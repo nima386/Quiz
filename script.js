@@ -33,6 +33,10 @@ function renderHome() {
   box.innerHTML = "";
 
   Object.keys(data).forEach(category => {
+    const total = data[category].length;
+    const done = progress[category] || 0;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+
     const card = document.createElement("div");
     card.className = "category-card";
 
@@ -40,12 +44,17 @@ function renderHome() {
       <div class="card-head">
         <div>
           <h2>${category}</h2>
-          <p>Quiz • ${data[category].length} Fragen</p>
+          <p>Quiz • ${total} Fragen</p>
         </div>
         <span class="dots">⋮</span>
       </div>
-      <p class="progress-text">0 % der Fragen beantwortet</p>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
+
+      <p class="progress-text">${percent} % der Fragen beantwortet</p>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${percent}%"></div>
+      </div>
+
       <button class="main-btn">Weiter</button>
     `;
 
@@ -55,18 +64,13 @@ function renderHome() {
 }
 
 function startQuiz(category) {
-  if (data[category].length === 0) {
+  if (!data[category] || data[category].length === 0) {
     alert("Dieser Ordner hat noch keine Fragen.");
     return;
   }
 
   currentCategory = category;
-
-  if (progress[category] !== undefined) {
-    current = progress[category];
-  } else {
-    current = 0;
-  }
+  current = progress[category] || 0;
 
   if (current >= data[category].length) {
     current = 0;
@@ -75,7 +79,6 @@ function startQuiz(category) {
   showScreen(quiz, false);
   loadQuestion();
 }
-
 
 function loadQuestion() {
   const q = data[currentCategory][current];
@@ -112,26 +115,27 @@ function checkAnswer(index, clicked) {
     document.getElementById("feedback").textContent = "Keine Sorge, du lernst ja noch!";
   }
 
- setTimeout(() => {
-  current++;
+  setTimeout(() => {
+    current++;
 
-  if (current < data[currentCategory].length) {
-    progress[currentCategory] = current;
-  } else {
-    progress[currentCategory] = 0;
-  }
+    if (current < data[currentCategory].length) {
+      progress[currentCategory] = current;
+    } else {
+      progress[currentCategory] = 0;
+    }
 
-  localStorage.setItem("quizProgress", JSON.stringify(progress));
+    localStorage.setItem("quizProgress", JSON.stringify(progress));
 
-  if (current < data[currentCategory].length) {
-    loadQuestion();
-  } else {
-    alert("Quiz beendet!");
-    showScreen(home, true);
-    renderHome();
-  }
-}, 1200);
+    if (current < data[currentCategory].length) {
+      loadQuestion();
+    } else {
+      alert("Quiz beendet!");
+      showScreen(home, true);
+      renderHome();
+    }
+  }, 1200);
 }
+
 /* Bibliothek */
 
 function renderLibrary() {
@@ -171,14 +175,20 @@ function renderLibrary() {
     });
 
     row.onclick = () => {
-      if (!wrapper.classList.contains("open")) openFolder(category);
+      if (!wrapper.classList.contains("open")) {
+        openFolder(category);
+      }
     };
 
     deleteBtn.onclick = () => {
       if (!confirm(`${category} wirklich löschen?`)) return;
 
       delete data[category];
+      delete progress[category];
+
       save();
+      localStorage.setItem("quizProgress", JSON.stringify(progress));
+
       renderHome();
       renderLibrary();
     };
@@ -236,7 +246,14 @@ function deleteQuestion(index) {
   if (!confirm("Diese Frage wirklich löschen?")) return;
 
   data[currentCategory].splice(index, 1);
+
+  if (progress[currentCategory] >= data[currentCategory].length) {
+    progress[currentCategory] = 0;
+  }
+
   save();
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+
   renderHome();
   renderQuestionList();
   showScreen(questionList, true);
@@ -308,6 +325,7 @@ document.getElementById("saveQuestion").onclick = () => {
   const inputs = [...document.querySelectorAll(".answer-input")];
 
   if (!questionText) return alert("Bitte Frage eingeben.");
+
   if (!inputs[selectedCorrect].value.trim()) {
     return alert("Die richtige Antwort darf nicht leer sein.");
   }
@@ -354,7 +372,11 @@ document.getElementById("createFolder").onclick = () => {
   }
 
   data[name] = [];
+  progress[name] = 0;
+
   save();
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+
   renderHome();
   renderLibrary();
 
@@ -398,11 +420,15 @@ document.getElementById("backQuestions").onclick = () => {
 
 /* Start */
 
-fetch("questions.json?v=99")
+fetch("questions.json?v=100")
   .then(res => res.json())
   .then(serverData => {
-    localStorage.removeItem("quizData");
-    data = serverData;
+    data = serverData.Politik ? serverData : { Politik: serverData };
+    save();
+    renderHome();
+    renderLibrary();
+  })
+  .catch(() => {
     save();
     renderHome();
     renderLibrary();
