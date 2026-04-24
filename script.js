@@ -49,7 +49,7 @@ function renderHome() {
           <h2>${category}</h2>
           <p>Quiz • ${total} Fragen</p>
         </div>
-        <span class="dots">⋮</span>
+        <span class="dots" onclick="openMenu('${category}')">⋮</span>
       </div>
 
       <p class="progress-text">${percent} % der Fragen beantwortet</p>
