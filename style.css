@@ -445,7 +445,7 @@ h1 {
 
 .folder-name-input {
   display: block;
-  width: 80%;
+  width: 90%;
   margin: 28px auto 0;
   text-align: center;
   border: none;
@@ -453,7 +453,7 @@ h1 {
   padding: 8px;
   background: rgba(255,255,255,.16);
   color: white;
-  font-size: 32px;
+  font-size: clamp(22px, 7vw, 32px);
   font-weight: 800;
   outline: none;
 }
