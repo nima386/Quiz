@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- STARTSEITE -->
+  <section id="home" class="screen active">
+    <div class="top-bar">
+      <div class="search-box">🔍 <span>Suchen</span></div>
+      <div id="openProfile" class="avatar">👤</div>
+    </div>
+
+    <h1>Mach da weiter, wo du aufgehört hast</h1>
+
+    <div class="category-card">
+      <div class="card-head">
+        <div>
+          <h2>Politik</h2>
+          <p>Quiz • <span id="questionCount">0</span> Fragen</p>
+        </div>
+        <span class="dots">⋮</span>
+      </div>
+
+      <p class="progress-text">0 % der Fragen beantwortet</p>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+
+      <button id="startQuiz" class="main-btn">Weiter</button>
+    </div>
+  </section>
+
+  <!-- QUIZSEITE -->
+  <section id="quiz" class="screen">
+    <div class="quiz-top">
+      <button id="backHome" class="circle-btn">×</button>
+      <h2>Runde 1</h2>
+      <button class="circle-btn">⚙</button>
+    </div>
+
+    <div class="quiz-progress">
+      <span id="currentNumber">1</span>
+      <div class="bar"></div>
+      <span id="totalNumber">0</span>
+    </div>
+
+    <div class="quiz-content">
+      <p class="tag">Noch einmal</p>
+      <h1 id="questionText"></h1>
+      <p id="feedback" class="feedback"></p>
+      <div id="answers"></div>
+    </div>
+  </section>
+
+  <!-- PROFILSEITE -->
+  <section id="profile" class="screen">
+    <div class="profile-top">
+      <button id="closeProfile" class="circle-btn">←</button>
+      <h2>Profil</h2>
+    </div>
+
+    <div class="profile-info">
+      <div class="big-avatar">👤</div>
+      <h1>Dein Profil</h1>
+    </div>
+
+    <div class="settings-card">
+      ⚙ Einstellungen
+    </div>
+  </section>
+
+  <!-- NAVIGATION -->
+  <nav class="bottom-nav">
+    <div class="nav-item">⌂<br>Start</div>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
