@@ -614,3 +614,11 @@ h1 {
 .nav-item.active {
   color: #67e8f9;
 }
+
+#quiz {
+  padding-bottom: 40px;
+}
+
+#answers {
+  padding-bottom: 40px;
+}
