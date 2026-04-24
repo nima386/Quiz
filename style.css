@@ -622,3 +622,25 @@ h1 {
 #answers {
   padding-bottom: 40px;
 }
+
+.answer-actions {
+  display: none;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.glass-action {
+  flex: 1;
+  padding: 15px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.09);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  backdrop-filter: blur(20px);
+}
+
+.glass-action.primary {
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+}
