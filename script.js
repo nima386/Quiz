@@ -1,14 +1,3 @@
-fetch("questions.json")
-  .then(res => res.json())
-  .then(serverData => {
-    if (!data["Politik"] || data["Politik"].length === 0) {
-      data["Politik"] = serverData;
-      save();
-    }
-    renderHome();
-    renderLibrary();
-  });
-
 const nav = document.querySelector(".bottom-nav");
 
 let data = JSON.parse(localStorage.getItem("quizData")) || {
@@ -395,6 +384,16 @@ document.getElementById("backQuestions").onclick = () => {
 
 /* Start */
 
-save();
-renderHome();
-renderLibrary();
+fetch("questions.json?v=1")
+  .then(res => res.json())
+  .then(serverData => {
+    data["Politik"] = serverData.Politik || serverData;
+    save();
+    renderHome();
+    renderLibrary();
+  })
+  .catch(() => {
+    save();
+    renderHome();
+    renderLibrary();
+  });
