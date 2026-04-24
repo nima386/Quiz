@@ -537,7 +537,13 @@ function openMenu(category) {
 }
 
 function closeMenu() {
-  document.getElementById("menuModal").classList.remove("show");
+  const modal = document.getElementById("menuModal");
+  modal.classList.add("closing");
+
+  setTimeout(() => {
+    modal.classList.remove("show");
+    modal.classList.remove("closing");
+  }, 220);
 }
 
 document.getElementById("restartQuiz").onclick = () => {
