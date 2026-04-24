@@ -278,23 +278,9 @@ h1 {
 
 /* Bibliothek */
 
-.tabs {
-  display: flex;
-  gap: 12px;
-  overflow: hidden;
-  margin: 18px 0 28px;
-}
-
-.tabs span {
-  padding: 12px 18px;
-  border-radius: 22px;
-  background: rgba(255,255,255,.12);
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.active-tab {
-  border: 2px solid #a5b4fc;
+.library-subtitle {
+  margin-top: 10px;
+  font-size: 24px;
 }
 
 .folder-row,
@@ -364,73 +350,42 @@ h1 {
   margin-top: 18px;
 }
 
-/* Modal */
+/* Swipe Delete */
 
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  padding: 20px;
-  z-index: 10;
+.swipe-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  margin-bottom: 16px;
 }
 
-.modal.show {
-  display: grid;
-  place-items: center;
+.swipe-row {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1);
 }
 
-.modal-box {
-  width: 100%;
-  max-width: 430px;
-  background: rgba(15,23,42,.92);
-  border-radius: 26px;
-  padding: 20px;
+.swipe-wrapper.open .swipe-row {
+  transform: translateX(-110px);
 }
 
-textarea {
-  width: 100%;
-  height: 260px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.2);
-  background: rgba(255,255,255,.08);
+.swipe-delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 105px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ef4444, #f97316);
   color: white;
-  padding: 14px;
-  font-size: 15px;
+  font-weight: 900;
+  font-size: 16px;
+  z-index: 1;
 }
 
-.secondary {
-  background: rgba(255,255,255,.14);
-}
-
-/* Navigation */
-
-.bottom-nav {
-  position: fixed;
-  left: 20px;
-  right: 20px;
-  bottom: 16px;
-  padding: 14px;
-  border-radius: 30px;
-  background: rgba(255,255,255,.09);
-  text-align: center;
-  display: flex;
-  justify-content: space-around;
-}
-
-.nav-item {
-  color: #d6d8e8;
-  font-weight: bold;
-}
-
-.nav-item.active {
-  color: #67e8f9;
-}
-
-.library-subtitle {
-  margin-top: 10px;
-  font-size: 24px;
-}
+/* Ordner erstellen */
 
 .folder-modal {
   display: none;
@@ -503,37 +458,24 @@ textarea {
   outline: none;
 }
 
-.swipe-wrapper {
-  position: relative;
-  overflow: hidden;
-  border-radius: 22px;
-  margin-bottom: 16px;
+.folder-name-input::placeholder {
+  color: rgba(255,255,255,.45);
 }
 
-.swipe-row {
-  position: relative;
-  z-index: 2;
-  margin-bottom: 0;
-  transition: transform .28s cubic-bezier(.2,.8,.2,1);
+/* Frage hinzufügen */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  padding: 20px;
+  z-index: 10;
 }
 
-.swipe-wrapper.open .swipe-row {
-  transform: translateX(-110px);
-}
-
-.swipe-delete {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 105px;
-  border: none;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #ef4444, #f97316);
-  color: white;
-  font-weight: 900;
-  font-size: 16px;
-  z-index: 1;
+.modal.show {
+  display: grid;
+  place-items: center;
 }
 
 .question-create-box {
@@ -569,8 +511,7 @@ textarea {
 }
 
 #newQuestionText::placeholder,
-.answer-input::placeholder,
-.folder-name-input::placeholder {
+.answer-input::placeholder {
   color: rgba(255,255,255,.45);
 }
 
@@ -640,4 +581,36 @@ textarea {
   font-weight: 900;
   background: linear-gradient(135deg, #3b82f6, #6366f1);
   box-shadow: 0 14px 30px rgba(79,70,229,.35);
+}
+
+.secondary {
+  background: rgba(255,255,255,.14);
+}
+
+/* Navigation */
+
+.bottom-nav {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 16px;
+  padding: 14px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.09);
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+
+.nav-item {
+  color: #d6d8e8;
+  font-weight: bold;
+}
+
+.nav-item.active {
+  color: #67e8f9;
 }
