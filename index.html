@@ -93,29 +93,25 @@
 
   <!-- ADD QUESTION MODAL -->
 
-<div id="folderModal" class="folder-modal">
-  <div class="folder-create-box">
-    <div class="folder-handle"></div>
+<div id="modal" class="modal">
+  <div class="question-create-box">
+    <h2>Neue Frage</h2>
 
-    <div class="folder-actions">
-      <button id="cancelFolder" class="folder-btn dark">Abbrechen</button>
-      <button id="createFolder" class="folder-btn blue">Erstellen</button>
+    <textarea id="newQuestionText" placeholder="Frage eingeben..."></textarea>
+
+    <p class="modal-label">Wähle die richtige Antwort aus</p>
+
+    <div id="answerInputs"></div>
+
+    <div class="answer-controls">
+      <button id="removeAnswer" class="small-action">−</button>
+      <button id="addAnswer" class="small-action">+</button>
     </div>
 
-    <div class="folder-icon-big">📁</div>
-
-    <input id="folderNameInput" class="folder-name-input" value="Unbenannter Ordner">
+    <button id="saveQuestion" class="main-btn">Frage speichern</button>
+    <button id="closeModal" class="main-btn secondary">Abbrechen</button>
   </div>
 </div>
-  
-  <div id="modal" class="modal">
-    <div class="modal-box">
-      <h2>Frage hinzufügen</h2>
-      <textarea id="questionInput" placeholder="Frage 106&#10;&#10;Text der Frage...&#10;&#10;Antwort 1&#10;Antwort 2&#10;Antwort 3&#10;Antwort 4&#10;Antwort 5&#10;Antwort (hier die Nummer eingeben): 1"></textarea>
-      <button id="saveQuestion" class="main-btn">Speichern</button>
-      <button id="closeModal" class="main-btn secondary">Abbrechen</button>
-    </div>
-  </div>
 
   <!-- NAVIGATION -->
   <nav class="bottom-nav">
