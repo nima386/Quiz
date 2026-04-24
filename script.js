@@ -61,6 +61,22 @@ function startQuiz(category) {
   }
 
   currentCategory = category;
+
+  if (progress[category] !== undefined) {
+    current = progress[category];
+  } else {
+    current = 0;
+  }
+
+  if (current >= data[category].length) {
+    current = 0;
+  }
+
+  showScreen(quiz, false);
+  loadQuestion();
+}
+
+  currentCategory = category;
   current = 0;
   showScreen(quiz, false);
   loadQuestion();
