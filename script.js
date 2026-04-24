@@ -156,6 +156,12 @@ function checkAnswer(index, clicked) {
   }
 
   document.getElementById("answerActions").style.display = "flex";
+  setTimeout(() => {
+  document.getElementById("answerActions").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}, 120);
 }
 
 function goNextQuestion() {
