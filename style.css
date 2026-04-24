@@ -752,3 +752,16 @@ h1 {
 #answerActions {
   margin-bottom: 80px;
 }
+
+.bar {
+  overflow: hidden;
+}
+
+#quizBarFill {
+  height: 100%;
+  width: 0%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #38bdf8, #6366f1);
+  box-shadow: 0 0 18px rgba(56,189,248,.7);
+  transition: width .45s cubic-bezier(.2,.9,.2,1);
+}
