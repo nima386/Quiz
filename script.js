@@ -528,3 +528,14 @@ fetch("questions.json?v=100")
     renderHome();
     renderLibrary();
   });
+
+let selectedCategoryForMenu = null;
+
+function openMenu(category) {
+  selectedCategoryForMenu = category;
+  document.getElementById("menuModal").classList.add("show");
+}
+
+function closeMenu() {
+  document.getElementById("menuModal").classList.remove("show");
+}
