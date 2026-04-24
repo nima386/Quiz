@@ -26,6 +26,8 @@ const questionText = document.getElementById("questionText");
 const answers = document.getElementById("answers");
 const feedback = document.getElementById("feedback");
 
+const nav = document.querySelector(".bottom-nav"); // 🔥 wichtig
+
 document.getElementById("questionCount").textContent = questions.length;
 document.getElementById("totalNumber").textContent = questions.length;
 
@@ -36,21 +38,28 @@ function showScreen(screen) {
   screen.classList.add("active");
 }
 
+/* START QUIZ */
 startQuiz.onclick = () => {
   current = 0;
+  nav.style.display = "none"; // 🔥 Navigation AUS
   showScreen(quiz);
   loadQuestion();
 };
 
+/* ZURÜCK HOME */
 backHome.onclick = () => {
+  nav.style.display = "block"; // 🔥 Navigation AN
   showScreen(home);
 };
 
+/* PROFIL */
 openProfile.onclick = () => {
+  nav.style.display = "none"; // optional
   showScreen(profile);
 };
 
 closeProfile.onclick = () => {
+  nav.style.display = "block";
   showScreen(home);
 };
 
@@ -97,6 +106,7 @@ function checkAnswer(index, clickedAnswer) {
       loadQuestion();
     } else {
       alert("Quiz beendet!");
+      nav.style.display = "block"; // 🔥 wieder anzeigen
       showScreen(home);
     }
   }, 1200);
