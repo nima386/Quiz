@@ -1,117 +1,297 @@
 const nav = document.querySelector(".bottom-nav");
 
-/* ---------- DATEN ---------- */
-
 let data = JSON.parse(localStorage.getItem("quizData")) || {
-  Politik: []
+  Politik: [
+    {
+      text: "Was gab es zuerst: Haie oder Bäume?",
+      answers: ["Haie", "0°C", "Fledermaus", "Blitz", "Test"],
+      correct: 0
+    }
+  ]
 };
 
-/* ---------- ADMIN ---------- */
-const isAdmin = true;
-
-/* ---------- SCREENS ---------- */
-const home = document.getElementById("home");
-const quiz = document.getElementById("quiz");
-const profile = document.getElementById("profile");
-
-/* ---------- STATE ---------- */
 let currentCategory = "Politik";
 let current = 0;
 
-/* ---------- NAVIGATION ---------- */
-function showScreen(screen) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  screen.classList.add("active");
+const home = document.getElementById("home");
+const quiz = document.getElementById("quiz");
+const profile = document.getElementById("profile");
+const library = document.getElementById("library");
+const questionList = document.getElementById("questionList");
+const questionDetail = document.getElementById("questionDetail");
+
+function save() {
+  localStorage.setItem("quizData", JSON.stringify(data));
 }
 
-/* ---------- START QUIZ ---------- */
-function start(category) {
+function showScreen(screen, showNav = true) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
+  nav.style.display = showNav ? "flex" : "none";
+}
+
+function renderHome() {
+  const box = document.getElementById("homeCategories");
+  box.innerHTML = "";
+
+  Object.keys(data).forEach(category => {
+    const card = document.createElement("div");
+    card.className = "category-card";
+    card.innerHTML = `
+      <div class="card-head">
+        <div>
+          <h2>${category}</h2>
+          <p>Quiz • ${data[category].length} Fragen</p>
+        </div>
+        <span class="dots">⋮</span>
+      </div>
+      <p class="progress-text">0 % der Fragen beantwortet</p>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <button class="main-btn">Weiter</button>
+    `;
+
+    card.querySelector("button").onclick = () => startQuiz(category);
+    box.appendChild(card);
+  });
+}
+
+function startQuiz(category) {
+  if (data[category].length === 0) {
+    alert("Dieser Ordner hat noch keine Fragen.");
+    return;
+  }
+
   currentCategory = category;
   current = 0;
-  nav.style.display = "none";
-  showScreen(quiz);
+  showScreen(quiz, false);
   loadQuestion();
 }
 
-/* ---------- LOAD QUESTION ---------- */
 function loadQuestion() {
-  const questions = data[currentCategory];
-  const q = questions[current];
+  const q = data[currentCategory][current];
 
+  document.getElementById("currentNumber").textContent = current + 1;
+  document.getElementById("totalNumber").textContent = data[currentCategory].length;
   document.getElementById("questionText").textContent = q.text;
+  document.getElementById("feedback").textContent = "";
+
   const answers = document.getElementById("answers");
   answers.innerHTML = "";
 
-  q.answers.forEach((a, i) => {
+  q.answers.forEach((answer, index) => {
     const div = document.createElement("div");
     div.className = "answer";
-    div.textContent = a;
-    div.onclick = () => checkAnswer(i, div);
+    div.textContent = answer;
+    div.onclick = () => checkAnswer(index, div);
     answers.appendChild(div);
   });
 }
 
-/* ---------- CHECK ---------- */
-function checkAnswer(i, el) {
+function checkAnswer(index, clicked) {
   const q = data[currentCategory][current];
   const all = document.querySelectorAll(".answer");
 
   all.forEach(a => a.onclick = null);
 
-  if (i === q.correct) {
-    el.classList.add("correct");
+  if (index === q.correct) {
+    clicked.classList.add("correct");
+    document.getElementById("feedback").textContent = "Richtig!";
   } else {
-    el.classList.add("wrong");
+    clicked.classList.add("wrong");
     all[q.correct].classList.add("correct");
+    document.getElementById("feedback").textContent = "Keine Sorge, du lernst ja noch!";
   }
 
   setTimeout(() => {
     current++;
+
     if (current < data[currentCategory].length) {
       loadQuestion();
     } else {
-      alert("Fertig");
-      nav.style.display = "block";
-      showScreen(home);
+      alert("Quiz beendet!");
+      showScreen(home, true);
+      renderHome();
     }
-  }, 1000);
+  }, 1200);
 }
 
-/* ---------- ADMIN: FRAGE HINZUFÜGEN ---------- */
+/* Bibliothek */
 
-function addQuestion(rawText, category = "Politik") {
-  const lines = rawText.split("\n").map(l => l.trim()).filter(l => l);
+function renderLibrary() {
+  const list = document.getElementById("folderList");
+  list.innerHTML = "";
 
-  const question = lines[1];
-  const answers = lines.slice(2, 7);
-  const correctLine = lines.find(l => l.includes("Antwort"));
-  const correct = parseInt(correctLine.split(":")[1]) - 1;
+  Object.keys(data).forEach(category => {
+    const row = document.createElement("div");
+    row.className = "folder-row";
+    row.innerHTML = `
+      <div class="folder-icon">📁</div>
+      <div>
+        <div class="row-title">${category}</div>
+        <div class="row-sub">${data[category].length} Fragen</div>
+      </div>
+    `;
 
-  if (!data[category]) data[category] = [];
-
-  data[category].push({
-    text: question,
-    answers: answers,
-    correct: correct
+    row.onclick = () => openFolder(category);
+    list.appendChild(row);
   });
+}
 
-  localStorage.setItem("quizData", JSON.stringify(data));
+function openFolder(category) {
+  currentCategory = category;
+  document.getElementById("folderTitle").textContent = category;
+  renderQuestionList();
+  showScreen(questionList, true);
+}
+
+function renderQuestionList() {
+  const list = document.getElementById("questionItems");
+  list.innerHTML = "";
+
+  data[currentCategory].forEach((q, index) => {
+    const row = document.createElement("div");
+    row.className = "question-row";
+    row.innerHTML = `
+      <div class="folder-icon">?</div>
+      <div>
+        <div class="row-title">Frage ${index + 1}</div>
+        <div class="row-sub">${q.text}</div>
+      </div>
+    `;
+
+    row.onclick = () => openQuestionDetail(index);
+    list.appendChild(row);
+  });
+}
+
+function openQuestionDetail(index) {
+  const q = data[currentCategory][index];
+
+  const box = document.getElementById("detailBox");
+  box.innerHTML = `
+    <h2>${q.text}</h2>
+    ${q.answers.map((a, i) => `
+      <p>${i + 1}. ${a} ${i === q.correct ? "✅" : ""}</p>
+    `).join("")}
+    <button class="delete-btn" onclick="deleteQuestion(${index})">Frage löschen</button>
+  `;
+
+  showScreen(questionDetail, true);
+}
+
+function deleteQuestion(index) {
+  if (!confirm("Diese Frage wirklich löschen?")) return;
+
+  data[currentCategory].splice(index, 1);
+  save();
+  renderHome();
+  renderQuestionList();
+  showScreen(questionList, true);
+}
+
+/* Frage hinzufügen */
+
+function parseQuestion(rawText) {
+  const lines = rawText.split("\n").map(l => l.trim()).filter(Boolean);
+
+  const answerLine = lines.find(l => l.toLowerCase().startsWith("antwort"));
+  const correct = parseInt(answerLine.split(":").pop().trim(), 10) - 1;
+
+  const questionText = lines[1];
+  const answers = lines.filter(l =>
+    !l.toLowerCase().startsWith("frage") &&
+    !l.toLowerCase().startsWith("antwort") &&
+    l !== questionText
+  );
+
+  return {
+    text: questionText,
+    answers,
+    correct
+  };
+}
+
+document.getElementById("addQuestionBtn").onclick = () => {
+  document.getElementById("modal").classList.add("show");
+};
+
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("modal").classList.remove("show");
+};
+
+document.getElementById("saveQuestion").onclick = () => {
+  const raw = document.getElementById("questionInput").value;
+
+  if (!raw.trim()) return alert("Bitte Frage einfügen.");
+
+  const q = parseQuestion(raw);
+
+  data[currentCategory].push(q);
+  save();
+
+  document.getElementById("questionInput").value = "";
+  document.getElementById("modal").classList.remove("show");
+
+  renderHome();
+  renderQuestionList();
+
   alert("Frage hinzugefügt!");
-}
+};
 
-/* ---------- TEST BUTTON ---------- */
-window.addQuestion = addQuestion;
+/* Ordner erstellen */
 
-/* ---------- INIT ---------- */
-if (data["Politik"].length === 0) {
-  addQuestion(`Frage 1
+document.getElementById("addFolder").onclick = () => {
+  const name = prompt("Name des neuen Quiz:");
 
-Was gab es zuerst: Haie oder Bäume?
+  if (!name) return;
 
-Haie
-0°C
-Fledermaus
-Blitz
-Test
-Antwort: 1`);
-}
+  if (data[name]) {
+    alert("Diesen Ordner gibt es schon.");
+    return;
+  }
+
+  data[name] = [];
+  save();
+  renderHome();
+  renderLibrary();
+};
+
+/* Navigation */
+
+document.getElementById("navStart").onclick = () => {
+  showScreen(home, true);
+  renderHome();
+};
+
+document.getElementById("navLibrary").onclick = () => {
+  showScreen(library, true);
+  renderLibrary();
+};
+
+document.getElementById("backHome").onclick = () => {
+  showScreen(home, true);
+  renderHome();
+};
+
+document.getElementById("openProfile").onclick = () => {
+  showScreen(profile, false);
+};
+
+document.getElementById("closeProfile").onclick = () => {
+  showScreen(home, true);
+};
+
+document.getElementById("backLibrary").onclick = () => {
+  showScreen(library, true);
+  renderLibrary();
+};
+
+document.getElementById("backQuestions").onclick = () => {
+  showScreen(questionList, true);
+};
+
+/* Start */
+
+save();
+renderHome();
+renderLibrary();
