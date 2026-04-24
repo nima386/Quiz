@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- STARTSEITE -->
+  <!-- START -->
   <section id="home" class="screen active">
     <div class="top-bar">
       <div class="search-box">🔍 <span>Suchen</span></div>
@@ -17,26 +17,10 @@
 
     <h1>Mach da weiter, wo du aufgehört hast</h1>
 
-    <div class="category-card">
-      <div class="card-head">
-        <div>
-          <h2>Politik</h2>
-          <p>Quiz • <span id="questionCount">0</span> Fragen</p>
-        </div>
-        <span class="dots">⋮</span>
-      </div>
-
-      <p class="progress-text">0 % der Fragen beantwortet</p>
-
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
-      </div>
-
-      <button id="startQuiz" class="main-btn">Weiter</button>
-    </div>
+    <div id="homeCategories"></div>
   </section>
 
-  <!-- QUIZSEITE -->
+  <!-- QUIZ -->
   <section id="quiz" class="screen">
     <div class="quiz-top">
       <button id="backHome" class="circle-btn">×</button>
@@ -58,7 +42,7 @@
     </div>
   </section>
 
-  <!-- PROFILSEITE -->
+  <!-- PROFIL -->
   <section id="profile" class="screen">
     <div class="profile-top">
       <button id="closeProfile" class="circle-btn">←</button>
@@ -70,14 +54,62 @@
       <h1>Dein Profil</h1>
     </div>
 
-    <div class="settings-card">
-      ⚙ Einstellungen
-    </div>
+    <div class="settings-card">⚙ Einstellungen</div>
   </section>
+
+  <!-- BIBLIOTHEK -->
+  <section id="library" class="screen">
+    <div class="library-head">
+      <h1>Deine Bibliothek</h1>
+      <button id="addFolder" class="circle-btn">+</button>
+    </div>
+
+    <div class="tabs">
+      <span>Sets</span>
+      <span>Kurse</span>
+      <span class="active-tab">Ordner</span>
+      <span>Übungstests</span>
+    </div>
+
+    <div id="folderList"></div>
+  </section>
+
+  <!-- FRAGEN LISTE -->
+  <section id="questionList" class="screen">
+    <div class="profile-top">
+      <button id="backLibrary" class="circle-btn">←</button>
+      <h2 id="folderTitle">Politik</h2>
+    </div>
+
+    <div id="questionItems"></div>
+
+    <button id="addQuestionBtn" class="floating-plus">+</button>
+  </section>
+
+  <!-- FRAGE DETAILS -->
+  <section id="questionDetail" class="screen">
+    <div class="profile-top">
+      <button id="backQuestions" class="circle-btn">←</button>
+      <h2>Frage</h2>
+    </div>
+
+    <div id="detailBox" class="detail-card"></div>
+  </section>
+
+  <!-- ADD QUESTION MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <h2>Frage hinzufügen</h2>
+      <textarea id="questionInput" placeholder="Frage 106&#10;&#10;Text der Frage...&#10;&#10;Antwort 1&#10;Antwort 2&#10;Antwort 3&#10;Antwort 4&#10;Antwort 5&#10;Antwort (hier die Nummer eingeben): 1"></textarea>
+      <button id="saveQuestion" class="main-btn">Speichern</button>
+      <button id="closeModal" class="main-btn secondary">Abbrechen</button>
+    </div>
+  </div>
 
   <!-- NAVIGATION -->
   <nav class="bottom-nav">
-    <div class="nav-item">⌂<br>Start</div>
+    <div id="navStart" class="nav-item">⌂<br>Start</div>
+    <div id="navLibrary" class="nav-item">▣<br>Bibliothek</div>
   </nav>
 
   <script src="script.js"></script>
