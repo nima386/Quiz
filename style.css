@@ -631,18 +631,27 @@ h1 {
 
 .glass-action {
   flex: 1;
-  padding: 15px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.09);
+  padding: 16px;
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
   color: white;
   font-size: 18px;
-  font-weight: 800;
-  backdrop-filter: blur(20px);
+  font-weight: 900;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 14px 35px rgba(0,0,0,.22);
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
 
 .glass-action.primary {
-  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  background: linear-gradient(90deg, rgba(59,130,246,.85), rgba(99,102,241,.85));
+  box-shadow: 0 16px 40px rgba(99,102,241,.35);
+}
+
+.glass-action:active {
+  transform: scale(.96);
+  box-shadow: 0 0 35px rgba(99,102,241,.75);
 }
 
 .menu-modal {
