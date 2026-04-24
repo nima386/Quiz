@@ -232,6 +232,10 @@ function deleteQuestion(index) {
 
 function renderAnswerInputs() {
   const box = document.getElementById("answerInputs");
+
+  const oldValues = [...document.querySelectorAll(".answer-input")]
+    .map(input => input.value);
+
   box.innerHTML = "";
 
   for (let i = 0; i < answerCount; i++) {
@@ -243,6 +247,9 @@ function renderAnswerInputs() {
       <input class="answer-input" placeholder="Antwortmöglichkeit ${i + 1}">
       <div class="correct-dot"></div>
     `;
+
+    const input = row.querySelector(".answer-input");
+    input.value = oldValues[i] || "";
 
     row.querySelector(".correct-dot").onclick = () => {
       selectedCorrect = i;
