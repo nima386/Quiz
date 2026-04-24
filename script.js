@@ -1,113 +1,117 @@
-const questions = [
-  {
-    text: "Was gab es zuerst: Haie oder Bäume?",
-    answers: ["Haie", "0°C", "Fledermaus", "Blitz"],
-    correct: 0
-  },
-  {
-    text: "Welches Gesetz regelt die Berufsausbildung?",
-    answers: ["BGB", "BBiG", "StGB", "BUrlG"],
-    correct: 1
-  }
-];
+const nav = document.querySelector(".bottom-nav");
 
-let current = 0;
+/* ---------- DATEN ---------- */
 
+let data = JSON.parse(localStorage.getItem("quizData")) || {
+  Politik: []
+};
+
+/* ---------- ADMIN ---------- */
+const isAdmin = true;
+
+/* ---------- SCREENS ---------- */
 const home = document.getElementById("home");
 const quiz = document.getElementById("quiz");
 const profile = document.getElementById("profile");
 
-const startQuiz = document.getElementById("startQuiz");
-const backHome = document.getElementById("backHome");
-const openProfile = document.getElementById("openProfile");
-const closeProfile = document.getElementById("closeProfile");
+/* ---------- STATE ---------- */
+let currentCategory = "Politik";
+let current = 0;
 
-const questionText = document.getElementById("questionText");
-const answers = document.getElementById("answers");
-const feedback = document.getElementById("feedback");
-
-const nav = document.querySelector(".bottom-nav"); // 🔥 wichtig
-
-document.getElementById("questionCount").textContent = questions.length;
-document.getElementById("totalNumber").textContent = questions.length;
-
+/* ---------- NAVIGATION ---------- */
 function showScreen(screen) {
-  home.classList.remove("active");
-  quiz.classList.remove("active");
-  profile.classList.remove("active");
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
 }
 
-/* START QUIZ */
-startQuiz.onclick = () => {
+/* ---------- START QUIZ ---------- */
+function start(category) {
+  currentCategory = category;
   current = 0;
-  nav.style.display = "none"; // 🔥 Navigation AUS
+  nav.style.display = "none";
   showScreen(quiz);
   loadQuestion();
-};
+}
 
-/* ZURÜCK HOME */
-backHome.onclick = () => {
-  nav.style.display = "block"; // 🔥 Navigation AN
-  showScreen(home);
-};
-
-/* PROFIL */
-openProfile.onclick = () => {
-  nav.style.display = "none"; // optional
-  showScreen(profile);
-};
-
-closeProfile.onclick = () => {
-  nav.style.display = "block";
-  showScreen(home);
-};
-
+/* ---------- LOAD QUESTION ---------- */
 function loadQuestion() {
+  const questions = data[currentCategory];
   const q = questions[current];
 
-  document.getElementById("currentNumber").textContent = current + 1;
-  questionText.textContent = q.text;
-  feedback.textContent = "";
+  document.getElementById("questionText").textContent = q.text;
+  const answers = document.getElementById("answers");
   answers.innerHTML = "";
 
-  q.answers.forEach((answer, index) => {
+  q.answers.forEach((a, i) => {
     const div = document.createElement("div");
     div.className = "answer";
-    div.textContent = answer;
-
-    div.onclick = () => checkAnswer(index, div);
-
+    div.textContent = a;
+    div.onclick = () => checkAnswer(i, div);
     answers.appendChild(div);
   });
 }
 
-function checkAnswer(index, clickedAnswer) {
-  const q = questions[current];
-  const allAnswers = document.querySelectorAll(".answer");
+/* ---------- CHECK ---------- */
+function checkAnswer(i, el) {
+  const q = data[currentCategory][current];
+  const all = document.querySelectorAll(".answer");
 
-  allAnswers.forEach(answer => {
-    answer.onclick = null;
-  });
+  all.forEach(a => a.onclick = null);
 
-  if (index === q.correct) {
-    clickedAnswer.classList.add("correct");
-    feedback.textContent = "Richtig!";
+  if (i === q.correct) {
+    el.classList.add("correct");
   } else {
-    clickedAnswer.classList.add("wrong");
-    allAnswers[q.correct].classList.add("correct");
-    feedback.textContent = "Keine Sorge, du lernst ja noch!";
+    el.classList.add("wrong");
+    all[q.correct].classList.add("correct");
   }
 
   setTimeout(() => {
     current++;
-
-    if (current < questions.length) {
+    if (current < data[currentCategory].length) {
       loadQuestion();
     } else {
-      alert("Quiz beendet!");
-      nav.style.display = "block"; // 🔥 wieder anzeigen
+      alert("Fertig");
+      nav.style.display = "block";
       showScreen(home);
     }
-  }, 1200);
+  }, 1000);
+}
+
+/* ---------- ADMIN: FRAGE HINZUFÜGEN ---------- */
+
+function addQuestion(rawText, category = "Politik") {
+  const lines = rawText.split("\n").map(l => l.trim()).filter(l => l);
+
+  const question = lines[1];
+  const answers = lines.slice(2, 7);
+  const correctLine = lines.find(l => l.includes("Antwort"));
+  const correct = parseInt(correctLine.split(":")[1]) - 1;
+
+  if (!data[category]) data[category] = [];
+
+  data[category].push({
+    text: question,
+    answers: answers,
+    correct: correct
+  });
+
+  localStorage.setItem("quizData", JSON.stringify(data));
+  alert("Frage hinzugefügt!");
+}
+
+/* ---------- TEST BUTTON ---------- */
+window.addQuestion = addQuestion;
+
+/* ---------- INIT ---------- */
+if (data["Politik"].length === 0) {
+  addQuestion(`Frage 1
+
+Was gab es zuerst: Haie oder Bäume?
+
+Haie
+0°C
+Fledermaus
+Blitz
+Test
+Antwort: 1`);
 }
