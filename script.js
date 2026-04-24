@@ -1,14 +1,10 @@
 const nav = document.querySelector(".bottom-nav");
 
 let data = JSON.parse(localStorage.getItem("quizData")) || {
-  Politik: [
-    {
-      text: "Was gab es zuerst: Haie oder Bäume?",
-      answers: ["Haie", "0°C", "Fledermaus", "Blitz"],
-      correct: 0
-    }
-  ]
+  Politik: []
 };
+
+let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
 
 let currentCategory = "Politik";
 let current = 0;
