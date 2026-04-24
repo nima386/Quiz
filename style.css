@@ -6,8 +6,9 @@
 html, body {
   margin: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: Arial, sans-serif;
   background: linear-gradient(160deg, #061b46, #08051f 45%, #12072f);
   color: white;
@@ -26,8 +27,8 @@ body::before {
 
 .screen {
   display: none;
-  height: 100dvh;
-  padding: 22px 20px 92px;
+  min-height: 100dvh;
+  padding: 22px 20px 110px;
   animation: fadeSlide .35s ease;
 }
 
@@ -199,7 +200,7 @@ h1 {
 }
 
 .quiz-content {
-  margin-top: 90px;
+  margin-top: 50px;
 }
 
 .tag {
@@ -295,4 +296,12 @@ h1 {
 .nav-item {
   color: #67e8f9;
   font-weight: bold;
+}
+
+#quiz {
+  padding-bottom: 150px;
+}
+
+#answers {
+  padding-bottom: 60px;
 }
