@@ -122,8 +122,15 @@ function renderLibrary() {
   list.innerHTML = "";
 
   Object.keys(data).forEach(category => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "swipe-wrapper";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "swipe-delete";
+    deleteBtn.textContent = "Löschen";
+
     const row = document.createElement("div");
-    row.className = "folder-row";
+    row.className = "folder-row swipe-row";
     row.innerHTML = `
       <div class="folder-icon">📁</div>
       <div>
@@ -132,8 +139,42 @@ function renderLibrary() {
       </div>
     `;
 
-    row.onclick = () => openFolder(category);
-    list.appendChild(row);
+    let startX = 0;
+
+    row.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    row.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+
+      if (startX - endX > 60) {
+        wrapper.classList.add("open");
+      }
+
+      if (endX - startX > 60) {
+        wrapper.classList.remove("open");
+      }
+    });
+
+    row.onclick = () => {
+      if (!wrapper.classList.contains("open")) {
+        openFolder(category);
+      }
+    };
+
+    deleteBtn.onclick = () => {
+      if (!confirm(`${category} wirklich löschen?`)) return;
+
+      delete data[category];
+      save();
+      renderHome();
+      renderLibrary();
+    };
+
+    wrapper.appendChild(deleteBtn);
+    wrapper.appendChild(row);
+    list.appendChild(wrapper);
   });
 }
 
