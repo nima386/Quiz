@@ -117,18 +117,25 @@ function checkAnswer(index, clicked) {
     document.getElementById("feedback").textContent = "Keine Sorge, du lernst ja noch!";
   }
 
-  setTimeout(() => {
-    current++;
+ setTimeout(() => {
+  current++;
 
-    if (current < data[currentCategory].length) {
-      loadQuestion();
-    } else {
-      alert("Quiz beendet!");
-      showScreen(home, true);
-      renderHome();
-    }
-  }, 1200);
-}
+  if (current < data[currentCategory].length) {
+    progress[currentCategory] = current;
+  } else {
+    progress[currentCategory] = 0; // reset
+  }
+
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+
+  if (current < data[currentCategory].length) {
+    loadQuestion();
+  } else {
+    alert("Quiz beendet!");
+    showScreen(home, true);
+    renderHome();
+  }
+}, 1200);
 
 /* Bibliothek */
 
