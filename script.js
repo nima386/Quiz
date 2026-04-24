@@ -131,7 +131,7 @@ function checkAnswer(index, clicked) {
     renderHome();
   }
 }, 1200);
-
+}
 /* Bibliothek */
 
 function renderLibrary() {
