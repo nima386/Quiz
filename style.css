@@ -28,7 +28,7 @@ body::before {
 .screen {
   display: none;
   min-height: 100dvh;
-  padding: 22px 20px 110px;
+  padding: 22px 20px 120px;
   animation: fadeSlide .35s ease;
 }
 
@@ -304,4 +304,26 @@ h1 {
 
 #answers {
   padding-bottom: 60px;
+}
+
+html,
+body {
+  height: auto !important;
+  overflow-y: scroll !important;
+}
+
+.screen {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow-y: visible !important;
+}
+
+#quiz.active {
+  display: block;
+  overflow-y: auto !important;
+  padding-bottom: 180px !important;
+}
+
+body::before {
+  z-index: -1;
 }
