@@ -426,3 +426,79 @@ textarea {
 .nav-item.active {
   color: #67e8f9;
 }
+
+.library-subtitle {
+  margin-top: 10px;
+  font-size: 24px;
+}
+
+.folder-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 6, 30, .96);
+  z-index: 20;
+}
+
+.folder-modal.show {
+  display: block;
+}
+
+.folder-create-box {
+  height: 100dvh;
+  padding: 18px 24px;
+  background: linear-gradient(160deg, #08051f, #0b0733);
+  border-radius: 32px 32px 0 0;
+}
+
+.folder-handle {
+  width: 70px;
+  height: 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.45);
+  margin: 0 auto 28px;
+}
+
+.folder-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.folder-btn {
+  border: none;
+  padding: 16px 22px;
+  border-radius: 28px;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.folder-btn.dark {
+  background: rgba(255,255,255,.1);
+}
+
+.folder-btn.blue {
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+}
+
+.folder-icon-big {
+  text-align: center;
+  font-size: 70px;
+  margin-top: 50px;
+}
+
+.folder-name-input {
+  display: block;
+  width: 80%;
+  margin: 28px auto 0;
+  text-align: center;
+  border: none;
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(255,255,255,.16);
+  color: white;
+  font-size: 32px;
+  font-weight: 800;
+  outline: none;
+}
