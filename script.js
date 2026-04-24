@@ -111,12 +111,17 @@ function loadQuestion() {
 }
 
 function checkAnswer(index, clicked) {
-  const q = data[currentCategory][current];
+  const q = quizMode === "remembered"
+    ? remembered[currentCategory][current]
+    : data[currentCategory][current];
+
   const all = document.querySelectorAll(".answer");
 
   all.forEach(a => a.onclick = null);
 
-  if (index === q.correct) {
+  const isCorrect = index === q.correct;
+
+  if (isCorrect) {
     clicked.classList.add("correct");
     document.getElementById("feedback").textContent = "Richtig!";
   } else {
@@ -125,27 +130,32 @@ function checkAnswer(index, clicked) {
     document.getElementById("feedback").textContent = "Keine Sorge, du lernst ja noch!";
   }
 
-  setTimeout(() => {
-    current++;
+  if (quizMode === "remembered") {
+    setTimeout(() => {
+      if (isCorrect) {
+        remembered[currentCategory].splice(current, 1);
+        localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+      } else {
+        current++;
+      }
 
-    if (current < data[currentCategory].length) {
-      progress[currentCategory] = current;
-    } else {
-      progress[currentCategory] = 0;
-    }
+      if (!remembered[currentCategory] || remembered[currentCategory].length === 0) {
+        delete remembered[currentCategory];
+        localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+        showScreen(rememberedScreen, true);
+        renderRemembered();
+        return;
+      }
 
-    localStorage.setItem("quizProgress", JSON.stringify(progress));
-
-    if (current < data[currentCategory].length) {
+      if (current >= remembered[currentCategory].length) current = 0;
       loadQuestion();
-    } else {
-      alert("Quiz beendet!");
-      showScreen(home, true);
-      renderHome();
-    }
-  }, 1200);
-}
+    }, 1200);
 
+    return;
+  }
+
+  document.getElementById("answerActions").style.display = "flex";
+}
 /* Bibliothek */
 
 function renderLibrary() {
