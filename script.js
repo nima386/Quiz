@@ -5,6 +5,8 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
 };
 
 let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+let remembered = JSON.parse(localStorage.getItem("rememberedQuestions")) || {};
+let quizMode = "normal";
 
 let currentCategory = "Politik";
 let current = 0;
@@ -17,6 +19,7 @@ const profile = document.getElementById("profile");
 const library = document.getElementById("library");
 const questionList = document.getElementById("questionList");
 const questionDetail = document.getElementById("questionDetail");
+const rememberedScreen = document.getElementById("remembered");
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
@@ -81,12 +84,19 @@ function startQuiz(category) {
 }
 
 function loadQuestion() {
-  const q = data[currentCategory][current];
+  const q = quizMode === "remembered"
+    ? remembered[currentCategory][current]
+    : data[currentCategory][current];
 
   document.getElementById("currentNumber").textContent = current + 1;
-  document.getElementById("totalNumber").textContent = data[currentCategory].length;
+  document.getElementById("totalNumber").textContent =
+    quizMode === "remembered"
+      ? remembered[currentCategory].length
+      : data[currentCategory].length;
+
   document.getElementById("questionText").textContent = q.text;
   document.getElementById("feedback").textContent = "";
+  document.getElementById("answerActions").style.display = "none";
 
   const answers = document.getElementById("answers");
   answers.innerHTML = "";
