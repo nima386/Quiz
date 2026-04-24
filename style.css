@@ -6,9 +6,8 @@
 html, body {
   margin: 0;
   width: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 100%;
+  overflow: hidden;
   font-family: Arial, sans-serif;
   background: linear-gradient(160deg, #061b46, #08051f 45%, #12072f);
   color: white;
@@ -23,13 +22,15 @@ body::before {
     radial-gradient(circle at 90% 20%, rgba(124,58,237,.28), transparent 35%),
     radial-gradient(circle at 50% 100%, rgba(14,165,233,.18), transparent 35%);
   pointer-events: none;
+  z-index: -1;
 }
 
 .screen {
   display: none;
-  min-height: 100dvh;
-  padding: 22px 20px 120px;
+  height: 100dvh;
+  padding: 20px;
   animation: fadeSlide .35s ease;
+  overflow: hidden;
 }
 
 .screen.active {
@@ -93,9 +94,9 @@ body::before {
 }
 
 h1 {
-  font-size: clamp(28px, 8vw, 36px);
-  line-height: 1.22;
-  margin: 36px 0 22px;
+  font-size: clamp(26px, 7vw, 34px);
+  line-height: 1.18;
+  margin: 28px 0 20px;
 }
 
 .category-card,
@@ -164,13 +165,13 @@ h1 {
 }
 
 .circle-btn {
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: none;
   background: rgba(255,255,255,.12);
   color: white;
-  font-size: 25px;
+  font-size: 24px;
   transition: .22s ease;
 }
 
@@ -178,12 +179,12 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 18px;
 }
 
 .quiz-progress span {
   background: rgba(255,255,255,.16);
-  padding: 12px 15px;
+  padding: 10px 13px;
   border-radius: 50%;
   font-weight: bold;
 }
@@ -194,40 +195,42 @@ h1 {
 
 .bar {
   flex: 1;
-  height: 12px;
+  height: 10px;
   background: rgba(255,255,255,.25);
   border-radius: 20px;
 }
 
 .quiz-content {
-  margin-top: 40px;
+  margin-top: 24px;
 }
 
 .tag {
   display: inline-block;
   background: #d65a00;
-  padding: 5px 12px;
+  padding: 4px 11px;
   border-radius: 14px;
   font-weight: bold;
+  font-size: 13px;
 }
 
 #questionText {
-  margin: 24px 0 18px;
-  font-size: clamp(28px, 8vw, 38px);
+  margin: 16px 0 12px;
+  font-size: clamp(22px, 6vw, 30px);
 }
 
 .feedback {
   color: #ffb86b;
   font-weight: bold;
-  min-height: 26px;
+  min-height: 22px;
+  margin: 6px 0;
 }
 
 .answer {
-  padding: 16px 18px;
-  margin-top: 12px;
-  border-radius: 18px;
+  padding: 13px 15px;
+  margin-top: 9px;
+  border-radius: 16px;
   border: 2px solid rgba(255,255,255,.17);
-  font-size: 21px;
+  font-size: clamp(16px, 4.7vw, 19px);
   background: rgba(255,255,255,.055);
   transition: .22s ease;
   animation: answerIn .3s ease both;
@@ -296,34 +299,4 @@ h1 {
 .nav-item {
   color: #67e8f9;
   font-weight: bold;
-}
-
-#quiz {
-  padding-bottom: 150px;
-}
-
-#answers {
-  padding-bottom: 60px;
-}
-
-html,
-body {
-  height: auto !important;
-  overflow-y: scroll !important;
-}
-
-.screen {
-  height: auto !important;
-  min-height: 100dvh !important;
-  overflow-y: visible !important;
-}
-
-#quiz.active {
-  display: block;
-  overflow-y: auto !important;
-  padding-bottom: 180px !important;
-}
-
-body::before {
-  z-index: -1;
 }
