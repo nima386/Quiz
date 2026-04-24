@@ -76,11 +76,6 @@ function startQuiz(category) {
   loadQuestion();
 }
 
-  currentCategory = category;
-  current = 0;
-  showScreen(quiz, false);
-  loadQuestion();
-}
 
 function loadQuestion() {
   const q = data[currentCategory][current];
