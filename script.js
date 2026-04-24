@@ -94,6 +94,12 @@ function loadQuestion() {
     quizMode === "remembered"
       ? remembered[currentCategory].length
       : data[currentCategory].length;
+  const totalQuestions = quizMode === "remembered"
+  ? remembered[currentCategory].length
+  : data[currentCategory].length;
+
+document.getElementById("quizBarFill").style.width =
+  ((current + 1) / totalQuestions) * 100 + "%";
 
   document.getElementById("questionText").textContent = q.text;
   document.getElementById("feedback").textContent = "";
