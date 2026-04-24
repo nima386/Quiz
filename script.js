@@ -241,9 +241,18 @@ document.getElementById("saveQuestion").onclick = () => {
 /* Ordner erstellen */
 
 document.getElementById("addFolder").onclick = () => {
-  const name = prompt("Name des neuen Quiz:");
+  document.getElementById("folderModal").classList.add("show");
+  document.getElementById("folderNameInput").focus();
+};
 
-  if (!name) return;
+document.getElementById("cancelFolder").onclick = () => {
+  document.getElementById("folderModal").classList.remove("show");
+};
+
+document.getElementById("createFolder").onclick = () => {
+  const name = document.getElementById("folderNameInput").value.trim();
+
+  if (!name) return alert("Bitte Namen eingeben.");
 
   if (data[name]) {
     alert("Diesen Ordner gibt es schon.");
@@ -254,6 +263,9 @@ document.getElementById("addFolder").onclick = () => {
   save();
   renderHome();
   renderLibrary();
+
+  document.getElementById("folderNameInput").value = "Unbenannter Ordner";
+  document.getElementById("folderModal").classList.remove("show");
 };
 
 /* Navigation */
