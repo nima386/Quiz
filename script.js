@@ -556,3 +556,4 @@ document.getElementById("restartQuiz").onclick = () => {
   closeMenu();
   renderHome();
 }, 120);
+};
