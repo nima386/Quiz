@@ -73,6 +73,7 @@ function startQuiz(category) {
   }
 
   currentCategory = category;
+  quizMode = "normal";
   current = progress[category] || 0;
 
   if (current >= data[category].length) {
@@ -156,6 +157,46 @@ function checkAnswer(index, clicked) {
 
   document.getElementById("answerActions").style.display = "flex";
 }
+
+function goNextQuestion() {
+  current++;
+
+  if (current < data[currentCategory].length) {
+    progress[currentCategory] = current;
+  } else {
+    progress[currentCategory] = 0;
+  }
+
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+
+  if (current < data[currentCategory].length) {
+    loadQuestion();
+  } else {
+    alert("Quiz beendet!");
+    showScreen(home, true);
+    renderHome();
+  }
+}
+
+document.getElementById("nextBtn").onclick = () => {
+  goNextQuestion();
+};
+
+document.getElementById("rememberBtn").onclick = () => {
+  const q = data[currentCategory][current];
+
+  if (!remembered[currentCategory]) remembered[currentCategory] = [];
+
+  const exists = remembered[currentCategory].some(item => item.text === q.text);
+
+  if (!exists) {
+    remembered[currentCategory].push(q);
+    localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+  }
+
+  goNextQuestion();
+};
+
 /* Bibliothek */
 
 function renderLibrary() {
@@ -436,6 +477,40 @@ document.getElementById("backLibrary").onclick = () => {
 
 document.getElementById("backQuestions").onclick = () => {
   showScreen(questionList, true);
+};
+
+function renderRemembered() {
+  const list = document.getElementById("rememberedList");
+  list.innerHTML = "";
+
+  Object.keys(remembered).forEach(category => {
+    if (!remembered[category] || remembered[category].length === 0) return;
+
+    const row = document.createElement("div");
+    row.className = "folder-row";
+    row.innerHTML = `
+      <div class="folder-icon">★</div>
+      <div>
+        <div class="row-title">${category}</div>
+        <div class="row-sub">${remembered[category].length} gemerkt</div>
+      </div>
+    `;
+
+    row.onclick = () => {
+      currentCategory = category;
+      current = 0;
+      quizMode = "remembered";
+      showScreen(quiz, false);
+      loadQuestion();
+    };
+
+    list.appendChild(row);
+  });
+}
+
+document.getElementById("navRemembered").onclick = () => {
+  showScreen(rememberedScreen, true);
+  renderRemembered();
 };
 
 /* Start */
