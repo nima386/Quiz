@@ -539,3 +539,15 @@ function openMenu(category) {
 function closeMenu() {
   document.getElementById("menuModal").classList.remove("show");
 }
+
+document.getElementById("restartQuiz").onclick = () => {
+  if (!selectedCategoryForMenu) return;
+
+  if (!confirm("Willst du wirklich von vorne anfangen?")) return;
+
+  progress[selectedCategoryForMenu] = 0;
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+
+  closeMenu();
+  renderHome();
+};
