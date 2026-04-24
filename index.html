@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz App</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
   </section>
 
   <!-- BIBLIOTHEK -->
-  <section id="library" class="screen">
+  <section id="library" class="screen scroll-screen">
     <div class="library-head">
       <h1>Deine Bibliothek</h1>
       <button id="addFolder" class="circle-btn">+</button>
@@ -70,7 +70,7 @@
   </section>
 
   <!-- FRAGEN LISTE -->
-  <section id="questionList" class="screen">
+  <section id="questionList" class="screen scroll-screen">
     <div class="profile-top">
       <button id="backLibrary" class="circle-btn">←</button>
       <h2 id="folderTitle">Politik</h2>
@@ -82,7 +82,7 @@
   </section>
 
   <!-- FRAGE DETAILS -->
-  <section id="questionDetail" class="screen">
+  <section id="questionDetail" class="screen scroll-screen">
     <div class="profile-top">
       <button id="backQuestions" class="circle-btn">←</button>
       <h2>Frage</h2>
@@ -91,34 +91,49 @@
     <div id="detailBox" class="detail-card"></div>
   </section>
 
-  <!-- ADD QUESTION MODAL -->
+  <!-- ORDNER ERSTELLEN -->
+  <div id="folderModal" class="folder-modal">
+    <div class="folder-create-box">
+      <div class="folder-handle"></div>
 
-<div id="modal" class="modal">
-  <div class="question-create-box">
-    <h2>Neue Frage</h2>
+      <div class="folder-actions">
+        <button id="cancelFolder" class="folder-btn dark">Abbrechen</button>
+        <button id="createFolder" class="folder-btn blue">Erstellen</button>
+      </div>
 
-    <textarea id="newQuestionText" placeholder="Frage eingeben..."></textarea>
+      <div class="folder-icon-big">📁</div>
 
-    <p class="modal-label">Wähle die richtige Antwort aus</p>
-
-    <div id="answerInputs"></div>
-
-    <div class="answer-controls">
-      <button id="removeAnswer" class="small-action">−</button>
-      <button id="addAnswer" class="small-action">+</button>
+      <input id="folderNameInput" class="folder-name-input" placeholder="Unbenannter Ordner">
     </div>
-
-    <button id="saveQuestion" class="main-btn">Frage speichern</button>
-    <button id="closeModal" class="main-btn secondary">Abbrechen</button>
   </div>
-</div>
+
+  <!-- FRAGE HINZUFÜGEN -->
+  <div id="modal" class="modal">
+    <div class="question-create-box">
+      <h2>Neue Frage</h2>
+
+      <textarea id="newQuestionText" placeholder="Frage eingeben..."></textarea>
+
+      <p class="modal-label">Wähle die richtige Antwort aus</p>
+
+      <div id="answerInputs"></div>
+
+      <div class="answer-controls">
+        <button id="removeAnswer" class="small-action">−</button>
+        <button id="addAnswer" class="small-action">+</button>
+      </div>
+
+      <button id="saveQuestion" class="main-btn">Frage speichern</button>
+      <button id="closeModal" class="main-btn secondary">Abbrechen</button>
+    </div>
+  </div>
 
   <!-- NAVIGATION -->
   <nav class="bottom-nav">
-    <div id="navStart" class="nav-item">⌂<br>Start</div>
+    <div id="navStart" class="nav-item active">⌂<br>Start</div>
     <div id="navLibrary" class="nav-item">▣<br>Bibliothek</div>
   </nav>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1"></script>
 </body>
 </html>
