@@ -181,8 +181,14 @@ function goNextQuestion() {
 
   localStorage.setItem("quizProgress", JSON.stringify(progress));
 
-  if (current < data[currentCategory].length) {
-    loadQuestion();
+ if (current < data[currentCategory].length) {
+  loadQuestion();
+
+  document.getElementById("quiz").scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
   } else {
     alert("Quiz beendet!");
     showScreen(home, true);
