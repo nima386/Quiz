@@ -552,8 +552,8 @@ document.getElementById("restartQuiz").onclick = () => {
   progress[selectedCategoryForMenu] = 0;
   localStorage.setItem("quizProgress", JSON.stringify(progress));
 
-  setTimeout(() => {
-  closeMenu();
-  renderHome();
-}, 120);
+ setTimeout(() => {
+    closeMenu();
+    renderHome();
+  }, 120);
 };
