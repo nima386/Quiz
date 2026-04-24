@@ -502,3 +502,36 @@ textarea {
   font-weight: 800;
   outline: none;
 }
+
+.swipe-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  margin-bottom: 16px;
+}
+
+.swipe-row {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1);
+}
+
+.swipe-wrapper.open .swipe-row {
+  transform: translateX(-110px);
+}
+
+.swipe-delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 105px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: white;
+  font-weight: 900;
+  font-size: 16px;
+  z-index: 1;
+}
