@@ -701,3 +701,36 @@ h1 {
   background: rgba(255,255,255,.11);
   box-shadow: none;
 }
+
+.dots {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.dots:active {
+  background: rgba(255,255,255,.14);
+  box-shadow: 0 0 22px rgba(99,102,241,.45);
+  transform: scale(.92);
+}
+
+.menu-item {
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+
+.menu-item:active {
+  transform: scale(.96);
+  box-shadow: 0 0 35px rgba(99,102,241,.75);
+}
+
+.menu-modal.closing .menu-box {
+  animation: menuDown .22s ease forwards;
+}
+
+@keyframes menuDown {
+  to {
+    opacity: 0;
+    transform: translateY(40px) scale(.96);
+  }
+}
