@@ -384,15 +384,11 @@ document.getElementById("backQuestions").onclick = () => {
 
 /* Start */
 
-fetch("questions.json?v=1")
+fetch("questions.json?v=99")
   .then(res => res.json())
   .then(serverData => {
-    data["Politik"] = serverData.Politik || serverData;
-    save();
-    renderHome();
-    renderLibrary();
-  })
-  .catch(() => {
+    localStorage.removeItem("quizData");
+    data = serverData;
     save();
     renderHome();
     renderLibrary();
