@@ -543,8 +543,6 @@ function closeMenu() {
 document.getElementById("restartQuiz").onclick = () => {
   if (!selectedCategoryForMenu) return;
 
-  if (!confirm("Willst du wirklich von vorne anfangen?")) return;
-
   progress[selectedCategoryForMenu] = 0;
   localStorage.setItem("quizProgress", JSON.stringify(progress));
 
