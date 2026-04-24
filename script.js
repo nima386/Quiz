@@ -184,10 +184,10 @@ function goNextQuestion() {
   if (current < data[currentCategory].length) {
     loadQuestion();
 
-    document.getElementById("quiz").scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    setTimeout(() => {
+  document.getElementById("quiz").scrollTop = 0;
+  window.scrollTo(0, 0);
+}, 50);
   } else {
     alert("Quiz beendet!");
     showScreen(home, true);
