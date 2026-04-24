@@ -39,6 +39,7 @@ function renderHome() {
   Object.keys(data).forEach(category => {
     const card = document.createElement("div");
     card.className = "category-card";
+
     card.innerHTML = `
       <div class="card-head">
         <div>
@@ -133,6 +134,7 @@ function renderLibrary() {
 
     const row = document.createElement("div");
     row.className = "folder-row swipe-row";
+
     row.innerHTML = `
       <div class="folder-icon">📁</div>
       <div>
@@ -187,6 +189,7 @@ function renderQuestionList() {
   data[currentCategory].forEach((q, index) => {
     const row = document.createElement("div");
     row.className = "question-row";
+
     row.innerHTML = `
       <div class="folder-icon">?</div>
       <div>
@@ -265,8 +268,13 @@ document.getElementById("addAnswer").onclick = () => {
 
 document.getElementById("removeAnswer").onclick = () => {
   if (answerCount <= 2) return;
+
   answerCount--;
-  if (selectedCorrect >= answerCount) selectedCorrect = answerCount - 1;
+
+  if (selectedCorrect >= answerCount) {
+    selectedCorrect = answerCount - 1;
+  }
+
   renderAnswerInputs();
 };
 
@@ -279,11 +287,15 @@ document.getElementById("saveQuestion").onclick = () => {
   const inputs = [...document.querySelectorAll(".answer-input")];
 
   if (!questionText) return alert("Bitte Frage eingeben.");
-  if (!inputs[selectedCorrect].value.trim()) return alert("Die richtige Antwort darf nicht leer sein.");
+  if (!inputs[selectedCorrect].value.trim()) {
+    return alert("Die richtige Antwort darf nicht leer sein.");
+  }
 
   const cleanAnswers = inputs.map(i => i.value.trim()).filter(Boolean);
 
-  if (cleanAnswers.length < 2) return alert("Mindestens 2 Antworten eingeben.");
+  if (cleanAnswers.length < 2) {
+    return alert("Mindestens 2 Antworten eingeben.");
+  }
 
   data[currentCategory].push({
     text: questionText,
@@ -311,7 +323,9 @@ document.getElementById("cancelFolder").onclick = () => {
 };
 
 document.getElementById("createFolder").onclick = () => {
-  const name = document.getElementById("folderNameInput").value.trim() || "Unbenannter Ordner";
+  const name =
+    document.getElementById("folderNameInput").value.trim() ||
+    "Unbenannter Ordner";
 
   if (data[name]) {
     alert("Diesen Ordner gibt es schon.");
