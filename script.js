@@ -498,8 +498,15 @@ function renderRemembered() {
   Object.keys(remembered).forEach(category => {
     if (!remembered[category] || remembered[category].length === 0) return;
 
+    const wrapper = document.createElement("div");
+    wrapper.className = "swipe-wrapper";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "swipe-delete";
+    deleteBtn.textContent = "Löschen";
+
     const row = document.createElement("div");
-    row.className = "folder-row";
+    row.className = "folder-row swipe-row";
     row.innerHTML = `
       <div class="folder-icon">★</div>
       <div>
@@ -508,15 +515,38 @@ function renderRemembered() {
       </div>
     `;
 
+    let startX = 0;
+
+    row.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    row.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+
+      if (startX - endX > 60) wrapper.classList.add("open");
+      if (endX - startX > 60) wrapper.classList.remove("open");
+    });
+
     row.onclick = () => {
-      currentCategory = category;
-      current = 0;
-      quizMode = "remembered";
-      showScreen(quiz, false);
-      loadQuestion();
+      if (!wrapper.classList.contains("open")) {
+        currentCategory = category;
+        current = 0;
+        quizMode = "remembered";
+        showScreen(quiz, false);
+        loadQuestion();
+      }
     };
 
-    list.appendChild(row);
+    deleteBtn.onclick = () => {
+      delete remembered[category];
+      localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+      renderRemembered();
+    };
+
+    wrapper.appendChild(deleteBtn);
+    wrapper.appendChild(row);
+    list.appendChild(wrapper);
   });
 }
 
