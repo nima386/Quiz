@@ -743,3 +743,12 @@ h1 {
     transform: translateY(40px) scale(.96);
   }
 }
+
+#quiz.scroll-screen {
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+
+#answerActions {
+  margin-bottom: 80px;
+}
