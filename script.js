@@ -123,7 +123,7 @@ function checkAnswer(index, clicked) {
   if (current < data[currentCategory].length) {
     progress[currentCategory] = current;
   } else {
-    progress[currentCategory] = 0; // reset
+    progress[currentCategory] = 0;
   }
 
   localStorage.setItem("quizProgress", JSON.stringify(progress));
