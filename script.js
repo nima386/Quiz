@@ -4,7 +4,7 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
   Politik: [
     {
       text: "Was gab es zuerst: Haie oder Bäume?",
-      answers: ["Haie", "0°C", "Fledermaus", "Blitz", "Test"],
+      answers: ["Haie", "0°C", "Fledermaus", "Blitz"],
       correct: 0
     }
   ]
@@ -12,6 +12,8 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
 
 let currentCategory = "Politik";
 let current = 0;
+let answerCount = 4;
+let selectedCorrect = 0;
 
 const home = document.getElementById("home");
 const quiz = document.getElementById("quiz");
@@ -148,19 +150,12 @@ function renderLibrary() {
     row.addEventListener("touchend", e => {
       const endX = e.changedTouches[0].clientX;
 
-      if (startX - endX > 60) {
-        wrapper.classList.add("open");
-      }
-
-      if (endX - startX > 60) {
-        wrapper.classList.remove("open");
-      }
+      if (startX - endX > 60) wrapper.classList.add("open");
+      if (endX - startX > 60) wrapper.classList.remove("open");
     });
 
     row.onclick = () => {
-      if (!wrapper.classList.contains("open")) {
-        openFolder(category);
-      }
+      if (!wrapper.classList.contains("open")) openFolder(category);
     };
 
     deleteBtn.onclick = () => {
@@ -230,30 +225,49 @@ function deleteQuestion(index) {
   showScreen(questionList, true);
 }
 
-/* Frage hinzufügen */
+/* Neue Frage UI */
 
-function parseQuestion(rawText) {
-  const lines = rawText.split("\n").map(l => l.trim()).filter(Boolean);
+function renderAnswerInputs() {
+  const box = document.getElementById("answerInputs");
+  box.innerHTML = "";
 
-  const answerLine = lines.find(l => l.toLowerCase().startsWith("antwort"));
-  const correct = parseInt(answerLine.split(":").pop().trim(), 10) - 1;
+  for (let i = 0; i < answerCount; i++) {
+    const row = document.createElement("div");
+    row.className = "answer-input-row";
+    if (i === selectedCorrect) row.classList.add("selected");
 
-  const questionText = lines[1];
-  const answers = lines.filter(l =>
-    !l.toLowerCase().startsWith("frage") &&
-    !l.toLowerCase().startsWith("antwort") &&
-    l !== questionText
-  );
+    row.innerHTML = `
+      <input class="answer-input" placeholder="Antwortmöglichkeit ${i + 1}">
+      <div class="correct-dot"></div>
+    `;
 
-  return {
-    text: questionText,
-    answers,
-    correct
-  };
+    row.querySelector(".correct-dot").onclick = () => {
+      selectedCorrect = i;
+      renderAnswerInputs();
+    };
+
+    box.appendChild(row);
+  }
 }
 
 document.getElementById("addQuestionBtn").onclick = () => {
+  answerCount = 4;
+  selectedCorrect = 0;
+  document.getElementById("newQuestionText").value = "";
   document.getElementById("modal").classList.add("show");
+  renderAnswerInputs();
+};
+
+document.getElementById("addAnswer").onclick = () => {
+  answerCount++;
+  renderAnswerInputs();
+};
+
+document.getElementById("removeAnswer").onclick = () => {
+  if (answerCount <= 2) return;
+  answerCount--;
+  if (selectedCorrect >= answerCount) selectedCorrect = answerCount - 1;
+  renderAnswerInputs();
 };
 
 document.getElementById("closeModal").onclick = () => {
@@ -261,28 +275,34 @@ document.getElementById("closeModal").onclick = () => {
 };
 
 document.getElementById("saveQuestion").onclick = () => {
-  const raw = document.getElementById("questionInput").value;
+  const questionText = document.getElementById("newQuestionText").value.trim();
+  const inputs = [...document.querySelectorAll(".answer-input")];
 
-  if (!raw.trim()) return alert("Bitte Frage einfügen.");
+  if (!questionText) return alert("Bitte Frage eingeben.");
+  if (!inputs[selectedCorrect].value.trim()) return alert("Die richtige Antwort darf nicht leer sein.");
 
-  const q = parseQuestion(raw);
+  const cleanAnswers = inputs.map(i => i.value.trim()).filter(Boolean);
 
-  data[currentCategory].push(q);
+  if (cleanAnswers.length < 2) return alert("Mindestens 2 Antworten eingeben.");
+
+  data[currentCategory].push({
+    text: questionText,
+    answers: cleanAnswers,
+    correct: selectedCorrect
+  });
+
   save();
-
-  document.getElementById("questionInput").value = "";
-  document.getElementById("modal").classList.remove("show");
-
   renderHome();
   renderQuestionList();
 
-  alert("Frage hinzugefügt!");
+  document.getElementById("modal").classList.remove("show");
 };
 
 /* Ordner erstellen */
 
 document.getElementById("addFolder").onclick = () => {
   document.getElementById("folderModal").classList.add("show");
+  document.getElementById("folderNameInput").value = "";
   document.getElementById("folderNameInput").focus();
 };
 
@@ -291,9 +311,7 @@ document.getElementById("cancelFolder").onclick = () => {
 };
 
 document.getElementById("createFolder").onclick = () => {
-  const name = document.getElementById("folderNameInput").value.trim();
-
-  if (!name) return alert("Bitte Namen eingeben.");
+  const name = document.getElementById("folderNameInput").value.trim() || "Unbenannter Ordner";
 
   if (data[name]) {
     alert("Diesen Ordner gibt es schon.");
@@ -305,7 +323,7 @@ document.getElementById("createFolder").onclick = () => {
   renderHome();
   renderLibrary();
 
-  document.getElementById("folderNameInput").value = "Unbenannter Ordner";
+  document.getElementById("folderNameInput").value = "";
   document.getElementById("folderModal").classList.remove("show");
 };
 
