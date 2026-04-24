@@ -644,3 +644,54 @@ h1 {
 .glass-action.primary {
   background: linear-gradient(90deg, #3b82f6, #6366f1);
 }
+
+.menu-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.menu-modal.show {
+  display: flex;
+}
+
+.menu-box {
+  width: 85%;
+  background: rgba(20,20,40,.9);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 0 40px rgba(99,102,241,.4);
+  animation: scaleIn .25s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.menu-item {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+}
+
+.menu-item.cancel {
+  background: rgba(255,255,255,.1);
+}
