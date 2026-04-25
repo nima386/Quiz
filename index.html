@@ -18,6 +18,10 @@
   <!-- START -->
   <section id="home" class="screen active scroll-screen">
     <div class="top-bar">
+      <button id="upperMenuBtn" class="upper-menu-btn">
+  <span></span>
+  <span></span>
+</button>
       <div id="openSearch" class="search-box">🔍 <span>Suchen</span></div>
       <div id="openProfile" class="avatar">👤</div>
     </div>
@@ -199,6 +203,29 @@
 
   <div id="examResultBox"></div>
 </section>
+
+<div id="upperOverlay" class="upper-overlay"></div>
+
+<aside id="upperDrawer" class="upper-drawer">
+  <div class="upper-drawer-head">
+    <h2>Oberkategorien</h2>
+    <button id="closeUpperDrawer" class="circle-btn">×</button>
+  </div>
+
+  <div id="upperList"></div>
+
+  <button id="addUpperBtn" class="main-btn">+ Oberkategorie</button>
+</aside>
+
+<div id="upperModal" class="modal">
+  <div class="folder-create-box">
+    <h2>Oberkategorie erstellen</h2>
+    <input id="upperNameInput" placeholder="z. B. Bauzeichner">
+    <button id="createUpperBtn" class="main-btn">Erstellen</button>
+    <button id="cancelUpperBtn" class="main-btn secondary">Abbrechen</button>
+  </div>
+</div>
+  
   
 <!-- NAVIGATION -->
 <nav class="bottom-nav">
