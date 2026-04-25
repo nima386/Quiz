@@ -240,71 +240,63 @@ if (quizMode === "normal") {
 }
 
 function checkAnswer(index, clicked) {
-  const q = quizMode === "remembered"
-    ? remembered[currentCategory][current]
-    : data[currentCategory][current];
+  const source =
+    quizMode === "remembered" ? remembered[currentCategory] :
+    quizMode === "wrong" ? wrongQuestions[currentCategory] :
+    quizMode === "exam" ? examQuestions :
+    data[currentCategory];
+
+  let q;
+
+  if (quizMode === "normal") {
+    const order = quizOrders[currentCategory];
+    const realIndex = order[current];
+    q = data[currentCategory][realIndex];
+  } else {
+    q = source[current];
+  }
 
   const all = document.querySelectorAll(".answer");
-
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
-if (quizMode === "exam") {
-  const all = document.querySelectorAll(".answer");
 
-  all.forEach(a => a.classList.remove("selected"));
-  clicked.classList.add("selected");
-
-  examAnswers.push({
-    question: q,
-    chosen: index,
-    correct: isCorrect
-  });
-
-  setTimeout(() => {
-    current++;
-
-    if (current < examQuestions.length) {
-      loadQuestion();
-    } else {
-      finishExam();
-    }
-  }, 200);
-
-  return;
-}
-  
   if (quizMode === "exam") {
-  examAnswers.push({
-    question: q,
-    chosen: index,
-    correct: isCorrect
-  });
+    clicked.classList.add("selected");
 
-  current++;
+    examAnswers.push({
+      question: q,
+      chosen: index,
+      correct: isCorrect
+    });
 
-  if (current < examQuestions.length) {
-    loadQuestion();
-  } else {
-    finishExam();
+    setTimeout(() => {
+      current++;
+
+      if (current < examQuestions.length) {
+        loadQuestion();
+      } else {
+        finishExam();
+      }
+    }, 250);
+
+    return;
   }
 
-  return;
-}
   if (quizMode === "normal") {
-  recordStats(isCorrect);
+    recordStats(isCorrect);
 
-  if (!isCorrect) {
-    if (!wrongQuestions[currentCategory]) wrongQuestions[currentCategory] = [];
+    if (!isCorrect) {
+      if (!wrongQuestions[currentCategory]) wrongQuestions[currentCategory] = [];
 
-    const exists = wrongQuestions[currentCategory].some(item => item.text === q.text);
+      const exists = wrongQuestions[currentCategory].some(item => item.text === q.text);
 
-    if (!exists) {
-      wrongQuestions[currentCategory].push(q);
-      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+      if (!exists) {
+        wrongQuestions[currentCategory].push(q);
+        localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+      }
     }
   }
-}
 
   if (isCorrect) {
     clicked.classList.add("correct");
@@ -332,30 +324,6 @@ if (quizMode === "exam") {
         return;
       }
 
-      if (quizMode === "wrong") {
-  setTimeout(() => {
-    if (isCorrect) {
-      wrongQuestions[currentCategory].splice(current, 1);
-      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
-    } else {
-      current++;
-    }
-
-    if (!wrongQuestions[currentCategory] || wrongQuestions[currentCategory].length === 0) {
-      delete wrongQuestions[currentCategory];
-      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
-      showScreen(home, true);
-      renderHome();
-      return;
-    }
-
-    if (current >= wrongQuestions[currentCategory].length) current = 0;
-    loadQuestion();
-  }, 1200);
-
-  return;
-}
-
       if (current >= remembered[currentCategory].length) current = 0;
       loadQuestion();
     }, 1200);
@@ -363,15 +331,39 @@ if (quizMode === "exam") {
     return;
   }
 
-  document.getElementById("answerActions").style.display = "flex";
-  setTimeout(() => {
-  document.getElementById("answerActions").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}, 120);
-}
+  if (quizMode === "wrong") {
+    setTimeout(() => {
+      if (isCorrect) {
+        wrongQuestions[currentCategory].splice(current, 1);
+        localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+      } else {
+        current++;
+      }
 
+      if (!wrongQuestions[currentCategory] || wrongQuestions[currentCategory].length === 0) {
+        delete wrongQuestions[currentCategory];
+        localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+        showScreen(home, true);
+        renderHome();
+        return;
+      }
+
+      if (current >= wrongQuestions[currentCategory].length) current = 0;
+      loadQuestion();
+    }, 1200);
+
+    return;
+  }
+
+  document.getElementById("answerActions").style.display = "flex";
+
+  setTimeout(() => {
+    document.getElementById("answerActions").scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }, 120);
+}
 function goNextQuestion() {
   current++;
 
