@@ -397,7 +397,8 @@ function openQuestionDetail(index) {
     ${q.answers.map((a, i) => `
       <p>${i + 1}. ${a} ${i === q.correct ? "✅" : ""}</p>
     `).join("")}
-    <button class="delete-btn" onclick="deleteQuestion(${index})">Frage löschen</button>
+    <button class="delete-btn edit-btn" onclick="editQuestion(${index})">Frage bearbeiten</button>
+<button class="delete-btn" onclick="deleteQuestion(${index})">Frage löschen</button>
   `;
 
   showScreen(questionDetail, true);
