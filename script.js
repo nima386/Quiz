@@ -1494,25 +1494,33 @@ document.getElementById("loginBtn").onclick = async () => {
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
   if (user) {
     currentUser = user;
-    document.getElementById("logoutBtn").textContent = "⎋ Ausloggen";
-    guestMode = false;
-    localStorage.removeItem("guestMode");
-   
+   if (user) {
+  currentUser = user;
 
-    authScreen.classList.add("hide");
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.textContent = "⎋ Ausloggen";
+  logoutBtn.classList.remove("success");
+  logoutBtn.classList.add("danger");
 
-    await loadUserCloudData(user);
+  authScreen.classList.add("hide");
 
-    renderHome();
-    renderLibrary();
-    setActiveNav("navStart");
-  } else {
+  await loadUserCloudData(user);
+
+  renderHome();
+  renderLibrary();
+  setActiveNav("navStart");
+} 
+   else {
     currentUser = null;
-    document.getElementById("logoutBtn").textContent = "⎋ Einloggen";
+   const logoutBtn = document.getElementById("logoutBtn");
 
+logoutBtn.textContent = "⎋ Einloggen";
+logoutBtn.classList.remove("danger");
+logoutBtn.classList.add("success");
     if (guestMode) {
       authScreen.classList.add("hide");
-    } else {
+    } 
+    else {
       authScreen.classList.remove("hide");
     }
   }
