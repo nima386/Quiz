@@ -307,22 +307,23 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
 
-  window.firebaseTools = {
-    auth,
-    db,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    doc,
-    setDoc,
-    getDoc
-  };
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  console.log("Firebase verbunden");
+window.firebaseTools = {
+  auth,
+  db,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  doc,
+  setDoc,
+  getDoc
+};
+
+console.log("Firebase verbunden");
 </script>
 
 <!-- XLSX -->
