@@ -124,22 +124,42 @@
   <!-- FRAGE HINZUFÜGEN -->
   <div id="modal" class="modal">
     <div class="question-create-box">
-      <h2>Neue Frage</h2>
+  <h2>Fragen hinzufügen</h2>
 
-      <textarea id="newQuestionText" placeholder="Frage eingeben..."></textarea>
+  <div class="import-tabs">
+    <button id="manualTab" class="import-tab active">Manuell</button>
+    <button id="excelTab" class="import-tab">Excel</button>
+  </div>
 
-      <p class="modal-label">Wähle die richtige Antwort aus</p>
+  <div id="manualArea">
+    <textarea id="newQuestionText" placeholder="Frage eingeben..."></textarea>
 
-      <div id="answerInputs"></div>
+    <p class="modal-label">Wähle die richtige Antwort aus</p>
+    <div id="answerInputs"></div>
 
-      <div class="answer-controls">
-        <button id="removeAnswer" class="small-action">−</button>
-        <button id="addAnswer" class="small-action">+</button>
-      </div>
-
-      <button id="saveQuestion" class="main-btn">Frage speichern</button>
-      <button id="closeModal" class="main-btn secondary">Abbrechen</button>
+    <div class="answer-controls">
+      <button id="removeAnswer" class="small-action">−</button>
+      <button id="addAnswer" class="small-action">+</button>
     </div>
+
+    <button id="saveQuestion" class="main-btn">Frage speichern</button>
+  </div>
+
+  <div id="excelArea" style="display:none;">
+    <p class="modal-label">Excel-Datei auswählen</p>
+
+    <label class="excel-upload">
+      Excel hochladen
+      <input id="excelInput" type="file" accept=".xlsx,.xls" hidden>
+    </label>
+
+    <div id="excelPreview" class="excel-preview"></div>
+
+    <button id="importExcelBtn" class="main-btn">Excel importieren</button>
+  </div>
+
+  <button id="closeModal" class="main-btn secondary">Abbrechen</button>
+</div>
   </div>
 
 <section id="remembered" class="screen scroll-screen">
