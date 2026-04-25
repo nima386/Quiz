@@ -200,7 +200,10 @@ function loadQuestion() {
   quizMode === "exam" ? examQuestions :
   data[currentCategory];
 
-  const q = source[current];
+  const q =
+  quizMode === "normal"
+    ? data[currentCategory][quizOrders[currentCategory][current]]
+    : source[current];
 
   document.getElementById("currentNumber").textContent = current + 1;
   document.getElementById("totalNumber").textContent = source.length;
@@ -1130,6 +1133,8 @@ document.getElementById("restartQuiz").onclick = () => {
 
   progress[selectedCategoryForMenu] = 0;
   localStorage.setItem("quizProgress", JSON.stringify(progress));
+  delete quizOrders[selectedCategoryForMenu];
+saveQuizOrders();
 
  setTimeout(() => {
     closeMenu();
