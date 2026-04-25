@@ -1316,6 +1316,20 @@ document.getElementById("createUpperBtn").onclick = () => {
   showScreen(home, true);
 };
 
+document.getElementById("upperMenuBtn").addEventListener("click", () => {
+  document.getElementById("upperOverlay").classList.add("show");
+  document.getElementById("upperDrawer").classList.add("show");
+  renderUpperList();
+});
+
+document.getElementById("closeUpperDrawer").addEventListener("click", () => {
+  closeUpperDrawer();
+});
+
+document.getElementById("upperOverlay").addEventListener("click", () => {
+  closeUpperDrawer();
+});
+
 /* Start */
 
 hydrateActiveUpper();
