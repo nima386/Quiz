@@ -594,11 +594,32 @@ function renderLibrary() {
       if (endX - startX > 60) wrapper.classList.remove("open");
     });
 
-    row.onclick = () => {
-      if (!wrapper.classList.contains("open")) {
-        openFolder(category);
-      }
-    };
+   let startX = 0;
+
+row.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+row.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+
+  if (startX - endX > 55) wrapper.classList.add("open");
+  if (endX - startX > 55) wrapper.classList.remove("open");
+});
+
+row.onclick = () => {
+  if (wrapper.classList.contains("open")) return;
+
+  saveAppStore();
+  activeUpper = name;
+  hydrateActiveUpper();
+
+  closeUpperDrawer();
+  renderHome();
+  renderLibrary();
+  setActiveNav("navStart");
+  showScreen(home, true);
+};
 
     deleteBtn.onclick = () => {
       if (!confirm(`${category} wirklich löschen?`)) return;
@@ -810,7 +831,6 @@ if (editingIndex !== null) {
 document.getElementById("addFolder").onclick = () => {
   document.getElementById("folderModal").classList.add("show");
   document.getElementById("folderNameInput").value = "";
-  document.getElementById("folderNameInput").focus();
 };
 
 document.getElementById("cancelFolder").onclick = () => {
@@ -1263,7 +1283,6 @@ document.getElementById("upperOverlay").onclick = () => {
 document.getElementById("addUpperBtn").onclick = () => {
   document.getElementById("upperModal").classList.add("show");
   document.getElementById("upperNameInput").value = "";
-  document.getElementById("upperNameInput").focus();
 };
 
 document.getElementById("cancelUpperBtn").onclick = () => {
