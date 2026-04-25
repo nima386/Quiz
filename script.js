@@ -394,8 +394,9 @@ document.getElementById("nextBtn").onclick = () => {
 };
 
 document.getElementById("rememberBtn").onclick = () => {
-  const q = data[currentCategory][current];
-
+ const realIndex = quizOrders[currentCategory][current];
+const q = data[currentCategory][realIndex];
+  
   if (!remembered[currentCategory]) remembered[currentCategory] = [];
 
   const exists = remembered[currentCategory].some(item => item.text === q.text);
