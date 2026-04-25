@@ -1343,10 +1343,12 @@ fetch("questions.json?v=" + Date.now())
   .then(serverData => {
     const publicData = serverData.Politik ? serverData : { Politik: serverData };
 
-    if (activeUpper === "Bauzeichner") {
-      data = { ...publicData, ...data };
-      save();
-    }
+   if (activeUpper === "Bauzeichner") {
+  if (!data["Politik"] || data["Politik"].length === 0) {
+    data["Politik"] = publicData["Politik"] || publicData;
+    save();
+  }
+}
 
     renderHome();
     renderLibrary();
