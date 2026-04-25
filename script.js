@@ -1473,21 +1473,31 @@ document.getElementById("loginBtn").onclick = async () => {
       return;
     }
 
-    const email = usernameToEmail(username);
+    const { db, doc, getDoc, auth, signInWithEmailAndPassword } = window.firebaseTools;
 
-    const { auth, signInWithEmailAndPassword } = window.firebaseTools;
+    const usernameRef = doc(db, "usernames", username);
+    const usernameSnap = await getDoc(usernameRef);
+
+    if (!usernameSnap.exists()) {
+      showAuthMessage("Dieser Username existiert nicht.");
+      return;
+    }
+
+    const email = usernameToEmail(username);
 
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showAuthMessage("Username oder Passwort ist falsch.");
+    showAuthMessage("Passwort ist falsch.");
   }
 };
 
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
   if (user) {
     currentUser = user;
+    document.getElementById("logoutBtn").textContent = "⎋ Ausloggen";
     guestMode = false;
     localStorage.removeItem("guestMode");
+   
 
     authScreen.classList.add("hide");
 
@@ -1498,6 +1508,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     setActiveNav("navStart");
   } else {
     currentUser = null;
+    document.getElementById("logoutBtn").textContent = "⎋ Einloggen";
 
     if (guestMode) {
       authScreen.classList.add("hide");
@@ -1542,6 +1553,14 @@ document.getElementById("closeAuthBtn").onclick = () => {
 };
 
 document.getElementById("logoutBtn").onclick = async () => {
+  if (!currentUser) {
+    guestMode = false;
+    localStorage.removeItem("guestMode");
+    authScreen.classList.remove("hide");
+    showScreen(home, true);
+    return;
+  }
+
   const { auth, signOut } = window.firebaseTools;
 
   await signOut(auth);
@@ -1550,9 +1569,8 @@ document.getElementById("logoutBtn").onclick = async () => {
   guestMode = false;
   localStorage.removeItem("guestMode");
 
+  document.getElementById("logoutBtn").textContent = "⎋ Einloggen";
   authScreen.classList.remove("hide");
-  showScreen(home, true);
-  setActiveNav("navStart");
 };
 
 /* Start */
