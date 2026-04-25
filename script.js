@@ -49,9 +49,18 @@ const rememberedScreen = document.getElementById("remembered");
 const statsScreen = document.getElementById("statsScreen");
 const examResult = document.getElementById("examResult");
 
+let currentUser = null;
+
+const authScreen = document.getElementById("authScreen");
+const authName = document.getElementById("authName");
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authMessage = document.getElementById("authMessage");
+
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
   saveAppStore();
+  saveCloudData();
 }
 
 function getActiveStore() {
@@ -1341,6 +1350,121 @@ document.getElementById("closeUpperDrawer").addEventListener("click", () => {
 document.getElementById("upperOverlay").addEventListener("click", () => {
   closeUpperDrawer();
 });
+
+function showAuthMessage(text) {
+  authMessage.textContent = text;
+}
+
+async function saveUserProfile(user, username = "") {
+  const { db, doc, setDoc, getDoc } = window.firebaseTools;
+
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    await setDoc(userRef, {
+      profile: {
+        username: username || user.email.split("@")[0],
+        email: user.email,
+        createdAt: new Date().toISOString()
+      },
+      appStore: appStore
+    });
+  }
+}
+
+async function loadUserCloudData(user) {
+  const { db, doc, getDoc } = window.firebaseTools;
+
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+
+  if (snap.exists()) {
+    const cloud = snap.data();
+
+    if (cloud.appStore) {
+      appStore = cloud.appStore;
+      hydrateActiveUpper();
+      renderHome();
+      renderLibrary();
+      renderRemembered();
+      renderStats();
+    }
+  }
+}
+
+async function saveCloudData() {
+  if (!currentUser) return;
+
+  const { db, doc, setDoc } = window.firebaseTools;
+
+  saveAppStore();
+
+  await setDoc(doc(db, "users", currentUser.uid), {
+    appStore: appStore
+  }, { merge: true });
+}
+
+document.getElementById("registerBtn").onclick = async () => {
+  try {
+    showAuthMessage("");
+
+    const name = authName.value.trim();
+    const email = authEmail.value.trim();
+    const password = authPassword.value.trim();
+
+    if (!name || !email || !password) {
+      showAuthMessage("Bitte alle Felder ausfüllen.");
+      return;
+    }
+
+    const { auth, createUserWithEmailAndPassword } = window.firebaseTools;
+
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await saveUserProfile(result.user, name);
+
+    showAuthMessage("");
+  } catch (error) {
+    showAuthMessage(error.message);
+  }
+};
+
+document.getElementById("loginBtn").onclick = async () => {
+  try {
+    showAuthMessage("");
+
+    const email = authEmail.value.trim();
+    const password = authPassword.value.trim();
+
+    if (!email || !password) {
+      showAuthMessage("E-Mail und Passwort eingeben.");
+      return;
+    }
+
+    const { auth, signInWithEmailAndPassword } = window.firebaseTools;
+
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    showAuthMessage(error.message);
+  }
+};
+
+window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
+  if (user) {
+    currentUser = user;
+    authScreen.classList.add("hide");
+
+    await loadUserCloudData(user);
+
+    renderHome();
+    renderLibrary();
+    setActiveNav("navStart");
+  } else {
+    currentUser = null;
+    authScreen.classList.remove("hide");
+  }
+});
+
 
 /* Start */
 
