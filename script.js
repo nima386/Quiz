@@ -862,6 +862,87 @@ document.getElementById("searchInput").oninput = e => {
   runSearch(e.target.value);
 };
 
+document.getElementById("manualTab").onclick = () => {
+  document.getElementById("manualTab").classList.add("active");
+  document.getElementById("excelTab").classList.remove("active");
+  document.getElementById("manualArea").style.display = "block";
+  document.getElementById("excelArea").style.display = "none";
+};
+
+document.getElementById("excelTab").onclick = () => {
+  document.getElementById("excelTab").classList.add("active");
+  document.getElementById("manualTab").classList.remove("active");
+  document.getElementById("manualArea").style.display = "none";
+  document.getElementById("excelArea").style.display = "block";
+};
+
+document.getElementById("excelInput").onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = event => {
+    const dataArray = new Uint8Array(event.target.result);
+    const workbook = XLSX.read(dataArray, { type: "array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+    excelQuestions = rows
+      .filter(row => row[0])
+      .map(row => {
+        const questionText = String(row[0]).trim();
+
+        const rawAnswers = [
+          row[2],
+          row[3],
+          row[4],
+          row[5],
+          row[6]
+        ].filter(Boolean).map(a => String(a).trim());
+
+        const correctIndex = rawAnswers.findIndex(a =>
+          a.includes("**")
+        );
+
+        const cleanAnswers = rawAnswers.map(a =>
+          a.replace(/\*\*/g, "").trim()
+        );
+
+        return {
+          text: questionText,
+          answers: cleanAnswers,
+          correct: correctIndex
+        };
+      })
+      .filter(q => q.answers.length >= 2 && q.correct >= 0);
+
+    document.getElementById("excelPreview").innerHTML =
+      `${excelQuestions.length} Fragen erkannt.<br>Sie werden zu <b>${currentCategory}</b> hinzugefügt.`;
+  };
+
+  reader.readAsArrayBuffer(file);
+};
+
+document.getElementById("importExcelBtn").onclick = () => {
+  if (excelQuestions.length === 0) {
+    alert("Keine gültigen Fragen gefunden.");
+    return;
+  }
+
+  data[currentCategory].push(...excelQuestions);
+  save();
+  renderHome();
+  renderQuestionList();
+
+  document.getElementById("modal").classList.remove("show");
+  document.getElementById("excelPreview").innerHTML = "";
+  document.getElementById("excelInput").value = "";
+  excelQuestions = [];
+
+  alert("Excel-Fragen importiert!");
+};
+
 /* Start */
 
 fetch("questions.json")
