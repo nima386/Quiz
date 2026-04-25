@@ -7,6 +7,8 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
 let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
 let stats = JSON.parse(localStorage.getItem("quizStats")) || {};
 let remembered = JSON.parse(localStorage.getItem("rememberedQuestions")) || {};
+let wrongQuestions = JSON.parse(localStorage.getItem("wrongQuestions")) || {};
+let editingIndex = null;
 let quizMode = "normal";
 
 let currentCategory = "Politik";
@@ -42,9 +44,17 @@ function renderHome() {
     const total = data[category].length;
     const done = progress[category] || 0;
     const percent = total ? Math.round((done / total) * 100) : 0;
+    const wrongCount = wrongQuestions[category]?.length || 0;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "swipe-wrapper";
+
+    const wrongBtn = document.createElement("button");
+    wrongBtn.className = "swipe-delete mistake-btn";
+    wrongBtn.textContent = `Fehler ${wrongCount}`;
 
     const card = document.createElement("div");
-    card.className = "category-card";
+    card.className = "category-card swipe-row";
 
     card.innerHTML = `
       <div class="card-head">
@@ -64,8 +74,29 @@ function renderHome() {
       <button class="main-btn">Weiter</button>
     `;
 
+    let startX = 0;
+
+    card.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    card.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+
+      if (startX - endX > 60 && wrongCount > 0) wrapper.classList.add("open");
+      if (endX - startX > 60) wrapper.classList.remove("open");
+    });
+
     card.querySelector("button").onclick = () => startQuiz(category);
-    box.appendChild(card);
+
+    wrongBtn.onclick = () => {
+      if (wrongCount === 0) return;
+      startWrongQuiz(category);
+    };
+
+    wrapper.appendChild(wrongBtn);
+    wrapper.appendChild(card);
+    box.appendChild(wrapper);
   });
 }
 
