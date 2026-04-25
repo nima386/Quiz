@@ -350,6 +350,13 @@ function renderLibrary() {
 
       delete data[category];
       delete progress[category];
+      delete stats[category];
+      delete remembered[category];
+      delete wrongQuestions[category];
+
+localStorage.setItem("quizStats", JSON.stringify(stats));
+localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
 
       save();
       localStorage.setItem("quizProgress", JSON.stringify(progress));
