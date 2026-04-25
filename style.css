@@ -1051,3 +1051,48 @@ h1 {
   border: 1px solid #60a5fa;
   color: #93c5fd;
 }
+
+.import-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.08);
+}
+
+.import-tab {
+  flex: 1;
+  padding: 13px;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: 900;
+  background: transparent;
+}
+
+.import-tab.active {
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  box-shadow: 0 0 28px rgba(99,102,241,.45);
+}
+
+.excel-upload {
+  display: block;
+  text-align: center;
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.09);
+  border: 1px dashed rgba(255,255,255,.35);
+  font-weight: 900;
+  box-shadow: 0 0 28px rgba(99,102,241,.22);
+}
+
+.excel-preview {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.8);
+  font-weight: 800;
+  line-height: 1.5;
+}
