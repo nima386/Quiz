@@ -467,7 +467,7 @@ document.getElementById("createFolder").onclick = () => {
 };
 
 function setActiveNav(activeId) {
-  const items = ["navStart", "navLibrary", "navRemembered"];
+  const items = ["navStart", "navLibrary", "navRemembered", "navStats"];
   const index = items.indexOf(activeId);
 
   document.querySelectorAll(".nav-item").forEach(item => {
@@ -477,14 +477,6 @@ function setActiveNav(activeId) {
   document.getElementById(activeId).classList.add("active");
   document.querySelector(".bottom-nav").dataset.active = index;
 }
-
-function setActiveNav(activeId) {
-  const items = ["navStart", "navLibrary", "navRemembered"];
-  const index = items.indexOf(activeId);
-
-  document.querySelectorAll(".nav-item").forEach(item => {
-    item.classList.remove("active");
-  });
 
   document.getElementById(activeId).classList.add("active");
   document.querySelector(".bottom-nav").dataset.active = index;
