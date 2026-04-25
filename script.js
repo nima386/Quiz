@@ -200,10 +200,20 @@ function loadQuestion() {
   quizMode === "exam" ? examQuestions :
   data[currentCategory];
 
-  const q =
-  quizMode === "normal"
-    ? data[currentCategory][quizOrders[currentCategory][current]]
-    : source[current];
+let q;
+
+if (quizMode === "normal") {
+  if (!quizOrders[currentCategory]) {
+    prepareQuizOrder(currentCategory);
+  }
+
+  const order = quizOrders[currentCategory];
+  const index = order[current] ?? 0;
+
+  q = data[currentCategory][index];
+} else {
+  q = source[current];
+}
 
   document.getElementById("currentNumber").textContent = current + 1;
   document.getElementById("totalNumber").textContent = source.length;
