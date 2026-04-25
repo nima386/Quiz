@@ -14,6 +14,24 @@ let quizMode = "normal";
 let excelQuestions = [];
 let examQuestions = [];
 let examAnswers = [];
+let activeUpper = localStorage.getItem("activeUpper") || "Bauzeichner";
+
+let appStore = JSON.parse(localStorage.getItem("appStore"));
+
+if (!appStore) {
+  appStore = {
+    upperCategories: {
+      Bauzeichner: {
+        data,
+        progress,
+        quizOrders,
+        stats,
+        remembered,
+        wrongQuestions
+      }
+    }
+  };
+}
 
 let currentCategory = "Politik";
 let current = 0;
@@ -33,10 +51,55 @@ const examResult = document.getElementById("examResult");
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
+  saveAppStore();
+}
+
+function getActiveStore() {
+  if (!appStore.upperCategories[activeUpper]) {
+    appStore.upperCategories[activeUpper] = {
+      data: {},
+      progress: {},
+      quizOrders: {},
+      stats: {},
+      remembered: {},
+      wrongQuestions: {}
+    };
+  }
+
+  return appStore.upperCategories[activeUpper];
+}
+
+function hydrateActiveUpper() {
+  const store = getActiveStore();
+
+  data = store.data || {};
+  progress = store.progress || {};
+  quizOrders = store.quizOrders || {};
+  stats = store.stats || {};
+  remembered = store.remembered || {};
+  wrongQuestions = store.wrongQuestions || {};
+}
+
+function syncActiveUpper() {
+  appStore.upperCategories[activeUpper] = {
+    data,
+    progress,
+    quizOrders,
+    stats,
+    remembered,
+    wrongQuestions
+  };
+}
+
+function saveAppStore() {
+  syncActiveUpper();
+  localStorage.setItem("appStore", JSON.stringify(appStore));
+  localStorage.setItem("activeUpper", activeUpper);
 }
 
 function saveQuizOrders() {
   localStorage.setItem("quizOrders", JSON.stringify(quizOrders));
+  saveAppStore();
 }
 
 function shuffleArray(array) {
@@ -56,6 +119,101 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".swipe-wrapper.open").forEach(item => {
     item.classList.remove("open");
   });
+
+  function renderUpperList() {
+  const list = document.getElementById("upperList");
+  list.innerHTML = "";
+
+  Object.keys(appStore.upperCategories).forEach(name => {
+    const store = appStore.upperCategories[name];
+    const categoryCount = Object.keys(store.data || {}).length;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "upper-swipe";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "upper-delete";
+    deleteBtn.textContent = "Löschen";
+
+    const row = document.createElement("div");
+    row.className = "upper-row";
+    if (name === activeUpper) row.classList.add("active");
+
+    row.innerHTML = `
+      <div class="upper-icon">◈</div>
+      <div>
+        <div class="upper-title">${name}</div>
+        <div class="upper-sub">${categoryCount} Kategorien</div>
+      </div>
+    `;
+
+    let startX = 0;
+
+    row.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    row.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+
+      if (startX - endX > 55) wrapper.classList.add("open");
+      if (endX - startX > 55) wrapper.classList.remove("open");
+    });
+
+    row.onclick = () => {
+      if (wrapper.classList.contains("open")) return;
+
+      saveAppStore();
+
+      activeUpper = name;
+      hydrateActiveUpper();
+
+      closeUpperDrawer();
+      renderHome();
+      renderLibrary();
+      setActiveNav("navStart");
+      showScreen(home, true);
+    };
+
+    deleteBtn.onclick = () => {
+      const names = Object.keys(appStore.upperCategories);
+
+      if (names.length <= 1) {
+        alert("Mindestens eine Oberkategorie muss bleiben.");
+        return;
+      }
+
+      if (!confirm(`${name} wirklich löschen?`)) return;
+
+      delete appStore.upperCategories[name];
+
+      if (activeUpper === name) {
+        activeUpper = Object.keys(appStore.upperCategories)[0];
+        hydrateActiveUpper();
+      }
+
+      saveAppStore();
+      renderUpperList();
+      renderHome();
+      renderLibrary();
+    };
+
+    wrapper.appendChild(deleteBtn);
+    wrapper.appendChild(row);
+    list.appendChild(wrapper);
+  });
+}
+
+function openUpperDrawer() {
+  document.getElementById("upperOverlay").classList.add("show");
+  document.getElementById("upperDrawer").classList.add("show");
+  renderUpperList();
+}
+
+function closeUpperDrawer() {
+  document.getElementById("upperOverlay").classList.remove("show");
+  document.getElementById("upperDrawer").classList.remove("show");
+}
 
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
@@ -461,6 +619,8 @@ function renderLibrary() {
       delete stats[category];
       delete remembered[category];
       delete wrongQuestions[category];
+      delete quizOrders[category];
+saveAppStore();
 
 localStorage.setItem("quizStats", JSON.stringify(stats));
 localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
@@ -680,6 +840,8 @@ document.getElementById("createFolder").onclick = () => {
 
   data[name] = [];
   progress[name] = 0;
+  quizOrders[name] = [];
+saveAppStore();
 
   save();
   localStorage.setItem("quizProgress", JSON.stringify(progress));
@@ -1097,14 +1259,77 @@ saveQuizOrders();
   alert("Excel-Fragen importiert!");
 };
 
+document.getElementById("upperMenuBtn").onclick = () => {
+  openUpperDrawer();
+};
+
+document.getElementById("closeUpperDrawer").onclick = () => {
+  closeUpperDrawer();
+};
+
+document.getElementById("upperOverlay").onclick = () => {
+  closeUpperDrawer();
+};
+
+document.getElementById("addUpperBtn").onclick = () => {
+  document.getElementById("upperModal").classList.add("show");
+  document.getElementById("upperNameInput").value = "";
+  document.getElementById("upperNameInput").focus();
+};
+
+document.getElementById("cancelUpperBtn").onclick = () => {
+  document.getElementById("upperModal").classList.remove("show");
+};
+
+document.getElementById("createUpperBtn").onclick = () => {
+  const name = document.getElementById("upperNameInput").value.trim();
+
+  if (!name) return alert("Bitte Namen eingeben.");
+
+  if (appStore.upperCategories[name]) {
+    alert("Diese Oberkategorie gibt es schon.");
+    return;
+  }
+
+  saveAppStore();
+
+  appStore.upperCategories[name] = {
+    data: {},
+    progress: {},
+    quizOrders: {},
+    stats: {},
+    remembered: {},
+    wrongQuestions: {}
+  };
+
+  activeUpper = name;
+  hydrateActiveUpper();
+
+  saveAppStore();
+
+  document.getElementById("upperModal").classList.remove("show");
+  closeUpperDrawer();
+
+  renderHome();
+  renderLibrary();
+  setActiveNav("navStart");
+  showScreen(home, true);
+};
+
 /* Start */
 
-fetch("questions.json")
+hydrateActiveUpper();
+
+fetch("questions.json?v=" + Date.now())
   .then(res => res.json())
   .then(serverData => {
-    data = serverData.Politik ? serverData : { Politik: serverData };
+    const publicData = serverData.Politik ? serverData : { Politik: serverData };
 
-    save();
+    if (activeUpper === "Bauzeichner") {
+      data = { ...publicData, ...data };
+      save();
+    }
+
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
