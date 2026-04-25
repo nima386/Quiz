@@ -1437,3 +1437,38 @@ textarea,
 select {
   font-size: 16px !important;
 }
+
+#upperModal .folder-create-box {
+  width: min(92vw, 420px);
+  padding: 22px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: 0 0 45px rgba(99,102,241,.32);
+}
+
+#upperModal h2 {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+#upperNameInput,
+#folderNameInput {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.18);
+  outline: none;
+  background: rgba(255,255,255,.10);
+  color: white;
+  font-weight: 800;
+  margin-bottom: 14px;
+  backdrop-filter: blur(20px);
+}
+
+#upperNameInput::placeholder,
+#folderNameInput::placeholder {
+  color: rgba(255,255,255,.45);
+}
