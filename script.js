@@ -1158,28 +1158,37 @@ const introScreen = document.getElementById("introScreen");
 
 if (introScreen) {
   let startY = 0;
+  let currentY = 0;
+  let dragging = false;
 
   introScreen.addEventListener("touchstart", e => {
     startY = e.touches[0].clientY;
+    dragging = true;
+    introScreen.style.transition = "none";
   });
 
-  introScreen.addEventListener("touchend", e => {
-    const endY = e.changedTouches[0].clientY;
+  introScreen.addEventListener("touchmove", e => {
+    if (!dragging) return;
 
-    if (startY - endY > 80) {
+    currentY = e.touches[0].clientY;
+    const diff = Math.min(0, currentY - startY);
+
+    introScreen.style.transform = `translateY(${diff}px)`;
+  });
+
+  introScreen.addEventListener("touchend", () => {
+    dragging = false;
+    introScreen.style.transition = "transform .55s cubic-bezier(.2,.9,.2,1), opacity .45s ease";
+
+    const diff = currentY - startY;
+
+    if (diff < -180) {
       introScreen.classList.add("hide");
-
       setTimeout(() => {
         introScreen.style.display = "none";
-      }, 750);
+      }, 600);
+    } else {
+      introScreen.style.transform = "translateY(0)";
     }
-  });
-
-  introScreen.addEventListener("click", () => {
-    introScreen.classList.add("hide");
-
-    setTimeout(() => {
-      introScreen.style.display = "none";
-    }, 750);
   });
 }
