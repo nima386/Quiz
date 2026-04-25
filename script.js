@@ -215,11 +215,6 @@ function closeUpperDrawer() {
   document.getElementById("upperDrawer").classList.remove("show");
 }
 
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  screen.classList.add("active");
-  nav.style.display = showNav ? "flex" : "none";
-}
-
 function renderHome() {
   const box = document.getElementById("homeCategories");
   box.innerHTML = "";
