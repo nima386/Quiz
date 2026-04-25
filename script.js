@@ -120,7 +120,12 @@ function showScreen(screen, showNav = true) {
     item.classList.remove("open");
   });
 
-  function renderUpperList() {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
+  nav.style.display = showNav ? "flex" : "none";
+}
+
+function renderUpperList() {
   const list = document.getElementById("upperList");
   list.innerHTML = "";
 
@@ -147,24 +152,8 @@ function showScreen(screen, showNav = true) {
       </div>
     `;
 
-    let startX = 0;
-
-    row.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    });
-
-    row.addEventListener("touchend", e => {
-      const endX = e.changedTouches[0].clientX;
-
-      if (startX - endX > 55) wrapper.classList.add("open");
-      if (endX - startX > 55) wrapper.classList.remove("open");
-    });
-
     row.onclick = () => {
-      if (wrapper.classList.contains("open")) return;
-
       saveAppStore();
-
       activeUpper = name;
       hydrateActiveUpper();
 
@@ -208,6 +197,11 @@ function openUpperDrawer() {
   document.getElementById("upperOverlay").classList.add("show");
   document.getElementById("upperDrawer").classList.add("show");
   renderUpperList();
+}
+
+function closeUpperDrawer() {
+  document.getElementById("upperOverlay").classList.remove("show");
+  document.getElementById("upperDrawer").classList.remove("show");
 }
 
 function closeUpperDrawer() {
