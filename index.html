@@ -251,7 +251,7 @@
   </div>
 </nav>
 
-<!-- MENU MODAL (HIER VOR SCRIPT!) -->
+<!-- MENU MODAL -->
 <div id="menuModal" class="menu-modal">
   <div class="menu-box">
     <button id="restartQuiz" class="menu-item">Neu starten</button>
@@ -259,12 +259,41 @@
   </div>
 </div>
 
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBHEg-jKbHBXXVKEf5OSg1YxmejKStSryY",
+    authDomain: "nima386.firebaseapp.com",
+    projectId: "nima386",
+    storageBucket: "nima386.firebasestorage.app",
+    messagingSenderId: "344163687667",
+    appId: "1:344163687667:web:7943a7093f3fbee6b7eb86",
+    measurementId: "G-69FVBPQX5F"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.auth = getAuth(app);
+  window.db = getFirestore(app);
+
+  console.log("Firebase verbunden");
+</script>
+
+<!-- XLSX -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-<script src="script.js?v=auto"></script>
-  <script>
+
+<!-- DEIN CODE (NUR EINMAL!) -->
+<script src="script.js?v=2"></script>
+
+<!-- Service Worker -->
+<script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");
   }
 </script>
+
 </body>
 </html>
