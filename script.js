@@ -5,6 +5,7 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
 };
 
 let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+let quizOrders = JSON.parse(localStorage.getItem("quizOrders")) || {};
 let stats = JSON.parse(localStorage.getItem("quizStats")) || {};
 let remembered = JSON.parse(localStorage.getItem("rememberedQuestions")) || {};
 let wrongQuestions = JSON.parse(localStorage.getItem("wrongQuestions")) || {};
@@ -32,6 +33,23 @@ const examResult = document.getElementById("examResult");
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
+}
+
+function saveQuizOrders() {
+  localStorage.setItem("quizOrders", JSON.stringify(quizOrders));
+}
+
+function shuffleArray(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function prepareQuizOrder(category) {
+  const total = data[category].length;
+
+  if (!quizOrders[category] || quizOrders[category].length !== total) {
+    quizOrders[category] = shuffleArray([...Array(total).keys()]);
+    saveQuizOrders();
+  }
 }
 
 function showScreen(screen, showNav = true) {
