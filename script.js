@@ -567,6 +567,12 @@ document.getElementById("navRemembered").onclick = () => {
   renderRemembered();
 };
 
+document.getElementById("navStats").onclick = () => {
+  setActiveNav("navStats");
+  showScreen(statsScreen, true);
+  renderStats();
+};
+
 document.getElementById("backHome").addEventListener("click", () => {
   setActiveNav("navStart");
   showScreen(home, true);
