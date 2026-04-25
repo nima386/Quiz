@@ -11,6 +11,8 @@ let wrongQuestions = JSON.parse(localStorage.getItem("wrongQuestions")) || {};
 let editingIndex = null;
 let quizMode = "normal";
 let excelQuestions = [];
+let examQuestions = [];
+let examAnswers = [];
 
 let currentCategory = "Politik";
 let current = 0;
