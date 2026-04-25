@@ -1052,3 +1052,8 @@ h1 {
   color: rgba(255,255,255,.65);
   font-weight: 800;
 }
+
+.mistake-btn {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  box-shadow: 0 0 28px rgba(249,115,22,.45);
+}
