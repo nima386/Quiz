@@ -59,6 +59,7 @@ const authName = document.getElementById("authName");
 const authEmail = document.getElementById("authEmail");
 const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
+let guestMode = localStorage.getItem("guestMode") === "true";
 
 authName.style.display = "none";
 
@@ -1457,6 +1458,9 @@ document.getElementById("loginBtn").onclick = async () => {
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
   if (user) {
     currentUser = user;
+    guestMode = false;
+    localStorage.removeItem("guestMode");
+
     authScreen.classList.add("hide");
 
     await loadUserCloudData(user);
@@ -1466,7 +1470,12 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     setActiveNav("navStart");
   } else {
     currentUser = null;
-    authScreen.classList.remove("hide");
+
+    if (guestMode) {
+      authScreen.classList.add("hide");
+    } else {
+      authScreen.classList.remove("hide");
+    }
   }
 });
 
@@ -1497,6 +1506,26 @@ backToLoginBtn.onclick = () => {
   backToLoginBtn.style.display = "none";
 
   authMessage.textContent = "";
+};
+
+document.getElementById("closeAuthBtn").onclick = () => {
+  guestMode = true;
+  localStorage.setItem("guestMode", "true");
+  authScreen.classList.add("hide");
+};
+
+document.getElementById("logoutBtn").onclick = async () => {
+  const { auth, signOut } = window.firebaseTools;
+
+  await signOut(auth);
+
+  currentUser = null;
+  guestMode = false;
+  localStorage.removeItem("guestMode");
+
+  authScreen.classList.remove("hide");
+  showScreen(home, true);
+  setActiveNav("navStart");
 };
 
 /* Start */
