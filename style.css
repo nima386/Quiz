@@ -1431,3 +1431,9 @@ body {
   overflow: hidden;
   border-radius: 24px;
 }
+
+input,
+textarea,
+select {
+  font-size: 16px !important;
+}
