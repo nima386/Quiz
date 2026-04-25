@@ -1176,19 +1176,58 @@ if (introScreen) {
     introScreen.style.transform = `translateY(${diff}px)`;
   });
 
-  introScreen.addEventListener("touchend", () => {
-    dragging = false;
-    introScreen.style.transition = "transform .55s cubic-bezier(.2,.9,.2,1), opacity .45s ease";
+ // LOTTIE START
+const intro = document.getElementById("introScreen");
+const swipe = document.getElementById("introSwipe");
 
-    const diff = currentY - startY;
+lottie.loadAnimation({
+  container: document.getElementById("introLogo"),
+  renderer: "svg",
+  loop: false,
+  autoplay: true,
+  path: "learning.json"
+});
 
-    if (diff < -140) {
-      introScreen.classList.add("hide");
-      setTimeout(() => {
-        introScreen.style.display = "none";
-      }, 600);
-    } else {
-      introScreen.style.transform = "translateY(0)";
-    }
-  });
-}
+// Swipe erst anzeigen NACH Animation
+setTimeout(() => {
+  swipe.classList.add("show");
+}, 1800);
+
+// SWIPE LOGIK
+let startY = 0;
+let currentY = 0;
+let dragging = false;
+
+intro.addEventListener("touchstart", e => {
+  startY = e.touches[0].clientY;
+  dragging = true;
+});
+
+intro.addEventListener("touchmove", e => {
+  if (!dragging) return;
+
+  currentY = e.touches[0].clientY;
+  const diff = currentY - startY;
+
+  if (diff < 0) {
+    intro.style.transform = `translateY(${diff}px)`;
+  }
+});
+
+intro.addEventListener("touchend", () => {
+  dragging = false;
+
+  if (currentY - startY < -120) {
+    // öffnen
+    intro.style.transition = "transform 0.4s ease";
+    intro.style.transform = "translateY(-100%)";
+
+    setTimeout(() => {
+      intro.remove();
+    }, 400);
+  } else {
+    // zurück
+    intro.style.transition = "transform 0.3s ease";
+    intro.style.transform = "translateY(0)";
+  }
+});
