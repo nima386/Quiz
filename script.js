@@ -19,6 +19,7 @@ const profile = document.getElementById("profile");
 const library = document.getElementById("library");
 const questionList = document.getElementById("questionList");
 const questionDetail = document.getElementById("questionDetail");
+const searchScreen = document.getElementById("searchScreen");
 const rememberedScreen = document.getElementById("remembered");
 
 function save() {
@@ -558,6 +559,90 @@ function renderRemembered() {
 document.getElementById("navRemembered").onclick = () => {
   showScreen(rememberedScreen, true);
   renderRemembered();
+};
+
+function openQuestionFromSearch(category, index) {
+  currentCategory = category;
+  openQuestionDetail(index);
+}
+
+function runSearch(query) {
+  const resultsBox = document.getElementById("searchResults");
+  resultsBox.innerHTML = "";
+
+  const search = query.toLowerCase().trim();
+
+  if (!search) {
+    resultsBox.innerHTML = `
+      <div class="search-result">
+        <div class="search-title">Wonach suchst du?</div>
+        <div class="search-sub">Suche nach Kategorie, Frage oder Antwort.</div>
+      </div>
+    `;
+    return;
+  }
+
+  Object.keys(data).forEach(category => {
+    const categoryMatch = category.toLowerCase().includes(search);
+
+    if (categoryMatch) {
+      const item = document.createElement("div");
+      item.className = "search-result";
+      item.innerHTML = `
+        <div class="search-type">Kategorie</div>
+        <div class="search-title">${category}</div>
+        <div class="search-sub">${data[category].length} Fragen</div>
+      `;
+
+      item.onclick = () => startQuiz(category);
+      resultsBox.appendChild(item);
+    }
+
+    data[category].forEach((q, index) => {
+      const answersText = q.answers.join(" ").toLowerCase();
+
+      const match =
+        q.text.toLowerCase().includes(search) ||
+        answersText.includes(search);
+
+      if (match) {
+        const item = document.createElement("div");
+        item.className = "search-result";
+        item.innerHTML = `
+          <div class="search-type">${category} • Frage ${index + 1}</div>
+          <div class="search-title">${q.text}</div>
+          <div class="search-sub">Tippen, um Frage zu öffnen</div>
+        `;
+
+        item.onclick = () => openQuestionFromSearch(category, index);
+        resultsBox.appendChild(item);
+      }
+    });
+  });
+
+  if (!resultsBox.innerHTML) {
+    resultsBox.innerHTML = `
+      <div class="search-result">
+        <div class="search-title">Nichts gefunden</div>
+        <div class="search-sub">Versuche ein anderes Stichwort.</div>
+      </div>
+    `;
+  }
+}
+
+document.getElementById("openSearch").onclick = () => {
+  showScreen(searchScreen, false);
+  document.getElementById("searchInput").value = "";
+  runSearch("");
+  setTimeout(() => document.getElementById("searchInput").focus(), 150);
+};
+
+document.getElementById("closeSearch").onclick = () => {
+  showScreen(home, true);
+};
+
+document.getElementById("searchInput").oninput = e => {
+  runSearch(e.target.value);
 };
 
 /* Start */
