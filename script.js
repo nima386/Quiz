@@ -495,12 +495,6 @@ document.getElementById("navRemembered").onclick = () => {
   renderRemembered();
 };
 
-document.getElementById("navRemembered").onclick = () => {
-  setActiveNav("navRemembered");
-  showScreen(rememberedScreen, true);
-  renderRemembered();
-};
-
 document.getElementById("openProfile").onclick = () => {
   showScreen(profile, false);
 };
@@ -518,6 +512,9 @@ document.getElementById("backQuestions").onclick = () => {
   showScreen(questionList, true);
 };
 
+
+/* Gemerkt Liste */
+
 function renderRemembered() {
   const list = document.getElementById("rememberedList");
   list.innerHTML = "";
@@ -534,6 +531,7 @@ function renderRemembered() {
 
     const row = document.createElement("div");
     row.className = "folder-row swipe-row";
+
     row.innerHTML = `
       <div class="folder-icon">★</div>
       <div>
@@ -577,10 +575,8 @@ function renderRemembered() {
   });
 }
 
-document.getElementById("navRemembered").onclick = () => {
-  showScreen(rememberedScreen, true);
-  renderRemembered();
-};
+
+/* Suche */
 
 function openQuestionFromSearch(category, index) {
   currentCategory = category;
@@ -604,9 +600,8 @@ function runSearch(query) {
   }
 
   Object.keys(data).forEach(category => {
-    const categoryMatch = category.toLowerCase().includes(search);
 
-    if (categoryMatch) {
+    if (category.toLowerCase().includes(search)) {
       const item = document.createElement("div");
       item.className = "search-result";
       item.innerHTML = `
@@ -614,17 +609,14 @@ function runSearch(query) {
         <div class="search-title">${category}</div>
         <div class="search-sub">${data[category].length} Fragen</div>
       `;
-
       item.onclick = () => startQuiz(category);
       resultsBox.appendChild(item);
     }
 
     data[category].forEach((q, index) => {
-      const answersText = q.answers.join(" ").toLowerCase();
-
       const match =
         q.text.toLowerCase().includes(search) ||
-        answersText.includes(search);
+        q.answers.join(" ").toLowerCase().includes(search);
 
       if (match) {
         const item = document.createElement("div");
@@ -632,9 +624,8 @@ function runSearch(query) {
         item.innerHTML = `
           <div class="search-type">${category} • Frage ${index + 1}</div>
           <div class="search-title">${q.text}</div>
-          <div class="search-sub">Tippen, um Frage zu öffnen</div>
+          <div class="search-sub">Tippen zum Öffnen</div>
         `;
-
         item.onclick = () => openQuestionFromSearch(category, index);
         resultsBox.appendChild(item);
       }
@@ -665,7 +656,6 @@ document.getElementById("closeSearch").onclick = () => {
 document.getElementById("searchInput").oninput = e => {
   runSearch(e.target.value);
 };
-
 
 /* Start */
 
