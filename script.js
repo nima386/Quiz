@@ -463,21 +463,32 @@ document.getElementById("createFolder").onclick = () => {
   document.getElementById("folderModal").classList.remove("show");
 };
 
+function setActiveNav(activeId) {
+  document.querySelectorAll(".nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  document.getElementById(activeId).classList.add("active");
+}
+
 /* Navigation */
 
 document.getElementById("navStart").onclick = () => {
+  setActiveNav("navStart");
   showScreen(home, true);
   renderHome();
 };
 
 document.getElementById("navLibrary").onclick = () => {
+  setActiveNav("navLibrary");
   showScreen(library, true);
   renderLibrary();
 };
 
-document.getElementById("backHome").onclick = () => {
-  showScreen(home, true);
-  renderHome();
+document.getElementById("navRemembered").onclick = () => {
+  setActiveNav("navRemembered");
+  showScreen(rememberedScreen, true);
+  renderRemembered();
 };
 
 document.getElementById("openProfile").onclick = () => {
