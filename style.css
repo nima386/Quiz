@@ -1096,3 +1096,38 @@ h1 {
   font-weight: 800;
   line-height: 1.5;
 }
+
+.category-swipe.open .swipe-row {
+  transform: translateX(-220px);
+}
+
+.swipe-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 215px;
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.swipe-action {
+  flex: 1;
+  border: none;
+  border-radius: 22px;
+  color: white;
+  font-weight: 900;
+  font-size: 15px;
+  backdrop-filter: blur(20px);
+}
+
+.mistake-action {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  box-shadow: 0 0 28px rgba(249,115,22,.45);
+}
+
+.exam-action {
+  background: linear-gradient(135deg, #22c55e, #38bdf8, #6366f1);
+  box-shadow: 0 0 28px rgba(56,189,248,.45);
+}
