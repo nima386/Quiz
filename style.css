@@ -1281,21 +1281,20 @@ body {
   touch-action: manipulation;
 }
 
-/* Intro Screen */
+/* Intro Clean Version */
 
 .intro-screen {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  overflow: hidden;
-  background: rgba(8, 5, 31, .38);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
   display: flex;
   align-items: center;
   justify-content: center;
   touch-action: none;
-  transition: transform .55s cubic-bezier(.2,.9,.2,1), opacity .45s ease;
+  background: rgba(8,5,31,.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform .55s cubic-bezier(.2,.9,.2,1), opacity .4s ease;
 }
 
 .intro-screen.hide {
@@ -1303,89 +1302,62 @@ body {
   opacity: 0;
 }
 
-.intro-glass {
+/* Hintergrund zeigt App durch */
+.intro-blur {
   position: absolute;
-  width: 88vw;
-  height: 210px;
-  border-radius: 42px;
-  background: rgba(255,255,255,.075);
-  border: 1px solid rgba(216,180,254,.42);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  box-shadow:
-    inset 0 0 28px rgba(255,255,255,.10),
-    0 0 42px rgba(168,85,247,.25);
+  inset: 0;
+  background: radial-gradient(circle at 60% 60%, rgba(99,102,241,.25), transparent 60%);
+  pointer-events: none;
 }
 
-.intro-glass.one {
-  transform: translateY(10px);
-}
-
-.intro-glass.two {
-  display: none;
-}
-
+/* HELLO */
 .hello-text {
-  position: relative;
   font-family: cursive;
-  font-size: clamp(54px, 16vw, 88px);
-  font-weight: 400;
-  color: rgba(255,255,255,.92);
+  font-size: clamp(48px, 14vw, 80px);
+  color: rgba(255,255,255,.95);
+  letter-spacing: 2px;
   text-shadow:
-    0 0 12px rgba(255,255,255,.75),
-    0 0 28px rgba(168,85,247,.75);
+    0 0 10px rgba(255,255,255,.6),
+    0 0 22px rgba(99,102,241,.6);
+
   overflow: hidden;
   white-space: nowrap;
   width: 0;
-  animation: helloWrite 1.15s cubic-bezier(.2,.9,.2,1) forwards;
+
+  animation: helloWrite 1.1s ease forwards;
 }
 
 @keyframes helloWrite {
   from { width: 0; }
-  to { width: 240px; }
+  to { width: 180px; }
 }
 
+/* SWIPE */
 .swipe-hint {
   position: absolute;
-  bottom: 58px;
+  bottom: 70px;
   text-align: center;
-  color: white;
-  letter-spacing: 3px;
-  font-weight: 700;
-  opacity: 0;
-  animation: showSwipe .35s ease forwards;
-  animation-delay: 1.25s;
-}
-
-.chevrons {
-  font-size: 34px;
-  line-height: .7;
-  color: #d8b4fe;
-  text-shadow: 0 0 20px rgba(216,180,254,.9);
-  animation: chevronOnce .7s ease-out 1;
-  animation-delay: 1.35s;
-}
-
-.swipe-hint p {
-  margin: 14px 0 20px;
+  color: rgba(255,255,255,.8);
   font-size: 14px;
+  opacity: 0;
+  animation: showSwipe .3s ease forwards;
+  animation-delay: 1.2s;
 }
 
-.home-line {
-  width: 150px;
-  height: 5px;
-  border-radius: 999px;
-  margin: auto;
-  background: rgba(255,255,255,.75);
-  box-shadow: 0 0 16px rgba(216,180,254,.6);
+.arrow {
+  font-size: 28px;
+  margin-bottom: 6px;
+  opacity: .9;
+  animation: arrowUp .6s ease-out 1;
+  animation-delay: 1.3s;
 }
 
 @keyframes showSwipe {
   to { opacity: 1; }
 }
 
-@keyframes chevronOnce {
+@keyframes arrowUp {
   0% { transform: translateY(10px); opacity: 0; }
-  50% { transform: translateY(-8px); opacity: 1; }
-  100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(-6px); opacity: 1; }
+  100% { transform: translateY(0); }
 }
