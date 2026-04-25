@@ -61,7 +61,16 @@ const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
 let guestMode = localStorage.getItem("guestMode") === "true";
 
-authName.style.display = "none";
+function normalizeUsername(name) {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "");
+}
+
+function usernameToEmail(username) {
+  return `${username}@nimaquiz.local`;
+}
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
@@ -1415,23 +1424,40 @@ document.getElementById("registerBtn").onclick = async () => {
   try {
     showAuthMessage("");
 
-    const name = authName.value.trim();
-    const email = authEmail.value.trim();
+    const username = normalizeUsername(authName.value);
     const password = authPassword.value.trim();
 
-    if (!name || !email || !password) {
-      showAuthMessage("Bitte alle Felder ausfüllen.");
+    if (!username || !password) {
+      showAuthMessage("Username und Passwort eingeben.");
       return;
     }
 
-    const { auth, createUserWithEmailAndPassword } = window.firebaseTools;
+    if (!/^[a-z0-9_]{3,20}$/.test(username)) {
+      showAuthMessage("Username: 3-20 Zeichen, nur Buchstaben, Zahlen oder _");
+      return;
+    }
+
+    const email = usernameToEmail(username);
+
+    const { auth, db, createUserWithEmailAndPassword, doc, setDoc } = window.firebaseTools;
 
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    await saveUserProfile(result.user, name);
+
+    await setDoc(doc(db, "usernames", username), {
+      uid: result.user.uid,
+      username,
+      createdAt: new Date().toISOString()
+    });
+
+    await saveUserProfile(result.user, username);
 
     showAuthMessage("");
   } catch (error) {
-    showAuthMessage(error.message);
+    if (error.code === "auth/email-already-in-use") {
+      showAuthMessage("Dieser Username ist bereits vergeben.");
+    } else {
+      showAuthMessage(error.message);
+    }
   }
 };
 
@@ -1439,19 +1465,21 @@ document.getElementById("loginBtn").onclick = async () => {
   try {
     showAuthMessage("");
 
-    const email = authEmail.value.trim();
+    const username = normalizeUsername(authName.value);
     const password = authPassword.value.trim();
 
-    if (!email || !password) {
-      showAuthMessage("E-Mail und Passwort eingeben.");
+    if (!username || !password) {
+      showAuthMessage("Username und Passwort eingeben.");
       return;
     }
+
+    const email = usernameToEmail(username);
 
     const { auth, signInWithEmailAndPassword } = window.firebaseTools;
 
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showAuthMessage(error.message);
+    showAuthMessage("Username oder Passwort ist falsch.");
   }
 };
 
@@ -1485,7 +1513,7 @@ const registerBtn = document.getElementById("registerBtn");
 const loginBtn = document.getElementById("loginBtn");
 
 showRegisterBtn.onclick = () => {
-  authName.style.display = "block";
+
 
   loginBtn.style.display = "none";
   showRegisterBtn.style.display = "none";
@@ -1497,7 +1525,6 @@ showRegisterBtn.onclick = () => {
 };
 
 backToLoginBtn.onclick = () => {
-  authName.style.display = "none";
 
   loginBtn.style.display = "block";
   showRegisterBtn.style.display = "block";
