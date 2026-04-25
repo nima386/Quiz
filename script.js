@@ -1153,3 +1153,33 @@ saveQuizOrders();
     renderHome();
   }, 120);
 };
+
+const introScreen = document.getElementById("introScreen");
+
+if (introScreen) {
+  let startY = 0;
+
+  introScreen.addEventListener("touchstart", e => {
+    startY = e.touches[0].clientY;
+  });
+
+  introScreen.addEventListener("touchend", e => {
+    const endY = e.changedTouches[0].clientY;
+
+    if (startY - endY > 80) {
+      introScreen.classList.add("hide");
+
+      setTimeout(() => {
+        introScreen.style.display = "none";
+      }, 750);
+    }
+  });
+
+  introScreen.addEventListener("click", () => {
+    introScreen.classList.add("hide");
+
+    setTimeout(() => {
+      introScreen.style.display = "none";
+    }, 750);
+  });
+}
