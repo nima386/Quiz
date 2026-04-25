@@ -472,6 +472,7 @@ function renderAnswerInputs() {
 }
 
 document.getElementById("addQuestionBtn").onclick = () => {
+  editingIndex = null;
   answerCount = 4;
   selectedCorrect = 0;
   document.getElementById("newQuestionText").value = "";
@@ -516,11 +517,18 @@ document.getElementById("saveQuestion").onclick = () => {
     return alert("Mindestens 2 Antworten eingeben.");
   }
 
-  data[currentCategory].push({
-    text: questionText,
-    answers: cleanAnswers,
-    correct: selectedCorrect
-  });
+ const newQuestion = {
+  text: questionText,
+  answers: cleanAnswers,
+  correct: selectedCorrect
+};
+
+if (editingIndex !== null) {
+  data[currentCategory][editingIndex] = newQuestion;
+  editingIndex = null;
+} else {
+  data[currentCategory].push(newQuestion);
+}
 
   save();
   renderHome();
