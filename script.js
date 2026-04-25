@@ -118,22 +118,33 @@ function startQuiz(category) {
   loadQuestion();
 }
 
+function startWrongQuiz(category) {
+  if (!wrongQuestions[category] || wrongQuestions[category].length === 0) {
+    alert("Keine Fehler in dieser Kategorie.");
+    return;
+  }
+
+  currentCategory = category;
+  quizMode = "wrong";
+  current = 0;
+
+  showScreen(quiz, false);
+  loadQuestion();
+}
+
 function loadQuestion() {
-  const q = quizMode === "remembered"
-    ? remembered[currentCategory][current]
-    : data[currentCategory][current];
+  const source =
+    quizMode === "remembered" ? remembered[currentCategory] :
+    quizMode === "wrong" ? wrongQuestions[currentCategory] :
+    data[currentCategory];
+
+  const q = source[current];
 
   document.getElementById("currentNumber").textContent = current + 1;
-  document.getElementById("totalNumber").textContent =
-    quizMode === "remembered"
-      ? remembered[currentCategory].length
-      : data[currentCategory].length;
-  const totalQuestions = quizMode === "remembered"
-  ? remembered[currentCategory].length
-  : data[currentCategory].length;
+  document.getElementById("totalNumber").textContent = source.length;
 
-document.getElementById("quizBarFill").style.width =
-  ((current + 1) / totalQuestions) * 100 + "%";
+  document.getElementById("quizBarFill").style.width =
+    ((current + 1) / source.length) * 100 + "%";
 
   document.getElementById("questionText").textContent = q.text;
   document.getElementById("feedback").textContent = "";
