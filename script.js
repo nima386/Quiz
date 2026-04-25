@@ -594,31 +594,10 @@ function renderLibrary() {
       if (endX - startX > 60) wrapper.classList.remove("open");
     });
 
-   let startX = 0;
-
-row.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
-
-row.addEventListener("touchend", e => {
-  const endX = e.changedTouches[0].clientX;
-
-  if (startX - endX > 55) wrapper.classList.add("open");
-  if (endX - startX > 55) wrapper.classList.remove("open");
-});
-
 row.onclick = () => {
-  if (wrapper.classList.contains("open")) return;
-
-  saveAppStore();
-  activeUpper = name;
-  hydrateActiveUpper();
-
-  closeUpperDrawer();
-  renderHome();
-  renderLibrary();
-  setActiveNav("navStart");
-  showScreen(home, true);
+  if (!wrapper.classList.contains("open")) {
+    openFolder(category);
+  }
 };
 
     deleteBtn.onclick = () => {
