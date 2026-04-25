@@ -31,6 +31,10 @@ function save() {
 }
 
 function showScreen(screen, showNav = true) {
+  document.querySelectorAll(".swipe-wrapper.open").forEach(item => {
+    item.classList.remove("open");
+  });
+
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
   nav.style.display = showNav ? "flex" : "none";
