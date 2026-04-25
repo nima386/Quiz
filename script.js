@@ -475,6 +475,18 @@ function setActiveNav(activeId) {
   document.querySelector(".bottom-nav").dataset.active = index;
 }
 
+function setActiveNav(activeId) {
+  const items = ["navStart", "navLibrary", "navRemembered"];
+  const index = items.indexOf(activeId);
+
+  document.querySelectorAll(".nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  document.getElementById(activeId).classList.add("active");
+  document.querySelector(".bottom-nav").dataset.active = index;
+}
+
 /* Navigation */
 
 document.getElementById("navStart").onclick = () => {
@@ -666,14 +678,14 @@ fetch("questions.json?v=100")
     save();
     renderHome();
     renderLibrary();
-  });
-  setActiveNav("navStart");
-
+  })
   .catch(() => {
     save();
     renderHome();
     renderLibrary();
   });
+
+setActiveNav("navStart");
 
 let selectedCategoryForMenu = null;
 
