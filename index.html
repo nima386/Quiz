@@ -323,7 +323,11 @@ window.firebaseTools = {
   getDoc
 };
 
-console.log("Firebase verbunden");
+ console.log("Firebase verbunden");
+
+  const appScript = document.createElement("script");
+  appScript.src = "script.js?v=20";
+  document.body.appendChild(appScript);
 </script>
 
 <!-- XLSX -->
