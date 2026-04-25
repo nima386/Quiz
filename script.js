@@ -169,6 +169,7 @@ function startExamQuiz(category) {
     .slice(0, amount);
 
   showScreen(quiz, false);
+  quiz.classList.add("exam-mode");
   loadQuestion();
 }
 
@@ -213,6 +214,31 @@ function checkAnswer(index, clicked) {
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
+if (quizMode === "exam") {
+  const all = document.querySelectorAll(".answer");
+
+  all.forEach(a => a.classList.remove("selected"));
+  clicked.classList.add("selected");
+
+  examAnswers.push({
+    question: q,
+    chosen: index,
+    correct: isCorrect
+  });
+
+  setTimeout(() => {
+    current++;
+
+    if (current < examQuestions.length) {
+      loadQuestion();
+    } else {
+      finishExam();
+    }
+  }, 200);
+
+  return;
+}
+  
   if (quizMode === "exam") {
   examAnswers.push({
     question: q,
@@ -718,6 +744,8 @@ function renderStats() {
 }
 
 function finishExam() {
+  quiz.classList.remove("exam-mode");
+  
   const total = examAnswers.length;
   const correct = examAnswers.filter(a => a.correct).length;
   const wrong = total - correct;
