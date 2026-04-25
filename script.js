@@ -28,6 +28,7 @@ const questionDetail = document.getElementById("questionDetail");
 const searchScreen = document.getElementById("searchScreen");
 const rememberedScreen = document.getElementById("remembered");
 const statsScreen = document.getElementById("statsScreen");
+const examResult = document.getElementById("examResult");
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
