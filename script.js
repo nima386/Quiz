@@ -14,6 +14,9 @@ let quizMode = "normal";
 let excelQuestions = [];
 let examQuestions = [];
 let examAnswers = [];
+
+let authMode = "login";
+
 let activeUpper = localStorage.getItem("activeUpper") || "Bauzeichner";
 
 let appStore = JSON.parse(localStorage.getItem("appStore"));
