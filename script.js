@@ -1499,6 +1499,12 @@ backToLoginBtn.onclick = () => {
   authMessage.textContent = "";
 };
 
+console.log("Firebase verbunden");
+
+const appScript = document.createElement("script");
+appScript.src = "script.js?v=20";
+document.body.appendChild(appScript);
+
 /* Start */
 
 hydrateActiveUpper();
