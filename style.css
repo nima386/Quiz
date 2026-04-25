@@ -1280,3 +1280,133 @@ button:active,
 body {
   touch-action: manipulation;
 }
+
+/* Intro Screen */
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(124,58,237,.55), transparent 35%),
+    radial-gradient(circle at 85% 85%, rgba(168,85,247,.6), transparent 35%),
+    linear-gradient(160deg, #08051f, #12072f 55%, #1e0b4d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  transition: transform .75s cubic-bezier(.2,.9,.2,1), opacity .5s ease;
+}
+
+.intro-screen.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.intro-glass {
+  position: absolute;
+  width: 78vw;
+  height: 54vh;
+  border-radius: 42% 58% 54% 46%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(28px) saturate(160%);
+  box-shadow:
+    inset 0 0 35px rgba(255,255,255,.12),
+    0 0 70px rgba(168,85,247,.35);
+}
+
+.intro-glass.one {
+  transform: rotate(12deg) translateY(-40px);
+  animation: floatOne 6s ease-in-out infinite;
+}
+
+.intro-glass.two {
+  width: 95vw;
+  height: 38vh;
+  transform: rotate(-18deg);
+  opacity: .65;
+  animation: floatTwo 7s ease-in-out infinite;
+}
+
+@keyframes floatOne {
+  50% { transform: rotate(16deg) translateY(-58px) scale(1.03); }
+}
+
+@keyframes floatTwo {
+  50% { transform: rotate(-14deg) translateY(28px) scale(1.04); }
+}
+
+.hello-text {
+  position: relative;
+  font-family: cursive;
+  font-size: clamp(72px, 22vw, 140px);
+  font-weight: 400;
+  color: white;
+  text-shadow:
+    0 0 18px rgba(255,255,255,.9),
+    0 0 35px rgba(168,85,247,.9),
+    0 0 75px rgba(99,102,241,.65);
+  animation: helloDraw 1.4s ease both, helloGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes helloDraw {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(.92);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes helloGlow {
+  50% {
+    text-shadow:
+      0 0 24px rgba(255,255,255,1),
+      0 0 55px rgba(168,85,247,1),
+      0 0 95px rgba(99,102,241,.9);
+  }
+}
+
+.swipe-hint {
+  position: absolute;
+  bottom: 44px;
+  text-align: center;
+  color: white;
+  letter-spacing: 4px;
+  font-weight: 700;
+  animation: swipeFloat 1.7s ease-in-out infinite;
+}
+
+.chevrons {
+  font-size: 42px;
+  line-height: .7;
+  color: #d8b4fe;
+  text-shadow: 0 0 24px rgba(216,180,254,.9);
+}
+
+.swipe-hint p {
+  margin: 18px 0 26px;
+  font-size: 18px;
+}
+
+.home-line {
+  width: 190px;
+  height: 6px;
+  border-radius: 999px;
+  margin: auto;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 0 20px rgba(216,180,254,.8);
+}
+
+@keyframes swipeFloat {
+  50% {
+    transform: translateY(-14px);
+    opacity: .75;
+  }
+}
