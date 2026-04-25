@@ -130,6 +130,7 @@ function checkAnswer(index, clicked) {
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
+  recordStats(isCorrect);
 
   if (isCorrect) {
     clicked.classList.add("correct");
@@ -487,6 +488,71 @@ function setActiveNav(activeId) {
 
   document.getElementById(activeId).classList.add("active");
   document.querySelector(".bottom-nav").dataset.active = index;
+}
+
+function recordStats(isCorrect) {
+  if (!stats[currentCategory]) {
+    stats[currentCategory] = { correct: 0, wrong: 0 };
+  }
+
+  if (isCorrect) {
+    stats[currentCategory].correct++;
+  } else {
+    stats[currentCategory].wrong++;
+  }
+
+  localStorage.setItem("quizStats", JSON.stringify(stats));
+}
+
+function renderStats() {
+  const box = document.getElementById("statsBox");
+  box.innerHTML = "";
+
+  let bestCategory = null;
+  let bestPercent = -1;
+
+  Object.keys(stats).forEach(category => {
+    const correct = stats[category].correct || 0;
+    const wrong = stats[category].wrong || 0;
+    const total = correct + wrong;
+    const percent = total ? Math.round((correct / total) * 100) : 0;
+
+    if (percent > bestPercent && total > 0) {
+      bestPercent = percent;
+      bestCategory = category;
+    }
+
+    const card = document.createElement("div");
+    card.className = "stat-card";
+    card.innerHTML = `
+      <div class="stat-head">
+        <h2>${category}</h2>
+        <span>${percent}%</span>
+      </div>
+
+      <div class="stat-bar">
+        <div class="stat-fill" style="width:${percent}%"></div>
+      </div>
+
+      <div class="stat-grid">
+        <div><b>${correct}</b><small>Richtig</small></div>
+        <div><b>${wrong}</b><small>Falsch</small></div>
+        <div><b>${total}</b><small>Gesamt</small></div>
+      </div>
+    `;
+    box.appendChild(card);
+  });
+
+  if (bestCategory) {
+    const best = document.createElement("div");
+    best.className = "best-card";
+    best.innerHTML = `
+      <p>Beste Kategorie</p>
+      <h2>${bestCategory}</h2>
+      <span>${bestPercent}% richtig</span>
+    `;
+    box.prepend(best);
+  }
 }
 
 /* Navigation */
