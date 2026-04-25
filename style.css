@@ -1472,3 +1472,34 @@ select {
 #folderNameInput::placeholder {
   color: rgba(255,255,255,.45);
 }
+
+#upperModal {
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(0px);
+  transition: opacity .28s cubic-bezier(.2,.9,.2,1), backdrop-filter .28s ease;
+}
+
+#upperModal.show {
+  opacity: 1;
+  pointer-events: auto;
+  backdrop-filter: blur(18px);
+}
+
+#upperModal .folder-create-box {
+  transform: translateY(34px) scale(.94);
+  opacity: 0;
+  transition:
+    transform .36s cubic-bezier(.18,.9,.2,1.08),
+    opacity .25s ease;
+}
+
+#upperModal.show .folder-create-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+#upperModal.closing .folder-create-box {
+  transform: translateY(28px) scale(.96);
+  opacity: 0;
+}
