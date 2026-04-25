@@ -1496,6 +1496,35 @@ document.getElementById("backToLoginBtn").onclick = () => {
   authMessage.textContent = "";
 };
 
+const showRegisterBtn = document.getElementById("showRegisterBtn");
+const backToLoginBtn = document.getElementById("backToLoginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const loginBtn = document.getElementById("loginBtn");
+
+showRegisterBtn.onclick = () => {
+  authName.style.display = "block";
+
+  loginBtn.style.display = "none";
+  showRegisterBtn.style.display = "none";
+
+  registerBtn.style.display = "block";
+  backToLoginBtn.style.display = "block";
+
+  authMessage.textContent = "";
+};
+
+backToLoginBtn.onclick = () => {
+  authName.style.display = "none";
+
+  loginBtn.style.display = "block";
+  showRegisterBtn.style.display = "block";
+
+  registerBtn.style.display = "none";
+  backToLoginBtn.style.display = "none";
+
+  authMessage.textContent = "";
+};
+
 /* Start */
 
 hydrateActiveUpper();
