@@ -16,7 +16,6 @@ html, body {
   display: none;
   height: 100dvh;
   padding: 20px;
-  animation: fadeSlide .35s ease;
   overflow: hidden;
 }
 
@@ -41,7 +40,7 @@ html, body {
 }
 
 h1 {
-  font-size: clamp(28px, 8vw, 42px);
+  font-size: clamp(24px, 7vw, 34px);
   line-height: 1.15;
   margin: 28px 0 20px;
 }
@@ -583,8 +582,8 @@ h1 {
   position: fixed;
   left: 18px;
   right: 18px;
-  bottom: 18px;
-  height: 74px;
+  bottom: 14px;
+  height: 72px;
   padding: 8px;
   border-radius: 44px;
   background: rgba(12, 12, 22, .72);
@@ -617,7 +616,7 @@ h1 {
 }
 
 .nav-icon {
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1;
   transition: .28s cubic-bezier(.2,.9,.2,1);
 }
@@ -1147,4 +1146,137 @@ h1 {
   background: rgba(255,255,255,.08) !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+/* ===== Premium App Feeling ===== */
+
+:root {
+  --speed-fast: .18s;
+  --speed-normal: .32s;
+  --ease-app: cubic-bezier(.2,.9,.2,1);
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+.screen.active {
+  animation: screenEnter var(--speed-normal) var(--ease-app);
+}
+
+@keyframes screenEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.985);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+button,
+.nav-item,
+.category-card,
+.folder-row,
+.question-row,
+.answer,
+.glass-action,
+.menu-item,
+.search-result,
+.stat-card,
+.best-card {
+  transition:
+    transform var(--speed-fast) var(--ease-app),
+    box-shadow var(--speed-fast) var(--ease-app),
+    background var(--speed-fast) var(--ease-app),
+    border var(--speed-fast) var(--ease-app),
+    opacity var(--speed-fast) var(--ease-app);
+}
+
+button:active,
+.nav-item:active,
+.category-card:active,
+.folder-row:active,
+.question-row:active,
+.answer:active,
+.glass-action:active,
+.menu-item:active,
+.search-result:active {
+  transform: scale(.965);
+}
+
+.category-card,
+.folder-row,
+.question-row,
+.answer,
+.search-result,
+.stat-card,
+.best-card {
+  will-change: transform;
+}
+
+.screen,
+.scroll-screen,
+#quiz {
+  -webkit-overflow-scrolling: touch;
+}
+
+.answer {
+  animation: softPop .24s var(--ease-app) both;
+}
+
+@keyframes softPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.progress-fill,
+#quizBarFill,
+.stat-fill {
+  transition: width .45s var(--ease-app);
+}
+
+.main-btn,
+.glass-action.primary,
+.menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.main-btn::after,
+.glass-action.primary::after,
+.menu-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,.35), transparent 45%);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.main-btn:active::after,
+.glass-action.primary:active::after,
+.menu-item:active::after {
+  opacity: 1;
+}
+
+.bottom-nav {
+  transition: transform var(--speed-normal) var(--ease-app), opacity var(--speed-normal) var(--ease-app);
+}
+
+.nav-bubble {
+  transition: transform .48s cubic-bezier(.18,.9,.18,1.15);
+}
+
+body {
+  touch-action: manipulation;
 }
