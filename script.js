@@ -10,6 +10,7 @@ let remembered = JSON.parse(localStorage.getItem("rememberedQuestions")) || {};
 let wrongQuestions = JSON.parse(localStorage.getItem("wrongQuestions")) || {};
 let editingIndex = null;
 let quizMode = "normal";
+let excelQuestions = [];
 
 let currentCategory = "Politik";
 let current = 0;
