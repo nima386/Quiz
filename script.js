@@ -1083,6 +1083,8 @@ document.getElementById("importExcelBtn").onclick = () => {
   }
 
   data[currentCategory].push(...excelQuestions);
+  delete quizOrders[currentCategory];
+saveQuizOrders();
   save();
   renderHome();
   renderQuestionList();
