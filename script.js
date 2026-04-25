@@ -1281,9 +1281,17 @@ document.getElementById("addUpperBtn").onclick = () => {
   }, 260);
 };
 
-document.getElementById("cancelUpperBtn").onclick = () => {
-  document.getElementById("upperModal").classList.remove("show");
-};
+function closeUpperModal() {
+  const modal = document.getElementById("upperModal");
+  modal.classList.add("closing");
+
+  setTimeout(() => {
+    modal.classList.remove("show");
+    modal.classList.remove("closing");
+  }, 260);
+}
+
+document.getElementById("cancelUpperBtn").onclick = closeUpperModal;
 
 document.getElementById("createUpperBtn").onclick = () => {
   const name = document.getElementById("upperNameInput").value.trim();
@@ -1311,7 +1319,7 @@ document.getElementById("createUpperBtn").onclick = () => {
 
   saveAppStore();
 
-  document.getElementById("upperModal").classList.remove("show");
+  closeUpperModal();
   closeUpperDrawer();
 
   renderHome();
