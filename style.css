@@ -596,7 +596,7 @@ h1 {
   left: 18px;
   right: 18px;
   bottom: 18px;
-  height: 86px;
+  height: 74px;
   padding: 8px;
   border-radius: 44px;
   background: rgba(12, 12, 22, .72);
@@ -623,13 +623,13 @@ h1 {
   justify-content: center;
   gap: 3px;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 11px;
   position: relative;
   transition: .28s cubic-bezier(.2,.9,.2,1);
 }
 
 .nav-icon {
-  font-size: 27px;
+  font-size: 22px;
   line-height: 1;
   transition: .28s cubic-bezier(.2,.9,.2,1);
 }
@@ -906,7 +906,7 @@ h1 {
   position: absolute;
   top: 8px;
   left: 8px;
-  width: calc((100% - 16px) / 3);
+  width: calc((100% - 16px) / 4);
   height: calc(100% - 16px);
   border-radius: 38px;
   background:
@@ -949,6 +949,10 @@ h1 {
 
 .bottom-nav[data-active="2"] .nav-bubble {
   transform: translateX(200%);
+}
+
+.bottom-nav[data-active="3"] .nav-bubble {
+  transform: translateX(300%);
 }
 
 .nav-item.active {
