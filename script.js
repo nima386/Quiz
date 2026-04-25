@@ -1182,7 +1182,7 @@ if (introScreen) {
 
     const diff = currentY - startY;
 
-    if (diff < -180) {
+    if (diff < -140) {
       introScreen.classList.add("hide");
       setTimeout(() => {
         introScreen.style.display = "none";
