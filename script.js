@@ -172,7 +172,20 @@ function checkAnswer(index, clicked) {
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
+  if (quizMode === "normal") {
   recordStats(isCorrect);
+
+  if (!isCorrect) {
+    if (!wrongQuestions[currentCategory]) wrongQuestions[currentCategory] = [];
+
+    const exists = wrongQuestions[currentCategory].some(item => item.text === q.text);
+
+    if (!exists) {
+      wrongQuestions[currentCategory].push(q);
+      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+    }
+  }
+}
 
   if (isCorrect) {
     clicked.classList.add("correct");
