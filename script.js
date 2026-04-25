@@ -464,11 +464,15 @@ document.getElementById("createFolder").onclick = () => {
 };
 
 function setActiveNav(activeId) {
+  const items = ["navStart", "navLibrary", "navRemembered"];
+  const index = items.indexOf(activeId);
+
   document.querySelectorAll(".nav-item").forEach(item => {
     item.classList.remove("active");
   });
 
   document.getElementById(activeId).classList.add("active");
+  document.querySelector(".bottom-nav").dataset.active = index;
 }
 
 /* Navigation */
