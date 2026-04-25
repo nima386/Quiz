@@ -421,6 +421,24 @@ function deleteQuestion(index) {
   showScreen(questionList, true);
 }
 
+function editQuestion(index) {
+  const q = data[currentCategory][index];
+
+  editingIndex = index;
+  answerCount = q.answers.length;
+  selectedCorrect = q.correct;
+
+  document.getElementById("newQuestionText").value = q.text;
+  document.getElementById("modal").classList.add("show");
+
+  renderAnswerInputs();
+
+  const inputs = document.querySelectorAll(".answer-input");
+  q.answers.forEach((answer, i) => {
+    if (inputs[i]) inputs[i].value = answer;
+  });
+}
+
 /* Neue Frage UI */
 
 function renderAnswerInputs() {
