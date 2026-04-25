@@ -152,6 +152,19 @@ function renderUpperList() {
       </div>
     `;
 
+    let startX = 0;
+
+row.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+row.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+
+  if (startX - endX > 55) wrapper.classList.add("open");
+  if (endX - startX > 55) wrapper.classList.remove("open");
+});
+    
     row.onclick = () => {
       saveAppStore();
       activeUpper = name;
@@ -1260,8 +1273,12 @@ document.getElementById("upperOverlay").onclick = () => {
 };
 
 document.getElementById("addUpperBtn").onclick = () => {
-  document.getElementById("upperModal").classList.add("show");
-  document.getElementById("upperNameInput").value = "";
+  closeUpperDrawer();
+
+  setTimeout(() => {
+    document.getElementById("upperModal").classList.add("show");
+    document.getElementById("upperNameInput").value = "";
+  }, 260);
 };
 
 document.getElementById("cancelUpperBtn").onclick = () => {
