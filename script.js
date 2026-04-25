@@ -474,12 +474,11 @@ function setActiveNav(activeId) {
     item.classList.remove("active");
   });
 
-  document.getElementById(activeId).classList.add("active");
-  document.querySelector(".bottom-nav").dataset.active = index;
-}
+  const activeEl = document.getElementById(activeId);
+  if (activeEl) activeEl.classList.add("active");
 
-  document.getElementById(activeId).classList.add("active");
-  document.querySelector(".bottom-nav").dataset.active = index;
+  const nav = document.querySelector(".bottom-nav");
+  if (nav && index >= 0) nav.dataset.active = index;
 }
 
 function recordStats(isCorrect) {
