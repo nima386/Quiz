@@ -55,11 +55,14 @@ function renderHome() {
     const wrongCount = wrongQuestions[category]?.length || 0;
 
     const wrapper = document.createElement("div");
-    wrapper.className = "swipe-wrapper";
+    wrapper.className = "swipe-wrapper category-swipe";
 
-    const wrongBtn = document.createElement("button");
-    wrongBtn.className = "swipe-delete mistake-btn";
-    wrongBtn.textContent = `Fehler ${wrongCount}`;
+    const actions = document.createElement("div");
+    actions.className = "swipe-actions";
+    actions.innerHTML = `
+      <button class="swipe-action mistake-action">Fehler<br>${wrongCount}</button>
+      <button class="swipe-action exam-action">Prüfung</button>
+    `;
 
     const card = document.createElement("div");
     card.className = "category-card swipe-row";
@@ -91,18 +94,22 @@ function renderHome() {
     card.addEventListener("touchend", e => {
       const endX = e.changedTouches[0].clientX;
 
-      if (startX - endX > 60 && wrongCount > 0) wrapper.classList.add("open");
+      if (startX - endX > 60) wrapper.classList.add("open");
       if (endX - startX > 60) wrapper.classList.remove("open");
     });
 
-    card.querySelector("button").onclick = () => startQuiz(category);
+    card.querySelector(".main-btn").onclick = () => startQuiz(category);
 
-    wrongBtn.onclick = () => {
-      if (wrongCount === 0) return;
+    actions.querySelector(".mistake-action").onclick = () => {
+      if (wrongCount === 0) return alert("Keine falschen Fragen vorhanden.");
       startWrongQuiz(category);
     };
 
-    wrapper.appendChild(wrongBtn);
+    actions.querySelector(".exam-action").onclick = () => {
+      startExamQuiz(category);
+    };
+
+    wrapper.appendChild(actions);
     wrapper.appendChild(card);
     box.appendChild(wrapper);
   });
@@ -140,11 +147,37 @@ function startWrongQuiz(category) {
   loadQuestion();
 }
 
+function startExamQuiz(category) {
+  const questions = data[category];
+
+  if (!questions || questions.length < 2) {
+    alert("Für eine Prüfung brauchst du mindestens 2 Fragen.");
+    return;
+  }
+
+  currentCategory = category;
+  quizMode = "exam";
+  current = 0;
+  examAnswers = [];
+
+  const amount = questions.length >= 40
+    ? 20
+    : Math.ceil(questions.length / 2);
+
+  examQuestions = [...questions]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, amount);
+
+  showScreen(quiz, false);
+  loadQuestion();
+}
+
 function loadQuestion() {
   const source =
-    quizMode === "remembered" ? remembered[currentCategory] :
-    quizMode === "wrong" ? wrongQuestions[currentCategory] :
-    data[currentCategory];
+  quizMode === "remembered" ? remembered[currentCategory] :
+  quizMode === "wrong" ? wrongQuestions[currentCategory] :
+  quizMode === "exam" ? examQuestions :
+  data[currentCategory];
 
   const q = source[current];
 
@@ -180,6 +213,23 @@ function checkAnswer(index, clicked) {
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
+  if (quizMode === "exam") {
+  examAnswers.push({
+    question: q,
+    chosen: index,
+    correct: isCorrect
+  });
+
+  current++;
+
+  if (current < examQuestions.length) {
+    loadQuestion();
+  } else {
+    finishExam();
+  }
+
+  return;
+}
   if (quizMode === "normal") {
   recordStats(isCorrect);
 
@@ -665,6 +715,49 @@ function renderStats() {
     `;
     box.prepend(best);
   }
+}
+
+function finishExam() {
+  const total = examAnswers.length;
+  const correct = examAnswers.filter(a => a.correct).length;
+  const wrong = total - correct;
+  const percent = Math.round((correct / total) * 100);
+
+  if (!wrongQuestions[currentCategory]) wrongQuestions[currentCategory] = [];
+
+  examAnswers
+    .filter(a => !a.correct)
+    .forEach(a => {
+      const exists = wrongQuestions[currentCategory].some(q => q.text === a.question.text);
+      if (!exists) wrongQuestions[currentCategory].push(a.question);
+    });
+
+  localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+
+  const box = document.getElementById("examResultBox");
+
+  box.innerHTML = `
+    <div class="best-card">
+      <p>Dein Ergebnis</p>
+      <h2>${percent}%</h2>
+      <span>${correct} richtig · ${wrong} falsch · ${total} Fragen</span>
+    </div>
+
+    ${examAnswers.filter(a => !a.correct).map(a => `
+      <div class="detail-card">
+        <h2>${a.question.text}</h2>
+        <p>Deine Antwort: ${a.question.answers[a.chosen]}</p>
+        <p>Richtig: ✅ ${a.question.answers[a.question.correct]}</p>
+      </div>
+    `).join("")}
+
+    <button class="main-btn" onclick="showScreen(home, true); renderHome();">
+      Zurück zur Startseite
+    </button>
+  `;
+
+  showScreen(examResult, true);
+  renderHome();
 }
 
 /* Navigation */
