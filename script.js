@@ -213,6 +213,30 @@ function checkAnswer(index, clicked) {
         return;
       }
 
+      if (quizMode === "wrong") {
+  setTimeout(() => {
+    if (isCorrect) {
+      wrongQuestions[currentCategory].splice(current, 1);
+      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+    } else {
+      current++;
+    }
+
+    if (!wrongQuestions[currentCategory] || wrongQuestions[currentCategory].length === 0) {
+      delete wrongQuestions[currentCategory];
+      localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+      showScreen(home, true);
+      renderHome();
+      return;
+    }
+
+    if (current >= wrongQuestions[currentCategory].length) current = 0;
+    loadQuestion();
+  }, 1200);
+
+  return;
+}
+
       if (current >= remembered[currentCategory].length) current = 0;
       loadQuestion();
     }, 1200);
