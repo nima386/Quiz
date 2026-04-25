@@ -1608,3 +1608,9 @@ select {
   background: rgba(239,68,68,.12);
   border: 1px solid rgba(239,68,68,.25);
 }
+
+.settings-card.success {
+  color: #86efac;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.3);
+}
