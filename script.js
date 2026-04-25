@@ -133,16 +133,17 @@ function renderHome() {
   });
 }
 
-currentCategory = category;
-quizMode = "normal";
-
-prepareQuizOrder(category);
-
-current = progress[category] || 0;
+function startQuiz(category) {
+  if (!data[category] || data[category].length === 0) {
+    alert("Dieser Ordner hat noch keine Fragen.");
+    return;
   }
 
   currentCategory = category;
   quizMode = "normal";
+
+  prepareQuizOrder(category);
+
   current = progress[category] || 0;
 
   if (current >= data[category].length) {
@@ -150,6 +151,7 @@ current = progress[category] || 0;
   }
 
   showScreen(quiz, false);
+  quiz.classList.remove("exam-mode");
   loadQuestion();
 }
 
