@@ -495,6 +495,12 @@ document.getElementById("navRemembered").onclick = () => {
   renderRemembered();
 };
 
+document.getElementById("navRemembered").onclick = () => {
+  setActiveNav("navRemembered");
+  showScreen(rememberedScreen, true);
+  renderRemembered();
+};
+
 document.getElementById("openProfile").onclick = () => {
   showScreen(profile, false);
 };
@@ -669,7 +675,9 @@ fetch("questions.json?v=100")
     save();
     renderHome();
     renderLibrary();
-  })
+  });
+  setActiveNav("navStart");
+
   .catch(() => {
     save();
     renderHome();
