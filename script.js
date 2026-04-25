@@ -859,7 +859,8 @@ document.getElementById("searchInput").oninput = e => {
 fetch("questions.json?v=100")
   .then(res => res.json())
   .then(serverData => {
-    data = serverData.Politik ? serverData : { Politik: serverData };
+    const publicData = serverData.Politik ? serverData : { Politik: serverData };
+data = { ...publicData, ...data };
     save();
     renderHome();
     renderLibrary();
