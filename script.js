@@ -507,6 +507,12 @@ document.getElementById("navRemembered").onclick = () => {
   renderRemembered();
 };
 
+document.getElementById("backHome").addEventListener("click", () => {
+  setActiveNav("navStart");
+  showScreen(home, true);
+  renderHome();
+});
+
 document.getElementById("openProfile").onclick = () => {
   showScreen(profile, false);
 };
