@@ -863,19 +863,21 @@ document.getElementById("searchInput").oninput = e => {
 
 /* Start */
 
-fetch("questions.json?v=100")
+fetch("questions.json")
   .then(res => res.json())
   .then(serverData => {
-    const publicData = serverData.Politik ? serverData : { Politik: serverData };
-data = { ...publicData, ...data };
+    data = serverData.Politik ? serverData : { Politik: serverData };
+
     save();
     renderHome();
     renderLibrary();
+    setActiveNav("navStart");
   })
-  .catch(() => {
-    save();
+  .catch(error => {
+    console.error("questions.json konnte nicht geladen werden:", error);
     renderHome();
     renderLibrary();
+    setActiveNav("navStart");
   });
 
 setActiveNav("navStart");
