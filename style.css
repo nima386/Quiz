@@ -1131,3 +1131,20 @@ h1 {
   background: linear-gradient(135deg, #22c55e, #38bdf8, #6366f1);
   box-shadow: 0 0 28px rgba(56,189,248,.45);
 }
+
+/* Prüfungsmodus Auswahl */
+
+.answer.selected {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: 0 0 18px rgba(255,255,255,.15);
+  transform: scale(.98);
+}
+
+/* kein grün/rot im Prüfungsmodus */
+.exam-mode .answer.correct,
+.exam-mode .answer.wrong {
+  background: rgba(255,255,255,.08) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
