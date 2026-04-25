@@ -5,6 +5,7 @@ let data = JSON.parse(localStorage.getItem("quizData")) || {
 };
 
 let progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+let stats = JSON.parse(localStorage.getItem("quizStats")) || {};
 let remembered = JSON.parse(localStorage.getItem("rememberedQuestions")) || {};
 let quizMode = "normal";
 
@@ -21,6 +22,7 @@ const questionList = document.getElementById("questionList");
 const questionDetail = document.getElementById("questionDetail");
 const searchScreen = document.getElementById("searchScreen");
 const rememberedScreen = document.getElementById("remembered");
+const statsScreen = document.getElementById("statsScreen");
 
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
