@@ -1470,32 +1470,6 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
   }
 });
 
-document.getElementById("showRegisterBtn").onclick = () => {
-  authMode = "register";
-
-  document.getElementById("loginBtn").style.display = "none";
-  document.getElementById("showRegisterBtn").style.display = "none";
-
-  document.getElementById("registerBtn").style.display = "block";
-  document.getElementById("backToLoginBtn").style.display = "block";
-
-  authName.style.display = "block";
-  authMessage.textContent = "";
-};
-
-document.getElementById("backToLoginBtn").onclick = () => {
-  authMode = "login";
-
-  document.getElementById("loginBtn").style.display = "block";
-  document.getElementById("showRegisterBtn").style.display = "block";
-
-  document.getElementById("registerBtn").style.display = "none";
-  document.getElementById("backToLoginBtn").style.display = "none";
-
-  authName.style.display = "none";
-  authMessage.textContent = "";
-};
-
 const showRegisterBtn = document.getElementById("showRegisterBtn");
 const backToLoginBtn = document.getElementById("backToLoginBtn");
 const registerBtn = document.getElementById("registerBtn");
