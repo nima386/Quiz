@@ -1442,6 +1442,7 @@ async function saveCloudData() {
 
 document.getElementById("registerBtn").onclick = async () => {
   const button = document.getElementById("registerBtn");
+  const button = document.getElementById("registerBtn");
   try {
     showAuthMessage("");
 
@@ -1463,7 +1464,9 @@ document.getElementById("registerBtn").onclick = async () => {
     const { auth, db, createUserWithEmailAndPassword, doc, setDoc } = window.firebaseTools;
 
     await startButtonLoading(button, "success");
-    const result = await createUserWithEmailAndPassword(auth, email, password);
+   await startButtonLoading(button, "success");
+
+const result = await createUserWithEmailAndPassword(auth, email, password);
 
     await setDoc(doc(db, "usernames", username), {
       uid: result.user.uid,
@@ -1514,12 +1517,14 @@ document.getElementById("loginBtn").onclick = async () => {
 
     const email = usernameToEmail(username);
 
-    await signInWithEmailAndPassword(auth, email, password);
+    await startButtonLoading(button, "success");
 
-    authScreen.classList.add("hide");
-    showScreen(home, true);
-    setActiveNav("navStart");
-    showIsland("Eingeloggt", "success");
+await signInWithEmailAndPassword(auth, email, password);
+
+authScreen.classList.add("hide");
+showScreen(home, true);
+setActiveNav("navStart");
+showIsland("Eingeloggt", "success");
 
   } catch (error) {
     showAuthMessage("Username oder Passwort ist falsch.");
@@ -1596,12 +1601,14 @@ document.getElementById("closeAuthBtn").onclick = () => {
 document.getElementById("logoutBtn").onclick = async () => {
   const button = document.getElementById("logoutBtn");
 
+  // 👇 wenn NICHT eingeloggt → Login öffnen
   if (!currentUser) {
     authScreen.classList.remove("hide");
     showScreen(profile, false);
     return;
   }
 
+  // 👇 Animation starten
   await startButtonLoading(button, "danger");
 
   const { auth, signOut } = window.firebaseTools;
@@ -1616,6 +1623,7 @@ document.getElementById("logoutBtn").onclick = async () => {
 
   showScreen(home, true);
   setActiveNav("navStart");
+
   showIsland("Ausgeloggt", "danger");
 };
 
