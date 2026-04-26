@@ -1069,7 +1069,7 @@ document.getElementById("backHome").addEventListener("click", () => {
   renderHome();
 });
 
-document.getElementById("openProfile").onclick = () => {
+document.getElementById("topAvatar").onclick = () => {
   updateProfileUI();
   showScreen(profile, false);
 
