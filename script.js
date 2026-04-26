@@ -197,6 +197,11 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
   nav.style.display = showNav ? "flex" : "none";
+  const addQuestionBtn = document.getElementById("addQuestionBtn");
+
+if (addQuestionBtn) {
+  addQuestionBtn.classList.toggle("show", screen === questionList);
+}
   setTimeout(() => {
   if (screen.classList.contains("scroll-screen")) {
     screen.scrollTo({ top: 0, behavior: "smooth" });
@@ -860,6 +865,12 @@ function renderAnswerInputs() {
 }
 
 document.getElementById("addQuestionBtn").onclick = () => {
+  softVibrate(25);
+document.getElementById("addQuestionBtn").classList.add("tap-pop");
+
+setTimeout(() => {
+  document.getElementById("addQuestionBtn").classList.remove("tap-pop");
+}, 220);
   editingIndex = null;
   answerCount = 4;
   selectedCorrect = 0;
