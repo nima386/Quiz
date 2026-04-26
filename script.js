@@ -1812,7 +1812,7 @@ document.getElementById("logoutBtn").onclick = async () => {
   guestMode = false;
   localStorage.removeItem("guestMode");
 
-  document.getElementById("logoutBtn").textContent = "⎋ Einloggen";
+  document.getElementById("logoutBtn").innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
 
   showScreen(home, true);
   setActiveNav("navStart");
