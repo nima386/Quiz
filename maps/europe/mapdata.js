@@ -63,7 +63,7 @@ var simplemaps_europemap_mapdata={
     
 		//Advanced settings
 		div: "map",
-    auto_load: "yes",
+    auto_load: "no",
     rotate: "0",
     url_new_tab: "yes",
     images_directory: "default",
