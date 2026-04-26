@@ -1030,28 +1030,18 @@ let europeHadMistake = false;
 let europeAnswerLocked = false;
 let europeRoundCorrect = 0;
 let europeRoundWrong = 0;
+let europeAnsweredThisCountry = false;
 
 function createEuropeDeck() {
   europeDeck = [...europeCountries].sort(() => Math.random() - 0.5);
 }
 
 function finishEuropeRound() {
+  document.getElementById("roundCorrectFinal").textContent = europeRoundCorrect;
+  document.getElementById("roundWrongFinal").textContent = europeRoundWrong;
+
+  document.getElementById("europeRoundModal").classList.add("show");
   showIsland("Runde beendet", "success");
-
-  setTimeout(() => {
-    alert(
-      `Runde beendet\n\n` +
-      `Richtig: ${europeRoundCorrect}\n` +
-      `Falsch: ${europeRoundWrong}`
-    );
-
-    europeRound++;
-    europeRoundCorrect = 0;
-    europeRoundWrong = 0;
-
-    createEuropeDeck();
-    pickNextEuropeCountry();
-  }, 400);
 }
 
 function initEuropeCountries() {
@@ -1096,9 +1086,22 @@ function pickNextEuropeCountry() {
   europeWrongAttempts = 0;
   europeHadMistake = false;
   europeAnswerLocked = false;
+  europeAnsweredThisCountry = false;
 
   document.getElementById("targetCountryName").textContent = currentEuropeCountry.name;
   document.getElementById("mapFeedback").textContent = "";
+}
+
+function resetEuropeRound() {
+  europeRoundCorrect = 0;
+  europeRoundWrong = 0;
+  europeWrongAttempts = 0;
+  europeHadMistake = false;
+  europeAnswerLocked = false;
+  europeAnsweredThisCountry = false;
+  currentEuropeCountry = null;
+  europeDeck = [];
+  document.body.classList.remove("map-playing");
 }
 
 function startEuropeMapQuiz() {
@@ -1144,8 +1147,10 @@ function handleEuropeCountryClick(countryId) {
   if (countryId === currentEuropeCountry.id) {
     europeAnswerLocked = true;
 
-    stats.correct++;
-    europeRoundCorrect++;
+   if (!europeAnsweredThisCountry) {
+  europeRoundCorrect++;
+  europeAnsweredThisCountry = true;
+}
 
     if (europeHadMistake) {
       stats.wrong++;
@@ -1165,7 +1170,6 @@ function handleEuropeCountryClick(countryId) {
     document.getElementById("mapFeedback").className = "map-feedback correct";
 
     updateEuropeMapScore();
-    saveGameStats();
 
     setTimeout(() => {
       pickNextEuropeCountry();
@@ -1187,8 +1191,10 @@ function handleEuropeCountryClick(countryId) {
 
   if (europeWrongAttempts >= 3) {
     europeAnswerLocked = true;
-    stats.wrong++;
-    europeRoundWrong++;
+    sif (!europeAnsweredThisCountry) {
+  europeRoundWrong++;
+  europeAnsweredThisCountry = true;
+}
     europeCurrentStreak = 0;
 
     colorEuropeCountry(currentEuropeCountry.id, "#ef4444");
@@ -1197,7 +1203,7 @@ function handleEuropeCountryClick(countryId) {
       `3x falsch – richtig war ${currentEuropeCountry.name}`;
 
     updateEuropeMapScore();
-    saveGameStats();
+
 
     setTimeout(() => {
       pickNextEuropeCountry();
@@ -1210,13 +1216,11 @@ function handleEuropeCountryClick(countryId) {
 }
 
 function updateEuropeMapScore() {
-  const stats = gameStats.europeCountries;
-
   document.getElementById("mapCorrectCount").textContent =
-    `${stats.correct || 0} richtig`;
+    `${europeRoundCorrect} richtig`;
 
   document.getElementById("mapWrongCount").textContent =
-    `${stats.wrong || 0} falsch`;
+    `${europeRoundWrong} falsch`;
 }
 
 function renderEuropeGameHome() {
@@ -2398,6 +2402,7 @@ document.getElementById("backGames").onclick = () => {
 };
 
 document.getElementById("backEuropeHome").onclick = () => {
+  resetEuropeRound();
   document.body.classList.remove("map-playing");
   renderEuropeGameHome();
   showScreen(europeGameHome, true);
