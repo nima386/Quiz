@@ -51,6 +51,8 @@ const searchScreen = document.getElementById("searchScreen");
 const rememberedScreen = document.getElementById("remembered");
 const statsScreen = document.getElementById("statsScreen");
 const examResult = document.getElementById("examResult");
+const gamesScreen = document.getElementById("gamesScreen");
+const europeGameHome = document.getElementById("europeGameHome");
 
 let currentUser = null;
 
@@ -59,6 +61,21 @@ const authName = document.getElementById("authName");
 const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
 let guestMode = localStorage.getItem("guestMode") === "true";
+let gameStats = JSON.parse(localStorage.getItem("gameStats")) || {
+  europeCountries: {
+    correct: 0,
+    wrong: 0,
+    bestStreak: 0
+  }
+};
+
+function saveGameStats() {
+  localStorage.setItem("gameStats", JSON.stringify(gameStats));
+
+  if (currentUser) {
+    saveCloudData();
+  }
+}
 const avatars = [
   "avatars/avatar0.png",
   "avatars/avatar1.png",
@@ -999,6 +1016,18 @@ function recordStats(isCorrect) {
   }
 
   localStorage.setItem("quizStats", JSON.stringify(stats));
+}
+
+function renderEuropeGameHome() {
+  const stats = gameStats.europeCountries || {
+    correct: 0,
+    wrong: 0,
+    bestStreak: 0
+  };
+
+  document.getElementById("europeCorrect").textContent = stats.correct || 0;
+  document.getElementById("europeWrong").textContent = stats.wrong || 0;
+  document.getElementById("europeBest").textContent = stats.bestStreak || 0;
 }
 
 function renderStats() {
@@ -2150,6 +2179,25 @@ document.getElementById("settingsBtn").onclick = () => {
 
 document.getElementById("closeSettingsBtn").onclick = () => {
   document.getElementById("settingsModal").classList.remove("show");
+};
+
+document.getElementById("openGamesFromDrawer").onclick = () => {
+  closeUpperDrawer();
+  showScreen(gamesScreen, true);
+  setActiveNav("navStart");
+};
+
+document.getElementById("openEuropeGame").onclick = () => {
+  renderEuropeGameHome();
+  showScreen(europeGameHome, true);
+};
+
+document.getElementById("backGames").onclick = () => {
+  showScreen(gamesScreen, true);
+};
+
+document.getElementById("startEuropeMapGame").onclick = () => {
+  showIsland("Karte kommt als Nächstes", "success");
 };
 
 document.getElementById("closeAuthBtn").onclick = () => {
