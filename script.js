@@ -1075,24 +1075,20 @@ function startEuropeMapQuiz() {
   }
 
   showScreen(europeMapGame, false);
-  document.body.classList.add("map-playing");
 
- setTimeout(() => {
+setTimeout(() => {
   const mapBox = document.getElementById("map");
-
   mapBox.innerHTML = "";
 
-  requestAnimationFrame(() => {
-    simplemaps_europemap.load();
+  simplemaps_europemap.load();
 
-    simplemaps_europemap.hooks.click_state = function(countryId) {
-      handleEuropeCountryClick(countryId);
-    };
+  simplemaps_europemap.hooks.click_state = function(countryId) {
+    handleEuropeCountryClick(countryId);
+  };
 
-    pickNextEuropeCountry();
-    updateEuropeMapScore();
-  });
-}, 600);
+  pickNextEuropeCountry();
+  updateEuropeMapScore();
+}, 700);
 
 function handleEuropeCountryClick(countryId) {
   if (!currentEuropeCountry || europeAnswerLocked) return;
