@@ -2657,3 +2657,30 @@ body #addQuestionBtn {
   backdrop-filter: blur(24px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
 }
+body #addQuestionBtn {
+  display: none;
+  font-size: 42px !important;
+  font-weight: 300 !important;
+  line-height: 1 !important;
+  color: white !important;
+
+  transition:
+    transform .22s cubic-bezier(.2,.9,.2,1),
+    box-shadow .24s ease,
+    opacity .2s ease,
+    filter .2s ease;
+}
+
+body #addQuestionBtn.show {
+  display: grid !important;
+  place-items: center !important;
+}
+
+body #addQuestionBtn:active {
+  transform: translateX(-50%) scale(.88) rotate(90deg) !important;
+  filter: brightness(1.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 22px 55px rgba(0,0,0,.38),
+    0 0 42px rgba(99,102,241,.42) !important;
+}
