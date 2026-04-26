@@ -74,7 +74,19 @@ function usernameToEmail(username) {
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
   saveAppStore();
-  saveCloudData();
+  scheduleCloudSave();
+}
+
+let cloudSaveTimer = null;
+
+function scheduleCloudSave() {
+  if (!currentUser) return;
+
+  clearTimeout(cloudSaveTimer);
+
+  cloudSaveTimer = setTimeout(() => {
+    saveCloudData();
+  }, 900);
 }
 
 function getActiveStore() {
@@ -1360,8 +1372,9 @@ document.getElementById("upperOverlay").addEventListener("click", () => {
   closeUpperDrawer();
 });
 
-function showAuthMessage(text) {
+function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
+  authMessage.className = type;
 }
 
 function showIsland(text, type = "success") {
