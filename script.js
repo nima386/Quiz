@@ -2412,6 +2412,19 @@ document.getElementById("startEuropeMapGame").onclick = () => {
   startEuropeMapQuiz();
 };
 
+document.getElementById("restartEuropeRound").onclick = () => {
+  document.getElementById("europeRoundModal").classList.remove("show");
+  resetEuropeRound();
+  startEuropeMapQuiz();
+};
+
+document.getElementById("backToEuropeStart").onclick = () => {
+  document.getElementById("europeRoundModal").classList.remove("show");
+  resetEuropeRound();
+  renderEuropeGameHome();
+  showScreen(europeGameHome, true);
+};
+
 document.getElementById("closeAuthBtn").onclick = () => {
   guestMode = true;
   localStorage.setItem("guestMode", "true");
