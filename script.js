@@ -1075,6 +1075,13 @@ let europeAnswerLocked = false;
 
 let europeRoundCorrect = 0;
 let europeRoundWrong = 0;
+let europeStartTime = null;
+
+let europeBestRun = JSON.parse(localStorage.getItem("europeBestRun")) || {
+  correct: 0,
+  wrong: 0,
+  time: null
+};
 
 let svgLoaded = false;
 let mapState = { x: 0, y: 0, scale: 1 };
@@ -1285,6 +1292,7 @@ async function startEuropeMapQuiz() {
 
   europeRoundCorrect = 0;
   europeRoundWrong = 0;
+  europeStartTime = Date.now();
 
   createEuropeDeck();
   pickNextEuropeCountry();
@@ -1370,17 +1378,71 @@ function resetEuropeRound() {
 }
 
 function finishEuropeRound() {
-  document.getElementById("roundCorrectFinal").textContent = europeRoundCorrect;
-  document.getElementById("roundWrongFinal").textContent = europeRoundWrong;
+  const result = saveEuropeBestRun();
 
-  document.getElementById("europeRoundModal").classList.add("show");
+  document.getElementById("roundCorrectFinal").textContent = result.correct;
+  document.getElementById("roundWrongFinal").textContent = result.wrong;
+  document.getElementById("roundTimeFinal").textContent = formatEuropeTime(result.time);
+
+  const modal = document.getElementById("europeRoundModal");
+  modal.classList.add("show");
+
+  const sheet = modal.querySelector(".avatar-sheet");
+  sheet.classList.remove("result-pop");
+  void sheet.offsetWidth;
+  sheet.classList.add("result-pop");
+
   showIsland("Runde beendet", "success");
 }
 
+function formatEuropeTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${String(seconds).padStart(2, "0")} min`;
+}
+
+function saveEuropeBestRun() {
+  const time = Date.now() - europeStartTime;
+
+  const newRun = {
+    correct: europeRoundCorrect,
+    wrong: europeRoundWrong,
+    time
+  };
+
+  const oldScore = europeBestRun.correct - europeBestRun.wrong;
+  const newScore = newRun.correct - newRun.wrong;
+
+  const isBetter =
+    !europeBestRun.time ||
+    newScore > oldScore ||
+    (newScore === oldScore && newRun.time < europeBestRun.time);
+
+  if (isBetter) {
+    europeBestRun = newRun;
+    localStorage.setItem("europeBestRun", JSON.stringify(europeBestRun));
+  }
+
+  return newRun;
+}
+
 function renderEuropeGameHome() {
-  document.getElementById("europeCorrect").textContent = 0;
-  document.getElementById("europeWrong").textContent = 0;
-  document.getElementById("europeBest").textContent = 0;
+  const bestText = document.getElementById("europeBestRun");
+  const bestTime = document.getElementById("europeBestTime");
+
+  if (!europeBestRun.time) {
+    bestText.textContent = "Noch kein Versuch";
+    bestTime.textContent = "Starte deine erste Runde";
+    return;
+  }
+
+  bestText.textContent =
+    `${europeBestRun.correct} richtig · ${europeBestRun.wrong} falsch`;
+
+  bestTime.textContent =
+    `Zeit: ${formatEuropeTime(europeBestRun.time)}`;
 }
 
 function renderStats() {
