@@ -60,6 +60,7 @@ const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
 let guestMode = localStorage.getItem("guestMode") === "true";
 const avatars = [
+  "avatars/avatar0.png",
   "avatars/avatar1.png",
   "avatars/avatar2.png",
   "avatars/avatar3.png",
@@ -70,9 +71,8 @@ const avatars = [
   "avatars/avatar8.png",
   "avatars/avatar9.png",
   "avatars/avatar10.png"
-  ];
-const DEFAULT_AVATAR = "avatars/avatar1.png";
-
+];
+const DEFAULT_AVATAR = "avatars/avatar0.png";
 function normalizeUsername(name) {
   return name
     .trim()
@@ -1457,7 +1457,7 @@ function selectAvatar(src) {
   document.getElementById("topAvatar").src = src;
   localStorage.setItem("userAvatar", src);
   if (src === DEFAULT_AVATAR) {
-  localStorage.removeItem("userAvatar");
+  localStorage.setItem("userAvatar", DEFAULT_AVATAR);
 }
 
   if (currentUser) {
@@ -1823,11 +1823,15 @@ document.getElementById("logoutBtn").onclick = async () => {
 /* Start */
 
 hydrateActiveUpper();
-const savedAvatar = localStorage.getItem("userAvatar");
-if (savedAvatar) {
-  document.getElementById("profileAvatar").src = savedAvatar;
-  document.getElementById("topAvatar").src = savedAvatar;
+let savedAvatar = localStorage.getItem("userAvatar");
+
+if (!savedAvatar) {
+  savedAvatar = DEFAULT_AVATAR;
+  localStorage.setItem("userAvatar", savedAvatar);
 }
+
+document.getElementById("profileAvatar").src = savedAvatar;
+document.getElementById("topAvatar").src = savedAvatar;
 
 fetch("questions.json?v=" + Date.now())
   .then(res => res.json())
