@@ -3056,3 +3056,58 @@ body #addQuestionBtn.tap-pop {
   height: 100% !important;
   min-height: 360px;
 }
+/* MOBILE MAP CONTROL */
+
+body.map-playing {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+body.map-playing #europeMapGame {
+  overflow: hidden !important;
+  height: 100dvh;
+}
+
+body.map-playing .bottom-nav {
+  display: none !important;
+}
+
+.map-glass-frame {
+  touch-action: none !important;
+  overscroll-behavior: contain;
+}
+
+#map,
+#map svg,
+#map * {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#europeMapGame {
+  overscroll-behavior: none;
+}
+
+@media (max-width: 600px) {
+  .map-question-card {
+    padding: 14px;
+    margin: 8px 0 12px;
+  }
+
+  .map-question-card h1 {
+    font-size: 24px;
+  }
+
+  .map-glass-frame {
+    height: 62dvh;
+    min-height: 430px;
+    border-radius: 28px;
+  }
+
+  .map-feedback {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+}
