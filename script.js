@@ -152,6 +152,18 @@ function syncActiveUpper() {
   };
 }
 
+function ensureTrash() {
+  if (!appStore.trash) {
+    appStore.trash = {
+      categories: [],
+      upperCategories: []
+    };
+  }
+
+  if (!appStore.trash.categories) appStore.trash.categories = [];
+  if (!appStore.trash.upperCategories) appStore.trash.upperCategories = [];
+}
+
 function saveAppStore() {
   syncActiveUpper();
   localStorage.setItem("appStore", JSON.stringify(appStore));
@@ -255,6 +267,14 @@ row.addEventListener("touchend", e => {
 
       if (!confirm(`${name} wirklich löschen?`)) return;
 
+ensureTrash();
+
+appStore.trash.upperCategories.push({
+  name,
+  store: appStore.upperCategories[name],
+  deletedAt: new Date().toISOString()
+});
+      
       delete appStore.upperCategories[name];
 
       if (activeUpper === name) {
@@ -680,6 +700,20 @@ row.onclick = () => {
    deleteBtn.onclick = async () => {
       if (!confirm(`${category} wirklich löschen?`)) return;
 
+ensureTrash();
+
+appStore.trash.categories.push({
+  upper: activeUpper,
+  name: category,
+  data: data[category],
+  progress: progress[category] || 0,
+  quizOrders: quizOrders[category] || [],
+  stats: stats[category] || null,
+  remembered: remembered[category] || [],
+  wrongQuestions: wrongQuestions[category] || [],
+  deletedAt: new Date().toISOString()
+});
+     
       delete data[category];
      if (!appStore.deletedCategories) appStore.deletedCategories = [];
 appStore.deletedCategories.push(`${activeUpper}/${category}`);
@@ -1573,6 +1607,145 @@ merged.deletedCategories = [
   return merged;
 }
 
+function renderTrashList() {
+  ensureTrash();
+
+  const list = document.getElementById("trashList");
+  list.innerHTML = "";
+
+  const items = [
+    ...appStore.trash.upperCategories.map((item, index) => ({
+      type: "upper",
+      index,
+      title: item.name,
+      sub: "Oberkategorie"
+    })),
+    ...appStore.trash.categories.map((item, index) => ({
+      type: "category",
+      index,
+      title: item.name,
+      sub: `Kategorie aus ${item.upper}`
+    }))
+  ];
+
+  if (items.length === 0) {
+    list.innerHTML = `
+      <div class="trash-empty">
+        <strong>Nichts gelöscht</strong>
+        <span>Gelöschte Kategorien erscheinen hier.</span>
+      </div>
+    `;
+    return;
+  }
+
+  items.forEach(item => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "trash-swipe";
+
+    const actions = document.createElement("div");
+    actions.className = "trash-actions";
+    actions.innerHTML = `
+      <button class="trash-restore">Wiederherstellen</button>
+      <button class="trash-delete">Endgültig löschen</button>
+    `;
+
+    const row = document.createElement("div");
+    row.className = "trash-row";
+    row.innerHTML = `
+      <div class="trash-icon">${item.type === "upper" ? "◈" : "📁"}</div>
+      <div>
+        <div class="trash-title">${item.title}</div>
+        <div class="trash-sub">${item.sub}</div>
+      </div>
+    `;
+
+    let startX = 0;
+
+    row.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    row.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+
+      if (startX - endX > 55) wrapper.classList.add("open");
+      if (endX - startX > 55) wrapper.classList.remove("open");
+    });
+
+    actions.querySelector(".trash-restore").onclick = async () => {
+      await restoreTrashItem(item.type, item.index);
+    };
+
+    actions.querySelector(".trash-delete").onclick = async () => {
+      await deleteTrashItemForever(item.type, item.index);
+    };
+
+    wrapper.appendChild(actions);
+    wrapper.appendChild(row);
+    list.appendChild(wrapper);
+  });
+}
+
+async function restoreTrashItem(type, index) {
+  ensureTrash();
+
+  if (type === "upper") {
+    const item = appStore.trash.upperCategories[index];
+
+    appStore.upperCategories[item.name] = item.store;
+    appStore.trash.upperCategories.splice(index, 1);
+
+    activeUpper = item.name;
+    hydrateActiveUpper();
+  }
+
+  if (type === "category") {
+    const item = appStore.trash.categories[index];
+
+    if (!appStore.upperCategories[item.upper]) {
+      appStore.upperCategories[item.upper] = createUpperStore();
+    }
+
+    activeUpper = item.upper;
+    hydrateActiveUpper();
+
+    data[item.name] = item.data || [];
+    progress[item.name] = item.progress || 0;
+    quizOrders[item.name] = item.quizOrders || [];
+    if (item.stats) stats[item.name] = item.stats;
+    remembered[item.name] = item.remembered || [];
+    wrongQuestions[item.name] = item.wrongQuestions || [];
+
+    appStore.trash.categories.splice(index, 1);
+  }
+
+  await persistNow();
+
+  renderTrashList();
+  renderHome();
+  renderLibrary();
+  showIsland("Wiederhergestellt", "success");
+}
+
+async function deleteTrashItemForever(type, index) {
+  ensureTrash();
+
+  if (!confirm("Endgültig löschen? Das kann nicht rückgängig gemacht werden.")) return;
+
+  if (type === "upper") {
+    appStore.trash.upperCategories.splice(index, 1);
+  }
+
+  if (type === "category") {
+    appStore.trash.categories.splice(index, 1);
+  }
+
+  await persistNow();
+
+  renderTrashList();
+  showIsland("Endgültig gelöscht", "danger");
+}
+
 function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
   authMessage.className = type;
@@ -1927,6 +2100,15 @@ document.getElementById("deleteAvatarBtn").onclick = () => {
   localStorage.removeItem("userAvatar");
   document.getElementById("avatarActionModal").classList.remove("show");
   showIsland("Avatar gelöscht", "danger");
+};
+
+document.getElementById("settingsBtn").onclick = () => {
+  renderTrashList();
+  document.getElementById("settingsModal").classList.add("show");
+};
+
+document.getElementById("closeSettingsBtn").onclick = () => {
+  document.getElementById("settingsModal").classList.remove("show");
 };
 
 document.getElementById("closeAuthBtn").onclick = () => {
