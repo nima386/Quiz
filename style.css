@@ -1698,3 +1698,63 @@ select {
 #authMessage {
   transition: opacity .25s ease, transform .25s ease;
 }
+.category-card,
+.folder-row,
+.question-row,
+.answer,
+.settings-card,
+.search-result,
+.stat-card,
+.best-card {
+  transition:
+    transform .22s cubic-bezier(.2,.9,.2,1),
+    box-shadow .22s ease,
+    background .22s ease,
+    border-color .22s ease;
+}
+
+.category-card:active,
+.folder-row:active,
+.question-row:active,
+.answer:active,
+.settings-card:active,
+.search-result:active {
+  transform: scale(.975);
+}
+
+.main-btn,
+.glass-action,
+.menu-item,
+.folder-btn,
+.import-tab,
+.swipe-action {
+  transition:
+    transform .18s cubic-bezier(.2,.9,.2,1),
+    box-shadow .22s ease,
+    filter .22s ease;
+}
+
+.main-btn:active,
+.glass-action:active,
+.menu-item:active,
+.folder-btn:active,
+.import-tab:active,
+.swipe-action:active {
+  transform: scale(.96);
+  filter: brightness(1.12);
+}
+
+.screen.active {
+  animation: screenSoftIn .28s cubic-bezier(.2,.9,.2,1);
+}
+
+@keyframes screenSoftIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
