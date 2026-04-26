@@ -56,7 +56,6 @@ let currentUser = null;
 
 const authScreen = document.getElementById("authScreen");
 const authName = document.getElementById("authName");
-const authEmail = document.getElementById("authEmail");
 const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
 let guestMode = localStorage.getItem("guestMode") === "true";
@@ -234,11 +233,6 @@ function openUpperDrawer() {
   document.getElementById("upperOverlay").classList.add("show");
   document.getElementById("upperDrawer").classList.add("show");
   renderUpperList();
-}
-
-function closeUpperDrawer() {
-  document.getElementById("upperOverlay").classList.remove("show");
-  document.getElementById("upperDrawer").classList.remove("show");
 }
 
 function closeUpperDrawer() {
@@ -1492,35 +1486,34 @@ document.getElementById("loginBtn").onclick = async () => {
 };
 
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
+  const logoutBtn = document.getElementById("logoutBtn");
+
   if (user) {
     currentUser = user;
-   if (user) {
-  currentUser = user;
+    guestMode = false;
+    localStorage.removeItem("guestMode");
 
-  const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.textContent = "⎋ Ausloggen";
-  logoutBtn.classList.remove("success");
-  logoutBtn.classList.add("danger");
+    logoutBtn.textContent = "⎋ Ausloggen";
+    logoutBtn.classList.remove("success");
+    logoutBtn.classList.add("danger");
 
-  authScreen.classList.add("hide");
+    authScreen.classList.add("hide");
 
-  await loadUserCloudData(user);
+    await loadUserCloudData(user);
 
-  renderHome();
-  renderLibrary();
-  setActiveNav("navStart");
-} 
-   else {
+    renderHome();
+    renderLibrary();
+    setActiveNav("navStart");
+  } else {
     currentUser = null;
-   const logoutBtn = document.getElementById("logoutBtn");
 
-logoutBtn.textContent = "⎋ Einloggen";
-logoutBtn.classList.remove("danger");
-logoutBtn.classList.add("success");
+    logoutBtn.textContent = "⎋ Einloggen";
+    logoutBtn.classList.remove("danger");
+    logoutBtn.classList.add("success");
+
     if (guestMode) {
       authScreen.classList.add("hide");
-    } 
-    else {
+    } else {
       authScreen.classList.remove("hide");
     }
   }
