@@ -681,6 +681,8 @@ row.onclick = () => {
       if (!confirm(`${category} wirklich löschen?`)) return;
 
       delete data[category];
+     if (!appStore.deletedCategories) appStore.deletedCategories = [];
+appStore.deletedCategories.push(`${activeUpper}/${category}`);,
       delete progress[category];
       delete stats[category];
       delete remembered[category];
@@ -1494,6 +1496,83 @@ async function saveAvatarToCloud(src) {
   }, { merge: true });
 }
 
+function createEmptyAppStore() {
+  return {
+    upperCategories: {}
+  };
+}
+
+function mergeAppStores(cloudStore, localStore) {
+  const merged = cloudStore || createEmptyAppStore();
+
+  if (!merged.upperCategories) {
+    merged.upperCategories = {};
+  }
+
+  const localUpper = localStore?.upperCategories || {};
+  const deletedCategories = localStore?.deletedCategories || [];
+
+merged.deletedCategories = [
+  ...(merged.deletedCategories || []),
+  ...deletedCategories
+];
+
+  Object.keys(localUpper).forEach(upperName => {
+    if (!merged.upperCategories[upperName]) {
+      merged.upperCategories[upperName] = localUpper[upperName];
+      return;
+    }
+
+    const cloudUpper = merged.upperCategories[upperName];
+    const localUpperData = localUpper[upperName];
+
+    cloudUpper.data = {
+      ...(cloudUpper.data || {}),
+      ...(localUpperData.data || {})
+    };
+
+    deletedCategories.forEach(key => {
+  const [deletedUpper, deletedCategory] = key.split("/");
+
+  if (deletedUpper === upperName && cloudUpper.data) {
+    delete cloudUpper.data[deletedCategory];
+    delete cloudUpper.progress?.[deletedCategory];
+    delete cloudUpper.quizOrders?.[deletedCategory];
+    delete cloudUpper.stats?.[deletedCategory];
+    delete cloudUpper.remembered?.[deletedCategory];
+    delete cloudUpper.wrongQuestions?.[deletedCategory];
+  }
+});
+
+    cloudUpper.progress = {
+      ...(cloudUpper.progress || {}),
+      ...(localUpperData.progress || {})
+    };
+
+    cloudUpper.quizOrders = {
+      ...(cloudUpper.quizOrders || {}),
+      ...(localUpperData.quizOrders || {})
+    };
+
+    cloudUpper.stats = {
+      ...(cloudUpper.stats || {}),
+      ...(localUpperData.stats || {})
+    };
+
+    cloudUpper.remembered = {
+      ...(cloudUpper.remembered || {}),
+      ...(localUpperData.remembered || {})
+    };
+
+    cloudUpper.wrongQuestions = {
+      ...(cloudUpper.wrongQuestions || {}),
+      ...(localUpperData.wrongQuestions || {})
+    };
+  });
+
+  return merged;
+}
+
 function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
   authMessage.className = type;
@@ -1525,8 +1604,13 @@ function hideAppLoader() {
 
 // ✅ HIER EINFÜGEN (direkt nach der Funktion)
 
-window.addEventListener("online", () => {
+window.addEventListener("online", async () => {
   showIsland("Wieder online", "success");
+
+  if (currentUser && localStorage.getItem("pendingCloudSync") === "true") {
+    await persistNow();
+    showIsland("Synchronisiert", "success");
+  }
 });
 
 window.addEventListener("offline", () => {
@@ -1565,35 +1649,82 @@ async function saveUserProfile(user, username = "") {
 }
 
 async function loadUserCloudData(user) {
-  const { db, doc, getDoc } = window.firebaseTools;
+  const { db, doc, getDoc, setDoc } = window.firebaseTools;
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
+  const localCopy = JSON.parse(JSON.stringify(appStore));
+
   if (snap.exists()) {
     const cloud = snap.data();
 
-    if (cloud.appStore) {
-      appStore = cloud.appStore;
-      hydrateActiveUpper();
-      renderHome();
-      renderLibrary();
-      renderRemembered();
-      renderStats();
+    if (cloud.avatar) {
+      document.getElementById("profileAvatar").src = cloud.avatar;
+      document.getElementById("topAvatar").src = cloud.avatar;
+      localStorage.setItem("userAvatar", cloud.avatar);
     }
+
+    const wantsMerge = confirm(
+      "Lokale Daten mit deinem Cloud-Konto verbinden?\n\nOK = lokale Änderungen übernehmen\nAbbrechen = Cloud-Daten laden"
+    );
+
+    if (wantsMerge) {
+      appStore = mergeAppStores(cloud.appStore || createEmptyAppStore(), localCopy);
+      activeUpper = localStorage.getItem("activeUpper") || cloud.activeUpper || "Bauzeichner";
+
+      hydrateActiveUpper();
+      saveAppStore();
+
+      await setDoc(userRef, {
+        appStore,
+        activeUpper,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } else {
+      appStore = cloud.appStore || localCopy;
+      activeUpper = cloud.activeUpper || "Bauzeichner";
+      hydrateActiveUpper();
+      saveAppStore();
+    }
+  } else {
+    await setDoc(userRef, {
+      appStore,
+      activeUpper,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
   }
+
+  renderHome();
+  renderLibrary();
+  renderRemembered();
+  renderStats();
 }
 
 async function saveCloudData() {
   if (!currentUser) return;
 
-  const { db, doc, setDoc } = window.firebaseTools;
+  if (!navigator.onLine) {
+    localStorage.setItem("pendingCloudSync", "true");
+    return;
+  }
 
-  saveAppStore();
+  try {
+    const { db, doc, setDoc } = window.firebaseTools;
 
-  await setDoc(doc(db, "users", currentUser.uid), {
-    appStore: appStore
-  }, { merge: true });
+    saveAppStore();
+
+    await setDoc(doc(db, "users", currentUser.uid), {
+      appStore: appStore,
+      activeUpper: activeUpper,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    localStorage.removeItem("pendingCloudSync");
+  } catch (error) {
+    localStorage.setItem("pendingCloudSync", "true");
+    console.log("Cloud Sync später erneut versuchen:", error);
+  }
 }
 
 document.getElementById("registerBtn").onclick = async () => {
