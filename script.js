@@ -1022,11 +1022,10 @@ function recordStats(isCorrect) {
 
 const EUROPE_COUNTRY_NAMES = {
   AL: "Albanien",
-  AD: "Andorra",
   AT: "Österreich",
   BY: "Belarus",
   BE: "Belgien",
-  BA: "Bosnien und Herzegowina",
+  BA: "Bosnien",
   BG: "Bulgarien",
   HR: "Kroatien",
   CY: "Zypern",
@@ -1042,12 +1041,10 @@ const EUROPE_COUNTRY_NAMES = {
   IE: "Irland",
   IT: "Italien",
   LV: "Lettland",
-  LI: "Liechtenstein",
   LT: "Litauen",
   LU: "Luxemburg",
   MT: "Malta",
-  MD: "Moldau",
-  MC: "Monaco",
+  MD: "Moldavien",
   ME: "Montenegro",
   NL: "Niederlande",
   MK: "Nordmazedonien",
@@ -1064,7 +1061,6 @@ const EUROPE_COUNTRY_NAMES = {
   TR: "Türkei",
   UA: "Ukraine",
   GB: "Vereinigtes Königreich",
-  VA: "Vatikanstadt"
 };
 
 let europeCountries = [];
