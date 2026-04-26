@@ -682,7 +682,7 @@ row.onclick = () => {
 
       delete data[category];
      if (!appStore.deletedCategories) appStore.deletedCategories = [];
-appStore.deletedCategories.push(`${activeUpper}/${category}`);,
+appStore.deletedCategories.push(`${activeUpper}/${category}`);
       delete progress[category];
       delete stats[category];
       delete remembered[category];
