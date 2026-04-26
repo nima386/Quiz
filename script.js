@@ -106,6 +106,14 @@ function scheduleCloudSave() {
   }, 900);
 }
 
+async function persistNow() {
+  saveAppStore();
+
+  if (currentUser) {
+    await saveCloudData();
+  }
+}
+
 function getActiveStore() {
   if (!appStore.upperCategories[activeUpper]) {
     appStore.upperCategories[activeUpper] = {
@@ -236,7 +244,7 @@ row.addEventListener("touchend", e => {
       showScreen(home, true);
     };
 
-    deleteBtn.onclick = () => {
+    deleteBtn.onclick = async () => {
       const names = Object.keys(appStore.upperCategories);
 
       if (names.length <= 1) {
@@ -253,10 +261,11 @@ row.addEventListener("touchend", e => {
         hydrateActiveUpper();
       }
 
-      saveAppStore();
-      renderUpperList();
-      renderHome();
-      renderLibrary();
+      await persistNow();
+
+renderUpperList();
+renderHome();
+renderLibrary();
     };
 
     wrapper.appendChild(deleteBtn);
@@ -667,7 +676,7 @@ row.onclick = () => {
   }
 };
 
-    deleteBtn.onclick = () => {
+   deleteBtn.onclick = async () => {
       if (!confirm(`${category} wirklich löschen?`)) return;
 
       delete data[category];
@@ -683,10 +692,12 @@ localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
 localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
 
       save();
-      localStorage.setItem("quizProgress", JSON.stringify(progress));
+localStorage.setItem("quizProgress", JSON.stringify(progress));
 
-      renderHome();
-      renderLibrary();
+await persistNow();
+
+renderHome();
+renderLibrary();
     };
 
     wrapper.appendChild(deleteBtn);
@@ -739,7 +750,7 @@ function openQuestionDetail(index) {
   showScreen(questionDetail, true);
 }
 
-function deleteQuestion(index) {
+async function deleteQuestion(index) {
   if (!confirm("Diese Frage wirklich löschen?")) return;
 
   data[currentCategory].splice(index, 1);
@@ -749,9 +760,11 @@ function deleteQuestion(index) {
   }
 
   save();
-  localStorage.setItem("quizProgress", JSON.stringify(progress));
+localStorage.setItem("quizProgress", JSON.stringify(progress));
 
-  renderHome();
+await persistNow();
+
+renderHome();
   renderQuestionList();
   showScreen(questionList, true);
 }
@@ -1145,10 +1158,13 @@ function renderRemembered() {
       }
     };
 
-    deleteBtn.onclick = () => {
+    deleteBtn.onclick = async () => {
       delete remembered[category];
-      localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
-      renderRemembered();
+localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+
+await persistNow();
+
+renderRemembered();
     };
 
     wrapper.appendChild(deleteBtn);
