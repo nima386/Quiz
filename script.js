@@ -1022,56 +1022,229 @@ function recordStats(isCorrect) {
   localStorage.setItem("quizStats", JSON.stringify(stats));
 }
 
+const EUROPE_COUNTRY_NAMES = {
+  AL: "Albanien",
+  AD: "Andorra",
+  AT: "Österreich",
+  BY: "Belarus",
+  BE: "Belgien",
+  BA: "Bosnien und Herzegowina",
+  BG: "Bulgarien",
+  HR: "Kroatien",
+  CY: "Zypern",
+  CZ: "Tschechien",
+  DK: "Dänemark",
+  EE: "Estland",
+  FI: "Finnland",
+  FR: "Frankreich",
+  DE: "Deutschland",
+  GR: "Griechenland",
+  HU: "Ungarn",
+  IS: "Island",
+  IE: "Irland",
+  IT: "Italien",
+  LV: "Lettland",
+  LI: "Liechtenstein",
+  LT: "Litauen",
+  LU: "Luxemburg",
+  MT: "Malta",
+  MD: "Moldau",
+  MC: "Monaco",
+  ME: "Montenegro",
+  NL: "Niederlande",
+  MK: "Nordmazedonien",
+  NO: "Norwegen",
+  PL: "Polen",
+  PT: "Portugal",
+  RO: "Rumänien",
+  RS: "Serbien",
+  SK: "Slowakei",
+  SI: "Slowenien",
+  ES: "Spanien",
+  SE: "Schweden",
+  CH: "Schweiz",
+  TR: "Türkei",
+  UA: "Ukraine",
+  GB: "Vereinigtes Königreich",
+  VA: "Vatikanstadt"
+};
+
 let europeCountries = [];
+let europeDeck = [];
 let currentEuropeCountry = null;
-let europeCurrentStreak = 0;
+
 let europeWrongAttempts = 0;
-let europeHadMistake = false;
+let europeAnsweredThisCountry = false;
 let europeAnswerLocked = false;
+
 let europeRoundCorrect = 0;
 let europeRoundWrong = 0;
-let europeAnsweredThisCountry = false;
+
+let svgLoaded = false;
+let mapState = { x: 0, y: 0, scale: 1 };
+let dragState = null;
+
+function initEuropeCountries() {
+  europeCountries = Object.keys(EUROPE_COUNTRY_NAMES).map(id => ({
+    id,
+    name: EUROPE_COUNTRY_NAMES[id]
+  }));
+}
 
 function createEuropeDeck() {
   europeDeck = [...europeCountries].sort(() => Math.random() - 0.5);
 }
 
-function finishEuropeRound() {
-  document.getElementById("roundCorrectFinal").textContent = europeRoundCorrect;
-  document.getElementById("roundWrongFinal").textContent = europeRoundWrong;
+async function loadEuropeSvg() {
+  const mapBox = document.getElementById("map");
 
-  document.getElementById("europeRoundModal").classList.add("show");
-  showIsland("Runde beendet", "success");
-}
+  if (svgLoaded) return;
 
-function initEuropeCountries() {
-  if (!window.simplemaps_europemap_mapdata) return;
+  const res = await fetch("maps/europe/europe.svg");
+  const svgText = await res.text();
 
-  europeCountries = Object.keys(simplemaps_europemap_mapdata.state_specific)
-    .map(id => ({
-      id,
-      name: simplemaps_europemap_mapdata.state_specific[id].name
-    }))
-    .filter(country => country.name && country.name !== "default");
-}
+  mapBox.innerHTML = svgText;
 
-function colorEuropeCountry(countryId, color) {
-  if (!countryId || !simplemaps_europemap_mapdata.state_specific[countryId]) return;
+  const svg = mapBox.querySelector("svg");
+  svg.id = "europeSvg";
 
-  simplemaps_europemap_mapdata.state_specific[countryId].color = color;
-  simplemaps_europemap_mapdata.state_specific[countryId].hover_color = color;
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.id = "europeViewport";
 
-  if (window.simplemaps_europemap?.refresh_state) {
-    simplemaps_europemap.refresh_state(countryId);
-  } else {
-    simplemaps_europemap.load();
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
   }
+
+  svg.appendChild(viewport);
+
+  Object.keys(EUROPE_COUNTRY_NAMES).forEach(id => {
+    const land = svg.querySelector(`#${id}`);
+    if (!land) return;
+
+    land.classList.add("europe-country");
+    land.dataset.country = id;
+  });
+
+  initEuropeMapTouch(svg);
+  svgLoaded = true;
+}
+
+function applyMapTransform() {
+  const viewport = document.getElementById("europeViewport");
+  if (!viewport) return;
+
+  viewport.setAttribute(
+    "transform",
+    `translate(${mapState.x} ${mapState.y}) scale(${mapState.scale})`
+  );
+}
+
+function zoomAt(clientX, clientY, zoomFactor) {
+  const svg = document.getElementById("europeSvg");
+  if (!svg) return;
+
+  const rect = svg.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  const oldScale = mapState.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  mapState.x = x - (x - mapState.x) * (newScale / oldScale);
+  mapState.y = y - (y - mapState.y) * (newScale / oldScale);
+  mapState.scale = newScale;
+
+  applyMapTransform();
+}
+
+function initEuropeMapTouch(svg) {
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 0.85);
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    dragState = {
+      startX: e.clientX,
+      startY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      target: e.target.closest("[data-country]")
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!dragState) return;
+
+    const dx = e.clientX - dragState.lastX;
+    const dy = e.clientY - dragState.lastY;
+
+    if (
+      Math.abs(e.clientX - dragState.startX) > 7 ||
+      Math.abs(e.clientY - dragState.startY) > 7
+    ) {
+      dragState.moved = true;
+    }
+
+    mapState.x += dx;
+    mapState.y += dy;
+
+    dragState.lastX = e.clientX;
+    dragState.lastY = e.clientY;
+
+    applyMapTransform();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    if (!dragState) return;
+
+    if (!dragState.moved && dragState.target) {
+      handleEuropeCountryClick(dragState.target.dataset.country);
+    }
+
+    dragState = null;
+  });
+
+  let pinchStartDistance = null;
+
+  svg.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+
+    e.preventDefault();
+
+    const a = e.touches[0];
+    const b = e.touches[1];
+
+    const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const centerX = (a.clientX + b.clientX) / 2;
+    const centerY = (a.clientY + b.clientY) / 2;
+
+    if (pinchStartDistance) {
+      zoomAt(centerX, centerY, distance / pinchStartDistance);
+    }
+
+    pinchStartDistance = distance;
+  }, { passive: false });
+
+  svg.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+  });
+}
+
+function colorEuropeCountry(countryId, className) {
+  const land = document.querySelector(`#${countryId}`);
+  if (!land) return;
+
+  land.classList.remove("correct-country", "wrong-country");
+  land.classList.add(className);
 }
 
 function resetEuropeMapColors() {
-  Object.keys(simplemaps_europemap_mapdata.state_specific).forEach(id => {
-    simplemaps_europemap_mapdata.state_specific[id].color = "default";
-    simplemaps_europemap_mapdata.state_specific[id].hover_color = "default";
+  document.querySelectorAll(".europe-country").forEach(land => {
+    land.classList.remove("correct-country", "wrong-country");
   });
 }
 
@@ -1084,99 +1257,46 @@ function pickNextEuropeCountry() {
   currentEuropeCountry = europeDeck.pop();
 
   europeWrongAttempts = 0;
-  europeHadMistake = false;
-  europeAnswerLocked = false;
   europeAnsweredThisCountry = false;
+  europeAnswerLocked = false;
 
   document.getElementById("targetCountryName").textContent = currentEuropeCountry.name;
   document.getElementById("mapFeedback").textContent = "";
 }
 
-function resetEuropeRound() {
-  europeRoundCorrect = 0;
-  europeRoundWrong = 0;
-  europeWrongAttempts = 0;
-  europeHadMistake = false;
-  europeAnswerLocked = false;
-  europeAnsweredThisCountry = false;
-  currentEuropeCountry = null;
-  europeDeck = [];
-  document.body.classList.remove("map-playing");
-}
-
-function startEuropeMapQuiz() {
+async function startEuropeMapQuiz() {
   initEuropeCountries();
-
-  if (!window.simplemaps_europemap || europeCountries.length === 0) {
-    showIsland("Karte lädt noch", "danger");
-    return;
-  }
 
   showScreen(europeMapGame, false);
   document.body.classList.add("map-playing");
 
-  setTimeout(() => {
-    const mapBox = document.getElementById("map");
-    mapBox.innerHTML = "";
+  await loadEuropeSvg();
 
-    resetEuropeMapColors();
-    simplemaps_europemap.load();
+  mapState = { x: 0, y: 0, scale: 1 };
+  applyMapTransform();
 
-    simplemaps_europemap.hooks.click_state = function(countryId) {
-      handleEuropeCountryClick(countryId);
-    };
+  resetEuropeMapColors();
 
-    simplemaps_europemap.hooks.over_state = function(countryId) {
-  window.lastTouchedEuropeCountry = countryId;
-};
-    
-    simplemaps_europemap.hooks.touch_state = function(countryId) {
-      handleEuropeCountryClick(countryId);
-    };
+  europeRoundCorrect = 0;
+  europeRoundWrong = 0;
 
-    europeRoundCorrect = 0;
-    europeRoundWrong = 0;
-
-    createEuropeDeck();
-    pickNextEuropeCountry();
-    updateEuropeMapScore();
-  }, 700);
+  createEuropeDeck();
+  pickNextEuropeCountry();
+  updateEuropeMapScore();
 }
-
-const mapBox = document.getElementById("map");
-
-mapBox.ontouchend = () => {
-  if (window.lastTouchedEuropeCountry) {
-    handleEuropeCountryClick(window.lastTouchedEuropeCountry);
-  }
-};
 
 function handleEuropeCountryClick(countryId) {
   if (!currentEuropeCountry || europeAnswerLocked) return;
 
-  const stats = gameStats.europeCountries;
-
   if (countryId === currentEuropeCountry.id) {
     europeAnswerLocked = true;
 
-   if (!europeAnsweredThisCountry) {
-  europeRoundCorrect++;
-  europeAnsweredThisCountry = true;
-}
-
-    if (europeHadMistake) {
-      stats.wrong++;
-      europeRoundWrong++;
-      europeCurrentStreak = 0;
-    } else {
-      europeCurrentStreak++;
+    if (!europeAnsweredThisCountry) {
+      europeRoundCorrect++;
+      europeAnsweredThisCountry = true;
     }
 
-    if (europeCurrentStreak > stats.bestStreak) {
-      stats.bestStreak = europeCurrentStreak;
-    }
-
-    colorEuropeCountry(countryId, "#22c55e");
+    colorEuropeCountry(countryId, "correct-country");
 
     document.getElementById("mapFeedback").textContent = "Richtig!";
     document.getElementById("mapFeedback").className = "map-feedback correct";
@@ -1185,16 +1305,14 @@ function handleEuropeCountryClick(countryId) {
 
     setTimeout(() => {
       pickNextEuropeCountry();
-    }, 900);
+    }, 850);
 
     return;
   }
 
   europeWrongAttempts++;
-  europeHadMistake = true;
 
-  const clickedName =
-    simplemaps_europemap_mapdata.state_specific[countryId]?.name || countryId;
+  const clickedName = EUROPE_COUNTRY_NAMES[countryId] || countryId;
 
   document.getElementById("mapFeedback").textContent =
     `Falsch – das war ${clickedName} (${europeWrongAttempts}/3)`;
@@ -1203,28 +1321,23 @@ function handleEuropeCountryClick(countryId) {
 
   if (europeWrongAttempts >= 3) {
     europeAnswerLocked = true;
-   if (!europeAnsweredThisCountry) {
-  europeRoundWrong++;
-  europeAnsweredThisCountry = true;
-}
-    europeCurrentStreak = 0;
 
-    colorEuropeCountry(currentEuropeCountry.id, "#ef4444");
+    if (!europeAnsweredThisCountry) {
+      europeRoundWrong++;
+      europeAnsweredThisCountry = true;
+    }
+
+    colorEuropeCountry(currentEuropeCountry.id, "wrong-country");
 
     document.getElementById("mapFeedback").textContent =
       `3x falsch – richtig war ${currentEuropeCountry.name}`;
 
     updateEuropeMapScore();
 
-
     setTimeout(() => {
       pickNextEuropeCountry();
     }, 1200);
-
-    return;
   }
-
-  updateEuropeMapScore();
 }
 
 function updateEuropeMapScore() {
@@ -1235,16 +1348,29 @@ function updateEuropeMapScore() {
     `${europeRoundWrong} falsch`;
 }
 
-function renderEuropeGameHome() {
-  const stats = gameStats.europeCountries || {
-    correct: 0,
-    wrong: 0,
-    bestStreak: 0
-  };
+function resetEuropeRound() {
+  europeRoundCorrect = 0;
+  europeRoundWrong = 0;
+  europeWrongAttempts = 0;
+  europeAnsweredThisCountry = false;
+  europeAnswerLocked = false;
+  currentEuropeCountry = null;
+  europeDeck = [];
+  document.body.classList.remove("map-playing");
+}
 
-  document.getElementById("europeCorrect").textContent = stats.correct || 0;
-  document.getElementById("europeWrong").textContent = stats.wrong || 0;
-  document.getElementById("europeBest").textContent = stats.bestStreak || 0;
+function finishEuropeRound() {
+  document.getElementById("roundCorrectFinal").textContent = europeRoundCorrect;
+  document.getElementById("roundWrongFinal").textContent = europeRoundWrong;
+
+  document.getElementById("europeRoundModal").classList.add("show");
+  showIsland("Runde beendet", "success");
+}
+
+function renderEuropeGameHome() {
+  document.getElementById("europeCorrect").textContent = 0;
+  document.getElementById("europeWrong").textContent = 0;
+  document.getElementById("europeBest").textContent = 0;
 }
 
 function renderStats() {
