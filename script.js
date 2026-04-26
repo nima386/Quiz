@@ -55,8 +55,6 @@ const examResult = document.getElementById("examResult");
 const gamesScreen = document.getElementById("gamesScreen");
 const europeGameHome = document.getElementById("europeGameHome");
 const europeMapGame = document.getElementById("europeMapGame");
-let europeDeck = [];
-let europeRound = 1;
 
 let currentUser = null;
 
