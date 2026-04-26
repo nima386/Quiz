@@ -1510,6 +1510,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
+    showScreen(home, true);
   } else {
     currentUser = null;
 
@@ -1517,11 +1518,9 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     logoutBtn.classList.remove("danger");
     logoutBtn.classList.add("success");
 
-    if (guestMode) {
-      authScreen.classList.add("hide");
-    } else {
-      authScreen.classList.remove("hide");
-    }
+    authScreen.classList.add("hide");
+    showScreen(home, true);
+    setActiveNav("navStart");
   }
 });
 
