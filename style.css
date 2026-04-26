@@ -1686,3 +1686,15 @@ select {
   transform: scale(.96);
   filter: brightness(1.12);
 }
+
+#authMessage.error {
+  color: #fca5a5;
+}
+
+#authMessage.success {
+  color: #86efac;
+}
+
+#authMessage {
+  transition: opacity .25s ease, transform .25s ease;
+}
