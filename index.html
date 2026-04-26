@@ -97,7 +97,7 @@
 
 <div class="profile-center">
   <div class="avatar-ring">
-    <div class="big-avatar">👤</div>
+    <img id="profileAvatar" class="big-avatar" src="avatars/avatar1.png">
   </div>
 
   <h1 id="profileUsername">Gast</h1>
@@ -372,5 +372,13 @@ window.firebaseTools = {
   }
 </script>
 
+<div id="avatarModal" class="modal">
+  <div class="avatar-box">
+    <h2>Avatar wählen</h2>
+    <div id="avatarGrid" class="avatar-grid"></div>
+    <button id="closeAvatarModal" class="main-btn secondary">Schließen</button>
+  </div>
+</div>
+  
 </body>
 </html>
