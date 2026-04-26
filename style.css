@@ -2050,3 +2050,139 @@ Das ist der Unterschied zwischen:
 .avatar-ring.animate::before {
   animation: avatarSnake 1.15s ease-out 1;
 }
+
+/* PROFILE MOBILE REFINEMENT */
+
+#profile {
+  min-height: 100dvh;
+  padding: calc(env(safe-area-inset-top) + 22px) 24px calc(env(safe-area-inset-bottom) + 26px);
+  overflow: hidden;
+}
+
+.premium-profile-top {
+  position: relative;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-profile-top .circle-btn {
+  position: absolute;
+  left: 0;
+}
+
+.profile-title-pill {
+  margin: 0;
+  padding: 10px 30px;
+  font-size: 24px;
+  line-height: 1;
+  border-radius: 26px;
+}
+
+.profile-center {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.avatar-ring {
+  width: 124px;
+  height: 124px;
+  margin: 0 auto 20px;
+}
+
+.profile-center .big-avatar {
+  width: 112px;
+  height: 112px;
+  font-size: 48px;
+}
+
+#profileUsername {
+  font-size: 38px;
+  line-height: 1.05;
+}
+
+#profileStatus {
+  margin: 6px 0 28px;
+  font-size: 17px;
+}
+
+#syncInfoCard {
+  margin-top: 0;
+  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 24px;
+}
+
+.sync-icon {
+  min-width: 54px;
+  height: 54px;
+  border-radius: 20px;
+  font-size: 26px;
+}
+
+.profile-actions-bottom {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: calc(env(safe-area-inset-bottom) + 82px);
+  gap: 14px;
+}
+
+.premium-setting,
+.premium-logout {
+  min-height: 66px;
+  padding: 0 22px;
+  border-radius: 26px;
+  font-size: 18px;
+}
+
+.setting-icon {
+  font-size: 26px;
+}
+
+.setting-arrow {
+  font-size: 34px;
+}
+
+@media (max-height: 760px) {
+  .profile-center {
+    margin-top: 18px;
+  }
+
+  .avatar-ring {
+    width: 108px;
+    height: 108px;
+    margin-bottom: 16px;
+  }
+
+  .profile-center .big-avatar {
+    width: 96px;
+    height: 96px;
+    font-size: 42px;
+  }
+
+  #profileUsername {
+    font-size: 34px;
+  }
+
+  #profileStatus {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+
+  #syncInfoCard {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .premium-setting,
+  .premium-logout {
+    min-height: 58px;
+    border-radius: 23px;
+  }
+
+  .profile-actions-bottom {
+    bottom: calc(env(safe-area-inset-bottom) + 76px);
+  }
+}
