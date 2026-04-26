@@ -3049,3 +3049,10 @@ body #addQuestionBtn.tap-pop {
 .map-feedback.wrong {
   color: #fca5a5;
 }
+
+#map,
+#map svg {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 360px;
+}
