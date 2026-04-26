@@ -113,7 +113,7 @@
 </div>
 
 <div class="profile-actions-bottom">
-  <div class="settings-card premium-setting">
+ <div id="settingsBtn" class="settings-card premium-setting">
     <span class="setting-icon">⚙</span>
     <span>Einstellungen</span>
     <span class="setting-arrow">›</span>
@@ -372,6 +372,21 @@ window.firebaseTools = {
   }
 </script>
 
+<div id="settingsModal" class="modal avatar-bottom-modal">
+  <div class="avatar-sheet">
+    <div class="sheet-handle"></div>
+
+    <div class="avatar-sheet-head">
+      <h2>Einstellungen</h2>
+      <p>Gelöschte Inhalte verwalten</p>
+    </div>
+
+    <div id="trashList" class="trash-list"></div>
+
+    <button id="closeSettingsBtn" class="avatar-sheet-btn muted">Schließen</button>
+  </div>
+</div>
+  
  <div id="avatarActionModal" class="modal avatar-bottom-modal">
   <div class="avatar-sheet">
     <div class="sheet-handle"></div>
