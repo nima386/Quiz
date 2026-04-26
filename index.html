@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Quiz App</title>
   <link rel="stylesheet" href="style.css?v=auto">
 </head>
@@ -240,7 +240,7 @@
 <div id="upperModal" class="modal">
   <div class="folder-create-box">
     <h2>Oberkategorie erstellen</h2>
-    <input id="upperNameInput" placeholder="z. B. Bauzeichner">
+    <input id="upperNameInput">
     <button id="createUpperBtn" class="main-btn">Erstellen</button>
     <button id="cancelUpperBtn" class="main-btn secondary">Abbrechen</button>
   </div>
@@ -279,6 +279,9 @@
     <button onclick="closeMenu()" class="menu-item cancel">Abbrechen</button>
   </div>
 </div>
+
+  <!-- XLSX -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <!-- Firebase -->
 <script type="module">
@@ -327,12 +330,9 @@ window.firebaseTools = {
  console.log("Firebase verbunden");
 
   const appScript = document.createElement("script");
-  appScript.src = "script.js?v=20";
+  appScript.src = "script.js?v=21";
   document.body.appendChild(appScript);
 </script>
-
-<!-- XLSX -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 
 <!-- Service Worker -->
