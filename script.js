@@ -107,6 +107,7 @@ function scheduleCloudSave() {
 }
 
 async function persistNow() {
+  clearTimeout(cloudSaveTimer);
   saveAppStore();
 
   if (currentUser) {
@@ -1819,7 +1820,7 @@ document.getElementById("logoutBtn").onclick = async () => {
 
   // 👇 Animation starten
   await startButtonLoading(button, "danger");
-
+  await persistNow();
   const { auth, signOut } = window.firebaseTools;
 
   await signOut(auth);
