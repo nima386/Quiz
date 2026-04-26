@@ -1052,14 +1052,19 @@ function startEuropeMapQuiz() {
 
   showScreen(europeMapGame, false);
 
-  setTimeout(() => {
-    simplemaps_europemap.hooks.click_state = function(countryId) {
-      handleEuropeCountryClick(countryId);
-    };
+ setTimeout(() => {
+  const mapBox = document.getElementById("map");
+  mapBox.innerHTML = "";
 
-    pickNextEuropeCountry();
-    updateEuropeMapScore();
-  }, 300);
+  simplemaps_europemap.load();
+
+  simplemaps_europemap.hooks.click_state = function(countryId) {
+    handleEuropeCountryClick(countryId);
+  };
+
+  pickNextEuropeCountry();
+  updateEuropeMapScore();
+}, 500);
 }
 
 function handleEuropeCountryClick(countryId) {
