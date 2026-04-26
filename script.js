@@ -1451,6 +1451,7 @@ function renderAvatarGrid() {
 
 function selectAvatar(src) {
   document.getElementById("profileAvatar").src = src;
+  document.getElementById("topAvatar").src = src;
   localStorage.setItem("userAvatar", src);
   if (src === DEFAULT_AVATAR) {
   localStorage.removeItem("userAvatar");
@@ -1818,6 +1819,7 @@ hydrateActiveUpper();
 const savedAvatar = localStorage.getItem("userAvatar");
 if (savedAvatar) {
   document.getElementById("profileAvatar").src = savedAvatar;
+  document.getElementById("topAvatar").src = savedAvatar;
 }
 
 fetch("questions.json?v=" + Date.now())
