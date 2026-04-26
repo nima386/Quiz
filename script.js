@@ -1059,6 +1059,13 @@ document.getElementById("backHome").addEventListener("click", () => {
 document.getElementById("openProfile").onclick = () => {
   updateProfileUI();
   showScreen(profile, false);
+
+  const ring = document.querySelector(".avatar-ring");
+  if (ring) {
+    ring.classList.remove("animate");
+    void ring.offsetWidth;
+    ring.classList.add("animate");
+  }
 };
 
 document.getElementById("closeProfile").onclick = () => {
@@ -1634,7 +1641,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     guestMode = false;
     localStorage.removeItem("guestMode");
 
-    logoutBtn.textContent = "⎋ Ausloggen";
+    logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Ausloggen</span><span class="setting-arrow">›</span>`;
     logoutBtn.classList.remove("success");
     logoutBtn.classList.add("danger");
 
@@ -1650,7 +1657,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
   } else {
     currentUser = null;
 
-    logoutBtn.textContent = "⎋ Einloggen";
+   logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
     logoutBtn.classList.remove("danger");
     logoutBtn.classList.add("success");
 
