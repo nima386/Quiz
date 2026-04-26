@@ -1126,6 +1126,10 @@ function startEuropeMapQuiz() {
       handleEuropeCountryClick(countryId);
     };
 
+    simplemaps_europemap.hooks.over_state = function(countryId) {
+  window.lastTouchedEuropeCountry = countryId;
+};
+    
     simplemaps_europemap.hooks.touch_state = function(countryId) {
       handleEuropeCountryClick(countryId);
     };
@@ -1138,6 +1142,14 @@ function startEuropeMapQuiz() {
     updateEuropeMapScore();
   }, 700);
 }
+
+const mapBox = document.getElementById("map");
+
+mapBox.ontouchend = () => {
+  if (window.lastTouchedEuropeCountry) {
+    handleEuropeCountryClick(window.lastTouchedEuropeCountry);
+  }
+};
 
 function handleEuropeCountryClick(countryId) {
   if (!currentEuropeCountry || europeAnswerLocked) return;
