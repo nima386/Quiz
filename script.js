@@ -1390,6 +1390,29 @@ function showIsland(text, type = "success") {
   }, 1800);
 }
 
+function showIsland(text, type = "success") {
+  const island = document.getElementById("appIsland");
+
+  island.textContent = text;
+  island.className = `app-island ${type} show`;
+
+  if (navigator.vibrate) navigator.vibrate(35);
+
+  setTimeout(() => {
+    island.classList.remove("show");
+  }, 1800);
+}
+
+// ✅ HIER EINFÜGEN (direkt nach der Funktion)
+
+window.addEventListener("online", () => {
+  showIsland("Wieder online", "success");
+});
+
+window.addEventListener("offline", () => {
+  showIsland("Offline-Modus", "danger");
+});
+
 function startButtonLoading(button, type = "success") {
   button.classList.add("auth-loading");
   if (type === "danger") button.classList.add("danger");
@@ -1495,12 +1518,16 @@ showIsland("Account erstellt", "success");
 
     showAuthMessage("");
   } catch (error) {
-    if (error.code === "auth/email-already-in-use") {
-      showAuthMessage("Dieser Username ist bereits vergeben.");
-    } else {
-      showAuthMessage(error.message);
-    }
+  if (error.code === "auth/email-already-in-use") {
+    showAuthMessage("Dieser Username ist bereits vergeben.");
+  } else if (error.code === "auth/weak-password") {
+    showAuthMessage("Passwort muss mindestens 6 Zeichen haben.");
+  } else if (!navigator.onLine) {
+    showAuthMessage("Keine Internetverbindung.");
+  } else {
+    showAuthMessage("Registrierung fehlgeschlagen.");
   }
+}
 };
 
 document.getElementById("loginBtn").onclick = async () => {
@@ -1538,8 +1565,12 @@ setActiveNav("navStart");
 showIsland("Eingeloggt", "success");
 
   } catch (error) {
+  if (!navigator.onLine) {
+    showAuthMessage("Keine Internetverbindung.");
+  } else {
     showAuthMessage("Username oder Passwort ist falsch.");
   }
+}
 };
 
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
