@@ -1089,6 +1089,9 @@ function startEuropeMapQuiz() {
   simplemaps_europemap.hooks.click_state = function(countryId) {
     handleEuropeCountryClick(countryId);
   };
+   simplemaps_europemap.hooks.touch_state = function(countryId) {
+  handleEuropeCountryClick(countryId);
+};
 
   pickNextEuropeCountry();
   updateEuropeMapScore();
