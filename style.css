@@ -3374,3 +3374,33 @@ body.map-playing #europeMapGame {
 .game-hero-card p {
   line-height: 1.55;
 }
+.best-run-card p {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#europeGameHome .question-detail-top {
+  position: relative;
+  justify-content: center !important;
+  padding: 0 68px;
+  margin-bottom: 26px;
+}
+
+#europeGameHome #backGames {
+  position: absolute !important;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#europeGameHome .question-detail-top h2 {
+  margin: 0;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 26px rgba(99,102,241,.22);
+}
