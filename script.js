@@ -71,6 +71,10 @@ function usernameToEmail(username) {
   return `${username}@nimaquiz.local`;
 }
 
+function softVibrate(ms = 18) {
+  if (navigator.vibrate) navigator.vibrate(ms);
+}
+
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
   saveAppStore();
@@ -151,6 +155,7 @@ function prepareQuizOrder(category) {
 }
 
 function showScreen(screen, showNav = true) {
+  softVibrate(10);
   document.querySelectorAll(".swipe-wrapper.open").forEach(item => {
     item.classList.remove("open");
   });
@@ -158,6 +163,12 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
   nav.style.display = showNav ? "flex" : "none";
+  setTimeout(() => {
+  if (screen.classList.contains("scroll-screen")) {
+    screen.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, 40);
 }
 
 function renderUpperList() {
@@ -1390,17 +1401,15 @@ function showIsland(text, type = "success") {
   }, 1800);
 }
 
-function showIsland(text, type = "success") {
-  const island = document.getElementById("appIsland");
+function hideAppLoader() {
+  const loader = document.getElementById("appLoader");
+  if (!loader) return;
 
-  island.textContent = text;
-  island.className = `app-island ${type} show`;
-
-  if (navigator.vibrate) navigator.vibrate(35);
+  loader.classList.add("hide");
 
   setTimeout(() => {
-    island.classList.remove("show");
-  }, 1800);
+    loader.style.display = "none";
+  }, 400);
 }
 
 // ✅ HIER EINFÜGEN (direkt nach der Funktion)
@@ -1699,12 +1708,14 @@ fetch("questions.json?v=" + Date.now())
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
+    hideAppLoader();
   })
   .catch(error => {
     console.error("questions.json konnte nicht geladen werden:", error);
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
+    hideAppLoader();
   });
 
 setActiveNav("navStart");
