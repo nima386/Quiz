@@ -3406,18 +3406,28 @@ body.map-playing #europeMapGame {
 }
 .map-game-top {
   position: relative;
-  height: 64px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
 }
 
+/* Pfeil links */
 .map-game-top #backEuropeHome {
   position: absolute;
   left: 0;
 }
 
+/* Timer IMMER exakt mittig */
+.map-live-timer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 130px;
+  text-align: center;
+}
+
+/* Titel rechts */
 .map-game-top h2 {
   position: absolute;
   right: 0;
@@ -3428,93 +3438,22 @@ body.map-playing #europeMapGame {
   font-weight: 950;
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 0 26px rgba(99,102,241,.18);
+  box-shadow: 0 0 20px rgba(99,102,241,.18);
 }
 
-.map-live-timer {
-  min-width: 118px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  text-align: center;
-  background: linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.06));
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.20),
-    0 14px 36px rgba(0,0,0,.28),
-    0 0 30px rgba(99,102,241,.20);
-  backdrop-filter: blur(24px) saturate(160%);
-}
-
-.map-live-timer span {
-  display: block;
-  font-size: 10px;
-  font-weight: 900;
-  color: rgba(255,255,255,.55);
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-
-.map-live-timer strong {
-  display: block;
-  font-size: 18px;
-  font-weight: 950;
-  margin-top: 2px;
-}
-
-.map-game-top {
-  display: grid !important;
-  grid-template-columns: 72px 1fr 160px;
-  gap: 14px;
-  align-items: center;
-  height: 74px;
-}
-
-.map-game-top #backEuropeHome {
-  position: static !important;
-  justify-self: start;
-}
-
-.map-live-timer {
-  justify-self: center;
-  min-width: 150px;
-  max-width: 170px;
-}
-
-.map-game-top h2 {
-  position: static !important;
-  justify-self: end;
-  font-size: 20px;
-  padding: 12px 18px;
-  white-space: nowrap;
-}
-
-@media (max-width: 430px) {
-  .map-game-top {
-    grid-template-columns: 58px 1fr 124px;
-    gap: 8px;
-  }
-
-  .map-game-top .circle-btn {
-    width: 54px;
-    height: 54px;
-  }
+@media (max-width: 420px) {
 
   .map-live-timer {
-    min-width: 112px;
-    max-width: 118px;
-    padding: 7px 10px;
-  }
-
-  .map-live-timer span {
-    font-size: 9px;
-  }
-
-  .map-live-timer strong {
-    font-size: 18px;
+    min-width: 110px;
+    transform: translateX(-50%) scale(0.95);
   }
 
   .map-game-top h2 {
     font-size: 15px;
-    padding: 10px 12px;
+    padding: 8px 12px;
+  }
+
+  .map-game-top #backEuropeHome {
+    transform: scale(0.9);
   }
 }
