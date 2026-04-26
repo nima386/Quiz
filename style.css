@@ -3178,3 +3178,17 @@ body.map-playing #europeMapGame {
 .europe-country.wrong-country {
   fill: #ef4444 !important;
 }
+#map .land,
+#map .europe-country {
+  fill: rgba(255,255,255,.16) !important;
+  stroke: rgba(255,255,255,.65) !important;
+  pointer-events: auto !important;
+}
+
+#map .correct-country {
+  fill: #22c55e !important;
+}
+
+#map .wrong-country {
+  fill: #ef4444 !important;
+}
