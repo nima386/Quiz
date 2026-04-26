@@ -1076,12 +1076,23 @@ let europeAnswerLocked = false;
 let europeRoundCorrect = 0;
 let europeRoundWrong = 0;
 let europeStartTime = null;
+let europeTimerInterval = null;
 
-let europeBestRun = JSON.parse(localStorage.getItem("europeBestRun")) || {
-  correct: 0,
-  wrong: 0,
-  time: null
-};
+function getEuropeBestRunKey() {
+  return currentUser
+    ? `europeBestRun_${currentUser.uid}`
+    : "europeBestRun_guest";
+}
+
+function loadEuropeBestRun() {
+  return JSON.parse(localStorage.getItem(getEuropeBestRunKey())) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+}
+
+let europeBestRun = loadEuropeBestRun();
 
 let svgLoaded = false;
 let mapState = { x: 0, y: 0, scale: 1 };
@@ -1293,6 +1304,7 @@ async function startEuropeMapQuiz() {
   europeRoundCorrect = 0;
   europeRoundWrong = 0;
   europeStartTime = Date.now();
+  startEuropeTimer();
 
   createEuropeDeck();
   pickNextEuropeCountry();
@@ -1375,11 +1387,12 @@ function resetEuropeRound() {
   currentEuropeCountry = null;
   europeDeck = [];
   document.body.classList.remove("map-playing");
+  stopEuropeTimer();
 }
 
 function finishEuropeRound() {
   const result = saveEuropeBestRun();
-
+stopEuropeTimer();
   document.getElementById("roundCorrectFinal").textContent = result.correct;
   document.getElementById("roundWrongFinal").textContent = result.wrong;
   document.getElementById("roundTimeFinal").textContent = formatEuropeTime(result.time);
@@ -1403,6 +1416,24 @@ function formatEuropeTime(ms) {
   return `${minutes}:${String(seconds).padStart(2, "0")} min`;
 }
 
+function startEuropeTimer() {
+  clearInterval(europeTimerInterval);
+
+  europeTimerInterval = setInterval(() => {
+    if (!europeStartTime) return;
+
+    const timer = document.getElementById("liveEuropeTimer");
+    if (timer) {
+      timer.textContent = formatEuropeTime(Date.now() - europeStartTime).replace(" min", "");
+    }
+  }, 500);
+}
+
+function stopEuropeTimer() {
+  clearInterval(europeTimerInterval);
+  europeTimerInterval = null;
+}
+
 function saveEuropeBestRun() {
   const time = Date.now() - europeStartTime;
 
@@ -1422,13 +1453,14 @@ function saveEuropeBestRun() {
 
   if (isBetter) {
     europeBestRun = newRun;
-    localStorage.setItem("europeBestRun", JSON.stringify(europeBestRun));
+    localStorage.setItem(getEuropeBestRunKey(), JSON.stringify(europeBestRun));
   }
 
   return newRun;
 }
 
 function renderEuropeGameHome() {
+  europeBestRun = loadEuropeBestRun();
   const bestText = document.getElementById("europeBestRun");
   const bestTime = document.getElementById("europeBestTime");
 
