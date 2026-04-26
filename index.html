@@ -90,27 +90,41 @@
 
   <!-- PROFIL -->
   <section id="profile" class="screen">
-    <div class="profile-top">
-      <button id="closeProfile" class="circle-btn">←</button>
-      <h2>Profil</h2>
-    </div>
+   <div class="profile-top premium-profile-top">
+  <button id="closeProfile" class="circle-btn">←</button>
+  <div class="profile-title-pill">Profil</div>
+</div>
 
-    <div class="profile-card-premium">
-  <div class="big-avatar">👤</div>
-
-  <div>
-    <h1 id="profileUsername">Gast</h1>
-    <p id="profileStatus">Nicht eingeloggt</p>
+<div class="profile-center">
+  <div class="avatar-ring">
+    <div class="big-avatar">👤</div>
   </div>
+
+  <h1 id="profileUsername">Gast</h1>
+  <p id="profileStatus">Nicht eingeloggt</p>
 </div>
 
 <div id="syncInfoCard" class="sync-info-card offline">
-  <strong>Nur lokal gespeichert</strong>
-  <span>Wenn du dich einloggst, wird dein Fortschritt online gesichert.</span>
+  <div class="sync-icon">☁</div>
+  <div>
+    <strong>Nur lokal gespeichert</strong>
+    <span>Wenn du dich einloggst, wird dein Fortschritt online gesichert.</span>
+  </div>
 </div>
 
-<div class="settings-card">⚙ Einstellungen</div>
-<div id="logoutBtn" class="settings-card success">⎋ Einloggen</div>
+<div class="profile-actions-bottom">
+  <div class="settings-card premium-setting">
+    <span class="setting-icon">⚙</span>
+    <span>Einstellungen</span>
+    <span class="setting-arrow">›</span>
+  </div>
+
+  <div id="logoutBtn" class="settings-card success premium-logout">
+    <span class="setting-icon">↪</span>
+    <span>Einloggen</span>
+    <span class="setting-arrow">›</span>
+  </div>
+</div>
   </section>
 
   <!-- BIBLIOTHEK -->
