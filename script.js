@@ -773,6 +773,7 @@ function renderQuestionList() {
 
 function openQuestionDetail(index) {
   const q = data[currentCategory][index];
+  document.getElementById("detailTitle").textContent = `Frage ${index + 1}`;
 
   const box = document.getElementById("detailBox");
   box.innerHTML = `
