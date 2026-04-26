@@ -1601,10 +1601,14 @@ document.getElementById("logoutBtn").onclick = async () => {
 
   // 👇 wenn NICHT eingeloggt → Login öffnen
   if (!currentUser) {
-    authScreen.classList.remove("hide");
-    showScreen(profile, false);
-    return;
-  }
+  await startButtonLoading(button, "success");
+
+  authScreen.classList.remove("hide");
+  showScreen(profile, false);
+
+  showIsland("Login öffnen", "success");
+  return;
+}
 
   // 👇 Animation starten
   await startButtonLoading(button, "danger");
