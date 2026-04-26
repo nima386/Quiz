@@ -284,6 +284,29 @@
   </div>
 </section>
 
+  <section id="europeMapGame" class="screen scroll-screen">
+  <div class="question-detail-top">
+    <button id="backEuropeHome" class="circle-btn">←</button>
+    <h2>Europa Map</h2>
+  </div>
+
+  <div class="map-question-card">
+    <p>Tippe auf:</p>
+    <h1 id="targetCountryName">Deutschland</h1>
+
+    <div class="map-score-row">
+      <span id="mapCorrectCount">0 richtig</span>
+      <span id="mapWrongCount">0 falsch</span>
+    </div>
+  </div>
+
+  <div class="map-glass-frame">
+    <div id="map"></div>
+  </div>
+
+  <div id="mapFeedback" class="map-feedback"></div>
+</section>
+
   <section id="statsScreen" class="screen scroll-screen">
   <div class="library-head">
     <h1>Statistik</h1>
@@ -367,7 +390,9 @@
 
   <!-- XLSX -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
+<!-- Europe Map -->
+<script src="maps/europe/mapdata.js"></script>
+<script src="maps/europe/europemap.js"></script>
 <!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
