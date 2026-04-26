@@ -70,9 +70,8 @@ const avatars = [
   "avatars/avatar8.png",
   "avatars/avatar9.png",
   "avatars/avatar10.png"
-  const DEFAULT_AVATAR = "avatars/avatar1.png";
-];
-
+  ];
+const DEFAULT_AVATAR = "avatars/avatar1.png";
 
 function normalizeUsername(name) {
   return name
