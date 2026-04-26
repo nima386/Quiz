@@ -310,7 +310,9 @@ function renderHome() {
   const box = document.getElementById("homeCategories");
   box.innerHTML = "";
 
-  Object.keys(data).forEach(category => {
+  const categoriesToSearch = searchOnlyCurrentCategory ? [currentCategory] : Object.keys(data);
+
+categoriesToSearch.forEach(category => {
     const total = data[category].length;
     const done = progress[category] || 0;
     const percent = total ? Math.round((done / total) * 100) : 0;
@@ -1219,6 +1221,7 @@ function openQuestionFromSearch(category, index) {
   openQuestionDetail(index);
 }
 
+let searchOnlyCurrentCategory = false;
 function runSearch(query) {
   const resultsBox = document.getElementById("searchResults");
   resultsBox.innerHTML = "";
@@ -1279,13 +1282,25 @@ function runSearch(query) {
 }
 
 document.getElementById("openQuestionSearch").onclick = () => {
-  showScreen(searchScreen, false);
-  document.getElementById("searchInput").value = currentCategory;
-  runSearch(currentCategory);
-  setTimeout(() => document.getElementById("searchInput").focus(), 150);
+  const btn = document.getElementById("openQuestionSearch");
+
+  btn.classList.add("search-expand");
+
+  setTimeout(() => {
+    searchOnlyCurrentCategory = true;
+
+    showScreen(searchScreen, false);
+    document.getElementById("searchInput").value = "";
+    runSearch("");
+
+    setTimeout(() => document.getElementById("searchInput").focus(), 120);
+
+    btn.classList.remove("search-expand");
+  }, 260);
 };
 
 document.getElementById("openSearch").onclick = () => {
+  searchOnlyCurrentCategory = false;
   showScreen(searchScreen, false);
   document.getElementById("searchInput").value = "";
   runSearch("");
@@ -1293,6 +1308,13 @@ document.getElementById("openSearch").onclick = () => {
 };
 
 document.getElementById("closeSearch").onclick = () => {
+  if (searchOnlyCurrentCategory) {
+    searchOnlyCurrentCategory = false;
+    showScreen(questionList, true);
+    renderQuestionList();
+    return;
+  }
+
   showScreen(home, true);
 };
 
