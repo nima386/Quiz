@@ -1978,12 +1978,6 @@ if (!savedAvatar) {
   localStorage.setItem("userAvatar", savedAvatar);
 }
 
-const savedAvatar = localStorage.getItem("userAvatar");
-
-if (savedAvatar) {
-  document.getElementById("profileAvatar").src = savedAvatar;
-  document.getElementById("topAvatar").src = savedAvatar;
-}
 
 fetch("questions.json?v=" + Date.now())
   .then(res => res.json())
