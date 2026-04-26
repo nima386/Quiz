@@ -239,6 +239,51 @@
   <div id="searchResults"></div>
 </section>
 
+  <section id="gamesScreen" class="screen scroll-screen">
+  <div class="library-head">
+    <h1>Spiele</h1>
+  </div>
+
+  <div class="game-card" id="openEuropeGame">
+    <div class="game-icon">🌍</div>
+    <div>
+      <h2>Europa Länder</h2>
+      <p>Tippe das richtige Land auf der Karte an</p>
+    </div>
+    <span class="game-arrow">›</span>
+  </div>
+</section>
+
+  <section id="europeGameHome" class="screen scroll-screen">
+  <div class="question-detail-top">
+    <button id="backGames" class="circle-btn">←</button>
+    <h2>Europa Länder</h2>
+  </div>
+
+  <div class="game-hero-card">
+    <div class="game-big-icon">🗺️</div>
+    <h1>Europa Länder</h1>
+    <p>Dir wird ein Land genannt. Tippe es richtig auf der Karte an.</p>
+
+    <div class="game-stats-mini">
+      <div>
+        <strong id="europeCorrect">0</strong>
+        <span>Richtig</span>
+      </div>
+      <div>
+        <strong id="europeWrong">0</strong>
+        <span>Falsch</span>
+      </div>
+      <div>
+        <strong id="europeBest">0</strong>
+        <span>Best Streak</span>
+      </div>
+    </div>
+
+    <button id="startEuropeMapGame" class="main-btn">Spiel starten</button>
+  </div>
+</section>
+
   <section id="statsScreen" class="screen scroll-screen">
   <div class="library-head">
     <h1>Statistik</h1>
@@ -264,7 +309,17 @@
 
   <div id="upperList"></div>
 
-  <button id="addUpperBtn" class="main-btn">+ Oberkategorie</button>
+<div class="drawer-divider"></div>
+
+<div id="openGamesFromDrawer" class="drawer-game-entry">
+  <div class="drawer-game-icon">🎮</div>
+  <div>
+    <strong>Spiele</strong>
+    <span>Länder, Karten & mehr</span>
+  </div>
+</div>
+
+<button id="addUpperBtn" class="main-btn">+ Oberkategorie</button>
 </aside>
 
 <div id="upperModal" class="modal">
