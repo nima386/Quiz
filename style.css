@@ -301,20 +301,6 @@ h1 {
   margin-top: 4px;
 }
 
-.floating-plus {
-  position: fixed;
-  right: 24px;
-  bottom: 100px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  font-size: 32px;
-  box-shadow: 0 18px 40px rgba(79,70,229,.45);
-}
-
 .detail-card {
   margin-top: 24px;
   padding: 22px;
@@ -2653,4 +2639,21 @@ Das ist der Unterschied zwischen:
     inset 0 1px 0 rgba(255,255,255,.25),
     0 0 34px rgba(99,102,241,.38),
     0 18px 42px rgba(0,0,0,.32);
+}
+body #addQuestionBtn {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(env(safe-area-inset-bottom) + 92px) !important;
+  transform: translateX(-50%) !important;
+  z-index: 99999 !important;
+
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 50% !important;
+
+  background: rgba(255,255,255,.13) !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
 }
