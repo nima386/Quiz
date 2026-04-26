@@ -1030,6 +1030,30 @@ function initEuropeCountries() {
     .filter(country => country.name && country.name !== "default");
 }
 
+function colorEuropeCountry(countryId, color) {
+  if (!countryId || !simplemaps_europemap_mapdata.state_specific[countryId]) return;
+
+  simplemaps_europemap_mapdata.state_specific[countryId].color = color;
+  simplemaps_europemap_mapdata.state_specific[countryId].hover_color = color;
+
+  if (window.simplemaps_europemap?.refresh_state) {
+    simplemaps_europemap.refresh_state(countryId);
+  } else {
+    simplemaps_europemap.load();
+  }
+}
+
+function resetEuropeMapColors() {
+  Object.keys(simplemaps_europemap_mapdata.state_specific).forEach(id => {
+    simplemaps_europemap_mapdata.state_specific[id].color = "default";
+    simplemaps_europemap_mapdata.state_specific[id].hover_color = "default";
+  });
+
+  if (window.simplemaps_europemap?.load) {
+    simplemaps_europemap.load();
+  }
+}
+
 function pickNextEuropeCountry() {
   if (europeCountries.length === 0) initEuropeCountries();
 
@@ -1040,6 +1064,7 @@ function pickNextEuropeCountry() {
     currentEuropeCountry.name;
 
   document.getElementById("mapFeedback").textContent = "";
+  europeWrongAttempts = 0;
 }
 
 function startEuropeMapQuiz() {
@@ -1064,6 +1089,7 @@ function startEuropeMapQuiz() {
 
   pickNextEuropeCountry();
   updateEuropeMapScore();
+   resetEuropeMapColors();
 }, 500);
 }
 
@@ -1080,32 +1106,49 @@ function handleEuropeCountryClick(countryId) {
       stats.bestStreak = europeCurrentStreak;
     }
 
+    colorEuropeCountry(countryId, "#22c55e");
+
     document.getElementById("mapFeedback").textContent = "Richtig!";
     document.getElementById("mapFeedback").className = "map-feedback correct";
     showIsland("Richtig", "success");
     softVibrate(30);
 
+    updateEuropeMapScore();
+    saveGameStats();
+
     setTimeout(() => {
       pickNextEuropeCountry();
-      updateEuropeMapScore();
     }, 900);
-  } else {
-    stats.wrong++;
-    europeCurrentStreak = 0;
 
-    const clickedName =
-      simplemaps_europemap_mapdata.state_specific[countryId]?.name || countryId;
-
-    document.getElementById("mapFeedback").textContent =
-      `Falsch – das war ${clickedName}`;
-
-    document.getElementById("mapFeedback").className = "map-feedback wrong";
-    showIsland("Falsch", "danger");
-    softVibrate(70);
-
-    updateEuropeMapScore();
+    return;
   }
 
+  europeWrongAttempts++;
+  stats.wrong++;
+  europeCurrentStreak = 0;
+
+  const clickedName =
+    simplemaps_europemap_mapdata.state_specific[countryId]?.name || countryId;
+
+  document.getElementById("mapFeedback").textContent =
+    `Falsch – das war ${clickedName} (${europeWrongAttempts}/3)`;
+
+  document.getElementById("mapFeedback").className = "map-feedback wrong";
+  showIsland("Falsch", "danger");
+  softVibrate(70);
+
+  if (europeWrongAttempts >= 3) {
+    colorEuropeCountry(currentEuropeCountry.id, "#ef4444");
+
+    document.getElementById("mapFeedback").textContent =
+      `3x falsch – richtig war ${currentEuropeCountry.name}`;
+
+    setTimeout(() => {
+      pickNextEuropeCountry();
+    }, 1200);
+  }
+
+  updateEuropeMapScore();
   saveGameStats();
 }
 
@@ -1123,6 +1166,8 @@ function renderEuropeGameHome() {
   let europeCountries = [];
 let currentEuropeCountry = null;
 let europeCurrentStreak = 0;
+  let europeWrongAttempts = 0;
+  
   const stats = gameStats.europeCountries || {
     correct: 0,
     wrong: 0,
