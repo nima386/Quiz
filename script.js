@@ -1342,7 +1342,7 @@ showIsland(`${europeWrongAttempts} von 3`, "danger");
 
     if (!europeAnsweredThisCountry) {
       europeRoundWrong++;
-      europeAnsweredThisCountry = true;
+      europeAnsweredThisCountry = true; 
     }
 
     colorEuropeCountry(currentEuropeCountry.id, "wrong-country");
