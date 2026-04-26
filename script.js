@@ -1364,6 +1364,32 @@ function showAuthMessage(text) {
   authMessage.textContent = text;
 }
 
+function showIsland(text, type = "success") {
+  const island = document.getElementById("appIsland");
+
+  island.textContent = text;
+  island.className = `app-island ${type} show`;
+
+  if (navigator.vibrate) navigator.vibrate(35);
+
+  setTimeout(() => {
+    island.classList.remove("show");
+  }, 1800);
+}
+
+function startButtonLoading(button, type = "success") {
+  button.classList.add("auth-loading");
+  if (type === "danger") button.classList.add("danger");
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      button.classList.remove("auth-loading");
+      button.classList.remove("danger");
+      resolve();
+    }, 900);
+  });
+}
+
 async function saveUserProfile(user, username = "") {
   const { db, doc, setDoc, getDoc } = window.firebaseTools;
 
@@ -1415,6 +1441,7 @@ async function saveCloudData() {
 }
 
 document.getElementById("registerBtn").onclick = async () => {
+  const button = document.getElementById("registerBtn");
   try {
     showAuthMessage("");
 
@@ -1435,6 +1462,7 @@ document.getElementById("registerBtn").onclick = async () => {
 
     const { auth, db, createUserWithEmailAndPassword, doc, setDoc } = window.firebaseTools;
 
+    await startButtonLoading(button, "success");
     const result = await createUserWithEmailAndPassword(auth, email, password);
 
     await setDoc(doc(db, "usernames", username), {
@@ -1444,6 +1472,10 @@ document.getElementById("registerBtn").onclick = async () => {
     });
 
     await saveUserProfile(result.user, username);
+    authScreen.classList.add("hide");
+showScreen(home, true);
+setActiveNav("navStart");
+showIsland("Account erstellt", "success");
 
     showAuthMessage("");
   } catch (error) {
@@ -1456,6 +1488,8 @@ document.getElementById("registerBtn").onclick = async () => {
 };
 
 document.getElementById("loginBtn").onclick = async () => {
+  const button = document.getElementById("loginBtn");
+
   try {
     showAuthMessage("");
 
@@ -1467,13 +1501,9 @@ document.getElementById("loginBtn").onclick = async () => {
       return;
     }
 
-    const {
-      db,
-      doc,
-      getDoc,
-      auth,
-      signInWithEmailAndPassword
-    } = window.firebaseTools;
+    await startButtonLoading(button, "success");
+
+    const { db, doc, getDoc, auth, signInWithEmailAndPassword } = window.firebaseTools;
 
     const usernameSnap = await getDoc(doc(db, "usernames", username));
 
@@ -1485,8 +1515,13 @@ document.getElementById("loginBtn").onclick = async () => {
     const email = usernameToEmail(username);
 
     await signInWithEmailAndPassword(auth, email, password);
+
+    authScreen.classList.add("hide");
+    showScreen(home, true);
+    setActiveNav("navStart");
+    showIsland("Eingeloggt", "success");
+
   } catch (error) {
-    console.log(error);
     showAuthMessage("Username oder Passwort ist falsch.");
   }
 };
@@ -1559,13 +1594,15 @@ document.getElementById("closeAuthBtn").onclick = () => {
 };
 
 document.getElementById("logoutBtn").onclick = async () => {
+  const button = document.getElementById("logoutBtn");
+
   if (!currentUser) {
-    guestMode = false;
-    localStorage.removeItem("guestMode");
     authScreen.classList.remove("hide");
-    showScreen(home, true);
+    showScreen(profile, false);
     return;
   }
+
+  await startButtonLoading(button, "danger");
 
   const { auth, signOut } = window.firebaseTools;
 
@@ -1576,7 +1613,10 @@ document.getElementById("logoutBtn").onclick = async () => {
   localStorage.removeItem("guestMode");
 
   document.getElementById("logoutBtn").textContent = "⎋ Einloggen";
-  authScreen.classList.remove("hide");
+
+  showScreen(home, true);
+  setActiveNav("navStart");
+  showIsland("Ausgeloggt", "danger");
 };
 
 /* Start */
