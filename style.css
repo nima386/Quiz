@@ -1836,3 +1836,60 @@ Farben wirken hochwertiger
 Das ist der Unterschied zwischen:
 
 „coole App“ vs „krass, wo hast du die her?“
+.profile-card-premium {
+  margin: 24px 0 18px;
+  padding: 22px;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 22px 60px rgba(0,0,0,.32),
+    0 0 36px rgba(99,102,241,.22);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+
+.profile-card-premium h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.profile-card-premium p {
+  margin: 6px 0 0;
+  color: rgba(255,255,255,.65);
+  font-weight: 800;
+}
+
+.sync-info-card {
+  margin-bottom: 16px;
+  padding: 18px;
+  border-radius: 26px;
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(24px);
+}
+
+.sync-info-card strong {
+  font-size: 16px;
+}
+
+.sync-info-card span {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+}
+
+.sync-info-card.online {
+  background: rgba(34,197,94,.12);
+  box-shadow: 0 0 30px rgba(34,197,94,.22);
+}
+
+.sync-info-card.offline {
+  background: rgba(239,68,68,.10);
+  box-shadow: 0 0 30px rgba(239,68,68,.18);
+}
