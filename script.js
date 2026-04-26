@@ -1277,6 +1277,13 @@ function runSearch(query) {
   }
 }
 
+document.getElementById("openQuestionSearch").onclick = () => {
+  showScreen(searchScreen, false);
+  document.getElementById("searchInput").value = currentCategory;
+  runSearch(currentCategory);
+  setTimeout(() => document.getElementById("searchInput").focus(), 150);
+};
+
 document.getElementById("openSearch").onclick = () => {
   showScreen(searchScreen, false);
   document.getElementById("searchInput").value = "";
