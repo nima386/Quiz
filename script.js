@@ -1442,7 +1442,7 @@ async function saveCloudData() {
 
 document.getElementById("registerBtn").onclick = async () => {
   const button = document.getElementById("registerBtn");
-  const button = document.getElementById("registerBtn");
+ 
   try {
     showAuthMessage("");
 
@@ -1464,7 +1464,7 @@ document.getElementById("registerBtn").onclick = async () => {
     const { auth, db, createUserWithEmailAndPassword, doc, setDoc } = window.firebaseTools;
 
     await startButtonLoading(button, "success");
-   await startButtonLoading(button, "success");
+  
 
 const result = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -1503,9 +1503,7 @@ document.getElementById("loginBtn").onclick = async () => {
       showAuthMessage("Username und Passwort eingeben.");
       return;
     }
-
-    await startButtonLoading(button, "success");
-
+    
     const { db, doc, getDoc, auth, signInWithEmailAndPassword } = window.firebaseTools;
 
     const usernameSnap = await getDoc(doc(db, "usernames", username));
