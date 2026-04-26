@@ -1234,13 +1234,23 @@ function colorEuropeCountry(countryId, className) {
   const land = document.querySelector(`#${countryId}`);
   if (!land) return;
 
-  land.classList.remove("correct-country", "wrong-country");
+ land.classList.remove(
+  "correct-country",
+  "second-try-country",
+  "third-try-country",
+  "wrong-country"
+);
   land.classList.add(className);
 }
 
 function resetEuropeMapColors() {
   document.querySelectorAll(".europe-country").forEach(land => {
-    land.classList.remove("correct-country", "wrong-country");
+   land.classList.remove(
+  "correct-country",
+  "second-try-country",
+  "third-try-country",
+  "wrong-country"
+);
   });
 }
 
@@ -1292,10 +1302,16 @@ function handleEuropeCountryClick(countryId) {
       europeAnsweredThisCountry = true;
     }
 
-    colorEuropeCountry(countryId, "correct-country");
+    if (europeWrongAttempts === 0) {
+  colorEuropeCountry(countryId, "correct-country");
+} else if (europeWrongAttempts === 1) {
+  colorEuropeCountry(countryId, "second-try-country");
+} else {
+  colorEuropeCountry(countryId, "third-try-country");
+}
 
-    document.getElementById("mapFeedback").textContent = "Richtig!";
-    document.getElementById("mapFeedback").className = "map-feedback correct";
+   document.getElementById("mapFeedback").textContent = "";
+showIsland("Richtig", "success");
 
     updateEuropeMapScore();
 
@@ -1310,10 +1326,8 @@ function handleEuropeCountryClick(countryId) {
 
   const clickedName = EUROPE_COUNTRY_NAMES[countryId] || countryId;
 
-  document.getElementById("mapFeedback").textContent =
-    `Falsch – das war ${clickedName} (${europeWrongAttempts}/3)`;
-
-  document.getElementById("mapFeedback").className = "map-feedback wrong";
+  document.getElementById("mapFeedback").textContent = "";
+showIsland(`${europeWrongAttempts} von 3`, "danger");
 
   if (europeWrongAttempts >= 3) {
     europeAnswerLocked = true;
@@ -1325,8 +1339,8 @@ function handleEuropeCountryClick(countryId) {
 
     colorEuropeCountry(currentEuropeCountry.id, "wrong-country");
 
-    document.getElementById("mapFeedback").textContent =
-      `3x falsch – richtig war ${currentEuropeCountry.name}`;
+    document.getElementById("mapFeedback").textContent = "";
+showIsland("Falsch", "danger");
 
     updateEuropeMapScore();
 
