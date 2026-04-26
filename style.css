@@ -3058,10 +3058,6 @@ body #addQuestionBtn.tap-pop {
 }
 /* MOBILE MAP CONTROL */
 
-body.map-playing {
-  overflow: hidden !important;
-  touch-action: none;
-}
 
 body.map-playing #europeMapGame {
   overflow: hidden !important;
@@ -3077,14 +3073,6 @@ body.map-playing .bottom-nav {
   overscroll-behavior: contain;
 }
 
-#map,
-#map svg,
-#map * {
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-}
 
 #europeMapGame {
   overscroll-behavior: none;
@@ -3110,4 +3098,42 @@ body.map-playing .bottom-nav {
     font-size: 16px;
     margin-top: 10px;
   }
+}
+
+/* EUROPE MAP TOUCH FIX */
+
+body.map-playing {
+  overflow: hidden !important;
+}
+
+body.map-playing #europeMapGame {
+  height: 100dvh;
+  overflow: hidden !important;
+}
+
+.map-glass-frame {
+  height: 64dvh;
+  min-height: 430px;
+  overflow: hidden;
+  touch-action: none !important;
+  overscroll-behavior: none;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  touch-action: none !important;
+}
+
+#map svg {
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none !important;
+}
+
+#map path,
+#map [data-id],
+#map * {
+  pointer-events: auto !important;
+  -webkit-tap-highlight-color: transparent;
 }
