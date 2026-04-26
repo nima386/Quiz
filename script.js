@@ -1451,6 +1451,9 @@ function renderAvatarGrid() {
 
 function selectAvatar(src) {
   document.getElementById("profileAvatar").src = src;
+  document.querySelectorAll(".sheet-avatar-preview").forEach(img => {
+  img.src = src;
+});
   document.getElementById("topAvatar").src = src;
   localStorage.setItem("userAvatar", src);
   if (src === DEFAULT_AVATAR) {
@@ -1748,6 +1751,10 @@ backToLoginBtn.onclick = () => {
 
   authMessage.textContent = "";
 };
+
+document.querySelectorAll(".sheet-avatar-preview").forEach(img => {
+  img.src = document.getElementById("profileAvatar").src;
+});
 
 document.getElementById("profileAvatar").onclick = () => {
   document.getElementById("avatarActionModal").classList.add("show");
