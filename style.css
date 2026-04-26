@@ -3404,3 +3404,59 @@ body.map-playing #europeMapGame {
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 0 26px rgba(99,102,241,.22);
 }
+.map-game-top {
+  position: relative;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.map-game-top #backEuropeHome {
+  position: absolute;
+  left: 0;
+}
+
+.map-game-top h2 {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 26px rgba(99,102,241,.18);
+}
+
+.map-live-timer {
+  min-width: 118px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  text-align: center;
+  background: linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    0 14px 36px rgba(0,0,0,.28),
+    0 0 30px rgba(99,102,241,.20);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+.map-live-timer span {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  color: rgba(255,255,255,.55);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.map-live-timer strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 950;
+  margin-top: 2px;
+}
