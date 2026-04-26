@@ -59,6 +59,19 @@ const authName = document.getElementById("authName");
 const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
 let guestMode = localStorage.getItem("guestMode") === "true";
+const avatars = [
+  "avatars/avatar1.png",
+  "avatars/avatar2.png",
+  "avatars/avatar3.png",
+  "avatars/avatar4.png",
+  "avatars/avatar5.png",
+  "avatars/avatar6.png",
+  "avatars/avatar7.png",
+  "avatars/avatar8.png",
+  "avatars/avatar9.png",
+  "avatars/avatar10.png"
+];
+
 
 function normalizeUsername(name) {
   return name
@@ -1421,6 +1434,42 @@ function updateProfileUI() {
   }
 }
 
+function renderAvatarGrid() {
+  const grid = document.getElementById("avatarGrid");
+  grid.innerHTML = "";
+
+  avatars.forEach(src => {
+    const div = document.createElement("div");
+    div.className = "avatar-item";
+    div.innerHTML = `<img src="${src}">`;
+
+    div.onclick = () => selectAvatar(src);
+
+    grid.appendChild(div);
+  });
+}
+
+function selectAvatar(src) {
+  document.getElementById("profileAvatar").src = src;
+  localStorage.setItem("userAvatar", src);
+
+  if (currentUser) {
+    saveAvatarToCloud(src);
+  }
+
+  document.getElementById("avatarModal").classList.remove("show");
+}
+
+async function saveAvatarToCloud(src) {
+  if (!currentUser) return;
+
+  const { db, doc, setDoc } = window.firebaseTools;
+
+  await setDoc(doc(db, "users", currentUser.uid), {
+    avatar: src
+  }, { merge: true });
+}
+
 function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
   authMessage.className = type;
@@ -1696,6 +1745,15 @@ backToLoginBtn.onclick = () => {
   authMessage.textContent = "";
 };
 
+document.getElementById("profileAvatar").onclick = () => {
+  document.getElementById("avatarModal").classList.add("show");
+  renderAvatarGrid();
+};
+
+document.getElementById("closeAvatarModal").onclick = () => {
+  document.getElementById("avatarModal").classList.remove("show");
+};
+
 document.getElementById("closeAuthBtn").onclick = () => {
   guestMode = true;
   localStorage.setItem("guestMode", "true");
@@ -1738,6 +1796,10 @@ document.getElementById("logoutBtn").onclick = async () => {
 /* Start */
 
 hydrateActiveUpper();
+const savedAvatar = localStorage.getItem("userAvatar");
+if (savedAvatar) {
+  document.getElementById("profileAvatar").src = savedAvatar;
+}
 
 fetch("questions.json?v=" + Date.now())
   .then(res => res.json())
@@ -1750,6 +1812,7 @@ fetch("questions.json?v=" + Date.now())
     save();
   }
 }
+    
 
     renderHome();
     renderLibrary();
