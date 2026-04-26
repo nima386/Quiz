@@ -1497,14 +1497,21 @@ document.getElementById("registerBtn").onclick = async () => {
 
     const email = usernameToEmail(username);
 
-    const { auth, db, createUserWithEmailAndPassword, doc, setDoc } = window.firebaseTools;
+    const { auth, db, createUserWithEmailAndPassword, doc, setDoc, getDoc } = window.firebaseTools;
+    const usernameRef = doc(db, "usernames", username);
+const usernameSnap = await getDoc(usernameRef);
+
+if (usernameSnap.exists()) {
+  showAuthMessage("Dieser Username ist bereits vergeben.");
+  return;
+}
 
     await startButtonLoading(button, "success");
   
 
 const result = await createUserWithEmailAndPassword(auth, email, password);
 
-    await setDoc(doc(db, "usernames", username), {
+    await setDoc(usernameRef, {
       uid: result.user.uid,
       username,
       createdAt: new Date().toISOString()
