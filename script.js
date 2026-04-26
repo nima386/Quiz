@@ -1467,10 +1467,15 @@ document.getElementById("loginBtn").onclick = async () => {
       return;
     }
 
-    const { db, doc, getDoc, auth, signInWithEmailAndPassword } = window.firebaseTools;
+    const {
+      db,
+      doc,
+      getDoc,
+      auth,
+      signInWithEmailAndPassword
+    } = window.firebaseTools;
 
-    const usernameRef = doc(db, "usernames", username);
-    const usernameSnap = await getDoc(usernameRef);
+    const usernameSnap = await getDoc(doc(db, "usernames", username));
 
     if (!usernameSnap.exists()) {
       showAuthMessage("Dieser Username existiert nicht.");
@@ -1481,7 +1486,8 @@ document.getElementById("loginBtn").onclick = async () => {
 
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showAuthMessage("Passwort ist falsch.");
+    console.log(error);
+    showAuthMessage("Username oder Passwort ist falsch.");
   }
 };
 
