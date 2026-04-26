@@ -2598,3 +2598,31 @@ Das ist der Unterschied zwischen:
     0 0 28px rgba(99,102,241,.18);
   backdrop-filter: blur(24px);
 }
+
+.question-detail-top {
+  position: relative;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.question-detail-top #backQuestions {
+  position: absolute;
+  left: 0;
+}
+
+.question-detail-top #detailTitle {
+  margin: 0;
+  padding: 10px 28px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 28px rgba(99,102,241,.18);
+  backdrop-filter: blur(24px);
+}
