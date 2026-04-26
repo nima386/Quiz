@@ -2201,3 +2201,34 @@ Das ist der Unterschied zwischen:
     opacity: 0.6;
   }
 }
+
+.avatar-box {
+  padding: 20px;
+  text-align: center;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.avatar-item {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.avatar-item:hover {
+  transform: scale(1.1);
+}
+
+.avatar-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
