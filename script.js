@@ -1119,8 +1119,6 @@ function handleEuropeCountryClick(countryId) {
 
     document.getElementById("mapFeedback").textContent = "Richtig!";
     document.getElementById("mapFeedback").className = "map-feedback correct";
-    showIsland("Richtig", "success");
-    softVibrate(30);
 
     updateEuropeMapScore();
     saveGameStats();
@@ -1142,8 +1140,6 @@ function handleEuropeCountryClick(countryId) {
     `Falsch – das war ${clickedName} (${europeWrongAttempts}/3)`;
 
   document.getElementById("mapFeedback").className = "map-feedback wrong";
-  showIsland("Falsch", "danger");
-  softVibrate(70);
 
   if (europeWrongAttempts >= 3) {
     europeAnswerLocked = true;
@@ -1211,8 +1207,6 @@ if (europeWrongAttempts >= 3) {
   setTimeout(() => {
     pickNextEuropeCountry();
   }, 1200);
-
-  return; // 🔥 WICHTIG
 }
 
 function renderEuropeGameHome() {
