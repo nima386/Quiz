@@ -2626,3 +2626,12 @@ Das ist der Unterschied zwischen:
     0 0 28px rgba(99,102,241,.18);
   backdrop-filter: blur(24px);
 }
+/* FIX: Frage-Plus bleibt fest unten */
+#addQuestionBtn.floating-plus {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(env(safe-area-inset-bottom) + 92px) !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+}
