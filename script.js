@@ -1057,6 +1057,7 @@ document.getElementById("backHome").addEventListener("click", () => {
 });
 
 document.getElementById("openProfile").onclick = () => {
+  updateProfileUI();
   showScreen(profile, false);
 };
 
@@ -1383,6 +1384,36 @@ document.getElementById("upperOverlay").addEventListener("click", () => {
   closeUpperDrawer();
 });
 
+function updateProfileUI() {
+  const profileUsername = document.getElementById("profileUsername");
+  const profileStatus = document.getElementById("profileStatus");
+  const syncInfoCard = document.getElementById("syncInfoCard");
+
+  if (currentUser) {
+    const username = currentUser.email.split("@")[0];
+
+    profileUsername.textContent = username;
+    profileStatus.textContent = "Eingeloggt";
+
+    syncInfoCard.classList.remove("offline");
+    syncInfoCard.classList.add("online");
+    syncInfoCard.innerHTML = `
+      <strong>Cloud Sync aktiv</strong>
+      <span>Dein Fortschritt wird online gespeichert und ist auf anderen Geräten verfügbar.</span>
+    `;
+  } else {
+    profileUsername.textContent = "Gast";
+    profileStatus.textContent = "Nicht eingeloggt";
+
+    syncInfoCard.classList.remove("online");
+    syncInfoCard.classList.add("offline");
+    syncInfoCard.innerHTML = `
+      <strong>Nur lokal gespeichert</strong>
+      <span>Wenn du dich einloggst, wird dein Fortschritt online gesichert.</span>
+    `;
+  }
+}
+
 function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
   authMessage.className = type;
@@ -1531,7 +1562,10 @@ const result = await createUserWithEmailAndPassword(auth, email, password);
 showScreen(home, true);
 setActiveNav("navStart");
 showIsland("Account erstellt", "success");
-
+setTimeout(() => {
+  showIsland(`Hallo ${username}`, "success");
+}, 2100);
+    
     showAuthMessage("");
   } catch (error) {
   if (error.code === "auth/email-already-in-use") {
@@ -1579,6 +1613,9 @@ authScreen.classList.add("hide");
 showScreen(home, true);
 setActiveNav("navStart");
 showIsland("Eingeloggt", "success");
+    setTimeout(() => {
+  showIsland(`Hallo ${username}`, "success");
+}, 2100);
 
   } catch (error) {
   if (!navigator.onLine) {
@@ -1608,6 +1645,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
+    updateProfileUI();
     showScreen(home, true);
   } else {
     currentUser = null;
@@ -1619,6 +1657,7 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     authScreen.classList.add("hide");
     showScreen(home, true);
     setActiveNav("navStart");
+    updateProfileUI();
   }
 });
 
