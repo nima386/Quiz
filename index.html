@@ -372,20 +372,39 @@ window.firebaseTools = {
   }
 </script>
 
-  <div id="avatarActionModal" class="modal">
-  <div class="avatar-action-box">
-    <h2>Avatar</h2>
-    <button id="changeAvatarBtn" class="main-btn">Avatar ändern</button>
-    <button id="deleteAvatarBtn" class="main-btn secondary">Avatar löschen</button>
-    <button id="closeAvatarActionBtn" class="main-btn secondary">Abbrechen</button>
+ <div id="avatarActionModal" class="modal avatar-bottom-modal">
+  <div class="avatar-sheet">
+    <div class="sheet-handle"></div>
+
+    <div class="avatar-sheet-head">
+      <div class="avatar-ring mini-ring">
+        <img class="sheet-avatar-preview" src="avatars/avatar1.png">
+      </div>
+      <h2>Avatar</h2>
+      <p>Profilbild verwalten</p>
+    </div>
+
+    <button id="changeAvatarBtn" class="avatar-sheet-btn primary">Avatar ändern</button>
+    <button id="deleteAvatarBtn" class="avatar-sheet-btn danger">Avatar löschen</button>
+    <button id="closeAvatarActionBtn" class="avatar-sheet-btn muted">Abbrechen</button>
   </div>
 </div>
   
-<div id="avatarModal" class="modal">
-  <div class="avatar-box">
-    <h2>Avatar wählen</h2>
+<div id="avatarModal" class="modal avatar-bottom-modal">
+  <div class="avatar-sheet avatar-picker-sheet">
+    <div class="sheet-handle"></div>
+
+    <div class="avatar-sheet-head">
+      <div class="avatar-ring mini-ring">
+        <img class="sheet-avatar-preview" src="avatars/avatar1.png">
+      </div>
+      <h2>Avatar wählen</h2>
+      <p>Wähle deinen Profil-Avatar aus</p>
+    </div>
+
     <div id="avatarGrid" class="avatar-grid"></div>
-    <button id="closeAvatarModal" class="main-btn secondary">Schließen</button>
+
+    <button id="closeAvatarModal" class="avatar-sheet-btn muted">Schließen</button>
   </div>
 </div>
   
