@@ -1021,6 +1021,8 @@ function recordStats(isCorrect) {
 }
 
 const EUROPE_COUNTRY_NAMES = {
+  RU: "Russland",
+  XK: "Kosovo",
   AL: "Albanien",
   AT: "Österreich",
   BY: "Belarus",
