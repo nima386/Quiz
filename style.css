@@ -2454,3 +2454,92 @@ Das ist der Unterschied zwischen:
     min-height: 50px;
   }
 }
+.trash-list {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.trash-swipe {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.trash-actions {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 210px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.trash-actions button {
+  border: 0;
+  color: white;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.trash-restore {
+  background: rgba(34,197,94,.72);
+}
+
+.trash-delete {
+  background: rgba(239,68,68,.78);
+}
+
+.trash-row {
+  position: relative;
+  z-index: 2;
+  min-height: 72px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(24px);
+  transition: transform .28s cubic-bezier(.2,.9,.2,1);
+}
+
+.trash-swipe.open .trash-row {
+  transform: translateX(-210px);
+}
+
+.trash-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: rgba(255,255,255,.10);
+}
+
+.trash-title {
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.trash-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(255,255,255,.58);
+}
+
+.trash-empty {
+  padding: 20px;
+  border-radius: 24px;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.13);
+}
+
+.trash-empty span {
+  color: rgba(255,255,255,.58);
+  font-size: 13px;
+}
