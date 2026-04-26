@@ -1203,7 +1203,7 @@ function handleEuropeCountryClick(countryId) {
 
   if (europeWrongAttempts >= 3) {
     europeAnswerLocked = true;
-    sif (!europeAnsweredThisCountry) {
+   if (!europeAnsweredThisCountry) {
   europeRoundWrong++;
   europeAnsweredThisCountry = true;
 }
