@@ -1453,6 +1453,9 @@ function renderAvatarGrid() {
 function selectAvatar(src) {
   document.getElementById("profileAvatar").src = src;
   localStorage.setItem("userAvatar", src);
+  if (src === DEFAULT_AVATAR) {
+  localStorage.removeItem("userAvatar");
+}
 
   if (currentUser) {
     saveAvatarToCloud(src);
@@ -1747,12 +1750,28 @@ backToLoginBtn.onclick = () => {
 };
 
 document.getElementById("profileAvatar").onclick = () => {
-  document.getElementById("avatarModal").classList.add("show");
-  renderAvatarGrid();
+  document.getElementById("avatarActionModal").classList.add("show");
 };
 
 document.getElementById("closeAvatarModal").onclick = () => {
   document.getElementById("avatarModal").classList.remove("show");
+};
+
+document.getElementById("changeAvatarBtn").onclick = () => {
+  document.getElementById("avatarActionModal").classList.remove("show");
+  document.getElementById("avatarModal").classList.add("show");
+  renderAvatarGrid();
+};
+
+document.getElementById("closeAvatarActionBtn").onclick = () => {
+  document.getElementById("avatarActionModal").classList.remove("show");
+};
+
+document.getElementById("deleteAvatarBtn").onclick = () => {
+  selectAvatar(DEFAULT_AVATAR);
+  localStorage.removeItem("userAvatar");
+  document.getElementById("avatarActionModal").classList.remove("show");
+  showIsland("Avatar gelöscht", "danger");
 };
 
 document.getElementById("closeAuthBtn").onclick = () => {
