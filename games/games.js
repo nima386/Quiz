@@ -1120,6 +1120,30 @@ document.getElementById("backAsiaHome").onclick = () => {
   showScreen(document.getElementById("gamesScreen"), true);
 };
 
+/* === SOUTH AMERICA UI FLOW === */
+
+const southAmericaHomeEl = document.getElementById("southAmericaGameHome");
+const southAmericaGameEl = document.getElementById("southAmericaMapGame");
+
+document.getElementById("startSouthAmericaGame").onclick = () => {
+  southAmericaHomeEl.style.display = "none";
+  southAmericaGameEl.style.display = "block";
+  document.body.classList.add("map-playing");
+
+  startSouthAmericaMapQuiz(); // GANZ WICHTIG
+};
+
+document.getElementById("backSouthAmericaHome").onclick = () => {
+  southAmericaGameEl.style.display = "none";
+  southAmericaHomeEl.style.display = "block";
+  document.body.classList.remove("map-playing");
+};
+
+document.getElementById("backGamesFromSouthAmerica").onclick = () => {
+  southAmericaHomeEl.style.display = "none";
+  showScreen(gamesScreen, true);
+};
+
 /* === africa unten === */
 /* === AFRICA MAP GAME FULL === */
 
