@@ -795,13 +795,9 @@ body.map-playing #europeMapGame {
   color: rgba(255,255,255,.58);
   background: transparent;
   font-weight: 950;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 0px; /* WICHTIG – Abstand weg */
+  display: grid;
+  place-items: center;
+  gap: 2px;
 }
 
 .games-nav-item span {
@@ -987,6 +983,18 @@ body.map-playing .nav-floating-label {
     font-size: 9px;
     margin-top: -3px;
   }
+  .games-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+}
+
+.games-nav-item small {
+  font-size: 9px;
+  margin-top: -3px;
+}
 }
 
   
