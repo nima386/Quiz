@@ -3470,7 +3470,7 @@ body.map-playing #europeMapGame {
   cursor: grabbing;
 }
 #map .country-flash {
-  animation: countryFlash .9s cubic-bezier(.15,.95,.2,1);
+  animation: countryFlash .8s cubic-bezier(.15,.95,.2,1);
 }
 
 @keyframes countryFlash {
