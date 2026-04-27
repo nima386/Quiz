@@ -223,7 +223,10 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
 
-  const navLabel = document.getElementById("navFloatingLabel");
+  if (navLabel) {
+  navLabel.style.display =
+    (showMainNav || showGamesNav) ? "grid" : "none";
+}
   const mainNav = document.querySelector(".bottom-nav");
   const gamesNav = document.getElementById("gamesNav");
 
