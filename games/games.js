@@ -767,8 +767,8 @@ async function loadAsiaSvg() {
   mapBox.innerHTML = svgText;
 
   const svg = mapBox.querySelector("svg");
-  svg.id = "asiaSvg";
-  svg.setAttribute("viewBox", "80 80 820 900");
+svg.id = "asiaSvg";
+
 svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
   const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
