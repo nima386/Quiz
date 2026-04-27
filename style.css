@@ -3566,7 +3566,7 @@ body.map-playing #europeMapGame {
 
 .nav-floating-label {
   position: fixed;
-  left: calc(12.5% + var(--label-x, 0%));
+  left: 50%;
   bottom: calc(env(safe-area-inset-bottom) + 82px);
   transform: translateX(-50%);
   z-index: 1200;
@@ -3649,4 +3649,67 @@ body.map-playing #europeMapGame {
 .nav-item:not(.active) .nav-img-icon {
   opacity: .45;
   transform: scale(.92);
+}
+.nav-floating-label {
+  display: grid !important;
+  place-items: center !important;
+  min-width: 92px;
+  height: 46px;
+  padding: 0 18px !important;
+  text-align: center !important;
+}
+
+.bottom-nav {
+  position: fixed;
+  overflow: visible !important;
+  --label-cut-x: 58px;
+}
+
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: var(--label-cut-x);
+  top: -8px;
+  width: 104px;
+  height: 34px;
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+  background: rgba(8, 5, 31, .96);
+
+  box-shadow:
+    inset 0 -1px 0 rgba(255,255,255,.08),
+    0 8px 18px rgba(0,0,0,.22);
+
+  z-index: 0;
+
+  transition:
+    left .48s cubic-bezier(.22,1,.28,1),
+    width .42s cubic-bezier(.22,1,.28,1);
+}
+
+.nav-floating-label {
+  z-index: 1300;
+  bottom: calc(env(safe-area-inset-bottom) + 87px);
+}
+
+.nav-floating-label::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  width: 84%;
+  height: 16px;
+  transform: translateX(-50%);
+
+  border-radius: 0 0 999px 999px;
+  background: rgba(255,255,255,.055);
+  border-bottom: 1px solid rgba(255,255,255,.11);
+
+  pointer-events: none;
+}
+@media (min-width: 700px) {
+  .nav-floating-label {
+    bottom: calc(env(safe-area-inset-bottom) + 92px);
+  }
 }
