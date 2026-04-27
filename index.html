@@ -269,17 +269,16 @@
     <span class="game-arrow">›</span>
   </div>
 
-    <div class="game-card" id="openAsiaGame">
-  <div class="game-icon">🌏</div>
+   <div onclick="openAsiaGame()" class="game-card">
+  <div class="game-icon">🌍</div>
   <div>
     <h2>Asien</h2>
     <p>Länder auf der Asien-Karte erkennen</p>
   </div>
-  <span class="game-arrow">›</span>
 </div>
     
 </section>
-
+<!-- europa -->
   <section id="europeGameHome" class="screen scroll-screen">
   <div class="question-detail-top">
     <button id="backGames" class="circle-btn">←</button>
@@ -421,6 +420,37 @@
 </div>
   
    <button id="addQuestionBtn" class="floating-plus">+</button>
+
+<!-- ASIA -->
+
+  <section id="asiaMapGame" class="screen">
+
+  <div class="map-game-top">
+    <button id="backAsiaHome" class="circle-btn">←</button>
+
+    <div class="map-live-timer" id="asiaTimer">00:00</div>
+
+    <h2>Asien</h2>
+  </div>
+
+  <div class="map-question-card">
+    <p>Finde das Land:</p>
+    <h1 id="asiaCountryName">---</h1>
+
+    <div class="map-score-row">
+      <span id="asiaScore">0 Punkte</span>
+      <span id="asiaRound">0 / 10</span>
+    </div>
+  </div>
+
+  <div class="map-glass-frame">
+    <div id="asiaMap"></div>
+  </div>
+
+  <div id="asiaFeedback" class="map-feedback"></div>
+
+</section>
+
 <!-- NAVIGATION -->
   <div id="navFloatingLabel" class="nav-floating-label">Start</div>
   
