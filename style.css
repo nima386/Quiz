@@ -3906,17 +3906,17 @@ body.map-playing #europeMapGame {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -36px;
-  width: 150px;
-  height: 52px;
+  bottom: -28px;
+  width: 140px;
+  height: 40px;
   transform: translateX(-50%);
 
   background:
-    radial-gradient(ellipse at center, rgba(255,255,255,.16), transparent 68%),
-    radial-gradient(ellipse at center, rgba(99,102,241,.18), transparent 72%);
+    radial-gradient(ellipse at center, rgba(255,255,255,.12), transparent 70%),
+    radial-gradient(ellipse at center, rgba(99,102,241,.14), transparent 75%);
 
-  filter: blur(8px);
-  opacity: .75;
+  filter: blur(10px);
+  opacity: .6;
   pointer-events: none;
   z-index: -1;
 }
@@ -3943,4 +3943,12 @@ body.map-playing #europeMapGame {
         rgba(255,255,255,.20) 100%
       );
   }
+}
+/* === NOTCH KOMPLETT AUS === */
+.bottom-nav::before {
+  display: none !important;
+}
+
+.bottom-nav::after {
+  display: none !important;
 }
