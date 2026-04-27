@@ -453,10 +453,9 @@
 </section>
 <!-- africa oben -->
 <!-- southamerica -->
-  <div id="southAmericaGameHome">
-
+ <section id="southAmericaGameHome" class="screen scroll-screen">
   <div class="question-detail-top">
-    <button id="backGamesFromSouthAmerica" class="upper-menu-btn">←</button>
+    <button id="backGamesFromSouthAmerica" class="circle-btn">←</button>
     <h2>Südamerika Länder</h2>
   </div>
 
@@ -468,42 +467,44 @@
 
     <div class="best-run-card">
       <span>Bester Versuch</span>
-      <strong id="southAmericaBestRun">0 richtig · 0 falsch</strong>
-      <p>Zeit 0:10 min</p>
+      <strong id="southAmericaBestRun">Noch kein Versuch</strong>
+      <p id="southAmericaBestTime">Starte deine erste Runde</p>
     </div>
 
-    <button id="startSouthAmericaGame" class="primary-btn">
+    <button id="startSouthAmericaGame" class="main-btn">
       Spiel starten
     </button>
   </div>
-</div>
+</section>
 
-
-<div id="southAmericaMapGame" style="display:none;">
+<section id="southAmericaMapGame" class="screen scroll-screen">
   <div class="map-game-top">
-    <button id="backSouthAmericaHome" class="upper-menu-btn">←</button>
-    <div class="map-live-timer">00:00</div>
+    <button id="backSouthAmericaHome" class="circle-btn">←</button>
+
+    <div class="map-live-timer">
+      <small>TIMER</small>
+      <strong id="liveSouthAmericaTimer">0:00</strong>
+    </div>
+
     <h2>Südamerika</h2>
   </div>
 
   <div class="map-question-card">
-    <p>Finde:</p>
-    <h1 id="southAmericaTargetCountry">Brasilien</h1>
+    <p>Tippe auf:</p>
+    <h1 id="targetSouthAmericaCountryName">---</h1>
 
     <div class="map-score-row">
-      <span id="southAmericaCorrect">0 richtig</span>
-      <span id="southAmericaWrong">0 falsch</span>
+      <span id="southAmericaCorrectCount">0 richtig</span>
+      <span id="southAmericaWrongCount">0 falsch</span>
     </div>
   </div>
 
   <div class="map-glass-frame">
-    <div id="southAmericaMap">
-      <!-- DEIN SVG HIER -->
-    </div>
+    <div id="southAmericaMap"></div>
   </div>
 
-  <div id="southAmericaFeedback" class="map-feedback"></div>
-</div>
+  <p id="southAmericaMapFeedback" class="map-feedback"></p>
+</section>
   <!-- southamerica oben -->
   
   <div id="europeRoundModal" class="modal avatar-bottom-modal">
