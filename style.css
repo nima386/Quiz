@@ -4289,3 +4289,14 @@ body.map-playing #europeMapGame {
   padding: 10px 24px;
   font-size: 17px;
 }
+.upper-overlay {
+  z-index: 4000 !important;
+}
+
+.upper-drawer {
+  z-index: 4100 !important;
+}
+
+.games-nav {
+  z-index: 1400 !important;
+}
