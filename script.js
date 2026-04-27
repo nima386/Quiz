@@ -219,7 +219,8 @@ function showScreen(screen, showNav = true) {
   screen.id === "asiaGameHome" ||
   screen.id === "africaGameHome" ||
   screen.id === "southAmericaGameHome" ||
-  screen.id === "gamesStatsScreen";
+screen.id === "northAmericaGameHome" ||
+screen.id === "gamesStatsScreen";
 
   const isNoNavArea =
   screen.id === "questionList" ||
@@ -228,7 +229,8 @@ function showScreen(screen, showNav = true) {
   screen.id === "asiaMapGame" ||
   screen.id === "africaMapGame" ||
   screen.id === "southAmericaMapGame" ||
-  showNav === false;
+screen.id === "northAmericaMapGame" ||
+showNav === false;
 
   const showMainNav = !isGamesArea && !isNoNavArea;
   const showGamesNav = isGamesArea && !isNoNavArea;
