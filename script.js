@@ -214,15 +214,21 @@ function showScreen(screen, showNav = true) {
   const navLabel = document.getElementById("navFloatingLabel");
 
   const isGamesArea =
-    screen.id === "gamesScreen" ||
-    screen.id === "europeGameHome" ||
-    screen.id === "gamesStatsScreen";
+  screen.id === "gamesScreen" ||
+  screen.id === "europeGameHome" ||
+  screen.id === "asiaGameHome" ||
+  screen.id === "africaGameHome" ||
+  screen.id === "southAmericaGameHome" ||
+  screen.id === "gamesStatsScreen";
 
   const isNoNavArea =
-    screen.id === "questionList" ||
-    screen.id === "questionDetail" ||
-    screen.id === "europeMapGame" ||
-    showNav === false;
+  screen.id === "questionList" ||
+  screen.id === "questionDetail" ||
+  screen.id === "europeMapGame" ||
+  screen.id === "asiaMapGame" ||
+  screen.id === "africaMapGame" ||
+  screen.id === "southAmericaMapGame" ||
+  showNav === false;
 
   const showMainNav = !isGamesArea && !isNoNavArea;
   const showGamesNav = isGamesArea && !isNoNavArea;
