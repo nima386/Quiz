@@ -1025,9 +1025,17 @@ function setActiveNav(activeId) {
     floatingLabel.classList.remove("morphing");
     void floatingLabel.offsetWidth;
 
-    floatingLabel.style.setProperty("--label-x", `${index * 100}%`);
-    floatingLabel.textContent = labels[activeId];
-    floatingLabel.classList.add("morphing");
+   const activeRect = activeEl.getBoundingClientRect();
+const navRect = nav.getBoundingClientRect();
+
+const centerX = activeRect.left + activeRect.width / 2;
+const navRelativeX = centerX - navRect.left;
+
+floatingLabel.style.left = `${centerX}px`;
+nav.style.setProperty("--label-cut-x", `${navRelativeX}px`);
+
+floatingLabel.textContent = labels[activeId];
+floatingLabel.classList.add("morphing");
   }
 }
 
