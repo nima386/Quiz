@@ -1,3 +1,9 @@
+const gamesScreenEl = document.getElementById("gamesScreen");
+const europeGameHomeEl = document.getElementById("europeGameHome");
+const europeMapGameEl = document.getElementById("europeMapGame");
+const gamesStatsScreenEl = document.getElementById("gamesStatsScreen");
+
+
 let gameStats = JSON.parse(localStorage.getItem("gameStats")) || {
   europeCountries: {
     correct: 0,
