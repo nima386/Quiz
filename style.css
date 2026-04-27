@@ -3674,7 +3674,7 @@ body.map-playing #europeMapGame {
 }
 
 /* schneidet den oberen Rand weich aus */
-.bottom-nav::before {
+
   content: "";
   position: absolute;
   left: var(--label-cut-x);
@@ -3768,7 +3768,7 @@ body.map-playing #europeMapGame {
 }
 
 @media (max-width: 430px) {
-  .bottom-nav::before {
+ 
     width: 124px;
     height: 52px;
     top: -16px;
@@ -3829,4 +3829,22 @@ body.map-playing #europeMapGame {
     min-width: 86px !important;
     font-size: 11.5px !important;
   }
+}
+.bottom-nav::before {
+  width: 96px !important;
+  height: 32px !important;
+  top: -5px !important;
+  border-radius: 0 0 24px 24px !important;
+  background: rgba(10,6,35,.55) !important;
+  box-shadow: 0 0 14px rgba(99,102,241,.10) !important;
+}
+
+.nav-floating-label {
+  height: 34px !important;
+  min-width: 82px !important;
+  padding: 0 14px !important;
+  font-size: 11px !important;
+  border: 0 !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.035)) !important;
+  box-shadow: 0 0 14px rgba(99,102,241,.12) !important;
 }
