@@ -276,6 +276,15 @@
     <p>Länder auf der Asien-Karte erkennen</p>
   </div>
 </div>
+
+<div onclick="openAfricaGame()" class="game-card">
+  <div class="game-icon">🌍</div>
+  <div>
+    <h2>Afrika</h2>
+    <p>Länder auf der Afrika-Karte erkennen</p>
+  </div>
+  <span class="game-arrow">›</span>
+</div>
     
 </section>
 <!-- europa -->
@@ -358,6 +367,37 @@
   </div>
 
   <p id="asiaMapFeedback" class="map-feedback"></p>
+</section>
+
+  <!-- africa -->
+  
+<section id="africaMapGame" class="screen scroll-screen">
+  <div class="map-game-top">
+    <button id="backAfricaHome" class="circle-btn">←</button>
+
+    <div class="map-live-timer">
+      <small>TIMER</small>
+      <strong id="liveAfricaTimer">0:00</strong>
+    </div>
+
+    <h2>Afrika Map</h2>
+  </div>
+
+  <div class="map-question-card">
+    <p>Tippe auf:</p>
+    <h1 id="targetAfricaCountryName">---</h1>
+
+    <div class="map-score-row">
+      <span id="africaCorrectCount">0 richtig</span>
+      <span id="africaWrongCount">0 falsch</span>
+    </div>
+  </div>
+
+  <div class="map-glass-frame">
+    <div id="africaMap"></div>
+  </div>
+
+  <p id="africaMapFeedback" class="map-feedback"></p>
 </section>
   
   
