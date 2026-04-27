@@ -3469,51 +3469,45 @@ body.map-playing #europeMapGame {
 #map svg:active {
   cursor: grabbing;
 }
-#map .country-flash {
-  animation: countryFlash .8s cubic-bezier(.15,.95,.2,1);
-}
-
+#map .country-flash,
 #map .country-flash-soft {
-  animation: countryFlashSoft .42s cubic-bezier(.2,.9,.2,1);
+  animation: countryBorderPulse .72s cubic-bezier(.22,.8,.25,1);
 }
 
-@keyframes countryFlash {
+@keyframes countryBorderPulse {
   0% {
+    stroke: rgba(255,255,255,.65) !important;
+    stroke-width: .65 !important;
     filter: brightness(1);
-    stroke-width: .65;
   }
 
-  22% {
-    filter:
-      brightness(1.8)
-      drop-shadow(0 0 28px rgba(255,255,255,1))
-      drop-shadow(0 0 58px rgba(99,102,241,.9));
-    stroke-width: 3.2;
+  35% {
+    stroke: rgba(255,255,255,1) !important;
+    stroke-width: 2.4 !important;
+    filter: brightness(1.28);
   }
 
-  65% {
-    filter:
-      brightness(1.8)
-      drop-shadow(0 0 24px rgba(255,255,255,.7));
-    stroke-width: 2.2;
+  70% {
+    stroke: rgba(145,160,255,.95) !important;
+    stroke-width: 1.8 !important;
+    filter: brightness(1.12);
   }
 
   100% {
+    stroke: rgba(255,255,255,.65) !important;
+    stroke-width: .65 !important;
     filter: brightness(1);
-    stroke-width: .65;
   }
 }
+#map .correct-country {
+  fill: rgba(34,197,94,.46) !important;
+}
 
-@keyframes countryFlashSoft {
-  0% {
-    filter: brightness(1);
-  }
+#map .second-try-country {
+  fill: rgba(249,115,22,.46) !important;
+}
 
-  45% {
-    filter: brightness(1.35);
-  }
-
-  100% {
-    filter: brightness(1);
-  }
+#map .third-try-country,
+#map .wrong-country {
+  fill: rgba(239,68,68,.46) !important;
 }
