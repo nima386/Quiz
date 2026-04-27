@@ -3856,7 +3856,7 @@ body.map-playing #europeMapGame {
   content: "";
   position: absolute;
   left: var(--label-cut-x);
-  top: -2px;
+  top: 6px;
   width: 154px;
   height: 34px;
   transform: translateX(-50%);
