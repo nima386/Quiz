@@ -3470,7 +3470,7 @@ body.map-playing #europeMapGame {
   cursor: grabbing;
 }
 #map .country-flash {
-  animation: countryFlash 1.0s cubic-bezier(.15,.95,.2,1);
+  animation: countryFlash .8s cubic-bezier(.15,.95,.2,1);
 }
 
 #map .country-flash-soft {
@@ -3485,7 +3485,7 @@ body.map-playing #europeMapGame {
 
   22% {
     filter:
-      brightness(2.9)
+      brightness(1.8)
       drop-shadow(0 0 28px rgba(255,255,255,1))
       drop-shadow(0 0 58px rgba(99,102,241,.9));
     stroke-width: 3.2;
