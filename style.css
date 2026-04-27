@@ -3511,3 +3511,9 @@ body.map-playing #europeMapGame {
 #map .wrong-country {
   fill: rgba(239,68,68,.46) !important;
 }
+#map .temp-wrong-country {
+  fill: rgba(239,68,68,.42) !important;
+  stroke: rgba(255,160,160,.95) !important;
+  stroke-width: 1.5 !important;
+  transition: fill .18s ease, stroke .18s ease, stroke-width .18s ease;
+}
