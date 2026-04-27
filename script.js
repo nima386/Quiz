@@ -696,6 +696,25 @@ function goNextQuestion() {
   }
 }
 
+function updateGamesFloatingLabel(activeId) {
+  const label = document.getElementById("navFloatingLabel");
+  const btn = document.getElementById(activeId);
+
+  if (!label || !btn) return;
+
+  const textMap = {
+    gamesNavStart: "Länder",
+    gamesNavStats: "Stats"
+  };
+
+  label.textContent = textMap[activeId] || "";
+
+  const rect = btn.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+
+  label.style.left = centerX + "px";
+}
+
 function setGamesNavActive(activeId) {
   document.querySelectorAll(".games-nav-item").forEach(item => {
     item.classList.remove("active");
@@ -739,6 +758,8 @@ const q = data[currentCategory][realIndex];
   if (!exists) {
     remembered[currentCategory].push(q);
     localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+
+    updateGamesFloatingLabel(activeId);
   }
 
   goNextQuestion();
