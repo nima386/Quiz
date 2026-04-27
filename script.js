@@ -250,8 +250,22 @@ function showScreen(screen, showNav = true) {
   }
 
   if (navLabel) {
-    navLabel.style.display = (showMainNav || showGamesNav) ? "grid" : "none";
+  navLabel.style.display = (showMainNav || showGamesNav) ? "grid" : "none";
+
+  if (showMainNav) {
+    const activeMain = document.querySelector(".nav-item.active");
+    if (activeMain) {
+      const labelMap = {
+        navStart: "Start",
+        navLibrary: "Bibliothek",
+        navRemembered: "Gemerkt",
+        navStats: "Stats"
+      };
+
+      navLabel.textContent = labelMap[activeMain.id] || "";
+    }
   }
+}
 
   if (showMainNav) {
     setTimeout(() => {
