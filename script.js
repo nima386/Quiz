@@ -55,6 +55,7 @@ const examResult = document.getElementById("examResult");
 const gamesScreen = document.getElementById("gamesScreen");
 const europeGameHome = document.getElementById("europeGameHome");
 const europeMapGame = document.getElementById("europeMapGame");
+const gamesStatsScreen = document.getElementById("gamesStatsScreen");
 
 let currentUser = null;
 
@@ -214,44 +215,56 @@ function prepareQuizOrder(category) {
 
 function showScreen(screen, showNav = true) {
   softVibrate(10);
+
   document.querySelectorAll(".swipe-wrapper.open").forEach(item => {
     item.classList.remove("open");
   });
 
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
-  nav.style.display = showNav ? "flex" : "none";
+
   const navLabel = document.getElementById("navFloatingLabel");
-if (navLabel) {
-  navLabel.style.display = showNav ? "grid" : "none";
-  
-  if (screen === questionList || screen === questionDetail || screen === europeMapGame) {
-  nav.classList.add("nav-hidden");
-  if (navLabel) navLabel.classList.add("nav-hidden");
-} else {
-  nav.classList.remove("nav-hidden");
-  if (navLabel) navLabel.classList.remove("nav-hidden");
-}
-}
-  const addQuestionBtn = document.getElementById("addQuestionBtn");
-
-if (addQuestionBtn) {
-  addQuestionBtn.classList.toggle("show", screen === questionList);
-}
-
   const gamesNav = document.getElementById("gamesNav");
 
-if (gamesNav) {
-  const showGamesNav = screen === gamesScreen || screen === europeGameHome;
-  gamesNav.classList.toggle("show", showGamesNav);
-}
-  
-  setTimeout(() => {
-  if (screen.classList.contains("scroll-screen")) {
-    screen.scrollTo({ top: 0, behavior: "smooth" });
+  const isGameArea =
+    screen === gamesScreen ||
+    screen === europeGameHome ||
+    screen === europeMapGame ||
+    screen.id === "gamesStatsScreen";
+
+  const showMainNav =
+    showNav &&
+    !isGameArea &&
+    screen !== questionList &&
+    screen !== questionDetail;
+
+  const showGamesNav =
+    isGameArea &&
+    screen !== europeMapGame;
+
+  nav.style.display = showMainNav ? "flex" : "none";
+
+  if (navLabel) {
+    navLabel.style.display = showMainNav ? "grid" : "none";
   }
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, 40);
+
+  if (gamesNav) {
+    gamesNav.classList.toggle("show", showGamesNav);
+  }
+
+  const addQuestionBtn = document.getElementById("addQuestionBtn");
+
+  if (addQuestionBtn) {
+    addQuestionBtn.classList.toggle("show", screen === questionList);
+  }
+
+  setTimeout(() => {
+    if (screen.classList.contains("scroll-screen")) {
+      screen.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 40);
 }
 
 function renderUpperList() {
@@ -684,16 +697,24 @@ function goNextQuestion() {
   }
 }
 
+function setGamesNavActive(activeId) {
+  document.querySelectorAll(".games-nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  const active = document.getElementById(activeId);
+  if (active) active.classList.add("active");
+}
+
 document.getElementById("gamesNavStart").onclick = () => {
-  document.getElementById("gamesNavStart").classList.add("active");
-  document.getElementById("gamesNavStats").classList.remove("active");
+  setGamesNavActive("gamesNavStart");
   showScreen(gamesScreen, true);
 };
 
 document.getElementById("gamesNavStats").onclick = () => {
-  document.getElementById("gamesNavStats").classList.add("active");
-  document.getElementById("gamesNavStart").classList.remove("active");
-  showIsland("Spiele-Stats kommen gleich", "success");
+  setGamesNavActive("gamesNavStats");
+  renderGamesStats();
+  showScreen(gamesStatsScreen, true);
 };
 
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
@@ -2754,8 +2775,8 @@ document.getElementById("closeSettingsBtn").onclick = () => {
 
 document.getElementById("openGamesFromDrawer").onclick = () => {
   closeUpperDrawer();
+  setGamesNavActive("gamesNavStart");
   showScreen(gamesScreen, true);
-  setActiveNav("navStart");
 };
 
 document.getElementById("openEuropeGame").onclick = () => {
