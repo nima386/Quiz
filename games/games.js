@@ -1611,3 +1611,44 @@ document.getElementById("backGamesFromAsia").onclick = () => {
 document.getElementById("backGamesFromAfrica").onclick = () => {
   showScreen(document.getElementById("gamesScreen"), true);
 };
+
+let southAmericaSvgLoaded = false;
+let southAmericaMapState = { x: 0, y: 0, scale: 1 };
+let southAmericaDragState = null;
+
+async function loadSouthAmericaSvg() {
+  const mapBox = document.getElementById("southAmericaMap");
+
+  if (southAmericaSvgLoaded) return;
+
+  const res = await fetch("maps/southAmerica/southAmerica.svg?v=" + Date.now());
+  const svgText = await res.text();
+
+  mapBox.innerHTML = svgText;
+
+  const svg = mapBox.querySelector("svg");
+  svg.id = "southAmericaSvg";
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.id = "southAmericaViewport";
+
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
+  }
+
+
+  svg.appendChild(viewport);
+
+
+  document.querySelectorAll("#southAmericaMap .land").forEach(land => {
+    if (!land.id) return;
+
+    land.classList.add("southamerica-country");
+    land.dataset.country = land.id;
+  });
+
+  initSouthAmericaMapTouch(svg);
+
+  southAmericaSvgLoaded = true;
+}
