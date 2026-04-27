@@ -1249,6 +1249,19 @@ function initEuropeMapTouch(svg) {
   });
 }
 
+function flashEuropeCountry(countryId) {
+  const land = document.querySelector(`#${countryId}`);
+  if (!land) return;
+
+  land.classList.remove("country-flash");
+  void land.offsetWidth;
+  land.classList.add("country-flash");
+
+  setTimeout(() => {
+    land.classList.remove("country-flash");
+  }, 420);
+}
+
 function colorEuropeCountry(countryId, className) {
   const land = document.querySelector(`#${countryId}`);
   if (!land) return;
@@ -1314,6 +1327,23 @@ async function startEuropeMapQuiz() {
 
 function handleEuropeCountryClick(countryId) {
   if (!currentEuropeCountry || europeAnswerLocked) return;
+  flashEuropeCountry(countryId);
+
+const clickedLand = document.querySelector(`#${countryId}`);
+
+if (
+  countryId !== currentEuropeCountry.id &&
+  clickedLand &&
+  (
+    clickedLand.classList.contains("correct-country") ||
+    clickedLand.classList.contains("second-try-country") ||
+    clickedLand.classList.contains("third-try-country") ||
+    clickedLand.classList.contains("wrong-country")
+  )
+) {
+  showIsland("Schon beantwortet", "success");
+  return;
+}
 
   if (countryId === currentEuropeCountry.id) {
     europeAnswerLocked = true;
