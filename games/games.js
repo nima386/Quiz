@@ -50,7 +50,7 @@ function setGamesNavActive(activeId) {
 
 document.getElementById("gamesNavStart").onclick = () => {
   setGamesNavActive("gamesNavStart");
-  showScreen(gamesScreen, true);
+  showScreen(document.getElementById("gamesScreen"), true);
 };
 
 document.getElementById("gamesNavStats").onclick = () => {
@@ -676,7 +676,7 @@ document.getElementById("gamesStatsUpperMenuBtn").onclick = () => {
 document.getElementById("openGamesFromDrawer").onclick = () => {
   closeUpperDrawer();
   setGamesNavActive("gamesNavStart");
-  showScreen(gamesScreen, true);
+  showScreen(document.getElementById("gamesScreen"), true);
 };
 
 document.getElementById("openEuropeGame").onclick = () => {
