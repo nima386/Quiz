@@ -711,7 +711,6 @@ const ASIA_COUNTRY_NAMES = {
   IL: "Israel",
   IQ: "Irak",
   IR: "Iran",
-  IO: "Britisches Territorium im Indischen Ozean",
   IN: "Indien",
   ID: "Indonesien",
   HK: "Hongkong",
@@ -1120,3 +1119,463 @@ document.getElementById("backAsiaHome").onclick = () => {
   resetAsiaRound();
   showScreen(document.getElementById("gamesScreen"), true);
 };
+
+/* === africa unten === */
+/* === AFRICA MAP GAME FULL === */
+
+const AFRICA_COUNTRY_NAMES = {
+  DZ: "Algerien",
+  AO: "Angola",
+  BJ: "Benin",
+  BW: "Botswana",
+  BF: "Burkina Faso",
+  BI: "Burundi",
+  CM: "Kamerun",
+  CV: "Kap Verde",
+  CF: "Zentralafrikanische Republik",
+  TD: "Tschad",
+  KM: "Komoren",
+  CG: "Republik Kongo",
+  CD: "Demokratische Republik Kongo",
+  DJ: "Dschibuti",
+  EG: "Ägypten",
+  GQ: "Äquatorialguinea",
+  ER: "Eritrea",
+  SZ: "Eswatini",
+  ET: "Äthiopien",
+  GA: "Gabun",
+  GM: "Gambia",
+  GH: "Ghana",
+  GN: "Guinea",
+  GW: "Guinea-Bissau",
+  CI: "Elfenbeinküste",
+  KE: "Kenia",
+  LS: "Lesotho",
+  LR: "Liberia",
+  LY: "Libyen",
+  MG: "Madagaskar",
+  MW: "Malawi",
+  ML: "Mali",
+  MR: "Mauretanien",
+  MU: "Mauritius",
+  MA: "Marokko",
+  MZ: "Mosambik",
+  NA: "Namibia",
+  NE: "Niger",
+  NG: "Nigeria",
+  RW: "Ruanda",
+  ST: "São Tomé und Príncipe",
+  SN: "Senegal",
+  SC: "Seychellen",
+  SL: "Sierra Leone",
+  SO: "Somalia",
+  ZA: "Südafrika",
+  SS: "Südsudan",
+  SD: "Sudan",
+  TZ: "Tansania",
+  TG: "Togo",
+  TN: "Tunesien",
+  UG: "Uganda",
+  EH: "Westsahara",
+  ZM: "Sambia",
+  ZW: "Simbabwe"
+};
+
+let africaCountriesList = [];
+let africaDeck = [];
+let currentAfricaCountry = null;
+
+let africaWrongAttempts = 0;
+let africaAnsweredThisCountry = false;
+let africaAnswerLocked = false;
+
+let africaRoundCorrect = 0;
+let africaRoundWrong = 0;
+let africaStartTime = null;
+let africaTimerInterval = null;
+
+let africaSvgLoaded = false;
+let africaMapState = { x: 0, y: 0, scale: 1 };
+let africaDragState = null;
+
+function openAfricaGame() {
+  startAfricaMapQuiz();
+}
+
+function initAfricaCountries() {
+  africaCountriesList = Object.keys(AFRICA_COUNTRY_NAMES)
+    .filter(id => document.querySelector(`#africaMap #${id}`))
+    .map(id => ({
+      id,
+      name: AFRICA_COUNTRY_NAMES[id]
+    }));
+}
+
+function createAfricaDeck() {
+  africaDeck = [...africaCountriesList].sort(() => Math.random() - 0.5);
+}
+
+async function loadAfricaSvg() {
+  const mapBox = document.getElementById("africaMap");
+
+  if (africaSvgLoaded) return;
+
+  const res = await fetch("maps/africa/africa.svg?v=" + Date.now());
+  const svgText = await res.text();
+
+  mapBox.innerHTML = svgText;
+
+  const svg = mapBox.querySelector("svg");
+  svg.id = "africaSvg";
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.id = "africaViewport";
+
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
+  }
+
+  svg.appendChild(viewport);
+
+  Object.keys(AFRICA_COUNTRY_NAMES).forEach(id => {
+    const land = svg.querySelector(`#${id}`);
+    if (!land) return;
+
+    land.classList.add("africa-country");
+    land.dataset.country = id;
+  });
+
+  initAfricaMapTouch(svg);
+  africaSvgLoaded = true;
+}
+
+function applyAfricaMapTransform() {
+  const viewport = document.getElementById("africaViewport");
+  if (!viewport) return;
+
+  viewport.setAttribute(
+    "transform",
+    `translate(${africaMapState.x} ${africaMapState.y}) scale(${africaMapState.scale})`
+  );
+}
+
+function zoomAfricaAt(clientX, clientY, zoomFactor) {
+  const svg = document.getElementById("africaSvg");
+  if (!svg) return;
+
+  const rect = svg.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  const oldScale = africaMapState.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  africaMapState.x = x - (x - africaMapState.x) * (newScale / oldScale);
+  africaMapState.y = y - (y - africaMapState.y) * (newScale / oldScale);
+  africaMapState.scale = newScale;
+
+  applyAfricaMapTransform();
+}
+
+function initAfricaMapTouch(svg) {
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomAfricaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    africaDragState = {
+      startX: e.clientX,
+      startY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      target: e.target.closest("[data-country]")
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!africaDragState) return;
+
+    const dx = e.clientX - africaDragState.lastX;
+    const dy = e.clientY - africaDragState.lastY;
+
+    if (
+      Math.abs(e.clientX - africaDragState.startX) > 7 ||
+      Math.abs(e.clientY - africaDragState.startY) > 7
+    ) {
+      africaDragState.moved = true;
+    }
+
+    africaMapState.x += dx * 1.18;
+    africaMapState.y += dy * 1.18;
+
+    africaDragState.lastX = e.clientX;
+    africaDragState.lastY = e.clientY;
+
+    applyAfricaMapTransform();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    if (!africaDragState) return;
+
+    if (!africaDragState.moved && africaDragState.target) {
+      handleAfricaCountryClick(africaDragState.target.dataset.country);
+    }
+
+    africaDragState = null;
+  });
+
+  let pinchStartDistance = null;
+
+  svg.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+
+    e.preventDefault();
+
+    const a = e.touches[0];
+    const b = e.touches[1];
+
+    const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const centerX = (a.clientX + b.clientX) / 2;
+    const centerY = (a.clientY + b.clientY) / 2;
+
+    if (pinchStartDistance) {
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      zoomAfricaAt(centerX, centerY, pinchZoom);
+    }
+
+    pinchStartDistance = distance;
+  }, { passive: false });
+
+  svg.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+  });
+}
+
+function resetAfricaMapColors() {
+  document.querySelectorAll(".africa-country").forEach(land => {
+    land.classList.remove(
+      "correct-country",
+      "second-try-country",
+      "third-try-country",
+      "wrong-country",
+      "temp-wrong-country",
+      "country-flash",
+      "country-flash-soft"
+    );
+  });
+}
+
+function flashAfricaCountry(countryId) {
+  const land = document.querySelector(`#africaMap #${countryId}`);
+  if (!land) return;
+
+  const alreadyAnswered =
+    land.classList.contains("correct-country") ||
+    land.classList.contains("second-try-country") ||
+    land.classList.contains("third-try-country") ||
+    land.classList.contains("wrong-country");
+
+  land.classList.remove("country-flash", "country-flash-soft");
+  void land.offsetWidth;
+
+  land.classList.add(alreadyAnswered ? "country-flash-soft" : "country-flash");
+
+  setTimeout(() => {
+    land.classList.remove("country-flash", "country-flash-soft");
+  }, 1100);
+}
+
+function colorAfricaCountry(countryId, className) {
+  const land = document.querySelector(`#africaMap #${countryId}`);
+  if (!land) return;
+
+  land.classList.remove(
+    "correct-country",
+    "second-try-country",
+    "third-try-country",
+    "wrong-country"
+  );
+
+  land.classList.add(className);
+}
+
+function pickNextAfricaCountry() {
+  if (africaDeck.length === 0) {
+    finishAfricaRound();
+    return;
+  }
+
+  currentAfricaCountry = africaDeck.pop();
+
+  africaWrongAttempts = 0;
+  africaAnsweredThisCountry = false;
+  africaAnswerLocked = false;
+
+  document.getElementById("targetAfricaCountryName").textContent = currentAfricaCountry.name;
+  document.getElementById("africaMapFeedback").textContent = "";
+}
+
+async function startAfricaMapQuiz() {
+  showScreen(document.getElementById("africaMapGame"), false);
+  document.body.classList.add("map-playing");
+
+  await loadAfricaSvg();
+
+  initAfricaCountries();
+
+  africaMapState = { x: 0, y: 0, scale: 1 };
+  applyAfricaMapTransform();
+
+  resetAfricaMapColors();
+
+  africaRoundCorrect = 0;
+  africaRoundWrong = 0;
+  africaStartTime = Date.now();
+
+  startAfricaTimer();
+  createAfricaDeck();
+  pickNextAfricaCountry();
+  updateAfricaMapScore();
+}
+
+function handleAfricaCountryClick(countryId) {
+  if (!currentAfricaCountry || africaAnswerLocked) return;
+
+  flashAfricaCountry(countryId);
+
+  const clickedLand = document.querySelector(`#africaMap #${countryId}`);
+
+  const isAlreadyColored =
+    clickedLand &&
+    (
+      clickedLand.classList.contains("correct-country") ||
+      clickedLand.classList.contains("second-try-country") ||
+      clickedLand.classList.contains("third-try-country") ||
+      clickedLand.classList.contains("wrong-country")
+    );
+
+  if (countryId !== currentAfricaCountry.id && isAlreadyColored) {
+    showIsland("Schon beantwortet", "success");
+    return;
+  }
+
+  if (countryId === currentAfricaCountry.id) {
+    africaAnswerLocked = true;
+
+    if (!africaAnsweredThisCountry) {
+      if (africaWrongAttempts === 0) {
+        africaRoundCorrect++;
+      } else {
+        africaRoundWrong++;
+      }
+
+      africaAnsweredThisCountry = true;
+    }
+
+    if (africaWrongAttempts === 0) {
+      colorAfricaCountry(countryId, "correct-country");
+    } else if (africaWrongAttempts === 1) {
+      colorAfricaCountry(countryId, "second-try-country");
+    } else {
+      colorAfricaCountry(countryId, "third-try-country");
+    }
+
+    showIsland("Richtig", "success");
+    updateAfricaMapScore();
+
+    setTimeout(() => {
+      pickNextAfricaCountry();
+    }, 850);
+
+    return;
+  }
+
+  africaWrongAttempts++;
+
+  if (!isAlreadyColored && clickedLand) {
+    clickedLand.classList.add("temp-wrong-country");
+
+    setTimeout(() => {
+      clickedLand.classList.remove("temp-wrong-country");
+    }, 520);
+  }
+
+  showIsland(`${africaWrongAttempts} von 3`, "danger");
+
+  if (africaWrongAttempts >= 3) {
+    africaAnswerLocked = true;
+
+    if (!africaAnsweredThisCountry) {
+      africaRoundWrong++;
+      africaAnsweredThisCountry = true;
+    }
+
+    colorAfricaCountry(currentAfricaCountry.id, "wrong-country");
+
+    showIsland("Falsch", "danger");
+    updateAfricaMapScore();
+
+    setTimeout(() => {
+      pickNextAfricaCountry();
+    }, 1200);
+  }
+}
+
+function updateAfricaMapScore() {
+  document.getElementById("africaCorrectCount").textContent =
+    `${africaRoundCorrect} richtig`;
+
+  document.getElementById("africaWrongCount").textContent =
+    `${africaRoundWrong} falsch`;
+}
+
+function resetAfricaRound() {
+  africaRoundCorrect = 0;
+  africaRoundWrong = 0;
+  africaWrongAttempts = 0;
+  africaAnsweredThisCountry = false;
+  africaAnswerLocked = false;
+  currentAfricaCountry = null;
+  africaDeck = [];
+
+  document.body.classList.remove("map-playing");
+  stopAfricaTimer();
+}
+
+function finishAfricaRound() {
+  stopAfricaTimer();
+  showIsland("Afrika Runde beendet", "success");
+
+  resetAfricaRound();
+  showScreen(document.getElementById("gamesScreen"), true);
+}
+
+function startAfricaTimer() {
+  clearInterval(africaTimerInterval);
+
+  africaTimerInterval = setInterval(() => {
+    if (!africaStartTime) return;
+
+    const timer = document.getElementById("liveAfricaTimer");
+
+    if (timer) {
+      timer.textContent = formatEuropeTime(Date.now() - africaStartTime).replace(" min", "");
+    }
+  }, 500);
+}
+
+function stopAfricaTimer() {
+  clearInterval(africaTimerInterval);
+  africaTimerInterval = null;
+}
+
+document.getElementById("backAfricaHome").onclick = () => {
+  resetAfricaRound();
+  showScreen(document.getElementById("gamesScreen"), true);
+};
+/* === africa oben === */
