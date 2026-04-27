@@ -1646,6 +1646,45 @@ function renderEuropeGameHome() {
     `Zeit: ${formatEuropeTime(europeBestRun.time)}`;
 }
 
+function renderGamesStats() {
+  const box = document.getElementById("gamesStatsBox");
+  if (!box) return;
+
+  const best = loadEuropeBestRun();
+
+  box.innerHTML = `
+    <div class="best-card games-best-card">
+      <p>Bestes Spiel</p>
+      <h2>Europa Länder</h2>
+      <span>
+        ${best.time ? `${best.correct} richtig · ${best.wrong} falsch · ${formatEuropeTime(best.time)}` : "Noch kein Versuch"}
+      </span>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-head">
+        <h2>Länder</h2>
+        <span>${best.time ? "Aktiv" : "0%"}</span>
+      </div>
+
+      <div class="stat-grid">
+        <div>
+          <b>${best.time ? best.correct : 0}</b>
+          <small>Richtig</small>
+        </div>
+        <div>
+          <b>${best.time ? best.wrong : 0}</b>
+          <small>Falsch</small>
+        </div>
+        <div>
+          <b>${best.time ? formatEuropeTime(best.time).replace(" min", "") : "0:00"}</b>
+          <small>Bestzeit</small>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderStats() {
   const box = document.getElementById("statsBox");
   box.innerHTML = "";
@@ -1743,6 +1782,10 @@ function finishExam() {
 }
 
 /* Navigation */
+
+document.getElementById("gamesStatsUpperMenuBtn").onclick = () => {
+  openUpperDrawer();
+};
 
 document.getElementById("navStart").onclick = () => {
   setActiveNav("navStart");
