@@ -670,110 +670,451 @@ document.getElementById("backToEuropeStart").onclick = () => {
   showScreen(europeGameHome, true);
 };
 
-/* === ASIA MAP GAME === */
+/* === ASIA MAP GAME FULL === */
 
-let asiaCountries = [];
-let asiaCurrent = null;
-let asiaScore = 0;
-let asiaRound = 0;
+const ASIA_COUNTRY_NAMES = {
+  RU: "Russland",
+  YE: "Jemen",
+  PS: "Palästina",
+  VN: "Vietnam",
+  UZ: "Usbekistan",
+  TW: "Taiwan",
+  TL: "Osttimor",
+  TM: "Turkmenistan",
+  TJ: "Tadschikistan",
+  TH: "Thailand",
+  SY: "Syrien",
+  SG: "Singapur",
+  SA: "Saudi-Arabien",
+  QA: "Katar",
+  KP: "Nordkorea",
+  PG: "Papua-Neuguinea",
+  PH: "Philippinen",
+  PK: "Pakistan",
+  OM: "Oman",
+  NP: "Nepal",
+  MY: "Malaysia",
+  MN: "Mongolei",
+  MM: "Myanmar",
+  MV: "Malediven",
+  MO: "Macau",
+  LK: "Sri Lanka",
+  LB: "Libanon",
+  LA: "Laos",
+  KW: "Kuwait",
+  KR: "Südkorea",
+  KH: "Kambodscha",
+  KG: "Kirgisistan",
+  KZ: "Kasachstan",
+  JP: "Japan",
+  JO: "Jordanien",
+  IL: "Israel",
+  IQ: "Irak",
+  IR: "Iran",
+  IO: "Britisches Territorium im Indischen Ozean",
+  IN: "Indien",
+  ID: "Indonesien",
+  HK: "Hongkong",
+  CN: "China",
+  BT: "Bhutan",
+  BN: "Brunei",
+  BH: "Bahrain",
+  BD: "Bangladesch",
+  AE: "Vereinigte Arabische Emirate",
+  AF: "Afghanistan"
+};
+
+let asiaCountriesList = [];
+let asiaDeck = [];
+let currentAsiaCountry = null;
+
+let asiaWrongAttempts = 0;
+let asiaAnsweredThisCountry = false;
+let asiaAnswerLocked = false;
+
+let asiaRoundCorrect = 0;
+let asiaRoundWrong = 0;
+let asiaStartTime = null;
+let asiaTimerInterval = null;
+
+let asiaSvgLoaded = false;
+let asiaMapState = { x: 0, y: 0, scale: 1 };
+let asiaDragState = null;
 
 function openAsiaGame() {
-  document.body.classList.add("map-playing");
-
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById("asiaMapGame").classList.add("active");
-
-  startAsiaGame();
+  startAsiaMapQuiz();
 }
 
-function startAsiaGame() {
-  asiaScore = 0;
-  asiaRound = 0;
-
-  asiaCountries = [
-"Afghanistan",
-"Bahrain",
-"Bangladesch",
-"Bhutan",
-"Britisches Territorium im Indischen Ozean",
-"Brunei",
-"Kambodscha",
-"China",
-"Hongkong",
-"Indien",
-"Indonesien",
-"Iran",
-"Irak",
-"Israel",
-"Japan",
-"Jordanien",
-"Kasachstan",
-"Kuwait",
-"Kirgisistan",
-"Laos",
-"Libanon",
-"Macau",
-"Malaysia",
-"Malediven",
-"Mongolei",
-"Myanmar",
-"Nepal",
-"Nordkorea",
-"Oman",
-"Pakistan",
-"Palästinensische Gebiete",
-"Papua-Neuguinea",
-"Philippinen",
-"Katar",
-"Russland (Asien)",
-"Saudi-Arabien",
-"Singapur",
-"Südkorea",
-"Sri Lanka",
-"Syrien",
-"Taiwan",
-"Tadschikistan",
-"Thailand",
-"Timor-Leste",
-"Turkmenistan",
-"Vereinigte Arabische Emirate",
-"Usbekistan",
-"Vietnam",
-"Jemen"
-  ];
-
-  nextAsiaRound();
+function initAsiaCountries() {
+  asiaCountriesList = Object.keys(ASIA_COUNTRY_NAMES).map(id => ({
+    id,
+    name: ASIA_COUNTRY_NAMES[id]
+  }));
 }
 
-function nextAsiaRound() {
-  if (asiaRound >= 10) {
-    alert("Spiel vorbei! Punkte: " + asiaScore);
+function createAsiaDeck() {
+  asiaDeck = [...asiaCountriesList].sort(() => Math.random() - 0.5);
+}
+
+async function loadAsiaSvg() {
+  const mapBox = document.getElementById("asiaMap");
+
+  if (asiaSvgLoaded) return;
+
+  const res = await fetch("maps/asia/asia.svg?v=" + Date.now());
+  const svgText = await res.text();
+
+  mapBox.innerHTML = svgText;
+
+  const svg = mapBox.querySelector("svg");
+  svg.id = "asiaSvg";
+
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.id = "asiaViewport";
+
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
+  }
+
+  svg.appendChild(viewport);
+
+  Object.keys(ASIA_COUNTRY_NAMES).forEach(id => {
+    const land = svg.querySelector(`#${id}`);
+    if (!land) return;
+
+    land.classList.add("asia-country");
+    land.dataset.country = id;
+  });
+
+  initAsiaMapTouch(svg);
+  asiaSvgLoaded = true;
+}
+
+function applyAsiaMapTransform() {
+  const viewport = document.getElementById("asiaViewport");
+  if (!viewport) return;
+
+  viewport.setAttribute(
+    "transform",
+    `translate(${asiaMapState.x} ${asiaMapState.y}) scale(${asiaMapState.scale})`
+  );
+}
+
+function zoomAsiaAt(clientX, clientY, zoomFactor) {
+  const svg = document.getElementById("asiaSvg");
+  if (!svg) return;
+
+  const rect = svg.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  const oldScale = asiaMapState.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  asiaMapState.x = x - (x - asiaMapState.x) * (newScale / oldScale);
+  asiaMapState.y = y - (y - asiaMapState.y) * (newScale / oldScale);
+  asiaMapState.scale = newScale;
+
+  applyAsiaMapTransform();
+}
+
+function initAsiaMapTouch(svg) {
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomAsiaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    asiaDragState = {
+      startX: e.clientX,
+      startY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      target: e.target.closest("[data-country]")
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!asiaDragState) return;
+
+    const dx = e.clientX - asiaDragState.lastX;
+    const dy = e.clientY - asiaDragState.lastY;
+
+    if (
+      Math.abs(e.clientX - asiaDragState.startX) > 7 ||
+      Math.abs(e.clientY - asiaDragState.startY) > 7
+    ) {
+      asiaDragState.moved = true;
+    }
+
+    asiaMapState.x += dx * 1.18;
+    asiaMapState.y += dy * 1.18;
+
+    asiaDragState.lastX = e.clientX;
+    asiaDragState.lastY = e.clientY;
+
+    applyAsiaMapTransform();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    if (!asiaDragState) return;
+
+    if (!asiaDragState.moved && asiaDragState.target) {
+      handleAsiaCountryClick(asiaDragState.target.dataset.country);
+    }
+
+    asiaDragState = null;
+  });
+
+  let pinchStartDistance = null;
+
+  svg.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+
+    e.preventDefault();
+
+    const a = e.touches[0];
+    const b = e.touches[1];
+
+    const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const centerX = (a.clientX + b.clientX) / 2;
+    const centerY = (a.clientY + b.clientY) / 2;
+
+    if (pinchStartDistance) {
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      zoomAsiaAt(centerX, centerY, pinchZoom);
+    }
+
+    pinchStartDistance = distance;
+  }, { passive: false });
+
+  svg.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+  });
+}
+
+function resetAsiaMapColors() {
+  document.querySelectorAll(".asia-country").forEach(land => {
+    land.classList.remove(
+      "correct-country",
+      "second-try-country",
+      "third-try-country",
+      "wrong-country",
+      "temp-wrong-country",
+      "country-flash",
+      "country-flash-soft"
+    );
+  });
+}
+
+function flashAsiaCountry(countryId) {
+  const land = document.querySelector(`#${countryId}`);
+  if (!land) return;
+
+  const alreadyAnswered =
+    land.classList.contains("correct-country") ||
+    land.classList.contains("second-try-country") ||
+    land.classList.contains("third-try-country") ||
+    land.classList.contains("wrong-country");
+
+  land.classList.remove("country-flash", "country-flash-soft");
+  void land.offsetWidth;
+
+  land.classList.add(alreadyAnswered ? "country-flash-soft" : "country-flash");
+
+  setTimeout(() => {
+    land.classList.remove("country-flash", "country-flash-soft");
+  }, 1100);
+}
+
+function colorAsiaCountry(countryId, className) {
+  const land = document.querySelector(`#${countryId}`);
+  if (!land) return;
+
+  land.classList.remove(
+    "correct-country",
+    "second-try-country",
+    "third-try-country",
+    "wrong-country"
+  );
+
+  land.classList.add(className);
+}
+
+function pickNextAsiaCountry() {
+  if (asiaDeck.length === 0) {
+    finishAsiaRound();
     return;
   }
 
-  asiaRound++;
+  currentAsiaCountry = asiaDeck.pop();
 
-  asiaCurrent = asiaCountries[Math.floor(Math.random() * asiaCountries.length)];
+  asiaWrongAttempts = 0;
+  asiaAnsweredThisCountry = false;
+  asiaAnswerLocked = false;
 
-  document.getElementById("asiaCountryName").innerText = asiaCurrent;
-  document.getElementById("asiaRound").innerText = asiaRound + " / 10";
-  document.getElementById("asiaScore").innerText = asiaScore + " Punkte";
+  document.getElementById("targetAsiaCountryName").textContent = currentAsiaCountry.name;
+  document.getElementById("asiaMapFeedback").textContent = "";
 }
 
-function selectAsiaCountry(clicked) {
-  const feedback = document.getElementById("asiaFeedback");
+async function startAsiaMapQuiz() {
+  initAsiaCountries();
 
-  if (clicked === asiaCurrent) {
-    asiaScore++;
-    feedback.innerText = "Richtig!";
-    feedback.className = "map-feedback correct";
-  } else {
-    feedback.innerText = "Falsch!";
-    feedback.className = "map-feedback wrong";
+  showScreen(document.getElementById("asiaMapGame"), false);
+  document.body.classList.add("map-playing");
+
+  await loadAsiaSvg();
+
+  asiaMapState = { x: 0, y: 0, scale: 1 };
+  applyAsiaMapTransform();
+
+  resetAsiaMapColors();
+
+  asiaRoundCorrect = 0;
+  asiaRoundWrong = 0;
+  asiaStartTime = Date.now();
+
+  startAsiaTimer();
+  createAsiaDeck();
+  pickNextAsiaCountry();
+  updateAsiaMapScore();
+}
+
+function handleAsiaCountryClick(countryId) {
+  if (!currentAsiaCountry || asiaAnswerLocked) return;
+
+  flashAsiaCountry(countryId);
+
+  const clickedLand = document.querySelector(`#${countryId}`);
+
+  const isAlreadyColored =
+    clickedLand &&
+    (
+      clickedLand.classList.contains("correct-country") ||
+      clickedLand.classList.contains("second-try-country") ||
+      clickedLand.classList.contains("third-try-country") ||
+      clickedLand.classList.contains("wrong-country")
+    );
+
+  if (countryId !== currentAsiaCountry.id && isAlreadyColored) {
+    showIsland("Schon beantwortet", "success");
+    return;
   }
 
-  setTimeout(() => {
-    feedback.innerText = "";
-    nextAsiaRound();
-  }, 1000);
+  if (countryId === currentAsiaCountry.id) {
+    asiaAnswerLocked = true;
+
+    if (!asiaAnsweredThisCountry) {
+      if (asiaWrongAttempts === 0) {
+        asiaRoundCorrect++;
+      } else {
+        asiaRoundWrong++;
+      }
+
+      asiaAnsweredThisCountry = true;
+    }
+
+    if (asiaWrongAttempts === 0) {
+      colorAsiaCountry(countryId, "correct-country");
+    } else if (asiaWrongAttempts === 1) {
+      colorAsiaCountry(countryId, "second-try-country");
+    } else {
+      colorAsiaCountry(countryId, "third-try-country");
+    }
+
+    showIsland("Richtig", "success");
+    updateAsiaMapScore();
+
+    setTimeout(() => {
+      pickNextAsiaCountry();
+    }, 850);
+
+    return;
+  }
+
+  asiaWrongAttempts++;
+
+  if (!isAlreadyColored && clickedLand) {
+    clickedLand.classList.add("temp-wrong-country");
+
+    setTimeout(() => {
+      clickedLand.classList.remove("temp-wrong-country");
+    }, 520);
+  }
+
+  showIsland(`${asiaWrongAttempts} von 3`, "danger");
+
+  if (asiaWrongAttempts >= 3) {
+    asiaAnswerLocked = true;
+
+    if (!asiaAnsweredThisCountry) {
+      asiaRoundWrong++;
+      asiaAnsweredThisCountry = true;
+    }
+
+    colorAsiaCountry(currentAsiaCountry.id, "wrong-country");
+
+    showIsland("Falsch", "danger");
+    updateAsiaMapScore();
+
+    setTimeout(() => {
+      pickNextAsiaCountry();
+    }, 1200);
+  }
 }
+
+function updateAsiaMapScore() {
+  document.getElementById("asiaCorrectCount").textContent =
+    `${asiaRoundCorrect} richtig`;
+
+  document.getElementById("asiaWrongCount").textContent =
+    `${asiaRoundWrong} falsch`;
+}
+
+function resetAsiaRound() {
+  asiaRoundCorrect = 0;
+  asiaRoundWrong = 0;
+  asiaWrongAttempts = 0;
+  asiaAnsweredThisCountry = false;
+  asiaAnswerLocked = false;
+  currentAsiaCountry = null;
+  asiaDeck = [];
+
+  document.body.classList.remove("map-playing");
+  stopAsiaTimer();
+}
+
+function finishAsiaRound() {
+  stopAsiaTimer();
+  showIsland("Asien Runde beendet", "success");
+
+  resetAsiaRound();
+  showScreen(document.getElementById("gamesScreen"), true);
+}
+
+function startAsiaTimer() {
+  clearInterval(asiaTimerInterval);
+
+  asiaTimerInterval = setInterval(() => {
+    if (!asiaStartTime) return;
+
+    const timer = document.getElementById("liveAsiaTimer");
+
+    if (timer) {
+      timer.textContent = formatEuropeTime(Date.now() - asiaStartTime).replace(" min", "");
+    }
+  }, 500);
+}
+
+function stopAsiaTimer() {
+  clearInterval(asiaTimerInterval);
+  asiaTimerInterval = null;
+}
+
+document.getElementById("backAsiaHome").onclick = () => {
+  resetAsiaRound();
+  showScreen(document.getElementById("gamesScreen"), true);
+};
