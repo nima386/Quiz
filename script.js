@@ -270,7 +270,7 @@ function showScreen(screen, showNav = true) {
         const rect = activeGame.getBoundingClientRect();
         navLabel.style.left = `${rect.left + rect.width / 2}px`;
         navLabel.textContent =
-          activeGame.id === "gamesNavStats" ? "Stats" : "Länder";
+          activeGame.id === "gamesNavStats" ? "Stats" : "Start";
       }
     }, 30);
   }
