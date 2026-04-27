@@ -1111,7 +1111,7 @@ function setActiveNav(activeId) {
     navLibrary: "Bibliothek",
     navRemembered: "Gemerkt",
     navStats: "Stats"
-    setTimeout(() => updateFloatingLabel(), 10);
+    
   };
 
   const index = items.indexOf(activeId);
@@ -1146,6 +1146,7 @@ floatingLabel.style.left = `${centerX}px`;
 
 floatingLabel.textContent = labels[activeId];
 floatingLabel.classList.add("morphing");
+    setTimeout(() => updateFloatingLabel(), 10);
   }
 }
 
