@@ -1809,17 +1809,6 @@ select {
   pointer-events: none;
 }
 
-
-Glas-Effekt richtig ausbauen (Apple Style)
-Light/Glow Effekte (nicht übertrieben, sondern edel)
-Buttons fühlen sich „alive“ an
-Karten bekommen Tiefe
-Farben wirken hochwertiger
-
-Das ist der Unterschied zwischen:
-
-„coole App“ vs „krass, wo hast du die her?“
-.profile-card-premium {
   margin: 24px 0 18px;
   padding: 22px;
   border-radius: 32px;
@@ -2821,3 +2810,578 @@ body #addQuestionBtn.tap-pop {
   padding-bottom: calc(env(safe-area-inset-bottom) + 14px);
 }
 
+.nav-img-icon,
+.ui-search-icon,
+.circle-icon-img {
+  filter: brightness(0) invert(1);
+  opacity: .92;
+  object-fit: contain;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 8px rgba(255,255,255,.22));
+}
+
+.nav-img-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ui-search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.circle-icon-img {
+  width: 20px;
+  height: 20px;
+}
+
+.folder-img-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.folder-icon {
+  display: grid;
+  place-items: center;
+}
+
+/* PREMIUM MORPH NAV LABEL - CLEAN */
+
+.bottom-nav {
+  overflow: visible !important;
+  --label-cut-x: 50%;
+}
+
+.nav-item span {
+  display: none !important;
+}
+
+.nav-floating-label {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 86px);
+  transform: translateX(-50%);
+  z-index: 1305;
+
+  min-width: 88px;
+  height: 36px;
+  padding: 0 16px;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 11.5px;
+  font-weight: 850;
+  color: rgba(255,255,255,.95);
+  white-space: nowrap;
+
+  border-radius: 999px;
+  border: 0;
+
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.16), transparent 58%),
+    linear-gradient(145deg, rgba(255,255,255,.105), rgba(255,255,255,.035));
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.22),
+    0 0 16px rgba(99,102,241,.12);
+
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+
+  transition:
+    left .48s cubic-bezier(.22,1,.28,1),
+    opacity .22s ease,
+    filter .28s ease;
+}
+
+.nav-floating-label.morphing {
+  animation: navLabelMorph .48s cubic-bezier(.22,1,.28,1);
+}
+
+@keyframes navLabelMorph {
+  0% {
+    opacity: .72;
+    filter: blur(2px);
+    transform: translateX(-50%) scale(.88);
+  }
+
+  55% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(-50%) scale(1.04);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: var(--label-cut-x);
+  top: -7px;
+  width: 100px;
+  height: 34px;
+  transform: translateX(-50%);
+  border-radius: 0 0 28px 28px;
+
+  background:
+    radial-gradient(circle at 50% 0%, rgba(124,58,237,.12), transparent 62%),
+    linear-gradient(180deg, rgba(10,6,35,.76), rgba(10,6,35,.46));
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.18),
+    0 0 16px rgba(99,102,241,.08);
+
+  z-index: 1;
+  pointer-events: none;
+
+  transition: left .48s cubic-bezier(.22,1,.28,1);
+}
+
+.bottom-nav::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.14) 0%,
+      rgba(255,255,255,.14) calc(var(--label-cut-x) - 64px),
+      transparent calc(var(--label-cut-x) - 64px),
+      transparent calc(var(--label-cut-x) + 64px),
+      rgba(255,255,255,.14) calc(var(--label-cut-x) + 64px),
+      rgba(255,255,255,.14) 100%
+    );
+
+  z-index: 2;
+  pointer-events: none;
+}
+
+.nav-bubble {
+  z-index: 3 !important;
+}
+
+.nav-item {
+  z-index: 4 !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+
+.nav-icon,
+.nav-img-icon {
+  transition:
+    transform .38s cubic-bezier(.22,1,.28,1),
+    opacity .3s ease,
+    filter .3s ease;
+}
+
+.nav-item.active .nav-icon,
+.nav-item.active .nav-img-icon {
+  transform: scale(1.12) translateY(-1px);
+  opacity: 1;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 10px rgba(255,255,255,.32))
+    drop-shadow(0 0 18px rgba(99,102,241,.25));
+}
+
+.nav-item:not(.active) .nav-icon,
+.nav-item:not(.active) .nav-img-icon {
+  opacity: .45;
+  transform: scale(.92);
+}
+
+@media (max-width: 430px) {
+  .nav-floating-label {
+    min-width: 82px;
+    height: 34px;
+    font-size: 11px;
+  }
+
+  .bottom-nav::before {
+    width: 92px;
+    height: 30px;
+    top: -6px;
+  }
+}
+/* === NAV NOTCH PREMIUM LIGHT CUT === */
+
+.nav-floating-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+
+  font-size: 15px !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 0 14px rgba(255,255,255,.22),
+    0 0 24px rgba(99,102,241,.22);
+}
+
+/* der ausgeschnittene Bereich in der großen Bubble */
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: var(--label-cut-x);
+  top: -2px;
+  width: 154px;
+  height: 34px;
+  transform: translateX(-50%);
+
+  border-radius: 0 0 30px 30px;
+
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,.22), transparent 48%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.015));
+
+  box-shadow:
+    inset 0 -2px 0 rgba(255,255,255,.75),
+    0 -10px 28px rgba(255,255,255,.12),
+    0 -18px 38px rgba(99,102,241,.16);
+
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* obere Linie der Nav mit echtem weichem Ausschnitt */
+.bottom-nav::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.20) 0%,
+      rgba(255,255,255,.20) calc(var(--label-cut-x) - 86px),
+      transparent calc(var(--label-cut-x) - 86px),
+      transparent calc(var(--label-cut-x) + 86px),
+      rgba(255,255,255,.20) calc(var(--label-cut-x) + 86px),
+      rgba(255,255,255,.20) 100%
+    );
+
+  box-shadow: 0 0 12px rgba(255,255,255,.16);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Lichtstrahl vom Einschnitt zur Schrift */
+.nav-floating-label::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -36px;
+  width: 150px;
+  height: 52px;
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,.16), transparent 68%),
+    radial-gradient(ellipse at center, rgba(99,102,241,.18), transparent 72%);
+
+  filter: blur(8px);
+  opacity: .75;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (max-width: 430px) {
+  .nav-floating-label {
+    font-size: 14px !important;
+  }
+
+  .bottom-nav::before {
+    width: 132px;
+    height: 30px;
+  }
+
+  .bottom-nav::after {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,.20) 0%,
+        rgba(255,255,255,.20) calc(var(--label-cut-x) - 74px),
+        transparent calc(var(--label-cut-x) - 74px),
+        transparent calc(var(--label-cut-x) + 74px),
+        rgba(255,255,255,.20) calc(var(--label-cut-x) + 74px),
+        rgba(255,255,255,.20) 100%
+      );
+  }
+}
+/* === NAV NOTCH PREMIUM LIGHT CUT === */
+
+.nav-floating-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+
+  font-size: 15px !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 0 14px rgba(255,255,255,.22),
+    0 0 24px rgba(99,102,241,.22);
+}
+
+/* der ausgeschnittene Bereich in der großen Bubble */
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: var(--label-cut-x);
+  top: 6px;
+  width: 154px;
+  height: 34px;
+  transform: translateX(-50%);
+
+  border-radius: 0 0 30px 30px;
+
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,.22), transparent 48%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.015));
+
+  box-shadow:
+    inset 0 -2px 0 rgba(255,255,255,.75),
+    0 -10px 28px rgba(255,255,255,.12),
+    0 -18px 38px rgba(99,102,241,.16);
+
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* obere Linie der Nav mit echtem weichem Ausschnitt */
+.bottom-nav::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.20) 0%,
+      rgba(255,255,255,.20) calc(var(--label-cut-x) - 86px),
+      transparent calc(var(--label-cut-x) - 86px),
+      transparent calc(var(--label-cut-x) + 86px),
+      rgba(255,255,255,.20) calc(var(--label-cut-x) + 86px),
+      rgba(255,255,255,.20) 100%
+    );
+
+  box-shadow: 0 0 12px rgba(255,255,255,.16);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Lichtstrahl vom Einschnitt zur Schrift */
+.nav-floating-label::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -28px;
+  width: 140px;
+  height: 40px;
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,.12), transparent 70%),
+    radial-gradient(ellipse at center, rgba(99,102,241,.14), transparent 75%);
+
+  filter: blur(10px);
+  opacity: .6;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (max-width: 430px) {
+  .nav-floating-label {
+    font-size: 14px !important;
+  }
+
+  .bottom-nav::before {
+    width: 132px;
+    height: 30px;
+  }
+
+  .bottom-nav::after {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,.20) 0%,
+        rgba(255,255,255,.20) calc(var(--label-cut-x) - 74px),
+        transparent calc(var(--label-cut-x) - 74px),
+        transparent calc(var(--label-cut-x) + 74px),
+        rgba(255,255,255,.20) calc(var(--label-cut-x) + 74px),
+        rgba(255,255,255,.20) 100%
+      );
+  }
+}
+/* === NOTCH KOMPLETT AUS === */
+.bottom-nav::before {
+  display: none !important;
+}
+
+.bottom-nav::after {
+  display: none !important;
+}
+/* === ICON FEINSCHLIFF === */
+
+.nav-img-icon {
+  width: 29px !important;
+  height: 29px !important;
+  object-fit: contain;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 9px rgba(255,255,255,.24)) !important;
+}
+
+.nav-item.active .nav-img-icon {
+  transform: scale(1.22) translateY(-1px) !important;
+}
+
+.ui-search-icon {
+  width: 19px !important;
+  height: 19px !important;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 7px rgba(255,255,255,.22)) !important;
+}
+
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px;
+}
+
+.search-box span {
+  line-height: 1;
+}
+/* === NAV ICONS FINAL === */
+
+.nav-img-icon {
+  width: 30px !important;
+  height: 30px !important;
+  object-fit: contain;
+
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 10px rgba(255,255,255,.25));
+
+  transition:
+    transform .35s cubic-bezier(.22,1,.28,1),
+    filter .3s ease,
+    opacity .3s ease;
+}
+
+/* aktive Seite */
+.nav-item.active .nav-img-icon {
+  transform: scale(1.25) translateY(-1px);
+
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 14px rgba(255,255,255,.35))
+    drop-shadow(0 0 24px rgba(99,102,241,.25));
+}
+
+/* inaktive */
+.nav-item:not(.active) .nav-img-icon {
+  opacity: .5;
+  transform: scale(.95);
+}
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+}
+
+.search-box img,
+.ui-search-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.bottom-nav.nav-hidden,
+.nav-floating-label.nav-hidden {
+  transform: translateY(120px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition:
+    transform .42s cubic-bezier(.22,1,.28,1),
+    opacity .25s ease !important;
+}
+.nav-item {
+  position: relative;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.20), rgba(99,102,241,.10), transparent 70%);
+  filter: blur(7px);
+  z-index: -1;
+}
+
+.nav-img-icon {
+  filter: brightness(0) invert(1) !important;
+}
+
+.nav-item.active .nav-img-icon {
+  filter: brightness(0) invert(1) !important;
+  transform: scale(1.22) translateY(-1px) !important;
+}
+
+.search-top {
+  position: relative;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.search-top #closeSearch {
+  position: absolute;
+  left: 0;
+}
+
+.search-top h2 {
+  margin: 0;
+  padding: 10px 28px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 24px rgba(99,102,241,.18);
+}
