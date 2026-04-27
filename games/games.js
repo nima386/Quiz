@@ -1120,31 +1120,7 @@ document.getElementById("backAsiaHome").onclick = () => {
   showScreen(document.getElementById("gamesScreen"), true);
 };
 
-/* === SOUTH AMERICA UI FLOW === */
 
-const southAmericaHomeEl = document.getElementById("southAmericaGameHome");
-const southAmericaGameEl = document.getElementById("southAmericaMapGame");
-
-document.getElementById("startSouthAmericaGame").onclick = () => {
-  southAmericaHomeEl.style.display = "none";
-  southAmericaGameEl.style.display = "block";
-  document.body.classList.add("map-playing");
-
-  startSouthAmericaMapQuiz(); // GANZ WICHTIG
-};
-
-document.getElementById("backSouthAmericaHome").onclick = () => {
-  southAmericaGameEl.style.display = "none";
-  southAmericaHomeEl.style.display = "block";
-  document.body.classList.remove("map-playing");
-};
-
-document.getElementById("backGamesFromSouthAmerica").onclick = () => {
-  southAmericaHomeEl.style.display = "none";
-  showScreen(gamesScreen, true);
-};
-
-/* === africa unten === */
 /* === AFRICA MAP GAME FULL === */
 
 const AFRICA_COUNTRY_NAMES = {
@@ -1629,9 +1605,58 @@ document.getElementById("backGamesFromAfrica").onclick = () => {
   showScreen(document.getElementById("gamesScreen"), true);
 };
 
+/* === SOUTH AMERICA MAP GAME FULL === */
+
+const SOUTH_AMERICA_COUNTRY_NAMES = {
+  AR: "Argentinien",
+  BO: "Bolivien",
+  BR: "Brasilien",
+  CL: "Chile",
+  CO: "Kolumbien",
+  EC: "Ecuador",
+  GY: "Guyana",
+  PY: "Paraguay",
+  PE: "Peru",
+  SR: "Suriname",
+  UY: "Uruguay",
+  VE: "Venezuela",
+  GF: "Französisch-Guayana",
+  FK: "Falklandinseln"
+};
+
+let southAmericaCountriesList = [];
+let southAmericaDeck = [];
+let currentSouthAmericaCountry = null;
+
+let southAmericaWrongAttempts = 0;
+let southAmericaAnsweredThisCountry = false;
+let southAmericaAnswerLocked = false;
+
+let southAmericaRoundCorrect = 0;
+let southAmericaRoundWrong = 0;
+let southAmericaStartTime = null;
+let southAmericaTimerInterval = null;
+
 let southAmericaSvgLoaded = false;
 let southAmericaMapState = { x: 0, y: 0, scale: 1 };
 let southAmericaDragState = null;
+
+function openSouthAmericaGame() {
+  showScreen(document.getElementById("southAmericaGameHome"), true);
+}
+
+function initSouthAmericaCountries() {
+  southAmericaCountriesList = Object.keys(SOUTH_AMERICA_COUNTRY_NAMES)
+    .filter(id => document.querySelector(`#southAmericaMap #${id}`))
+    .map(id => ({
+      id,
+      name: SOUTH_AMERICA_COUNTRY_NAMES[id]
+    }));
+}
+
+function createSouthAmericaDeck() {
+  southAmericaDeck = [...southAmericaCountriesList].sort(() => Math.random() - 0.5);
+}
 
 async function loadSouthAmericaSvg() {
   const mapBox = document.getElementById("southAmericaMap");
@@ -1654,9 +1679,7 @@ async function loadSouthAmericaSvg() {
     viewport.appendChild(svg.firstChild);
   }
 
-
   svg.appendChild(viewport);
-
 
   document.querySelectorAll("#southAmericaMap .land").forEach(land => {
     if (!land.id) return;
@@ -1666,6 +1689,344 @@ async function loadSouthAmericaSvg() {
   });
 
   initSouthAmericaMapTouch(svg);
-
   southAmericaSvgLoaded = true;
 }
+
+function applySouthAmericaMapTransform() {
+  const viewport = document.getElementById("southAmericaViewport");
+  if (!viewport) return;
+
+  viewport.setAttribute(
+    "transform",
+    `translate(${southAmericaMapState.x} ${southAmericaMapState.y}) scale(${southAmericaMapState.scale})`
+  );
+}
+
+function zoomSouthAmericaAt(clientX, clientY, zoomFactor) {
+  const svg = document.getElementById("southAmericaSvg");
+  if (!svg) return;
+
+  const rect = svg.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  const oldScale = southAmericaMapState.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  southAmericaMapState.x = x - (x - southAmericaMapState.x) * (newScale / oldScale);
+  southAmericaMapState.y = y - (y - southAmericaMapState.y) * (newScale / oldScale);
+  southAmericaMapState.scale = newScale;
+
+  applySouthAmericaMapTransform();
+}
+
+function initSouthAmericaMapTouch(svg) {
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomSouthAmericaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    southAmericaDragState = {
+      startX: e.clientX,
+      startY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      target: e.target.closest("[data-country]")
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!southAmericaDragState) return;
+
+    const dx = e.clientX - southAmericaDragState.lastX;
+    const dy = e.clientY - southAmericaDragState.lastY;
+
+    if (
+      Math.abs(e.clientX - southAmericaDragState.startX) > 7 ||
+      Math.abs(e.clientY - southAmericaDragState.startY) > 7
+    ) {
+      southAmericaDragState.moved = true;
+    }
+
+    southAmericaMapState.x += dx * 1.18;
+    southAmericaMapState.y += dy * 1.18;
+
+    southAmericaDragState.lastX = e.clientX;
+    southAmericaDragState.lastY = e.clientY;
+
+    applySouthAmericaMapTransform();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    if (!southAmericaDragState) return;
+
+    if (!southAmericaDragState.moved && southAmericaDragState.target) {
+      handleSouthAmericaCountryClick(southAmericaDragState.target.dataset.country);
+    }
+
+    southAmericaDragState = null;
+  });
+
+  let pinchStartDistance = null;
+
+  svg.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+
+    e.preventDefault();
+
+    const a = e.touches[0];
+    const b = e.touches[1];
+
+    const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const centerX = (a.clientX + b.clientX) / 2;
+    const centerY = (a.clientY + b.clientY) / 2;
+
+    if (pinchStartDistance) {
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      zoomSouthAmericaAt(centerX, centerY, pinchZoom);
+    }
+
+    pinchStartDistance = distance;
+  }, { passive: false });
+
+  svg.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+  });
+}
+
+function resetSouthAmericaMapColors() {
+  document.querySelectorAll(".southamerica-country").forEach(land => {
+    land.classList.remove(
+      "correct-country",
+      "second-try-country",
+      "third-try-country",
+      "wrong-country",
+      "temp-wrong-country",
+      "country-flash",
+      "country-flash-soft"
+    );
+  });
+}
+
+function flashSouthAmericaCountry(countryId) {
+  const land = document.querySelector(`#southAmericaMap #${countryId}`);
+  if (!land) return;
+
+  const alreadyAnswered =
+    land.classList.contains("correct-country") ||
+    land.classList.contains("second-try-country") ||
+    land.classList.contains("third-try-country") ||
+    land.classList.contains("wrong-country");
+
+  land.classList.remove("country-flash", "country-flash-soft");
+  void land.offsetWidth;
+
+  land.classList.add(alreadyAnswered ? "country-flash-soft" : "country-flash");
+
+  setTimeout(() => {
+    land.classList.remove("country-flash", "country-flash-soft");
+  }, 1100);
+}
+
+function colorSouthAmericaCountry(countryId, className) {
+  const land = document.querySelector(`#southAmericaMap #${countryId}`);
+  if (!land) return;
+
+  land.classList.remove(
+    "correct-country",
+    "second-try-country",
+    "third-try-country",
+    "wrong-country"
+  );
+
+  land.classList.add(className);
+}
+
+function pickNextSouthAmericaCountry() {
+  if (southAmericaDeck.length === 0) {
+    finishSouthAmericaRound();
+    return;
+  }
+
+  currentSouthAmericaCountry = southAmericaDeck.pop();
+
+  southAmericaWrongAttempts = 0;
+  southAmericaAnsweredThisCountry = false;
+  southAmericaAnswerLocked = false;
+
+  document.getElementById("targetSouthAmericaCountryName").textContent =
+    currentSouthAmericaCountry.name;
+
+  document.getElementById("southAmericaMapFeedback").textContent = "";
+}
+
+async function startSouthAmericaMapQuiz() {
+  showScreen(document.getElementById("southAmericaMapGame"), false);
+  document.body.classList.add("map-playing");
+
+  await loadSouthAmericaSvg();
+
+  initSouthAmericaCountries();
+
+  southAmericaMapState = { x: 0, y: 0, scale: 1 };
+  applySouthAmericaMapTransform();
+
+  resetSouthAmericaMapColors();
+
+  southAmericaRoundCorrect = 0;
+  southAmericaRoundWrong = 0;
+  southAmericaStartTime = Date.now();
+
+  startSouthAmericaTimer();
+  createSouthAmericaDeck();
+  pickNextSouthAmericaCountry();
+  updateSouthAmericaMapScore();
+}
+
+function handleSouthAmericaCountryClick(countryId) {
+  if (!currentSouthAmericaCountry || southAmericaAnswerLocked) return;
+
+  flashSouthAmericaCountry(countryId);
+
+  const clickedLand = document.querySelector(`#southAmericaMap #${countryId}`);
+
+  const isAlreadyColored =
+    clickedLand &&
+    (
+      clickedLand.classList.contains("correct-country") ||
+      clickedLand.classList.contains("second-try-country") ||
+      clickedLand.classList.contains("third-try-country") ||
+      clickedLand.classList.contains("wrong-country")
+    );
+
+  if (countryId !== currentSouthAmericaCountry.id && isAlreadyColored) {
+    showIsland("Schon beantwortet", "success");
+    return;
+  }
+
+  if (countryId === currentSouthAmericaCountry.id) {
+    southAmericaAnswerLocked = true;
+
+    if (!southAmericaAnsweredThisCountry) {
+      if (southAmericaWrongAttempts === 0) {
+        southAmericaRoundCorrect++;
+      } else {
+        southAmericaRoundWrong++;
+      }
+
+      southAmericaAnsweredThisCountry = true;
+    }
+
+    if (southAmericaWrongAttempts === 0) {
+      colorSouthAmericaCountry(countryId, "correct-country");
+    } else if (southAmericaWrongAttempts === 1) {
+      colorSouthAmericaCountry(countryId, "second-try-country");
+    } else {
+      colorSouthAmericaCountry(countryId, "third-try-country");
+    }
+
+    showIsland("Richtig", "success");
+    updateSouthAmericaMapScore();
+
+    setTimeout(() => {
+      pickNextSouthAmericaCountry();
+    }, 850);
+
+    return;
+  }
+
+  southAmericaWrongAttempts++;
+
+  if (!isAlreadyColored && clickedLand) {
+    clickedLand.classList.add("temp-wrong-country");
+
+    setTimeout(() => {
+      clickedLand.classList.remove("temp-wrong-country");
+    }, 520);
+  }
+
+  showIsland(`${southAmericaWrongAttempts} von 3`, "danger");
+
+  if (southAmericaWrongAttempts >= 3) {
+    southAmericaAnswerLocked = true;
+
+    if (!southAmericaAnsweredThisCountry) {
+      southAmericaRoundWrong++;
+      southAmericaAnsweredThisCountry = true;
+    }
+
+    colorSouthAmericaCountry(currentSouthAmericaCountry.id, "wrong-country");
+
+    showIsland("Falsch", "danger");
+    updateSouthAmericaMapScore();
+
+    setTimeout(() => {
+      pickNextSouthAmericaCountry();
+    }, 1200);
+  }
+}
+
+function updateSouthAmericaMapScore() {
+  document.getElementById("southAmericaCorrectCount").textContent =
+    `${southAmericaRoundCorrect} richtig`;
+
+  document.getElementById("southAmericaWrongCount").textContent =
+    `${southAmericaRoundWrong} falsch`;
+}
+
+function resetSouthAmericaRound() {
+  southAmericaRoundCorrect = 0;
+  southAmericaRoundWrong = 0;
+  southAmericaWrongAttempts = 0;
+  southAmericaAnsweredThisCountry = false;
+  southAmericaAnswerLocked = false;
+  currentSouthAmericaCountry = null;
+  southAmericaDeck = [];
+
+  document.body.classList.remove("map-playing");
+  stopSouthAmericaTimer();
+}
+
+function finishSouthAmericaRound() {
+  stopSouthAmericaTimer();
+  showIsland("Südamerika Runde beendet", "success");
+
+  resetSouthAmericaRound();
+  showScreen(document.getElementById("gamesScreen"), true);
+}
+
+function startSouthAmericaTimer() {
+  clearInterval(southAmericaTimerInterval);
+
+  southAmericaTimerInterval = setInterval(() => {
+    if (!southAmericaStartTime) return;
+
+    const timer = document.getElementById("liveSouthAmericaTimer");
+
+    if (timer) {
+      timer.textContent = formatEuropeTime(Date.now() - southAmericaStartTime).replace(" min", "");
+    }
+  }, 500);
+}
+
+function stopSouthAmericaTimer() {
+  clearInterval(southAmericaTimerInterval);
+  southAmericaTimerInterval = null;
+}
+
+document.getElementById("startSouthAmericaGame").onclick = () => {
+  startSouthAmericaMapQuiz();
+};
+
+document.getElementById("backSouthAmericaHome").onclick = () => {
+  resetSouthAmericaRound();
+  showScreen(document.getElementById("southAmericaGameHome"), true);
+};
+
+document.getElementById("backGamesFromSouthAmerica").onclick = () => {
+  showScreen(document.getElementById("gamesScreen"), true);
+};
