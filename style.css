@@ -3952,3 +3952,38 @@ body.map-playing #europeMapGame {
 .bottom-nav::after {
   display: none !important;
 }
+/* === ICON FEINSCHLIFF === */
+
+.nav-img-icon {
+  width: 29px !important;
+  height: 29px !important;
+  object-fit: contain;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 9px rgba(255,255,255,.24)) !important;
+}
+
+.nav-item.active .nav-img-icon {
+  transform: scale(1.22) translateY(-1px) !important;
+}
+
+.ui-search-icon {
+  width: 19px !important;
+  height: 19px !important;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 7px rgba(255,255,255,.22)) !important;
+}
+
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px;
+}
+
+.search-box span {
+  line-height: 1;
+}
