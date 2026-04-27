@@ -4031,3 +4031,12 @@ body.map-playing #europeMapGame {
   height: 18px;
   display: block;
 }
+.bottom-nav.nav-hidden,
+.nav-floating-label.nav-hidden {
+  transform: translateY(120px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition:
+    transform .42s cubic-bezier(.22,1,.28,1),
+    opacity .25s ease !important;
+}
