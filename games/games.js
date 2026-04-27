@@ -1579,3 +1579,11 @@ document.getElementById("backAfricaHome").onclick = () => {
   showScreen(document.getElementById("gamesScreen"), true);
 };
 /* === africa oben === */
+
+document.getElementById("backGamesFromAsia").onclick = () => {
+  showScreen(document.getElementById("gamesScreen"), true);
+};
+
+document.getElementById("backGamesFromAfrica").onclick = () => {
+  showScreen(document.getElementById("gamesScreen"), true);
+};
