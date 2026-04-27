@@ -221,6 +221,18 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
   nav.style.display = showNav ? "flex" : "none";
+  const navLabel = document.getElementById("navFloatingLabel");
+if (navLabel) {
+  navLabel.style.display = showNav ? "grid" : "none";
+  
+  if (screen === questionList || screen === questionDetail || screen === europeMapGame) {
+  nav.classList.add("nav-hidden");
+  if (navLabel) navLabel.classList.add("nav-hidden");
+} else {
+  nav.classList.remove("nav-hidden");
+  if (navLabel) navLabel.classList.remove("nav-hidden");
+}
+}
   const addQuestionBtn = document.getElementById("addQuestionBtn");
 
 if (addQuestionBtn) {
