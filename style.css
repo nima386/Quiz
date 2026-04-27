@@ -3470,10 +3470,11 @@ body.map-playing #europeMapGame {
   cursor: grabbing;
 }
 #map .country-flash {
-  animation: countryFlash .55s cubic-bezier(.18,.95,.2,1);
+  animation: countryFlash .9s cubic-bezier(.15,.95,.2,1);
 }
 
 @keyframes countryFlash {
+
   0% {
     filter:
       brightness(1)
@@ -3481,19 +3482,20 @@ body.map-playing #europeMapGame {
     stroke-width: .65;
   }
 
-  30% {
+  25% {
     filter:
-      brightness(2.2)
-      drop-shadow(0 0 18px rgba(255,255,255,.95))
-      drop-shadow(0 0 32px rgba(99,102,241,.6))
-      drop-shadow(0 0 46px rgba(99,102,241,.35));
-    stroke-width: 2.2;
+      brightness(2.6)
+      drop-shadow(0 0 26px rgba(255,255,255,1))
+      drop-shadow(0 0 50px rgba(99,102,241,.8))
+      drop-shadow(0 0 70px rgba(99,102,241,.45));
+    stroke-width: 2.6;
   }
 
-  70% {
+  55% {
     filter:
-      brightness(1.4)
-      drop-shadow(0 0 10px rgba(255,255,255,.5));
+      brightness(1.8)
+      drop-shadow(0 0 20px rgba(255,255,255,.7))
+      drop-shadow(0 0 36px rgba(99,102,241,.4));
   }
 
   100% {
