@@ -56,7 +56,7 @@ document.getElementById("gamesNavStart").onclick = () => {
 document.getElementById("gamesNavStats").onclick = () => {
   setGamesNavActive("gamesNavStats");
   renderGamesStats();
-  showScreen(gamesStatsScreen, true);
+ showScreen(document.getElementById("gamesStatsScreen"), true);
 };
 
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
@@ -1245,9 +1245,6 @@ function openAfricaGame() {
   showScreen(document.getElementById("africaGameHome"), true);
 }
 
-function openSouthAmericaGame() {
-  showScreen(document.getElementById("southAmericaGameHome"), true);
-}
 
 document.getElementById("startSouthAmericaGame").onclick = () => {
   startSouthAmericaMapQuiz();
