@@ -1364,10 +1364,15 @@ if (
   if (countryId === currentEuropeCountry.id) {
     europeAnswerLocked = true;
 
-    if (!europeAnsweredThisCountry) {
-      europeRoundCorrect++;
-      europeAnsweredThisCountry = true;
-    }
+   if (!europeAnsweredThisCountry) {
+  if (europeWrongAttempts === 0) {
+    europeRoundCorrect++;
+  } else {
+    europeRoundWrong++;
+  }
+
+  europeAnsweredThisCountry = true;
+}
 
     if (europeWrongAttempts === 0) {
   colorEuropeCountry(countryId, "correct-country");
