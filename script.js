@@ -787,6 +787,13 @@ renderLibrary();
 }
 
 function openFolder(category) {
+  if (!data[category]) {
+    showIsland("Kategorie nicht gefunden", "danger");
+    renderLibrary();
+    showScreen(library, true);
+    return;
+  }
+
   currentCategory = category;
   document.getElementById("folderTitle").textContent = category;
   renderQuestionList();
@@ -795,6 +802,10 @@ function openFolder(category) {
 
 function renderQuestionList() {
   const list = document.getElementById("questionItems");
+  if (!data[currentCategory]) {
+  list.innerHTML = "";
+  return;
+}
   list.innerHTML = "";
 
   data[currentCategory].forEach((q, index) => {
