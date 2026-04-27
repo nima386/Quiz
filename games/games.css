@@ -561,6 +561,33 @@ body.map-playing #europeMapGame {
   padding: 0 68px;
   margin-bottom: 26px;
 }
+#asiaGameHome .question-detail-top,
+#africaGameHome .question-detail-top {
+  position: relative;
+  justify-content: center !important;
+  padding: 0 68px;
+  margin-bottom: 26px;
+}
+
+#asiaGameHome #backGamesFromAsia,
+#africaGameHome #backGamesFromAfrica {
+  position: absolute !important;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#asiaGameHome .question-detail-top h2,
+#africaGameHome .question-detail-top h2 {
+  margin: 0;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 26px rgba(99,102,241,.22);
+}
 
 #europeGameHome #backGames {
   position: absolute !important;
@@ -1291,4 +1318,31 @@ body.map-playing #africaMapGame {
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 0 20px rgba(99,102,241,.18);
+}
+.primary-btn {
+  margin-top: 18px;
+  width: 100%;
+  padding: 18px;
+  border-radius: 999px;
+
+  font-size: 18px;
+  font-weight: 900;
+  color: white;
+
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+
+  box-shadow:
+    0 10px 28px rgba(59,130,246,.35),
+    0 0 30px rgba(99,102,241,.25);
+
+  transition: all .25s ease;
+}
+
+.primary-btn:active {
+  transform: scale(.97);
+  box-shadow:
+    0 6px 18px rgba(59,130,246,.25);
 }
