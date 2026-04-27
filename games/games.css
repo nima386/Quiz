@@ -1034,11 +1034,145 @@ body.map-playing #asiaMapGame {
   overflow: hidden !important;
   overscroll-behavior: none;
 }
+
+/* === ASIA SAME FEEL AS EUROPE FINAL === */
+
+body.map-playing #asiaMapGame {
+  height: 100dvh;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+#asiaMapGame .map-glass-frame {
+  height: 64dvh;
+  min-height: 430px;
+  overflow: hidden;
+  touch-action: none !important;
+  overscroll-behavior: none;
+}
+
+#asiaMap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none !important;
+}
+
 #asiaMap svg {
-  view-transition-name: none;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 360px;
+  display: block;
+  touch-action: none !important;
+  cursor: grab;
+}
+
+#asiaMap svg:active {
+  cursor: grabbing;
+}
+
+#asiaMap path,
+#asiaMap [data-id],
+#asiaMap * {
+  pointer-events: auto !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #asiaViewport {
-  transform-box: fill-box;
-  transform-origin: center center;
+  transform-origin: 0 0 !important;
+  transition: transform 0.055s linear;
+  will-change: transform;
+}
+
+#asiaMap .asia-country,
+#asiaMap .land {
+  fill: rgba(255,255,255,.16) !important;
+  stroke: rgba(255,255,255,.65) !important;
+  stroke-width: .65 !important;
+  cursor: pointer;
+  pointer-events: auto !important;
+  transition: fill .22s ease, filter .22s ease, stroke .22s ease, stroke-width .22s ease;
+}
+
+#asiaMap .asia-country:hover {
+  fill: rgba(99,102,241,.55) !important;
+  filter: drop-shadow(0 0 8px rgba(99,102,241,.55));
+}
+
+#asiaMap .correct-country {
+  fill: rgba(34,197,94,.46) !important;
+  filter: drop-shadow(0 0 10px rgba(34,197,94,.55));
+}
+
+#asiaMap .second-try-country {
+  fill: rgba(249,115,22,.46) !important;
+  filter: drop-shadow(0 0 10px rgba(249,115,22,.55));
+}
+
+#asiaMap .third-try-country,
+#asiaMap .wrong-country {
+  fill: rgba(239,68,68,.46) !important;
+  filter: drop-shadow(0 0 10px rgba(239,68,68,.55));
+}
+
+#asiaMap .temp-wrong-country {
+  fill: rgba(239,68,68,.42) !important;
+  stroke: rgba(255,160,160,.95) !important;
+  stroke-width: 1.5 !important;
+  transition: fill .18s ease, stroke .18s ease, stroke-width .18s ease;
+}
+
+#asiaMap .country-flash,
+#asiaMap .country-flash-soft {
+  animation: countryBorderPulse .72s cubic-bezier(.22,.8,.25,1);
+}
+
+#asiaMapGame .map-game-top {
+  position: relative;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#asiaMapGame #backAsiaHome {
+  position: absolute;
+  left: 0;
+}
+
+#asiaMapGame .map-live-timer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 130px;
+  text-align: center;
+}
+
+#asiaMapGame .map-game-top h2 {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 20px rgba(99,102,241,.18);
+}
+
+@media (max-width: 420px) {
+  #asiaMapGame .map-live-timer {
+    min-width: 110px;
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  #asiaMapGame .map-game-top h2 {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+
+  #asiaMapGame #backAsiaHome {
+    transform: scale(0.9);
+  }
 }
