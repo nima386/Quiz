@@ -2401,41 +2401,6 @@ async function loadUserCloudData(user) {
       localStorage.setItem("userAvatar", cloud.avatar);
     }
 
-    const wantsMerge = confirm(
-      "Lokale Daten mit deinem Cloud-Konto verbinden?\n\nOK = lokale Änderungen übernehmen\nAbbrechen = Cloud-Daten laden"
-    );
-
-    if (wantsMerge) {
-      appStore = mergeAppStores(cloud.appStore || createEmptyAppStore(), localCopy);
-      activeUpper = localStorage.getItem("activeUpper") || cloud.activeUpper || "Bauzeichner";
-
-      hydrateActiveUpper();
-      saveAppStore();
-
-      await setDoc(userRef, {
-        appStore,
-        activeUpper,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
-    } else {
-      appStore = cloud.appStore || localCopy;
-      activeUpper = cloud.activeUpper || "Bauzeichner";
-      hydrateActiveUpper();
-      saveAppStore();
-    }
-  } else {
-    await setDoc(userRef, {
-      appStore,
-      activeUpper,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
-  }
-
-  renderHome();
-  renderLibrary();
-  renderRemembered();
-  renderStats();
-}
 
 async function saveCloudData() {
   if (!currentUser || !navigator.onLine) return;
