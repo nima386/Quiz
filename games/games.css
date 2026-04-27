@@ -2331,3 +2331,56 @@ body.map-playing #northAmericaMapGame {
     height: 70px !important;
   }
 }
+/* === FIX: Games CSS darf normale App nicht klein machen === */
+
+@media (min-width: 700px) {
+  #home,
+  #library,
+  #remembered,
+  #statsScreen,
+  #searchScreen,
+  #profile {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #gamesScreen,
+  #gamesStatsScreen,
+  #europeGameHome,
+  #asiaGameHome,
+  #africaGameHome,
+  #southAmericaGameHome,
+  #northAmericaGameHome,
+  #europeMapGame,
+  #asiaMapGame,
+  #africaMapGame,
+  #southAmericaMapGame,
+  #northAmericaMapGame {
+    max-width: 820px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+/* === PC Scrollbar dunkler machen === */
+
+html {
+  scrollbar-color: rgba(255,255,255,.18) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.16);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,.28);
+}
