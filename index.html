@@ -294,6 +294,15 @@
   </div>
   <span class="game-arrow">›</span>
 </div>
+
+<div onclick="openNorthAmericaGame()" class="game-card">
+  <div class="game-icon">🌎</div>
+  <div>
+    <h2>Nordamerika</h2>
+    <p>Länder auf der Nordamerika-Karte erkennen</p>
+  </div>
+  <span class="game-arrow">›</span>
+</div>
     
 </section>
 <!-- europa -->
@@ -516,6 +525,90 @@
   <p id="southAmericaMapFeedback" class="map-feedback"></p>
 </section>
   <!-- southamerica oben -->
+
+  <!-- northamerica -->
+<section id="northAmericaGameHome" class="screen scroll-screen">
+  <div class="question-detail-top">
+    <button id="backGamesFromNorthAmerica" class="circle-btn">←</button>
+    <h2>Nordamerika Länder</h2>
+  </div>
+
+  <div class="game-hero-card">
+    <div class="game-big-icon">🌎</div>
+
+    <h1>Nordamerika Länder</h1>
+    <p>Dir wird ein Land genannt. Tippe es richtig auf der Karte an.</p>
+
+    <div class="best-run-card">
+      <span>Bester Versuch</span>
+      <strong id="northAmericaBestRun">Noch kein Versuch</strong>
+      <p id="northAmericaBestTime">Starte deine erste Runde</p>
+    </div>
+
+    <button id="startNorthAmericaGame" class="main-btn">
+      Spiel starten
+    </button>
+  </div>
+</section>
+
+<section id="northAmericaMapGame" class="screen scroll-screen">
+  <div class="map-game-top">
+    <button id="backNorthAmericaHome" class="circle-btn">←</button>
+
+    <div class="map-live-timer">
+      <small>TIMER</small>
+      <strong id="liveNorthAmericaTimer">0:00</strong>
+    </div>
+
+    <h2>Nordamerika</h2>
+  </div>
+
+  <div class="map-question-card">
+    <p>Tippe auf:</p>
+    <h1 id="targetNorthAmericaCountryName">---</h1>
+
+    <div class="map-score-row">
+      <span id="northAmericaCorrectCount">0 richtig</span>
+      <span id="northAmericaWrongCount">0 falsch</span>
+    </div>
+  </div>
+
+  <div class="map-glass-frame">
+    <div id="northAmericaMap"></div>
+  </div>
+
+  <p id="northAmericaMapFeedback" class="map-feedback"></p>
+</section>
+
+<div id="northAmericaRoundModal" class="modal avatar-bottom-modal">
+  <div class="avatar-sheet">
+    <div class="sheet-handle"></div>
+
+    <div class="avatar-sheet-head">
+      <h2>Runde beendet</h2>
+      <p>Deine Zusammenfassung</p>
+    </div>
+
+    <div class="game-stats-mini result-stats">
+      <div>
+        <strong id="northAmericaRoundCorrectFinal">0</strong>
+        <span>Richtig</span>
+      </div>
+      <div>
+        <strong id="northAmericaRoundWrongFinal">0</strong>
+        <span>Falsch</span>
+      </div>
+      <div>
+        <strong id="northAmericaRoundTimeFinal">0:00</strong>
+        <span>Zeit</span>
+      </div>
+    </div>
+
+    <button id="restartNorthAmericaRound" class="avatar-sheet-btn primary">Nochmal spielen</button>
+    <button id="backToNorthAmericaStart" class="avatar-sheet-btn muted">Zurück zum Start</button>
+  </div>
+</div>
+<!-- northamerica oben -->
   
   <div id="europeRoundModal" class="modal avatar-bottom-modal">
   <div class="avatar-sheet">
