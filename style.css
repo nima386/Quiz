@@ -4095,3 +4095,67 @@ body.map-playing #europeMapGame {
     0 0 28px rgba(99,102,241,.18);
   backdrop-filter: blur(24px);
 }
+.games-nav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  transform: translateX(-50%) translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+
+  width: min(280px, calc(100vw - 42px));
+  height: 66px;
+  padding: 7px;
+  border-radius: 999px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+  background: rgba(10,8,30,.72);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter: blur(28px) saturate(165%);
+  z-index: 1400;
+
+  transition:
+    transform .42s cubic-bezier(.22,1,.28,1),
+    opacity .25s ease;
+}
+
+.games-nav.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.games-nav-item {
+  border: none;
+  border-radius: 999px;
+  color: rgba(255,255,255,.58);
+  background: transparent;
+  font-weight: 950;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+}
+
+.games-nav-item span {
+  font-size: 20px;
+}
+
+.games-nav-item small {
+  font-size: 11px;
+}
+
+.games-nav-item.active {
+  color: white;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.22), transparent 52%),
+    linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    0 0 24px rgba(99,102,241,.24);
+}
