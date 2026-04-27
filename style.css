@@ -4184,3 +4184,26 @@ body.map-playing #europeMapGame {
 .bottom-nav[style*="display: none"] + .games-nav.show {
   display: grid !important;
 }
+.games-nav-item {
+  position: relative;
+  border: none;
+  background: transparent;
+  display: grid;
+  place-items: center;
+}
+
+.games-nav-item .nav-img-icon {
+  transition:
+    transform .35s cubic-bezier(.22,1,.28,1),
+    opacity .3s ease;
+}
+
+.games-nav-item.active .nav-img-icon {
+  transform: scale(1.25) translateY(-1px);
+  opacity: 1;
+}
+
+.games-nav-item:not(.active) .nav-img-icon {
+  opacity: .5;
+  transform: scale(.95);
+}
