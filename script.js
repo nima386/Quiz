@@ -223,37 +223,56 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
 
-  if (navLabel) {
-  navLabel.style.display =
-    (showMainNav || showGamesNav) ? "grid" : "none";
-}
   const mainNav = document.querySelector(".bottom-nav");
   const gamesNav = document.getElementById("gamesNav");
+  const navLabel = document.getElementById("navFloatingLabel");
 
-  const isGamesScreen =
+  const isGamesArea =
     screen.id === "gamesScreen" ||
     screen.id === "europeGameHome" ||
     screen.id === "gamesStatsScreen";
 
-  const isFullGameScreen =
-    screen.id === "europeMapGame";
-
-  const hideAllNav =
+  const isNoNavArea =
     screen.id === "questionList" ||
     screen.id === "questionDetail" ||
-    isFullGameScreen ||
+    screen.id === "europeMapGame" ||
     showNav === false;
 
-  if (mainNav) {
-    mainNav.style.display = (!hideAllNav && !isGamesScreen) ? "flex" : "none";
-  }
+  const showMainNav = !isGamesArea && !isNoNavArea;
+  const showGamesNav = isGamesArea && !isNoNavArea;
 
-  if (navLabel) {
-    navLabel.style.display = (!hideAllNav && !isGamesScreen) ? "grid" : "none";
+  if (mainNav) {
+    mainNav.style.display = showMainNav ? "flex" : "none";
   }
 
   if (gamesNav) {
-    gamesNav.classList.toggle("show", isGamesScreen);
+    gamesNav.classList.toggle("show", showGamesNav);
+  }
+
+  if (navLabel) {
+    navLabel.style.display = (showMainNav || showGamesNav) ? "grid" : "none";
+  }
+
+  if (showMainNav) {
+    setTimeout(() => {
+      const activeMain = document.querySelector(".nav-item.active");
+      if (activeMain && navLabel) {
+        const rect = activeMain.getBoundingClientRect();
+        navLabel.style.left = `${rect.left + rect.width / 2}px`;
+      }
+    }, 30);
+  }
+
+  if (showGamesNav) {
+    setTimeout(() => {
+      const activeGame = document.querySelector(".games-nav-item.active");
+      if (activeGame && navLabel) {
+        const rect = activeGame.getBoundingClientRect();
+        navLabel.style.left = `${rect.left + rect.width / 2}px`;
+        navLabel.textContent =
+          activeGame.id === "gamesNavStats" ? "Stats" : "Länder";
+      }
+    }, 30);
   }
 
   const addQuestionBtn = document.getElementById("addQuestionBtn");
