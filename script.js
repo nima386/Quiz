@@ -62,7 +62,7 @@ const authScreen = document.getElementById("authScreen");
 const authName = document.getElementById("authName");
 const authPassword = document.getElementById("authPassword");
 const authMessage = document.getElementById("authMessage");
-let guestMode = localStorage.getItem("guestMode") === "true";
+let pendingCloudSave = localStorage.getItem("pendingCloudSave") === "true";
 let gameStats = JSON.parse(localStorage.getItem("gameStats")) || {
   europeCountries: {
     correct: 0,
@@ -110,7 +110,10 @@ function softVibrate(ms = 18) {
 function save() {
   localStorage.setItem("quizData", JSON.stringify(data));
   saveAppStore();
-  scheduleCloudSave();
+
+  if (currentUser) {
+    scheduleCloudSave();
+  }
 }
 
 let cloudSaveTimer = null;
@@ -118,13 +121,15 @@ let cloudSaveTimer = null;
 function scheduleCloudSave() {
   if (!currentUser) return;
 
+  pendingCloudSave = true;
+  localStorage.setItem("pendingCloudSave", "true");
+
   clearTimeout(cloudSaveTimer);
 
   cloudSaveTimer = setTimeout(() => {
     saveCloudData();
   }, 900);
 }
-
 async function persistNow() {
   clearTimeout(cloudSaveTimer);
   saveAppStore();
@@ -2336,12 +2341,11 @@ function hideAppLoader() {
 
 // ✅ HIER EINFÜGEN (direkt nach der Funktion)
 
-window.addEventListener("online", async () => {
+window.addEventListener("online", () => {
   showIsland("Wieder online", "success");
 
-  if (currentUser && localStorage.getItem("pendingCloudSync") === "true") {
-    await persistNow();
-    showIsland("Synchronisiert", "success");
+  if (currentUser && pendingCloudSave) {
+    saveCloudData();
   }
 });
 
@@ -2434,29 +2438,19 @@ async function loadUserCloudData(user) {
 }
 
 async function saveCloudData() {
-  if (!currentUser) return;
+  if (!currentUser || !navigator.onLine) return;
 
-  if (!navigator.onLine) {
-    localStorage.setItem("pendingCloudSync", "true");
-    return;
-  }
+  const { db, doc, setDoc } = window.firebaseTools;
 
-  try {
-    const { db, doc, setDoc } = window.firebaseTools;
+  saveAppStore();
 
-    saveAppStore();
+  await setDoc(doc(db, "users", currentUser.uid), {
+    appStore: appStore,
+    updatedAt: new Date().toISOString()
+  }, { merge: true });
 
-    await setDoc(doc(db, "users", currentUser.uid), {
-      appStore: appStore,
-      activeUpper: activeUpper,
-      updatedAt: new Date().toISOString()
-    }, { merge: true });
-
-    localStorage.removeItem("pendingCloudSync");
-  } catch (error) {
-    localStorage.setItem("pendingCloudSync", "true");
-    console.log("Cloud Sync später erneut versuchen:", error);
-  }
+  pendingCloudSave = false;
+  localStorage.removeItem("pendingCloudSave");
 }
 
 document.getElementById("registerBtn").onclick = async () => {
@@ -2574,8 +2568,6 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
 
   if (user) {
     currentUser = user;
-    guestMode = false;
-    localStorage.removeItem("guestMode");
 
     logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Ausloggen</span><span class="setting-arrow">›</span>`;
     logoutBtn.classList.remove("success");
@@ -2585,6 +2577,10 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
 
     await loadUserCloudData(user);
 
+    if (pendingCloudSave && navigator.onLine) {
+      await saveCloudData();
+    }
+
     renderHome();
     renderLibrary();
     setActiveNav("navStart");
@@ -2593,15 +2589,16 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
   } else {
     currentUser = null;
 
-   logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
+    logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
     logoutBtn.classList.remove("danger");
     logoutBtn.classList.add("success");
 
-    authScreen.classList.add("hide");
-    showScreen(home, true);
-    setActiveNav("navStart");
+    authScreen.classList.remove("hide");
+    showScreen(home, false);
     updateProfileUI();
   }
+
+  hideAppLoader();
 });
 
 const showRegisterBtn = document.getElementById("showRegisterBtn");
@@ -2709,41 +2706,28 @@ document.getElementById("backToEuropeStart").onclick = () => {
   showScreen(europeGameHome, true);
 };
 
-document.getElementById("closeAuthBtn").onclick = () => {
-  guestMode = true;
-  localStorage.setItem("guestMode", "true");
-  authScreen.classList.add("hide");
-};
-
 document.getElementById("logoutBtn").onclick = async () => {
   const button = document.getElementById("logoutBtn");
 
-  // 👇 wenn NICHT eingeloggt → Login öffnen
   if (!currentUser) {
-  await startButtonLoading(button, "success");
+    authScreen.classList.remove("hide");
+    showScreen(home, false);
+    return;
+  }
 
-  authScreen.classList.remove("hide");
-  showScreen(profile, false);
-
-  showIsland("Login öffnen", "success");
-  return;
-}
-
-  // 👇 Animation starten
   await startButtonLoading(button, "danger");
-  await persistNow();
-  const { auth, signOut } = window.firebaseTools;
 
+  if (pendingCloudSave && navigator.onLine) {
+    await saveCloudData();
+  }
+
+  const { auth, signOut } = window.firebaseTools;
   await signOut(auth);
 
   currentUser = null;
-  guestMode = false;
-  localStorage.removeItem("guestMode");
 
-  document.getElementById("logoutBtn").innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
-
-  showScreen(home, true);
-  setActiveNav("navStart");
+  authScreen.classList.remove("hide");
+  showScreen(home, false);
 
   showIsland("Ausgeloggt", "danger");
 };
