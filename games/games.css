@@ -1438,3 +1438,37 @@ body.map-playing #africaMapGame {
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 0 26px rgba(99,102,241,.22);
 }
+/* SOUTH AMERICA HEADER EXACT LIKE EUROPE */
+#southAmericaMapGame .map-game-top {
+  position: relative;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#southAmericaMapGame #backSouthAmericaHome {
+  position: absolute;
+  left: 0;
+}
+
+#southAmericaMapGame .map-live-timer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 130px;
+  text-align: center;
+}
+
+#southAmericaMapGame .map-game-top h2 {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 950;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 20px rgba(99,102,241,.18);
+}
