@@ -611,11 +611,14 @@ function renderGamesStats() {
     time: null
   };
 
+const northAmerica = loadNorthAmericaBestRun();
+  
   const games = [
     { name: "Europa Länder", data: europe },
     { name: "Asien Länder", data: asia },
     { name: "Afrika Länder", data: africa },
-    { name: "Südamerika Länder", data: southAmerica }
+    { name: "Südamerika Länder", data: southAmerica },
+{ name: "Nordamerika Länder", data: northAmerica }
   ];
 
   const bestGame = games
@@ -2220,3 +2223,545 @@ body.map-playing #northAmericaMapGame {
   text-align: center;
   margin-bottom: 18px;
 }
+/* === NORTH AMERICA MAP GAME FULL === */
+
+const NORTH_AMERICA_COUNTRY_NAMES = {
+  CA: "Kanada",
+  US: "Vereinigte Staaten",
+  MX: "Mexiko",
+  GL: "Grönland",
+  GT: "Guatemala",
+  BZ: "Belize",
+  HN: "Honduras",
+  SV: "El Salvador",
+  NI: "Nicaragua",
+  CR: "Costa Rica",
+  PA: "Panama",
+  BS: "Bahamas",
+  CU: "Kuba",
+  JM: "Jamaika",
+  HT: "Haiti",
+  DO: "Dominikanische Republik",
+  PR: "Puerto Rico",
+  AG: "Antigua und Barbuda",
+  BB: "Barbados",
+  DM: "Dominica",
+  GD: "Grenada",
+  LC: "St. Lucia",
+  VC: "St. Vincent und die Grenadinen",
+  TT: "Trinidad und Tobago",
+  KN: "St. Kitts und Nevis",
+  AI: "Anguilla",
+  AW: "Aruba",
+  BM: "Bermuda",
+  BL: "Saint-Barthélemy",
+  BQ: "Bonaire, Sint Eustatius und Saba",
+  CW: "Curaçao",
+  GP: "Guadeloupe",
+  KY: "Kaimaninseln",
+  MF: "Saint-Martin",
+  MQ: "Martinique",
+  MS: "Montserrat",
+  PM: "Saint-Pierre und Miquelon",
+  SX: "Sint Maarten",
+  TC: "Turks- und Caicosinseln",
+  VG: "Britische Jungferninseln",
+  VI: "Amerikanische Jungferninseln"
+};
+
+let northAmericaCountriesList = [];
+let northAmericaDeck = [];
+let currentNorthAmericaCountry = null;
+
+let northAmericaWrongAttempts = 0;
+let northAmericaAnsweredThisCountry = false;
+let northAmericaAnswerLocked = false;
+
+let northAmericaRoundCorrect = 0;
+let northAmericaRoundWrong = 0;
+let northAmericaStartTime = null;
+let northAmericaTimerInterval = null;
+
+let northAmericaSvgLoaded = false;
+let northAmericaMapState = { x: 0, y: 0, scale: 1 };
+let northAmericaDragState = null;
+
+function getNorthAmericaBestRunKey() {
+  return currentUser
+    ? `northAmericaBestRun_${currentUser.uid}`
+    : "northAmericaBestRun_guest";
+}
+
+function loadNorthAmericaBestRun() {
+  return JSON.parse(localStorage.getItem(getNorthAmericaBestRunKey())) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+}
+
+let northAmericaBestRun = loadNorthAmericaBestRun();
+
+function openNorthAmericaGame() {
+  setGamesNavActive("gamesNavStart");
+  renderNorthAmericaGameHome();
+  showScreen(document.getElementById("northAmericaGameHome"), true);
+}
+
+function initNorthAmericaCountries() {
+  northAmericaCountriesList = Object.keys(NORTH_AMERICA_COUNTRY_NAMES)
+    .filter(id => document.querySelector(`#northAmericaMap #${id}`))
+    .map(id => ({
+      id,
+      name: NORTH_AMERICA_COUNTRY_NAMES[id]
+    }));
+}
+
+function createNorthAmericaDeck() {
+  northAmericaDeck = [...northAmericaCountriesList].sort(() => Math.random() - 0.5);
+}
+
+async function loadNorthAmericaSvg() {
+  const mapBox = document.getElementById("northAmericaMap");
+
+  if (northAmericaSvgLoaded) return;
+
+  const res = await fetch("maps/northAmerica/northAmerica.svg?v=" + Date.now());
+  const svgText = await res.text();
+
+  mapBox.innerHTML = svgText;
+
+  const svg = mapBox.querySelector("svg");
+  svg.id = "northAmericaSvg";
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.id = "northAmericaViewport";
+
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
+  }
+
+  svg.appendChild(viewport);
+
+  document.querySelectorAll("#northAmericaMap .land").forEach(land => {
+    if (!land.id) return;
+
+    land.classList.add("northamerica-country");
+    land.dataset.country = land.id;
+  });
+
+  initNorthAmericaMapTouch(svg);
+  northAmericaSvgLoaded = true;
+}
+
+function applyNorthAmericaMapTransform() {
+  const viewport = document.getElementById("northAmericaViewport");
+  if (!viewport) return;
+
+  viewport.setAttribute(
+    "transform",
+    `translate(${northAmericaMapState.x} ${northAmericaMapState.y}) scale(${northAmericaMapState.scale})`
+  );
+}
+
+function zoomNorthAmericaAt(clientX, clientY, zoomFactor) {
+  const svg = document.getElementById("northAmericaSvg");
+  if (!svg) return;
+
+  const rect = svg.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+
+  const oldScale = northAmericaMapState.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  northAmericaMapState.x = x - (x - northAmericaMapState.x) * (newScale / oldScale);
+  northAmericaMapState.y = y - (y - northAmericaMapState.y) * (newScale / oldScale);
+  northAmericaMapState.scale = newScale;
+
+  applyNorthAmericaMapTransform();
+}
+
+function initNorthAmericaMapTouch(svg) {
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomNorthAmericaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    northAmericaDragState = {
+      startX: e.clientX,
+      startY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      target: e.target.closest("[data-country]")
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!northAmericaDragState) return;
+
+    const dx = e.clientX - northAmericaDragState.lastX;
+    const dy = e.clientY - northAmericaDragState.lastY;
+
+    if (
+      Math.abs(e.clientX - northAmericaDragState.startX) > 7 ||
+      Math.abs(e.clientY - northAmericaDragState.startY) > 7
+    ) {
+      northAmericaDragState.moved = true;
+    }
+
+    northAmericaMapState.x += dx * 1.18;
+    northAmericaMapState.y += dy * 1.18;
+
+    northAmericaDragState.lastX = e.clientX;
+    northAmericaDragState.lastY = e.clientY;
+
+    applyNorthAmericaMapTransform();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    if (!northAmericaDragState) return;
+
+    if (!northAmericaDragState.moved && northAmericaDragState.target) {
+      handleNorthAmericaCountryClick(northAmericaDragState.target.dataset.country);
+    }
+
+    northAmericaDragState = null;
+  });
+
+  let pinchStartDistance = null;
+
+  svg.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+
+    e.preventDefault();
+
+    const a = e.touches[0];
+    const b = e.touches[1];
+
+    const distance = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const centerX = (a.clientX + b.clientX) / 2;
+    const centerY = (a.clientY + b.clientY) / 2;
+
+    if (pinchStartDistance) {
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      zoomNorthAmericaAt(centerX, centerY, pinchZoom);
+    }
+
+    pinchStartDistance = distance;
+  }, { passive: false });
+
+  svg.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+  });
+}
+
+function resetNorthAmericaMapColors() {
+  document.querySelectorAll(".northamerica-country").forEach(land => {
+    land.classList.remove(
+      "correct-country",
+      "second-try-country",
+      "third-try-country",
+      "wrong-country",
+      "temp-wrong-country",
+      "country-flash",
+      "country-flash-soft"
+    );
+  });
+}
+
+function flashNorthAmericaCountry(countryId) {
+  const land = document.querySelector(`#northAmericaMap #${countryId}`);
+  if (!land) return;
+
+  const alreadyAnswered =
+    land.classList.contains("correct-country") ||
+    land.classList.contains("second-try-country") ||
+    land.classList.contains("third-try-country") ||
+    land.classList.contains("wrong-country");
+
+  land.classList.remove("country-flash", "country-flash-soft");
+  void land.offsetWidth;
+
+  land.classList.add(alreadyAnswered ? "country-flash-soft" : "country-flash");
+
+  setTimeout(() => {
+    land.classList.remove("country-flash", "country-flash-soft");
+  }, 1100);
+}
+
+function colorNorthAmericaCountry(countryId, className) {
+  const land = document.querySelector(`#northAmericaMap #${countryId}`);
+  if (!land) return;
+
+  land.classList.remove(
+    "correct-country",
+    "second-try-country",
+    "third-try-country",
+    "wrong-country"
+  );
+
+  land.classList.add(className);
+}
+
+function pickNextNorthAmericaCountry() {
+  if (northAmericaDeck.length === 0) {
+    finishNorthAmericaRound();
+    return;
+  }
+
+  currentNorthAmericaCountry = northAmericaDeck.pop();
+
+  northAmericaWrongAttempts = 0;
+  northAmericaAnsweredThisCountry = false;
+  northAmericaAnswerLocked = false;
+
+  document.getElementById("targetNorthAmericaCountryName").textContent =
+    currentNorthAmericaCountry.name;
+
+  document.getElementById("northAmericaMapFeedback").textContent = "";
+}
+
+async function startNorthAmericaMapQuiz() {
+  showScreen(document.getElementById("northAmericaMapGame"), false);
+  document.body.classList.add("map-playing");
+
+  await loadNorthAmericaSvg();
+
+  initNorthAmericaCountries();
+
+  northAmericaMapState = { x: 0, y: 0, scale: 1 };
+  applyNorthAmericaMapTransform();
+
+  resetNorthAmericaMapColors();
+
+  northAmericaRoundCorrect = 0;
+  northAmericaRoundWrong = 0;
+  northAmericaStartTime = Date.now();
+
+  startNorthAmericaTimer();
+  createNorthAmericaDeck();
+  pickNextNorthAmericaCountry();
+  updateNorthAmericaMapScore();
+}
+
+function handleNorthAmericaCountryClick(countryId) {
+  if (!currentNorthAmericaCountry || northAmericaAnswerLocked) return;
+
+  flashNorthAmericaCountry(countryId);
+
+  const clickedLand = document.querySelector(`#northAmericaMap #${countryId}`);
+
+  const isAlreadyColored =
+    clickedLand &&
+    (
+      clickedLand.classList.contains("correct-country") ||
+      clickedLand.classList.contains("second-try-country") ||
+      clickedLand.classList.contains("third-try-country") ||
+      clickedLand.classList.contains("wrong-country")
+    );
+
+  if (countryId !== currentNorthAmericaCountry.id && isAlreadyColored) {
+    showIsland("Schon beantwortet", "success");
+    return;
+  }
+
+  if (countryId === currentNorthAmericaCountry.id) {
+    northAmericaAnswerLocked = true;
+
+    if (!northAmericaAnsweredThisCountry) {
+      if (northAmericaWrongAttempts === 0) {
+        northAmericaRoundCorrect++;
+      } else {
+        northAmericaRoundWrong++;
+      }
+
+      northAmericaAnsweredThisCountry = true;
+    }
+
+    if (northAmericaWrongAttempts === 0) {
+      colorNorthAmericaCountry(countryId, "correct-country");
+    } else if (northAmericaWrongAttempts === 1) {
+      colorNorthAmericaCountry(countryId, "second-try-country");
+    } else {
+      colorNorthAmericaCountry(countryId, "third-try-country");
+    }
+
+    showIsland("Richtig", "success");
+    updateNorthAmericaMapScore();
+
+    setTimeout(() => {
+      pickNextNorthAmericaCountry();
+    }, 850);
+
+    return;
+  }
+
+  northAmericaWrongAttempts++;
+
+  if (!isAlreadyColored && clickedLand) {
+    clickedLand.classList.add("temp-wrong-country");
+
+    setTimeout(() => {
+      clickedLand.classList.remove("temp-wrong-country");
+    }, 520);
+  }
+
+  showIsland(`${northAmericaWrongAttempts} von 3`, "danger");
+
+  if (northAmericaWrongAttempts >= 3) {
+    northAmericaAnswerLocked = true;
+
+    if (!northAmericaAnsweredThisCountry) {
+      northAmericaRoundWrong++;
+      northAmericaAnsweredThisCountry = true;
+    }
+
+    colorNorthAmericaCountry(currentNorthAmericaCountry.id, "wrong-country");
+
+    showIsland("Falsch", "danger");
+    updateNorthAmericaMapScore();
+
+    setTimeout(() => {
+      pickNextNorthAmericaCountry();
+    }, 1200);
+  }
+}
+
+function updateNorthAmericaMapScore() {
+  document.getElementById("northAmericaCorrectCount").textContent =
+    `${northAmericaRoundCorrect} richtig`;
+
+  document.getElementById("northAmericaWrongCount").textContent =
+    `${northAmericaRoundWrong} falsch`;
+}
+
+function resetNorthAmericaRound() {
+  northAmericaRoundCorrect = 0;
+  northAmericaRoundWrong = 0;
+  northAmericaWrongAttempts = 0;
+  northAmericaAnsweredThisCountry = false;
+  northAmericaAnswerLocked = false;
+  currentNorthAmericaCountry = null;
+  northAmericaDeck = [];
+
+  document.body.classList.remove("map-playing");
+  stopNorthAmericaTimer();
+}
+
+function finishNorthAmericaRound() {
+  const result = saveNorthAmericaBestRun();
+
+  stopNorthAmericaTimer();
+
+  document.getElementById("northAmericaRoundCorrectFinal").textContent = result.correct;
+  document.getElementById("northAmericaRoundWrongFinal").textContent = result.wrong;
+  document.getElementById("northAmericaRoundTimeFinal").textContent =
+    formatEuropeTime(result.time);
+
+  const modal = document.getElementById("northAmericaRoundModal");
+  modal.classList.add("show");
+
+  const sheet = modal.querySelector(".avatar-sheet");
+  sheet.classList.remove("result-pop");
+  void sheet.offsetWidth;
+  sheet.classList.add("result-pop");
+
+  showIsland("Runde beendet", "success");
+}
+
+function startNorthAmericaTimer() {
+  clearInterval(northAmericaTimerInterval);
+
+  northAmericaTimerInterval = setInterval(() => {
+    if (!northAmericaStartTime) return;
+
+    const timer = document.getElementById("liveNorthAmericaTimer");
+
+    if (timer) {
+      timer.textContent =
+        formatEuropeTime(Date.now() - northAmericaStartTime).replace(" min", "");
+    }
+  }, 500);
+}
+
+function stopNorthAmericaTimer() {
+  clearInterval(northAmericaTimerInterval);
+  northAmericaTimerInterval = null;
+}
+
+function saveNorthAmericaBestRun() {
+  const time = Date.now() - northAmericaStartTime;
+
+  const newRun = {
+    correct: northAmericaRoundCorrect,
+    wrong: northAmericaRoundWrong,
+    time
+  };
+
+  const oldScore = northAmericaBestRun.correct - northAmericaBestRun.wrong;
+  const newScore = newRun.correct - newRun.wrong;
+
+  const isBetter =
+    !northAmericaBestRun.time ||
+    newScore > oldScore ||
+    (newScore === oldScore && newRun.time < northAmericaBestRun.time);
+
+  if (isBetter) {
+    northAmericaBestRun = newRun;
+    localStorage.setItem(getNorthAmericaBestRunKey(), JSON.stringify(northAmericaBestRun));
+  }
+
+  return newRun;
+}
+
+function renderNorthAmericaGameHome() {
+  northAmericaBestRun = loadNorthAmericaBestRun();
+
+  const bestText = document.getElementById("northAmericaBestRun");
+  const bestTime = document.getElementById("northAmericaBestTime");
+
+  if (!northAmericaBestRun.time) {
+    bestText.textContent = "Noch kein Versuch";
+    bestTime.textContent = "Starte deine erste Runde";
+    return;
+  }
+
+  bestText.textContent =
+    `${northAmericaBestRun.correct} richtig · ${northAmericaBestRun.wrong} falsch`;
+
+  bestTime.textContent =
+    `Zeit: ${formatEuropeTime(northAmericaBestRun.time)}`;
+}
+
+document.getElementById("startNorthAmericaGame").onclick = () => {
+  startNorthAmericaMapQuiz();
+};
+
+document.getElementById("backNorthAmericaHome").onclick = () => {
+  resetNorthAmericaRound();
+  renderNorthAmericaGameHome();
+  showScreen(document.getElementById("northAmericaGameHome"), true);
+};
+
+document.getElementById("backGamesFromNorthAmerica").onclick = () => {
+  showScreen(document.getElementById("gamesScreen"), true);
+};
+
+document.getElementById("restartNorthAmericaRound").onclick = () => {
+  document.getElementById("northAmericaRoundModal").classList.remove("show");
+  resetNorthAmericaRound();
+  startNorthAmericaMapQuiz();
+};
+
+document.getElementById("backToNorthAmericaStart").onclick = () => {
+  document.getElementById("northAmericaRoundModal").classList.remove("show");
+  resetNorthAmericaRound();
+  renderNorthAmericaGameHome();
+  showScreen(document.getElementById("northAmericaGameHome"), true);
+};
