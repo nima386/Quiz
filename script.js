@@ -1033,6 +1033,7 @@ const navRelativeX = centerX - navRect.left;
 
 floatingLabel.style.left = `${centerX}px`;
 nav.style.setProperty("--label-cut-x", `${navRelativeX}px`);
+floatingLabel.style.left = `${centerX}px`;
 
 floatingLabel.textContent = labels[activeId];
 floatingLabel.classList.add("morphing");
