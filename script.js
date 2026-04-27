@@ -676,6 +676,14 @@ function goNextQuestion() {
   }
 }
 
+document.getElementById("gamesUpperMenuBtn").onclick = () => {
+  openUpperDrawer();
+};
+
+document.getElementById("openGamesSearch").onclick = () => {
+  showIsland("Spielsuche kommt als Nächstes", "success");
+};
+
 document.getElementById("nextBtn").onclick = () => {
   goNextQuestion();
 };
