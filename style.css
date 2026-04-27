@@ -4159,3 +4159,9 @@ body.map-playing #europeMapGame {
     inset 0 1px 0 rgba(255,255,255,.20),
     0 0 24px rgba(99,102,241,.24);
 }
+.games-best-card {
+  margin-top: 18px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.14), transparent 55%),
+    linear-gradient(145deg, rgba(59,130,246,.16), rgba(124,58,237,.12));
+}
