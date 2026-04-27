@@ -3763,3 +3763,20 @@ body.map-playing #europeMapGame {
 .nav-item {
   z-index: 4 !important;
 }
+.nav-floating-label {
+  max-width: calc(100vw - 34px);
+}
+
+@media (max-width: 430px) {
+  .bottom-nav::before {
+    width: 124px;
+    height: 52px;
+    top: -16px;
+  }
+
+  .nav-floating-label {
+    min-width: 96px;
+    height: 42px;
+    font-size: 13px;
+  }
+}
