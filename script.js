@@ -1253,13 +1253,24 @@ function flashEuropeCountry(countryId) {
   const land = document.querySelector(`#${countryId}`);
   if (!land) return;
 
-  land.classList.remove("country-flash");
+  const alreadyAnswered =
+    land.classList.contains("correct-country") ||
+    land.classList.contains("second-try-country") ||
+    land.classList.contains("third-try-country") ||
+    land.classList.contains("wrong-country");
+
+  land.classList.remove("country-flash", "country-flash-soft");
   void land.offsetWidth;
-  land.classList.add("country-flash");
+
+  if (alreadyAnswered) {
+    land.classList.add("country-flash-soft");
+  } else {
+    land.classList.add("country-flash");
+  }
 
   setTimeout(() => {
-    land.classList.remove("country-flash");
-  }, 420);
+    land.classList.remove("country-flash", "country-flash-soft");
+  }, 1100);
 }
 
 function colorEuropeCountry(countryId, className) {
