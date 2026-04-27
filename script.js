@@ -1395,7 +1395,6 @@ showIsland("Richtig", "success");
   }
 
   europeWrongAttempts++;
-  const clickedLand = document.querySelector(`#${countryId}`);
 const isAlreadyColored =
   clickedLand &&
   (
