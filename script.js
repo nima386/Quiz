@@ -1390,6 +1390,23 @@ showIsland("Richtig", "success");
   }
 
   europeWrongAttempts++;
+  const clickedLand = document.querySelector(`#${countryId}`);
+const isAlreadyColored =
+  clickedLand &&
+  (
+    clickedLand.classList.contains("correct-country") ||
+    clickedLand.classList.contains("second-try-country") ||
+    clickedLand.classList.contains("third-try-country") ||
+    clickedLand.classList.contains("wrong-country")
+  );
+
+if (!isAlreadyColored) {
+  clickedLand.classList.add("temp-wrong-country");
+
+  setTimeout(() => {
+    clickedLand.classList.remove("temp-wrong-country");
+  }, 520);
+}
 
   const clickedName = EUROPE_COUNTRY_NAMES[countryId] || countryId;
 
