@@ -3517,3 +3517,40 @@ body.map-playing #europeMapGame {
   stroke-width: 1.5 !important;
   transition: fill .18s ease, stroke .18s ease, stroke-width .18s ease;
 }
+.nav-img-icon,
+.ui-search-icon,
+.circle-icon-img {
+  filter: brightness(0) invert(1);
+  opacity: .92;
+  object-fit: contain;
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 8px rgba(255,255,255,.22));
+}
+
+.nav-img-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ui-search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.circle-icon-img {
+  width: 20px;
+  height: 20px;
+}
+
+.folder-img-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.folder-icon {
+  display: grid;
+  place-items: center;
+}
