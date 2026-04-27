@@ -804,10 +804,6 @@ body.map-playing #europeMapGame {
   font-size: 20px;
 }
 
-.games-nav-item small {
-  font-size: 10px;
-  margin-top: -2px; /* 🔥 zieht Text näher ran */
-}
 
 .games-nav-item.active {
   color: white;
