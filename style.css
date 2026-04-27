@@ -3987,3 +3987,47 @@ body.map-playing #europeMapGame {
 .search-box span {
   line-height: 1;
 }
+/* === NAV ICONS FINAL === */
+
+.nav-img-icon {
+  width: 30px !important;
+  height: 30px !important;
+  object-fit: contain;
+
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 10px rgba(255,255,255,.25));
+
+  transition:
+    transform .35s cubic-bezier(.22,1,.28,1),
+    filter .3s ease,
+    opacity .3s ease;
+}
+
+/* aktive Seite */
+.nav-item.active .nav-img-icon {
+  transform: scale(1.25) translateY(-1px);
+
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 14px rgba(255,255,255,.35))
+    drop-shadow(0 0 24px rgba(99,102,241,.25));
+}
+
+/* inaktive */
+.nav-item:not(.active) .nav-img-icon {
+  opacity: .5;
+  transform: scale(.95);
+}
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+}
+
+.search-box img,
+.ui-search-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
