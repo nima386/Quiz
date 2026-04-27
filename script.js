@@ -224,45 +224,44 @@ function showScreen(screen, showNav = true) {
   screen.classList.add("active");
 
   const navLabel = document.getElementById("navFloatingLabel");
+  const mainNav = document.querySelector(".bottom-nav");
   const gamesNav = document.getElementById("gamesNav");
 
-  const isGameArea =
-    screen === gamesScreen ||
-    screen === europeGameHome ||
-    screen === europeMapGame ||
+  const isGamesScreen =
+    screen.id === "gamesScreen" ||
+    screen.id === "europeGameHome" ||
     screen.id === "gamesStatsScreen";
 
-  const showMainNav =
-    showNav &&
-    !isGameArea &&
-    screen !== questionList &&
-    screen !== questionDetail;
+  const isFullGameScreen =
+    screen.id === "europeMapGame";
 
-  const showGamesNav =
-    isGameArea &&
-    screen !== europeMapGame;
+  const hideAllNav =
+    screen.id === "questionList" ||
+    screen.id === "questionDetail" ||
+    isFullGameScreen ||
+    showNav === false;
 
-  nav.style.display = showMainNav ? "flex" : "none";
+  if (mainNav) {
+    mainNav.style.display = (!hideAllNav && !isGamesScreen) ? "flex" : "none";
+  }
 
   if (navLabel) {
-    navLabel.style.display = showMainNav ? "grid" : "none";
+    navLabel.style.display = (!hideAllNav && !isGamesScreen) ? "grid" : "none";
   }
 
   if (gamesNav) {
-    gamesNav.classList.toggle("show", showGamesNav);
+    gamesNav.classList.toggle("show", isGamesScreen);
   }
 
   const addQuestionBtn = document.getElementById("addQuestionBtn");
-
   if (addQuestionBtn) {
-    addQuestionBtn.classList.toggle("show", screen === questionList);
+    addQuestionBtn.classList.toggle("show", screen.id === "questionList");
   }
 
   setTimeout(() => {
     if (screen.classList.contains("scroll-screen")) {
       screen.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, 40);
 }
@@ -2823,6 +2822,7 @@ document.getElementById("openGamesFromDrawer").onclick = () => {
 };
 
 document.getElementById("openEuropeGame").onclick = () => {
+  setGamesNavActive("gamesNavStart");
   renderEuropeGameHome();
   showScreen(europeGameHome, true);
 };
