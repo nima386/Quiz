@@ -1226,6 +1226,23 @@ function openAfricaGame() {
   showScreen(document.getElementById("africaGameHome"), true);
 }
 
+function openSouthAmericaGame() {
+  showScreen(document.getElementById("southAmericaGameHome"), true);
+}
+
+document.getElementById("startSouthAmericaGame").onclick = () => {
+  startSouthAmericaMapQuiz();
+};
+
+document.getElementById("backSouthAmericaHome").onclick = () => {
+  resetSouthAmericaRound();
+  showScreen(document.getElementById("southAmericaGameHome"), true);
+};
+
+document.getElementById("backGamesFromSouthAmerica").onclick = () => {
+  showScreen(document.getElementById("gamesScreen"), true);
+};
+
 function initAfricaCountries() {
   africaCountriesList = Object.keys(AFRICA_COUNTRY_NAMES)
     .filter(id => document.querySelector(`#africaMap #${id}`))
