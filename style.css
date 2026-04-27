@@ -3470,38 +3470,50 @@ body.map-playing #europeMapGame {
   cursor: grabbing;
 }
 #map .country-flash {
-  animation: countryFlash .8s cubic-bezier(.15,.95,.2,1);
+  animation: countryFlash 1.0s cubic-bezier(.15,.95,.2,1);
+}
+
+#map .country-flash-soft {
+  animation: countryFlashSoft .42s cubic-bezier(.2,.9,.2,1);
 }
 
 @keyframes countryFlash {
-
   0% {
-    filter:
-      brightness(1)
-      drop-shadow(0 0 0 rgba(255,255,255,0));
+    filter: brightness(1);
     stroke-width: .65;
   }
 
-  25% {
+  22% {
     filter:
-      brightness(2.6)
-      drop-shadow(0 0 26px rgba(255,255,255,1))
-      drop-shadow(0 0 50px rgba(99,102,241,.8))
-      drop-shadow(0 0 70px rgba(99,102,241,.45));
-    stroke-width: 2.6;
+      brightness(2.9)
+      drop-shadow(0 0 28px rgba(255,255,255,1))
+      drop-shadow(0 0 58px rgba(99,102,241,.9));
+    stroke-width: 3.2;
   }
 
-  55% {
+  65% {
     filter:
       brightness(1.8)
-      drop-shadow(0 0 20px rgba(255,255,255,.7))
-      drop-shadow(0 0 36px rgba(99,102,241,.4));
+      drop-shadow(0 0 24px rgba(255,255,255,.7));
+    stroke-width: 2.2;
   }
 
   100% {
-    filter:
-      brightness(1)
-      drop-shadow(0 0 0 rgba(255,255,255,0));
+    filter: brightness(1);
     stroke-width: .65;
+  }
+}
+
+@keyframes countryFlashSoft {
+  0% {
+    filter: brightness(1);
+  }
+
+  45% {
+    filter: brightness(1.35);
+  }
+
+  100% {
+    filter: brightness(1);
   }
 }
