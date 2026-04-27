@@ -1067,6 +1067,19 @@ saveAppStore();
   document.getElementById("folderModal").classList.remove("show");
 };
 
+function updateFloatingLabel() {
+  const active = document.querySelector(".nav-item.active");
+  const label = document.getElementById("navFloatingLabel");
+
+  if (!active || !label) return;
+
+  const rect = active.getBoundingClientRect();
+
+  const centerX = rect.left + rect.width / 2;
+
+  label.style.left = centerX + "px";
+}
+
 function setActiveNav(activeId) {
   const items = ["navStart", "navLibrary", "navRemembered", "navStats"];
   const labels = {
@@ -1074,6 +1087,7 @@ function setActiveNav(activeId) {
     navLibrary: "Bibliothek",
     navRemembered: "Gemerkt",
     navStats: "Stats"
+    setTimeout(() => updateFloatingLabel(), 10);
   };
 
   const index = items.indexOf(activeId);
@@ -2950,3 +2964,6 @@ saveQuizOrders();
     renderHome();
   }, 120);
 };
+
+window.addEventListener("resize", updateFloatingLabel);
+window.addEventListener("orientationchange", updateFloatingLabel);
