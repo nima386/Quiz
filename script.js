@@ -998,6 +998,13 @@ saveAppStore();
 
 function setActiveNav(activeId) {
   const items = ["navStart", "navLibrary", "navRemembered", "navStats"];
+  const labels = {
+    navStart: "Start",
+    navLibrary: "Bibliothek",
+    navRemembered: "Gemerkt",
+    navStats: "Stats"
+  };
+
   const index = items.indexOf(activeId);
 
   document.querySelectorAll(".nav-item").forEach(item => {
@@ -1008,7 +1015,20 @@ function setActiveNav(activeId) {
   if (activeEl) activeEl.classList.add("active");
 
   const nav = document.querySelector(".bottom-nav");
-  if (nav && index >= 0) nav.dataset.active = index;
+  const floatingLabel = document.getElementById("navFloatingLabel");
+
+  if (nav && index >= 0) {
+    nav.dataset.active = index;
+  }
+
+  if (floatingLabel && index >= 0) {
+    floatingLabel.classList.remove("morphing");
+    void floatingLabel.offsetWidth;
+
+    floatingLabel.style.setProperty("--label-x", `${index * 100}%`);
+    floatingLabel.textContent = labels[activeId];
+    floatingLabel.classList.add("morphing");
+  }
 }
 
 function recordStats(isCorrect) {
