@@ -2039,8 +2039,8 @@ function updateProfileUI() {
       <span>Dein Fortschritt wird online gespeichert und ist auf anderen Geräten verfügbar.</span>
     `;
   } else {
-    profileUsername.textContent = "Gast";
-    profileStatus.textContent = "Nicht eingeloggt";
+    profileUsername.textContent = "Nicht angemeldet";
+profileStatus.textContent = "Bitte anmelden";
 
     syncInfoCard.classList.remove("online");
     syncInfoCard.classList.add("offline");
@@ -2390,8 +2390,6 @@ async function loadUserCloudData(user) {
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
-  const localCopy = JSON.parse(JSON.stringify(appStore));
-
   if (snap.exists()) {
     const cloud = snap.data();
 
@@ -2400,6 +2398,24 @@ async function loadUserCloudData(user) {
       document.getElementById("topAvatar").src = cloud.avatar;
       localStorage.setItem("userAvatar", cloud.avatar);
     }
+
+    if (cloud.appStore) {
+      appStore = cloud.appStore;
+      hydrateActiveUpper();
+      saveAppStore();
+    }
+  } else {
+    await setDoc(userRef, {
+      profile: {
+        username: user.email.split("@")[0],
+        email: user.email,
+        createdAt: new Date().toISOString()
+      },
+      appStore: appStore,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  }
+}
 
 
 async function saveCloudData() {
