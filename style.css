@@ -3457,3 +3457,15 @@ body.map-playing #europeMapGame {
     transform: scale(0.9);
   }
 }
+#europeViewport {
+  transition: transform 0.055s linear;
+  will-change: transform;
+}
+
+#map svg {
+  cursor: grab;
+}
+
+#map svg:active {
+  cursor: grabbing;
+}
