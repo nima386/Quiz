@@ -1034,3 +1034,11 @@ body.map-playing #asiaMapGame {
   overflow: hidden !important;
   overscroll-behavior: none;
 }
+#asiaMap svg {
+  view-transition-name: none;
+}
+
+#asiaViewport {
+  transform-box: fill-box;
+  transform-origin: center center;
+}
