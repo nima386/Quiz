@@ -1700,7 +1700,7 @@ if (navStats) {
 }
 
 document.getElementById("backHome").addEventListener("click", () => {
-  setActiveNav("navStart");
+  
   showScreen(home, true);
   renderHome();
 });
@@ -2052,7 +2052,7 @@ document.getElementById("createUpperBtn").onclick = () => {
 
   renderHome();
   renderLibrary();
-  setActiveNav("navStart");
+  
   showScreen(home, true);
 };
 
@@ -2527,7 +2527,7 @@ const result = await createUserWithEmailAndPassword(auth, email, password);
     await saveUserProfile(result.user, username);
     authScreen.classList.add("hide");
 showScreen(home, true);
-setActiveNav("navStart");
+
 showIsland("Account erstellt", "success");
 setTimeout(() => {
   showIsland(`Hallo ${username}`, "success");
@@ -2578,7 +2578,7 @@ await signInWithEmailAndPassword(auth, email, password);
 
 authScreen.classList.add("hide");
 showScreen(home, true);
-setActiveNav("navStart");
+
 showIsland("Eingeloggt", "success");
     setTimeout(() => {
   showIsland(`Hallo ${username}`, "success");
@@ -2613,6 +2613,9 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
 
     renderHome();
     renderLibrary();
+    setTimeout(() => {
+  setActiveNav("navStart");
+}, 120);
     setActiveNav("navStart");
     updateProfileUI();
     showScreen(home, true);
