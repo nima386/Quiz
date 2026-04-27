@@ -4165,3 +4165,22 @@ body.map-playing #europeMapGame {
     radial-gradient(circle at 50% 0%, rgba(255,255,255,.14), transparent 55%),
     linear-gradient(145deg, rgba(59,130,246,.16), rgba(124,58,237,.12));
 }
+.games-nav {
+  display: grid;
+}
+
+.games-nav:not(.show) {
+  transform: translateX(-50%) translateY(120px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.games-nav.show {
+  transform: translateX(-50%) translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.bottom-nav[style*="display: none"] + .games-nav.show {
+  display: grid !important;
+}
