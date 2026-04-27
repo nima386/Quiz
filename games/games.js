@@ -741,7 +741,7 @@ let asiaMapState = { x: 0, y: 0, scale: 1 };
 let asiaDragState = null;
 
 function openAsiaGame() {
-  startAsiaMapQuiz();
+  showScreen(document.getElementById("asiaGameHome"), true);
 }
 
 function initAsiaCountries() {
@@ -1199,7 +1199,7 @@ let africaMapState = { x: 0, y: 0, scale: 1 };
 let africaDragState = null;
 
 function openAfricaGame() {
-  startAfricaMapQuiz();
+  showScreen(document.getElementById("africaGameHome"), true);
 }
 
 function initAfricaCountries() {
