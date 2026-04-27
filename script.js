@@ -238,6 +238,14 @@ if (navLabel) {
 if (addQuestionBtn) {
   addQuestionBtn.classList.toggle("show", screen === questionList);
 }
+
+  const gamesNav = document.getElementById("gamesNav");
+
+if (gamesNav) {
+  const showGamesNav = screen === gamesScreen || screen === europeGameHome;
+  gamesNav.classList.toggle("show", showGamesNav);
+}
+  
   setTimeout(() => {
   if (screen.classList.contains("scroll-screen")) {
     screen.scrollTo({ top: 0, behavior: "smooth" });
@@ -675,6 +683,18 @@ function goNextQuestion() {
     renderHome();
   }
 }
+
+document.getElementById("gamesNavStart").onclick = () => {
+  document.getElementById("gamesNavStart").classList.add("active");
+  document.getElementById("gamesNavStats").classList.remove("active");
+  showScreen(gamesScreen, true);
+};
+
+document.getElementById("gamesNavStats").onclick = () => {
+  document.getElementById("gamesNavStats").classList.add("active");
+  document.getElementById("gamesNavStart").classList.remove("active");
+  showIsland("Spiele-Stats kommen gleich", "success");
+};
 
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
   openUpperDrawer();
