@@ -1174,7 +1174,7 @@ function zoomAt(clientX, clientY, zoomFactor) {
 function initEuropeMapTouch(svg) {
   svg.addEventListener("wheel", e => {
     e.preventDefault();
-    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 0.85);
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
@@ -1203,8 +1203,8 @@ function initEuropeMapTouch(svg) {
       dragState.moved = true;
     }
 
-    mapState.x += dx;
-    mapState.y += dy;
+    mapState.x += dx * 1.18;
+    mapState.y += dy * 1.18;
 
     dragState.lastX = e.clientX;
     dragState.lastY = e.clientY;
@@ -1237,7 +1237,8 @@ function initEuropeMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      zoomAt(centerX, centerY, distance / pinchStartDistance);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      zoomAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
