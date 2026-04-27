@@ -669,3 +669,111 @@ document.getElementById("backToEuropeStart").onclick = () => {
   renderEuropeGameHome();
   showScreen(europeGameHome, true);
 };
+
+/* === ASIA MAP GAME === */
+
+let asiaCountries = [];
+let asiaCurrent = null;
+let asiaScore = 0;
+let asiaRound = 0;
+
+function openAsiaGame() {
+  document.body.classList.add("map-playing");
+
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("asiaMapGame").classList.add("active");
+
+  startAsiaGame();
+}
+
+function startAsiaGame() {
+  asiaScore = 0;
+  asiaRound = 0;
+
+  asiaCountries = [
+"Afghanistan",
+"Bahrain",
+"Bangladesch",
+"Bhutan",
+"Britisches Territorium im Indischen Ozean",
+"Brunei",
+"Kambodscha",
+"China",
+"Hongkong",
+"Indien",
+"Indonesien",
+"Iran",
+"Irak",
+"Israel",
+"Japan",
+"Jordanien",
+"Kasachstan",
+"Kuwait",
+"Kirgisistan",
+"Laos",
+"Libanon",
+"Macau",
+"Malaysia",
+"Malediven",
+"Mongolei",
+"Myanmar",
+"Nepal",
+"Nordkorea",
+"Oman",
+"Pakistan",
+"Palästinensische Gebiete",
+"Papua-Neuguinea",
+"Philippinen",
+"Katar",
+"Russland (Asien)",
+"Saudi-Arabien",
+"Singapur",
+"Südkorea",
+"Sri Lanka",
+"Syrien",
+"Taiwan",
+"Tadschikistan",
+"Thailand",
+"Timor-Leste",
+"Turkmenistan",
+"Vereinigte Arabische Emirate",
+"Usbekistan",
+"Vietnam",
+"Jemen"
+  ];
+
+  nextAsiaRound();
+}
+
+function nextAsiaRound() {
+  if (asiaRound >= 10) {
+    alert("Spiel vorbei! Punkte: " + asiaScore);
+    return;
+  }
+
+  asiaRound++;
+
+  asiaCurrent = asiaCountries[Math.floor(Math.random() * asiaCountries.length)];
+
+  document.getElementById("asiaCountryName").innerText = asiaCurrent;
+  document.getElementById("asiaRound").innerText = asiaRound + " / 10";
+  document.getElementById("asiaScore").innerText = asiaScore + " Punkte";
+}
+
+function selectAsiaCountry(clicked) {
+  const feedback = document.getElementById("asiaFeedback");
+
+  if (clicked === asiaCurrent) {
+    asiaScore++;
+    feedback.innerText = "Richtig!";
+    feedback.className = "map-feedback correct";
+  } else {
+    feedback.innerText = "Falsch!";
+    feedback.className = "map-feedback wrong";
+  }
+
+  setTimeout(() => {
+    feedback.innerText = "";
+    nextAsiaRound();
+  }, 1000);
+}
