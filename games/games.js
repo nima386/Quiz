@@ -591,38 +591,78 @@ function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   if (!box) return;
 
-  const best = loadEuropeBestRun();
+  const europe = loadEuropeBestRun();
+
+  const asia = JSON.parse(localStorage.getItem("asiaBestRun")) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+
+  const africa = JSON.parse(localStorage.getItem("africaBestRun")) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+
+  const southAmerica = JSON.parse(localStorage.getItem("southAmericaBestRun")) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+
+  const games = [
+    { name: "Europa Länder", data: europe },
+    { name: "Asien Länder", data: asia },
+    { name: "Afrika Länder", data: africa },
+    { name: "Südamerika Länder", data: southAmerica }
+  ];
+
+  const bestGame = games
+    .filter(g => g.data.time)
+    .sort((a, b) => {
+      const scoreA = a.data.correct - a.data.wrong;
+      const scoreB = b.data.correct - b.data.wrong;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return a.data.time - b.data.time;
+    })[0];
 
   box.innerHTML = `
     <div class="best-card games-best-card">
       <p>Bestes Spiel</p>
-      <h2>Europa Länder</h2>
+      <h2>${bestGame ? bestGame.name : "Noch kein Spiel"}</h2>
       <span>
-        ${best.time ? `${best.correct} richtig · ${best.wrong} falsch · ${formatEuropeTime(best.time)}` : "Noch kein Versuch"}
+        ${
+          bestGame
+            ? `${bestGame.data.correct} richtig · ${bestGame.data.wrong} falsch · ${formatEuropeTime(bestGame.data.time)}`
+            : "Starte deine erste Runde"
+        }
       </span>
     </div>
 
-    <div class="stat-card">
-      <div class="stat-head">
-        <h2>Länder</h2>
-        <span>${best.time ? "Aktiv" : "0%"}</span>
-      </div>
+    ${games.map(game => `
+      <div class="stat-card">
+        <div class="stat-head">
+          <h2>${game.name}</h2>
+          <span>${game.data.time ? "Aktiv" : "0%"}</span>
+        </div>
 
-      <div class="stat-grid">
-        <div>
-          <b>${best.time ? best.correct : 0}</b>
-          <small>Richtig</small>
-        </div>
-        <div>
-          <b>${best.time ? best.wrong : 0}</b>
-          <small>Falsch</small>
-        </div>
-        <div>
-          <b>${best.time ? formatEuropeTime(best.time).replace(" min", "") : "0:00"}</b>
-          <small>Bestzeit</small>
+        <div class="stat-grid">
+          <div>
+            <b>${game.data.time ? game.data.correct : 0}</b>
+            <small>Richtig</small>
+          </div>
+          <div>
+            <b>${game.data.time ? game.data.wrong : 0}</b>
+            <small>Falsch</small>
+          </div>
+          <div>
+            <b>${game.data.time ? formatEuropeTime(game.data.time).replace(" min", "") : "0:00"}</b>
+            <small>Bestzeit</small>
+          </div>
         </div>
       </div>
-    </div>
+    `).join("")}
   `;
 }
 
