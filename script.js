@@ -702,7 +702,7 @@ function renderLibrary() {
     row.className = "folder-row swipe-row";
 
     row.innerHTML = `
-      <div class="folder-icon">📁</div>
+     <div class="folder-icon"><img class="folder-img-icon" src="icon/folder.png"></div>
       <div>
         <div class="row-title">${category}</div>
         <div class="row-sub">${data[category].length} Fragen</div>
