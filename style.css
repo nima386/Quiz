@@ -4040,3 +4040,26 @@ body.map-playing #europeMapGame {
     transform .42s cubic-bezier(.22,1,.28,1),
     opacity .25s ease !important;
 }
+.nav-item {
+  position: relative;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.20), rgba(99,102,241,.10), transparent 70%);
+  filter: blur(7px);
+  z-index: -1;
+}
+
+.nav-img-icon {
+  filter: brightness(0) invert(1) !important;
+}
+
+.nav-item.active .nav-img-icon {
+  filter: brightness(0) invert(1) !important;
+  transform: scale(1.22) translateY(-1px) !important;
+}
