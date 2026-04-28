@@ -2949,3 +2949,218 @@ html {
     0 28px 75px rgba(0,0,0,.48),
     0 0 55px rgba(99,102,241,.45) !important;
 }
+
+/* FINAL PREMIUM GAMES STATS */
+
+#gamesStatsScreen .games-top {
+  display: none !important;
+}
+
+#gamesStatsBox {
+  padding-top: 8px;
+}
+
+.premium-globe-card {
+  height: 430px;
+  border-radius: 34px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(56,189,248,.24), transparent 45%),
+    linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.045));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 26px 70px rgba(0,0,0,.36),
+    0 0 46px rgba(56,189,248,.18);
+  margin-bottom: 18px;
+}
+
+#gamesGlobe {
+  width: 100%;
+  height: 100%;
+}
+
+.clean-best {
+  margin-top: 0 !important;
+}
+
+.continent-card-grid {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 120px;
+}
+
+.continent-focus-card {
+  padding: 20px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(99,102,241,.24), transparent 40%),
+    linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.055));
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 20px 54px rgba(0,0,0,.30);
+  backdrop-filter: blur(28px) saturate(160%);
+  transition:
+    transform .42s cubic-bezier(.22,1,.28,1),
+    border-radius .42s cubic-bezier(.22,1,.28,1),
+    box-shadow .42s ease;
+}
+
+.continent-focus-card:active {
+  transform: scale(.97);
+}
+
+.continent-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.continent-card-head span {
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.10);
+  font-size: 25px;
+}
+
+.continent-card-head h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.continent-accuracy {
+  margin-top: 18px;
+  font-size: 42px;
+  font-weight: 950;
+}
+
+.continent-focus-card p {
+  margin: 2px 0 16px;
+  color: rgba(255,255,255,.62);
+  font-weight: 850;
+}
+
+.continent-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.continent-mini-grid div {
+  padding: 13px 8px;
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(255,255,255,.075);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.continent-mini-grid b {
+  display: block;
+  font-size: 18px;
+}
+
+.continent-mini-grid small {
+  font-size: 10px;
+  color: rgba(255,255,255,.58);
+  font-weight: 900;
+}
+
+.continent-expanded {
+  min-height: 560px;
+  transform: scale(1.01);
+  border-radius: 36px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 32px 90px rgba(0,0,0,.48),
+    0 0 60px rgba(99,102,241,.24);
+}
+
+.focus-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.focus-detail-head span {
+  color: rgba(255,255,255,.62);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.focus-detail-head h2 {
+  margin: 4px 0 0;
+  font-size: 28px;
+}
+
+.continent-inline-map {
+  height: 260px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(5,11,26,.72);
+  border: 1px solid rgba(255,255,255,.13);
+  margin-bottom: 16px;
+}
+
+.continent-inline-map svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.focus-map-land,
+.continent-inline-map .land {
+  fill: rgba(255,255,255,.20) !important;
+  stroke: rgba(255,255,255,.42) !important;
+  stroke-width: .5 !important;
+}
+
+.map-loading {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: rgba(255,255,255,.6);
+  font-weight: 900;
+}
+
+@media (min-width: 760px) {
+  #gamesStatsBox {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .premium-globe-card {
+    height: 520px;
+  }
+
+  .continent-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .continent-expanded {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .premium-globe-card {
+    height: 360px;
+    border-radius: 30px;
+  }
+
+  .continent-accuracy {
+    font-size: 36px;
+  }
+
+  .continent-expanded {
+    min-height: 520px;
+  }
+
+  .continent-inline-map {
+    height: 230px;
+  }
+}
