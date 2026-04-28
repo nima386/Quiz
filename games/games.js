@@ -590,360 +590,7 @@ function renderEuropeGameHome() {
     `Zeit: ${formatEuropeTime(europeBestRun.time)}`;
 }
 
-let gamesGlobeInstance = null;
-let gamesGlobeDataLoaded = false;
-let selectedContinentKey = null;
 
-const CONTINENT_META = {
-  europe: {
-    name: "Europa",
-    emoji: "🌍",
-    color: "#22c55e",
-    countries: Object.keys(EUROPE_COUNTRY_NAMES)
-  },
-  asia: {
-    name: "Asien",
-    emoji: "🌏",
-    color: "#38bdf8",
-    countries: Object.keys(ASIA_COUNTRY_NAMES)
-  },
-  africa: {
-    name: "Afrika",
-    emoji: "🌍",
-    color: "#f97316",
-    countries: Object.keys(AFRICA_COUNTRY_NAMES)
-  },
-  southAmerica: {
-    name: "Südamerika",
-    emoji: "🌎",
-    color: "#a855f7",
-    countries: Object.keys(SOUTH_AMERICA_COUNTRY_NAMES)
-  },
-  northAmerica: {
-    name: "Nordamerika",
-    emoji: "🌎",
-    color: "#eab308",
-    countries: Object.keys(NORTH_AMERICA_COUNTRY_NAMES)
-  }
-};
-
-function getGameRun(key) {
-  if (key === "europe") return loadEuropeBestRun();
-  if (key === "northAmerica") return loadNorthAmericaBestRun();
-
-  return JSON.parse(localStorage.getItem(`${key}BestRun`)) || {
-    correct: 0,
-    wrong: 0,
-    time: null
-  };
-}
-
-function getContinentStats() {
-  const result = {};
-
-  Object.keys(CONTINENT_META).forEach(key => {
-    const run = getGameRun(key);
-    const total = (run.correct || 0) + (run.wrong || 0);
-    const accuracy = total ? Math.round((run.correct / total) * 100) : 0;
-
-    result[key] = {
-      ...run,
-      total,
-      accuracy,
-      played: run.time ? 1 : 0
-    };
-  });
-
-  return result;
-}
-
-function getContinentByCountryId(countryId) {
-  if (!countryId) return null;
-
-  const cleanId = String(countryId).toUpperCase();
-
-  return Object.keys(CONTINENT_META).find(key =>
-    CONTINENT_META[key].countries.includes(cleanId)
-  );
-}
-
-function getGeoJsonCountryId(feature) {
-  const p = feature.properties || {};
-
-  return (
-    p.ISO_A2 ||
-    p.iso_a2 ||
-    p.ADM0_A3 ||
-    p.adm0_a3 ||
-    p.ISO2 ||
-    p.iso2 ||
-    p.id ||
-    feature.id ||
-    ""
-  );
-}
-
-function getAccuracyColor(stats) {
-  if (!stats || !stats.total) return "rgba(148,163,184,.32)";
-  if (stats.accuracy >= 80) return "rgba(34,197,94,.72)";
-  if (stats.accuracy >= 55) return "rgba(234,179,8,.72)";
-  return "rgba(239,68,68,.72)";
-}
-
-function getContinentInsight(key, stats) {
-  const name = CONTINENT_META[key].name;
-
-  if (!stats.total) {
-    return `${name} wurde noch nicht gespielt. Starte eine Runde und fülle den Globus mit Fortschritt.`;
-  }
-
-  if (stats.accuracy >= 80) {
-    return `Stark, mashallah. ${name} ist aktuell eine deiner stärksten Regionen.`;
-  }
-
-  if (stats.accuracy >= 55) {
-    return `${name} ist solide. Mit ein paar Wiederholungen kommst du schnell auf ein starkes Level.`;
-  }
-
-  return `${name} ist noch schwach. Genau hier lohnt sich Training am meisten.`;
-}
-
-function renderContinentInfo(key) {
-  const card = document.getElementById("continentInfoCard");
-  if (!card) return;
-
-  const stats = getContinentStats();
-  const item = stats[key];
-  const meta = CONTINENT_META[key];
-
-  if (!key || !meta) {
-    card.innerHTML = `
-      <span>🌍 Kontinent wählen</span>
-      <strong>Tippe auf den Globus</strong>
-      <p>Deine Leistung wird farblich angezeigt.</p>
-    `;
-    return;
-  }
-
-  card.innerHTML = `
-    <span>${meta.emoji} ${meta.name}</span>
-    <strong>${item.accuracy}% Accuracy</strong>
-    <p>${item.correct} richtig · ${item.wrong} falsch · ${item.time ? formatEuropeTime(item.time) : "keine Zeit"}</p>
-  `;
-}
-
-function renderGamesStats() {
-  const box = document.getElementById("gamesStatsBox");
-  if (!box) return;
-
-  const stats = getContinentStats();
-  const games = Object.keys(CONTINENT_META).map(key => ({
-    key,
-    meta: CONTINENT_META[key],
-    data: stats[key]
-  }));
-
-  const totalCorrect = games.reduce((sum, g) => sum + (g.data.correct || 0), 0);
-  const totalWrong = games.reduce((sum, g) => sum + (g.data.wrong || 0), 0);
-  const totalAnswers = totalCorrect + totalWrong;
-  const totalAccuracy = totalAnswers ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
-
-  const bestGame = games
-    .filter(g => g.data.time)
-    .sort((a, b) => {
-      const scoreA = a.data.correct - a.data.wrong;
-      const scoreB = b.data.correct - b.data.wrong;
-      if (scoreB !== scoreA) return scoreB - scoreA;
-      return a.data.time - b.data.time;
-    })[0];
-
-  box.innerHTML = `
-    <div class="globe-summary-grid">
-      <div class="globe-summary-card">
-        <b>${totalCorrect}</b>
-        <small>Richtig</small>
-      </div>
-
-      <div class="globe-summary-card">
-        <b>${totalWrong}</b>
-        <small>Falsch</small>
-      </div>
-
-      <div class="globe-summary-card">
-        <b>${totalAccuracy}%</b>
-        <small>Accuracy</small>
-      </div>
-
-      <div class="globe-summary-card">
-        <b>${games.filter(g => g.data.time).length}</b>
-        <small>Aktive Regionen</small>
-      </div>
-    </div>
-
-    <div class="best-card games-best-card">
-      <p>Bestes Gebiet</p>
-      <h2>${bestGame ? bestGame.meta.name : "Noch kein Spiel"}</h2>
-      <span>
-        ${
-          bestGame
-            ? `${bestGame.data.correct} richtig · ${bestGame.data.wrong} falsch · ${formatEuropeTime(bestGame.data.time)}`
-            : "Starte deine erste Runde"
-        }
-      </span>
-    </div>
-
-    ${games.map(game => `
-      <div class="continent-stat-card">
-        <h2>${game.meta.emoji} ${game.meta.name}</h2>
-
-        <div class="continent-stat-line">
-          <span>Richtig</span>
-          <strong>${game.data.correct || 0}</strong>
-        </div>
-
-        <div class="continent-stat-line">
-          <span>Falsch</span>
-          <strong>${game.data.wrong || 0}</strong>
-        </div>
-
-        <div class="continent-stat-line">
-          <span>Accuracy</span>
-          <strong>${game.data.accuracy || 0}%</strong>
-        </div>
-
-        <div class="continent-stat-line">
-          <span>Beste Zeit</span>
-          <strong>${game.data.time ? formatEuropeTime(game.data.time).replace(" min", "") : "0:00"}</strong>
-        </div>
-
-        <div class="continent-insight">
-          ${getContinentInsight(game.key, game.data)}
-        </div>
-      </div>
-    `).join("")}
-  `;
-
-  initGamesGlobe();
-}
-
-async function initGamesGlobe() {
-  const globeEl = document.getElementById("gamesGlobe");
-  if (!globeEl || typeof Globe !== "function") return;
-
-  const stats = getContinentStats();
-
-  if (!gamesGlobeInstance) {
-    gamesGlobeInstance = Globe()(globeEl)
-      .backgroundColor("rgba(0,0,0,0)")
-      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
-      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
-      .showAtmosphere(true)
-      .atmosphereColor("#60a5fa")
-      .atmosphereAltitude(0.22)
-      .polygonGeoJsonGeometry(d => d.geometry)
-      .polygonCapColor(d => {
-        const continent = d.__continent;
-        return getAccuracyColor(stats[continent]);
-      })
-      .polygonSideColor(() => "rgba(255,255,255,.06)")
-      .polygonStrokeColor(() => "rgba(255,255,255,.22)")
-      .polygonAltitude(d => {
-        if (selectedContinentKey && d.__continent === selectedContinentKey) return 0.035;
-        return d.__continent ? 0.012 : 0.004;
-      })
-      .polygonLabel(d => {
-        const continent = d.__continent;
-        if (!continent) return "Nicht gespielt";
-
-        const meta = CONTINENT_META[continent];
-        const s = stats[continent];
-
-        return `
-          <div style="padding:8px 10px;">
-            <b>${meta.emoji} ${meta.name}</b><br>
-            Accuracy: ${s.accuracy}%<br>
-            Richtig: ${s.correct}<br>
-            Falsch: ${s.wrong}
-          </div>
-        `;
-      })
-      .onPolygonClick(d => {
-        if (!d.__continent) return;
-
-        selectedContinentKey = d.__continent;
-        renderContinentInfo(selectedContinentKey);
-
-        if (navigator.vibrate) navigator.vibrate(25);
-
-        gamesGlobeInstance
-          .polygonAltitude(p => {
-            if (p.__continent === selectedContinentKey) return 0.045;
-            return p.__continent ? 0.012 : 0.004;
-          })
-          .polygonsTransitionDuration(450);
-
-        showIsland(`${CONTINENT_META[selectedContinentKey].name} gewählt`, "success");
-      })
-      .onPolygonHover(d => {
-        if (!globeEl) return;
-        globeEl.style.cursor = d && d.__continent ? "pointer" : "grab";
-      });
-
-    gamesGlobeInstance.controls().autoRotate = true;
-    gamesGlobeInstance.controls().autoRotateSpeed = 0.45;
-    gamesGlobeInstance.controls().enableDamping = true;
-    gamesGlobeInstance.controls().dampingFactor = 0.08;
-
-    window.addEventListener("resize", () => {
-      resizeGamesGlobe();
-    });
-  }
-
-  resizeGamesGlobe();
-
-  if (gamesGlobeDataLoaded) {
-    gamesGlobeInstance
-      .polygonCapColor(d => getAccuracyColor(stats[d.__continent]))
-      .polygonsTransitionDuration(650);
-
-    return;
-  }
-
-  try {
-    const res = await fetch("maps/world/countries.geojson?v=" + Date.now());
-    const geo = await res.json();
-
-    const features = geo.features
-      .filter(f => f.geometry && (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon"))
-      .map(feature => {
-        const countryId = getGeoJsonCountryId(feature);
-        const continent = getContinentByCountryId(countryId);
-
-        return {
-          ...feature,
-          __countryId: countryId,
-          __continent: continent
-        };
-      });
-
-    gamesGlobeInstance.polygonsData(features);
-    gamesGlobeDataLoaded = true;
-  } catch (error) {
-    console.error("countries.geojson konnte nicht geladen werden:", error);
-    showIsland("Globus konnte nicht geladen werden", "danger");
-  }
-}
-
-function resizeGamesGlobe() {
-  const globeEl = document.getElementById("gamesGlobe");
-  if (!globeEl || !gamesGlobeInstance) return;
-
-  const rect = globeEl.getBoundingClientRect();
-
-  gamesGlobeInstance
-    .width(rect.width)
-    .height(rect.height);
-}
 
 document.getElementById("gamesStatsUpperMenuBtn").onclick = () => {
   openUpperDrawer();
@@ -2889,3 +2536,358 @@ document.getElementById("backToNorthAmericaStart").onclick = () => {
   renderNorthAmericaGameHome();
   showScreen(document.getElementById("northAmericaGameHome"), true);
 };
+
+let gamesGlobeInstance = null;
+let gamesGlobeDataLoaded = false;
+let selectedContinentKey = null;
+
+const CONTINENT_META = {
+  europe: {
+    name: "Europa",
+    emoji: "🌍",
+    color: "#22c55e",
+    countries: Object.keys(EUROPE_COUNTRY_NAMES)
+  },
+  asia: {
+    name: "Asien",
+    emoji: "🌏",
+    color: "#38bdf8",
+    countries: Object.keys(ASIA_COUNTRY_NAMES)
+  },
+  africa: {
+    name: "Afrika",
+    emoji: "🌍",
+    color: "#f97316",
+    countries: Object.keys(AFRICA_COUNTRY_NAMES)
+  },
+  southAmerica: {
+    name: "Südamerika",
+    emoji: "🌎",
+    color: "#a855f7",
+    countries: Object.keys(SOUTH_AMERICA_COUNTRY_NAMES)
+  },
+  northAmerica: {
+    name: "Nordamerika",
+    emoji: "🌎",
+    color: "#eab308",
+    countries: Object.keys(NORTH_AMERICA_COUNTRY_NAMES)
+  }
+};
+
+function getGameRun(key) {
+  if (key === "europe") return loadEuropeBestRun();
+  if (key === "northAmerica") return loadNorthAmericaBestRun();
+
+  return JSON.parse(localStorage.getItem(`${key}BestRun`)) || {
+    correct: 0,
+    wrong: 0,
+    time: null
+  };
+}
+
+function getContinentStats() {
+  const result = {};
+
+  Object.keys(CONTINENT_META).forEach(key => {
+    const run = getGameRun(key);
+    const total = (run.correct || 0) + (run.wrong || 0);
+    const accuracy = total ? Math.round((run.correct / total) * 100) : 0;
+
+    result[key] = {
+      ...run,
+      total,
+      accuracy,
+      played: run.time ? 1 : 0
+    };
+  });
+
+  return result;
+}
+
+function getContinentByCountryId(countryId) {
+  if (!countryId) return null;
+
+  const cleanId = String(countryId).toUpperCase();
+
+  return Object.keys(CONTINENT_META).find(key =>
+    CONTINENT_META[key].countries.includes(cleanId)
+  );
+}
+
+function getGeoJsonCountryId(feature) {
+  const p = feature.properties || {};
+
+  return (
+    p.ISO_A2 ||
+    p.iso_a2 ||
+    p.ADM0_A3 ||
+    p.adm0_a3 ||
+    p.ISO2 ||
+    p.iso2 ||
+    p.id ||
+    feature.id ||
+    ""
+  );
+}
+
+function getAccuracyColor(stats) {
+  if (!stats || !stats.total) return "rgba(148,163,184,.32)";
+  if (stats.accuracy >= 80) return "rgba(34,197,94,.72)";
+  if (stats.accuracy >= 55) return "rgba(234,179,8,.72)";
+  return "rgba(239,68,68,.72)";
+}
+
+function getContinentInsight(key, stats) {
+  const name = CONTINENT_META[key].name;
+
+  if (!stats.total) {
+    return `${name} wurde noch nicht gespielt. Starte eine Runde und fülle den Globus mit Fortschritt.`;
+  }
+
+  if (stats.accuracy >= 80) {
+    return `Stark, mashallah. ${name} ist aktuell eine deiner stärksten Regionen.`;
+  }
+
+  if (stats.accuracy >= 55) {
+    return `${name} ist solide. Mit ein paar Wiederholungen kommst du schnell auf ein starkes Level.`;
+  }
+
+  return `${name} ist noch schwach. Genau hier lohnt sich Training am meisten.`;
+}
+
+function renderContinentInfo(key) {
+  const card = document.getElementById("continentInfoCard");
+  if (!card) return;
+
+  const stats = getContinentStats();
+  const item = stats[key];
+  const meta = CONTINENT_META[key];
+
+  if (!key || !meta) {
+    card.innerHTML = `
+      <span>🌍 Kontinent wählen</span>
+      <strong>Tippe auf den Globus</strong>
+      <p>Deine Leistung wird farblich angezeigt.</p>
+    `;
+    return;
+  }
+
+  card.innerHTML = `
+    <span>${meta.emoji} ${meta.name}</span>
+    <strong>${item.accuracy}% Accuracy</strong>
+    <p>${item.correct} richtig · ${item.wrong} falsch · ${item.time ? formatEuropeTime(item.time) : "keine Zeit"}</p>
+  `;
+}
+
+function renderGamesStats() {
+  const box = document.getElementById("gamesStatsBox");
+  if (!box) return;
+
+  const stats = getContinentStats();
+  const games = Object.keys(CONTINENT_META).map(key => ({
+    key,
+    meta: CONTINENT_META[key],
+    data: stats[key]
+  }));
+
+  const totalCorrect = games.reduce((sum, g) => sum + (g.data.correct || 0), 0);
+  const totalWrong = games.reduce((sum, g) => sum + (g.data.wrong || 0), 0);
+  const totalAnswers = totalCorrect + totalWrong;
+  const totalAccuracy = totalAnswers ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
+
+  const bestGame = games
+    .filter(g => g.data.time)
+    .sort((a, b) => {
+      const scoreA = a.data.correct - a.data.wrong;
+      const scoreB = b.data.correct - b.data.wrong;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return a.data.time - b.data.time;
+    })[0];
+
+  box.innerHTML = `
+    <div class="globe-summary-grid">
+      <div class="globe-summary-card">
+        <b>${totalCorrect}</b>
+        <small>Richtig</small>
+      </div>
+
+      <div class="globe-summary-card">
+        <b>${totalWrong}</b>
+        <small>Falsch</small>
+      </div>
+
+      <div class="globe-summary-card">
+        <b>${totalAccuracy}%</b>
+        <small>Accuracy</small>
+      </div>
+
+      <div class="globe-summary-card">
+        <b>${games.filter(g => g.data.time).length}</b>
+        <small>Aktive Regionen</small>
+      </div>
+    </div>
+
+    <div class="best-card games-best-card">
+      <p>Bestes Gebiet</p>
+      <h2>${bestGame ? bestGame.meta.name : "Noch kein Spiel"}</h2>
+      <span>
+        ${
+          bestGame
+            ? `${bestGame.data.correct} richtig · ${bestGame.data.wrong} falsch · ${formatEuropeTime(bestGame.data.time)}`
+            : "Starte deine erste Runde"
+        }
+      </span>
+    </div>
+
+    ${games.map(game => `
+      <div class="continent-stat-card">
+        <h2>${game.meta.emoji} ${game.meta.name}</h2>
+
+        <div class="continent-stat-line">
+          <span>Richtig</span>
+          <strong>${game.data.correct || 0}</strong>
+        </div>
+
+        <div class="continent-stat-line">
+          <span>Falsch</span>
+          <strong>${game.data.wrong || 0}</strong>
+        </div>
+
+        <div class="continent-stat-line">
+          <span>Accuracy</span>
+          <strong>${game.data.accuracy || 0}%</strong>
+        </div>
+
+        <div class="continent-stat-line">
+          <span>Beste Zeit</span>
+          <strong>${game.data.time ? formatEuropeTime(game.data.time).replace(" min", "") : "0:00"}</strong>
+        </div>
+
+        <div class="continent-insight">
+          ${getContinentInsight(game.key, game.data)}
+        </div>
+      </div>
+    `).join("")}
+  `;
+
+  initGamesGlobe();
+}
+
+async function initGamesGlobe() {
+  const globeEl = document.getElementById("gamesGlobe");
+  if (!globeEl || typeof Globe !== "function") return;
+
+  const stats = getContinentStats();
+
+  if (!gamesGlobeInstance) {
+    gamesGlobeInstance = Globe()(globeEl)
+      .backgroundColor("rgba(0,0,0,0)")
+      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
+      .showAtmosphere(true)
+      .atmosphereColor("#60a5fa")
+      .atmosphereAltitude(0.22)
+      .polygonGeoJsonGeometry(d => d.geometry)
+      .polygonCapColor(d => {
+        const continent = d.__continent;
+        return getAccuracyColor(stats[continent]);
+      })
+      .polygonSideColor(() => "rgba(255,255,255,.06)")
+      .polygonStrokeColor(() => "rgba(255,255,255,.22)")
+      .polygonAltitude(d => {
+        if (selectedContinentKey && d.__continent === selectedContinentKey) return 0.035;
+        return d.__continent ? 0.012 : 0.004;
+      })
+      .polygonLabel(d => {
+        const continent = d.__continent;
+        if (!continent) return "Nicht gespielt";
+
+        const meta = CONTINENT_META[continent];
+        const s = stats[continent];
+
+        return `
+          <div style="padding:8px 10px;">
+            <b>${meta.emoji} ${meta.name}</b><br>
+            Accuracy: ${s.accuracy}%<br>
+            Richtig: ${s.correct}<br>
+            Falsch: ${s.wrong}
+          </div>
+        `;
+      })
+      .onPolygonClick(d => {
+        if (!d.__continent) return;
+
+        selectedContinentKey = d.__continent;
+        renderContinentInfo(selectedContinentKey);
+
+        if (navigator.vibrate) navigator.vibrate(25);
+
+        gamesGlobeInstance
+          .polygonAltitude(p => {
+            if (p.__continent === selectedContinentKey) return 0.045;
+            return p.__continent ? 0.012 : 0.004;
+          })
+          .polygonsTransitionDuration(450);
+
+        showIsland(`${CONTINENT_META[selectedContinentKey].name} gewählt`, "success");
+      })
+      .onPolygonHover(d => {
+        if (!globeEl) return;
+        globeEl.style.cursor = d && d.__continent ? "pointer" : "grab";
+      });
+
+    gamesGlobeInstance.controls().autoRotate = true;
+    gamesGlobeInstance.controls().autoRotateSpeed = 0.45;
+    gamesGlobeInstance.controls().enableDamping = true;
+    gamesGlobeInstance.controls().dampingFactor = 0.08;
+
+    window.addEventListener("resize", () => {
+      resizeGamesGlobe();
+    });
+  }
+
+  resizeGamesGlobe();
+
+  if (gamesGlobeDataLoaded) {
+    gamesGlobeInstance
+      .polygonCapColor(d => getAccuracyColor(stats[d.__continent]))
+      .polygonsTransitionDuration(650);
+
+    return;
+  }
+
+  try {
+    const res = await fetch("maps/world/countries.geojson?v=" + Date.now());
+    const geo = await res.json();
+
+    const features = geo.features
+      .filter(f => f.geometry && (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon"))
+      .map(feature => {
+        const countryId = getGeoJsonCountryId(feature);
+        const continent = getContinentByCountryId(countryId);
+
+        return {
+          ...feature,
+          __countryId: countryId,
+          __continent: continent
+        };
+      });
+
+    gamesGlobeInstance.polygonsData(features);
+    gamesGlobeDataLoaded = true;
+  } catch (error) {
+    console.error("countries.geojson konnte nicht geladen werden:", error);
+    showIsland("Globus konnte nicht geladen werden", "danger");
+  }
+}
+
+function resizeGamesGlobe() {
+  const globeEl = document.getElementById("gamesGlobe");
+  if (!globeEl || !gamesGlobeInstance) return;
+
+  const rect = globeEl.getBoundingClientRect();
+
+  gamesGlobeInstance
+    .width(rect.width)
+    .height(rect.height);
+}
