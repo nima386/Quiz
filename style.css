@@ -3450,3 +3450,38 @@ body #addQuestionBtn.tap-pop {
 body {
   -webkit-overflow-scrolling: touch;
 }
+/* === IOS PWA SAFE AREA FIX === */
+
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background: #08051f !important;
+  overflow: hidden;
+}
+
+body {
+  padding: 0 !important;
+}
+
+.screen {
+  padding-top: calc(20px + var(--safe-top)) !important;
+  padding-bottom: calc(110px + var(--safe-bottom)) !important;
+}
+
+.bottom-nav {
+  bottom: calc(14px + var(--safe-bottom)) !important;
+}
+
+.games-nav {
+  bottom: calc(14px + var(--safe-bottom)) !important;
+}
+
+.nav-floating-label {
+  bottom: calc(86px + var(--safe-bottom)) !important;
+}
