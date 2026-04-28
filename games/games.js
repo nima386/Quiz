@@ -2831,11 +2831,16 @@ function startFocusGame(key) {
 
 async function initGamesGlobeFinal() {
   const globeEl = document.getElementById("gamesGlobe");
+  const fakeGlobe = document.getElementById("globeFake");
   if (!globeEl || typeof Globe !== "function") return;
 
  if (gamesGlobeInstance) {
   const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
+   requestAnimationFrame(() => {
+  globeEl.classList.add("ready");
+  if (fakeGlobe) fakeGlobe.classList.add("hide");
+});
   return;
 }
 
