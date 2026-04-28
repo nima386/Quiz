@@ -3519,14 +3519,3 @@ html {
   }
 
 }
-@media (max-width: 430px) {
-
-  body {
-    font-size: 15px;
-  }
-
-  h1, h2 {
-    font-size: 18px;
-  }
-
-}
