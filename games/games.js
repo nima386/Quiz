@@ -55,11 +55,13 @@ document.getElementById("gamesNavStart").onclick = () => {
 
 document.getElementById("gamesNavStats").onclick = () => {
   setGamesNavActive("gamesNavStats");
-  showScreen(document.getElementById("gamesStatsScreen"), true);
 
-  setTimeout(() => {
+  // Globus sofort vorladen, bevor Screen sichtbar ist
+  requestAnimationFrame(() => {
     renderGamesStats();
-  }, 120);
+  });
+
+  showScreen(document.getElementById("gamesStatsScreen"), true);
 };
 
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
@@ -2914,4 +2916,12 @@ window.addEventListener("resize", () => {
   gamesGlobeInstance.width(rect.width).height(rect.height);
 });
 
+// Globus im Hintergrund vorbereiten, damit Stats schneller öffnet
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const statsScreen = document.getElementById("gamesStatsScreen");
+    if (!statsScreen) return;
 
+    renderGamesStats();
+  }, 900);
+});
