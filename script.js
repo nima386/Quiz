@@ -251,7 +251,7 @@ showNav === false;
   }
 
   if (navLabel) {
- navLabel.style.display = showMainNav ? "grid" : "none";
+  navLabel.style.display = showMainNav ? "grid" : "none";
 
   if (showMainNav) {
     const activeMain = document.querySelector(".nav-item.active");
