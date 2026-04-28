@@ -2632,7 +2632,9 @@ function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   const globeEl = document.getElementById("gamesGlobe");
 if (globeEl && !gamesGlobeInstance) {
-  requestAnimationFrame(() => initGamesGlobeFinal());
+  requestAnimationFrame(() => {
+    initGamesGlobeFinal();
+  });
 }
   if (!box) return;
 
