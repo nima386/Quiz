@@ -3423,3 +3423,30 @@ body #addQuestionBtn.tap-pop {
     transform: translateY(3px) scale(1.12) !important;
   }
 }
+@media (max-width: 430px) {
+
+  body {
+    font-size: 15px;
+  }
+
+  h1, h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+}
