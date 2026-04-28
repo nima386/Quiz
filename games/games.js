@@ -2632,7 +2632,7 @@ function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   const globeEl = document.getElementById("gamesGlobe");
 if (globeEl && !gamesGlobeInstance) {
-  requestAnimationFrame(() => ());
+  requestAnimationFrame(() => initGamesGlobeFinal());
 }
   if (!box) return;
 
@@ -2681,9 +2681,8 @@ if (globeEl && !gamesGlobeInstance) {
   `;
 
  requestAnimationFrame(() => {
-  ();
+  initGamesGlobeFinal();
 });
-}
 
 async function openContinentFocus(card, key) {
   const meta = CONTINENT_META_FINAL[key];
