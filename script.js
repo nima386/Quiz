@@ -90,7 +90,14 @@ function usernameToEmail(username) {
   return `${username}@nimaquiz.local`;
 }
 
+let userHasInteracted = false;
+
+window.addEventListener("pointerdown", () => {
+  userHasInteracted = true;
+}, { once: true });
+
 function softVibrate(ms = 18) {
+  if (!userHasInteracted) return;
   if (navigator.vibrate) navigator.vibrate(ms);
 }
 
@@ -244,7 +251,7 @@ showNav === false;
   }
 
   if (navLabel) {
-  navLabel.style.display = (showMainNav || showGamesNav) ? "grid" : "none";
+ navLabel.style.display = showMainNav ? "grid" : "none";
 
   if (showMainNav) {
     const activeMain = document.querySelector(".nav-item.active");
@@ -271,18 +278,7 @@ showNav === false;
     }, 30);
   }
 
-  if (showGamesNav) {
-    setTimeout(() => {
-      const activeGame = document.querySelector(".games-nav-item.active");
-      if (activeGame && navLabel) {
-        const rect = activeGame.getBoundingClientRect();
-        navLabel.style.left = `${rect.left + rect.width / 2}px`;
-        navLabel.textContent =
-          activeGame.id === "gamesNavStats" ? "Stats" : "Start";
-      }
-    }, 30);
-  }
-
+  
   const addQuestionBtn = document.getElementById("addQuestionBtn");
   if (addQuestionBtn) {
     addQuestionBtn.classList.toggle("show", screen.id === "questionList");
