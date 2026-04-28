@@ -2685,7 +2685,7 @@ if (globeEl && !gamesGlobeInstance) {
  requestAnimationFrame(() => {
   initGamesGlobeFinal();
 });
-
+}
 async function openContinentFocus(card, key) {
   const meta = CONTINENT_META_FINAL[key];
   const run = meta.run();
