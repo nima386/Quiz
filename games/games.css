@@ -3481,3 +3481,12 @@ html {
     -webkit-font-smoothing: antialiased;
   }
 }
+#gamesGlobe {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+#gamesGlobe canvas {
+  transform: translateZ(0);
+  will-change: transform;
+}
