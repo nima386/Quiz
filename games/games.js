@@ -2560,43 +2560,27 @@ function morphOpenContinent(card, key) {
   }, 220);
 }
 
-async function openContinentStats(key) {
-  const meta = CONTINENT_META[key];
-  const stats = getContinentStats()[key];
+function openContinentStats(key, clickedCard = null) {
+  document.querySelectorAll(".continent-focus-panel.open").forEach(panel => {
+    panel.classList.remove("open");
+  });
 
-  if (!meta || !stats) return;
+  document.querySelectorAll(".continent-card.active").forEach(card => {
+    card.classList.remove("active");
+  });
 
-  selectedContinentKey = key;
+  if (clickedCard) {
+    clickedCard.classList.add("active");
+  }
 
-  document.getElementById("continentDetailEmoji").textContent = meta.emoji;
-  document.getElementById("continentDetailTitle").textContent = `${meta.name} Mapping by Result`;
-  document.getElementById("continentDetailSubtitle").textContent = "Detailanalyse deiner Ergebnisse";
+  const panel = document.getElementById(`continentPanel-${key}`);
+  if (!panel) return;
 
-  document.getElementById("continentDetailCards").innerHTML = `
-    <div class="continent-detail-card">
-      <h3>${meta.emoji} ${meta.name}</h3>
-      <p>Accuracy: ${stats.accuracy}%</p>
-      <p>Richtig: ${stats.correct || 0}</p>
-      <p>Falsch: ${stats.wrong || 0}</p>
-      <p>Beste Zeit: ${stats.time ? formatEuropeTime(stats.time) : "0:00"}</p>
-    </div>
+  panel.classList.add("open");
 
-    <div class="continent-detail-card">
-      <h3>Analyse</h3>
-      <p>${getContinentInsight(key, stats)}</p>
-    </div>
-
-    <div class="continent-detail-card">
-      <h3>Nächster Schritt</h3>
-      <p>Wiederhole diesen Kontinent gezielt, um deine Genauigkeit zu verbessern.</p>
-    </div>
-  `;
-
-  await loadContinent2DMap(key);
-
-  document.getElementById("continentStatsOverlay").classList.add("show");
-
-  if (navigator.vibrate) navigator.vibrate(18);
+  setTimeout(() => {
+    initContinentDetailMap(key);
+  }, 120);
 }
 
 async function loadContinent2DMap(key) {
