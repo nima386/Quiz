@@ -3437,3 +3437,47 @@ html {
       0 12px 34px rgba(0,0,0,.28) !important;
   }
 }
+/* === MOBILE PERFORMANCE ONLY === */
+
+@media (max-width: 768px) {
+  .screen {
+    animation-duration: .18s !important;
+    transition-duration: .18s !important;
+  }
+
+  .game-card,
+  .game-hero-card,
+  .best-card,
+  .games-best-card,
+  .continent-focus-card,
+  .globe-info-bubble,
+  .games-nav {
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+  }
+
+  .game-card,
+  .continent-focus-card,
+  .best-card,
+  .games-best-card {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.14),
+      0 12px 32px rgba(0,0,0,.28) !important;
+  }
+
+  #gamesGlobe,
+  #gamesGlobe canvas {
+    transform: translate3d(0,0,0) !important;
+    will-change: transform !important;
+    contain: strict;
+  }
+
+  .scroll-screen {
+    overscroll-behavior: contain;
+    scroll-behavior: auto !important;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+  }
+}
