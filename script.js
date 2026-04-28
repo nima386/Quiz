@@ -219,8 +219,8 @@ function showScreen(screen, showNav = true) {
   screen.id === "asiaGameHome" ||
   screen.id === "africaGameHome" ||
   screen.id === "southAmericaGameHome" ||
-screen.id === "northAmericaGameHome" ||
-screen.id === "gamesStatsScreen";
+  screen.id === "northAmericaGameHome" ||
+  screen.id === "gamesStatsScreen";
 
   const isNoNavArea =
   screen.id === "questionList" ||
