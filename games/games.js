@@ -2688,11 +2688,10 @@ async function openContinentFocus(card, key) {
   const accuracy = getStatsAccuracy(run);
 
   document.querySelectorAll(".continent-focus-card.continent-expanded").forEach(openCard => {
-    if (openCard !== card) {
-      openCard.classList.remove("continent-expanded");
-      renderGamesStats();
-    }
-  });
+  if (openCard !== card) {
+    openCard.classList.remove("continent-expanded");
+  }
+});
 
   selectedStatsCard = card;
   card.classList.add("continent-expanded");
@@ -2847,7 +2846,7 @@ globeEl.innerHTML = "";
 
 gamesGlobeInstance = Globe()(globeEl)
     .backgroundColor("rgba(0,0,0,0)")
-   .globeImageUrl("//unpkg.com/three-globe/example/img/earth-dark.jpg")
+   .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
     .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
     .showAtmosphere(true)
     .atmosphereColor("#7dd3fc")
