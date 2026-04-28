@@ -2678,6 +2678,16 @@ function renderContinentInfo(key) {
     <p>${item.correct} richtig · ${item.wrong} falsch · ${item.time ? formatEuropeTime(item.time) : "keine Zeit"}</p>
   `;
 }
+
+function morphOpenContinent(card, key) {
+  card.classList.add("morph-source");
+
+  setTimeout(() => {
+    card.classList.remove("morph-source");
+    openContinentStats(key);
+  }, 220);
+}
+
 function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   if (!box) return;
@@ -2705,18 +2715,6 @@ function renderGamesStats() {
     })[0];
 
   box.innerHTML = `
-    <div class="games-stats-hero">
-      <div class="games-stats-head">
-        <div>
-          <h1>Dein Fortschritt</h1>
-          <p>Erkunde dein Wissen weltweit</p>
-        </div>
-
-        <div class="games-stats-tabs">
-          <button id="statsTabGlobal" class="games-stats-tab active">Global</button>
-          <button id="statsTabTotal" class="games-stats-tab">Gesamt</button>
-        </div>
-      </div>
 
       <div class="games-globe-wrap">
         <div id="gamesGlobe"></div>
@@ -2767,7 +2765,7 @@ function renderGamesStats() {
 
     <div class="continent-card-grid">
       ${games.map(game => `
-        <div class="continent-stat-card" data-continent-card="${game.key}">
+        <div class="continent-stat-card" onclick="morphOpenContinent(this, '${game.key}')">
           <h2>${game.meta.emoji} ${game.meta.name}</h2>
 
           <div class="continent-stat-line">
@@ -2954,6 +2952,20 @@ const CONTINENT_MAP_PATHS = {
   southAmerica: "maps/southAmerica/southAmerica.svg",
   northAmerica: "maps/northAmerica/northAmerica.svg"
 };
+
+function morphOpenContinent(card, key) {
+  if (!card) {
+    openContinentStats(key);
+    return;
+  }
+
+  card.classList.add("morph-source");
+
+  setTimeout(() => {
+    card.classList.remove("morph-source");
+    openContinentStats(key);
+  }, 220);
+}
 
 async function openContinentStats(key) {
   const meta = CONTINENT_META[key];
