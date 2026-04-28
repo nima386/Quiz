@@ -2380,10 +2380,22 @@ if (openGamesFromDrawerBtn) {
     const mainNav = document.querySelector(".bottom-nav");
     const gamesNav = document.getElementById("gamesNav");
     const navLabel = document.getElementById("navFloatingLabel");
+const openGamesFromDrawerBtn = document.getElementById("openGamesFromDrawer");
 
-    if (mainNav) mainNav.style.display = "none";
-    if (gamesNav) gamesNav.classList.add("show");
-    if (navLabel) navLabel.style.display = "none";
+if (openGamesFromDrawerBtn) {
+  openGamesFromDrawerBtn.onclick = () => {
+    closeUpperDrawer();
+
+    const gamesScreen = document.getElementById("gamesScreen");
+
+    showScreen(gamesScreen, true);
+
+    // optional: default active state setzen
+    document.querySelectorAll(".games-nav-item").forEach(i => i.classList.remove("active"));
+    const startBtn = document.getElementById("gamesNavStart");
+    if (startBtn) startBtn.classList.add("active");
+  };
+}
 
     showScreen(document.getElementById("gamesScreen"), true);
   };
