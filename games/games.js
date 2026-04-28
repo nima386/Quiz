@@ -64,7 +64,6 @@ document.getElementById("gamesNavStats").onclick = () => {
 
   requestAnimationFrame(() => {
     renderGamesStats();
-    resumeGlobe();
   });
 };
   setGamesNavActive("gamesNavStats");
