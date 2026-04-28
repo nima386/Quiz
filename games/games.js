@@ -60,7 +60,7 @@ document.getElementById("gamesNavStats").onclick = () => {
 
   setTimeout(() => {
     renderGamesStats();
-    initGamesGlobeFinal(); // ← WICHTIG
+    (); // ← WICHTIG
     resumeGlobe();
   }, 50);
 };
@@ -2635,7 +2635,7 @@ function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   const globeEl = document.getElementById("gamesGlobe");
 if (globeEl && !gamesGlobeInstance) {
-  requestAnimationFrame(() => initGamesGlobeFinal());
+  requestAnimationFrame(() => ());
 }
   if (!box) return;
 
@@ -2684,7 +2684,7 @@ if (globeEl && !gamesGlobeInstance) {
   `;
 
  requestAnimationFrame(() => {
-  initGamesGlobeFinal();
+  ();
 });
 }
 
@@ -2838,21 +2838,27 @@ function startFocusGame(key) {
 
 async function initGamesGlobeFinal() {
   const globeEl = document.getElementById("gamesGlobe");
- 
+
   if (!globeEl || typeof Globe !== "function") return;
 
- if (gamesGlobeInstance) {
   const rect = globeEl.getBoundingClientRect();
-  gamesGlobeInstance.width(rect.width).height(rect.height);
-  
-  return;
-}
 
-globeEl.innerHTML = "";
+  if (rect.width < 50 || rect.height < 50) {
+    requestAnimationFrame(() => initGamesGlobeFinal());
+    return;
+  }
 
-gamesGlobeInstance = Globe()(globeEl)
+  if (gamesGlobeInstance) {
+    gamesGlobeInstance.width(rect.width).height(rect.height);
+    resumeGlobe();
+    return;
+  }
+
+  globeEl.innerHTML = "";
+
+  gamesGlobeInstance = Globe()(globeEl)
     .backgroundColor("rgba(0,0,0,0)")
-   .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+    .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
     .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
     .showAtmosphere(true)
     .atmosphereColor("#7dd3fc")
@@ -2862,22 +2868,6 @@ gamesGlobeInstance = Globe()(globeEl)
     .polygonSideColor(() => "rgba(255,255,255,.08)")
     .polygonStrokeColor(() => "rgba(255,255,255,.28)")
     .polygonAltitude(d => d.__continent ? 0.018 : 0.004)
-    .polygonLabel(d => {
-      if (!d.__continent) return "";
-
-      const meta = CONTINENT_META_FINAL[d.__continent];
-      const run = meta.run();
-      const accuracy = getStatsAccuracy(run);
-
-      return `
-        <div style="padding:8px 10px;">
-          <b>${meta.emoji} ${meta.name}</b><br>
-          Accuracy: ${accuracy}%<br>
-          Richtig: ${run.correct || 0}<br>
-          Falsch: ${run.wrong || 0}
-        </div>
-      `;
-    })
     .onPolygonClick(d => {
       if (!d.__continent) return;
 
@@ -2887,16 +2877,16 @@ gamesGlobeInstance = Globe()(globeEl)
       if (card) openContinentFocus(card, d.__continent);
     });
 
-  gamesGlobeInstance.controls().autoRotate = true;
- gamesGlobeInstance.controls().autoRotateSpeed = 0.12;
-  gamesGlobeInstance.controls().enableDamping = true;
-  gamesGlobeInstance.controls().dampingFactor = 0.04;
-
-  const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
 
+  const controls = gamesGlobeInstance.controls();
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.12;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.04;
+
   try {
-    const res = await fetch("maps/world/countries.geojson");
+    const res = await fetch("maps/world/countries.geojson?v=1");
     const geo = await res.json();
 
     const features = geo.features.map(feature => {
@@ -2915,7 +2905,6 @@ gamesGlobeInstance = Globe()(globeEl)
     console.error("countries.geojson Fehler:", error);
   }
 }
-
 window.addEventListener("resize", () => {
   const globeEl = document.getElementById("gamesGlobe");
   if (!globeEl || !gamesGlobeInstance) return;
@@ -2938,11 +2927,4 @@ function resumeGlobe() {
   if (controls) controls.autoRotate = true;
 }
 
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const globeEl = document.getElementById("gamesGlobe");
-    if (globeEl && !gamesGlobeInstance) {
-      initGamesGlobeFinal();
-    }
-  }, 300);
-});
+
