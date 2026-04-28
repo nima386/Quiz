@@ -3519,3 +3519,22 @@ html {
   }
 
 }
+.games-nav-item small,
+.games-nav-item span {
+  display: none !important;
+}
+
+.games-nav-item {
+  font-size: 0 !important;
+}
+
+.games-nav-item img {
+  font-size: initial !important;
+}
+#navFloatingLabel {
+  transition:
+    left .38s cubic-bezier(.22, 1, .36, 1),
+    transform .38s cubic-bezier(.22, 1, .36, 1),
+    opacity .2s ease !important;
+  will-change: left, transform;
+}
