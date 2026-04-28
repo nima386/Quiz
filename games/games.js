@@ -2955,5 +2955,9 @@ function resumeGlobe() {
   if (controls) controls.autoRotate = true;
 }
 window.addEventListener("load", () => {
-  renderGamesStats();
+  requestAnimationFrame(() => {
+    if (document.getElementById("gamesStatsScreen")?.classList.contains("active")) {
+      renderGamesStats();
+    }
+  });
 });
