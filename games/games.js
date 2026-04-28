@@ -58,11 +58,13 @@ document.getElementById("gamesNavStats").onclick = () => {
   setGamesNavActive("gamesNavStats");
   showScreen(document.getElementById("gamesStatsScreen"), true);
 
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     renderGamesStats();
+    initGamesGlobeFinal(); // ← WICHTIG
     resumeGlobe();
-  });
+  }, 50);
 };
+  
 
 
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
