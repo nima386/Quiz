@@ -2631,6 +2631,10 @@ function getGlobeColor(continentKey) {
 
 function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
+  const globeEl = document.getElementById("gamesGlobe");
+if (globeEl && !gamesGlobeInstance) {
+  requestAnimationFrame(() => initGamesGlobeFinal());
+}
   if (!box) return;
 
   const games = Object.keys(CONTINENT_META_FINAL).map(key => {
@@ -2932,3 +2936,11 @@ function resumeGlobe() {
   if (controls) controls.autoRotate = true;
 }
 
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const globeEl = document.getElementById("gamesGlobe");
+    if (globeEl && !gamesGlobeInstance) {
+      initGamesGlobeFinal();
+    }
+  }, 300);
+});
