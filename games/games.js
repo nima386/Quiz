@@ -2842,7 +2842,7 @@ globeEl.innerHTML = "";
 
 gamesGlobeInstance = Globe()(globeEl)
     .backgroundColor("rgba(0,0,0,0)")
-    .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+   .globeImageUrl("//unpkg.com/three-globe/example/img/earth-dark.jpg")
     .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
     .showAtmosphere(true)
     .atmosphereColor("#7dd3fc")
