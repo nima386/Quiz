@@ -3485,3 +3485,13 @@ body {
 .nav-floating-label {
   bottom: calc(86px + var(--safe-bottom)) !important;
 }
+/* FIX: Floating Label darf Games-Nav nicht blockieren */
+#navFloatingLabel {
+  pointer-events: none !important;
+}
+
+/* FIX: Games Nav bleibt klickbar */
+#gamesNav,
+#gamesNav * {
+  pointer-events: auto;
+}
