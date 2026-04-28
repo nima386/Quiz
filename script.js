@@ -2368,3 +2368,23 @@ saveQuizOrders();
 
 window.addEventListener("resize", updateFloatingLabel);
 window.addEventListener("orientationchange", updateFloatingLabel);
+
+const openGamesFromDrawerBtn = document.getElementById("openGamesFromDrawer");
+
+if (openGamesFromDrawerBtn) {
+  openGamesFromDrawerBtn.onclick = () => {
+    closeUpperDrawer();
+
+    setActiveNav("navStart");
+
+    const mainNav = document.querySelector(".bottom-nav");
+    const gamesNav = document.getElementById("gamesNav");
+    const navLabel = document.getElementById("navFloatingLabel");
+
+    if (mainNav) mainNav.style.display = "none";
+    if (gamesNav) gamesNav.classList.add("show");
+    if (navLabel) navLabel.style.display = "none";
+
+    showScreen(document.getElementById("gamesScreen"), true);
+  };
+}
