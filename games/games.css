@@ -3557,3 +3557,13 @@ body:has(#southAmericaGameHome.active) #navFloatingLabel,
 body:has(#northAmericaGameHome.active) #navFloatingLabel {
   display: none !important;
 }
+.globe-shell {
+  width: 100%;
+  height: 260px; /* kannst du anpassen */
+  position: relative;
+}
+
+#gamesGlobe {
+  width: 100%;
+  height: 100%;
+}
