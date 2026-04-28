@@ -50,10 +50,23 @@ function setGamesNavActive(activeId) {
 
 document.getElementById("gamesNavStart").onclick = () => {
   setGamesNavActive("gamesNavStart");
+  pauseGlobe();
+  showScreen(document.getElementById("gamesScreen"), true);
+};
+  setGamesNavActive("gamesNavStart");
   showScreen(document.getElementById("gamesScreen"), true);
 };
 
 document.getElementById("gamesNavStats").onclick = () => {
+  setGamesNavActive("gamesNavStats");
+
+  showScreen(document.getElementById("gamesStatsScreen"), true);
+
+  requestAnimationFrame(() => {
+    renderGamesStats();
+    resumeGlobe();
+  });
+};
   setGamesNavActive("gamesNavStats");
 
   // Globus sofort vorladen, bevor Screen sichtbar ist
@@ -2880,10 +2893,15 @@ gamesGlobeInstance = Globe()(globeEl)
     });
 
   gamesGlobeInstance.controls().autoRotate = true;
-  gamesGlobeInstance.controls().autoRotateSpeed = 0.22;
+ gamesGlobeInstance.controls().autoRotateSpeed = 0.12;
   gamesGlobeInstance.controls().enableDamping = true;
   gamesGlobeInstance.controls().dampingFactor = 0.04;
-
+gamesGlobeInstance.renderer().setAnimationLoop(() => {
+  gamesGlobeInstance.renderer().render(
+    gamesGlobeInstance.scene(),
+    gamesGlobeInstance.camera()
+  );
+});
   const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
 
@@ -2924,4 +2942,18 @@ window.addEventListener("load", () => {
 
     renderGamesStats();
   }, 900);
+});
+function pauseGlobe() {
+  if (!gamesGlobeInstance) return;
+  const controls = gamesGlobeInstance.controls();
+  if (controls) controls.autoRotate = false;
+}
+
+function resumeGlobe() {
+  if (!gamesGlobeInstance) return;
+  const controls = gamesGlobeInstance.controls();
+  if (controls) controls.autoRotate = true;
+}
+window.addEventListener("load", () => {
+  renderGamesStats();
 });
