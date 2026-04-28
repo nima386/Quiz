@@ -53,29 +53,16 @@ document.getElementById("gamesNavStart").onclick = () => {
   pauseGlobe();
   showScreen(document.getElementById("gamesScreen"), true);
 };
-  setGamesNavActive("gamesNavStart");
-  showScreen(document.getElementById("gamesScreen"), true);
-};
 
 document.getElementById("gamesNavStats").onclick = () => {
   setGamesNavActive("gamesNavStats");
-
   showScreen(document.getElementById("gamesStatsScreen"), true);
 
   requestAnimationFrame(() => {
+    resumeGlobe();
     renderGamesStats();
   });
 };
-  setGamesNavActive("gamesNavStats");
-
-  // Globus sofort vorladen, bevor Screen sichtbar ist
-  requestAnimationFrame(() => {
-    renderGamesStats();
-  });
-
-  showScreen(document.getElementById("gamesStatsScreen"), true);
-};
-
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
   openUpperDrawer();
 };
@@ -2895,12 +2882,7 @@ gamesGlobeInstance = Globe()(globeEl)
  gamesGlobeInstance.controls().autoRotateSpeed = 0.12;
   gamesGlobeInstance.controls().enableDamping = true;
   gamesGlobeInstance.controls().dampingFactor = 0.04;
-gamesGlobeInstance.renderer().setAnimationLoop(() => {
-  gamesGlobeInstance.renderer().render(
-    gamesGlobeInstance.scene(),
-    gamesGlobeInstance.camera()
-  );
-});
+
   const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
 
@@ -2934,14 +2916,7 @@ window.addEventListener("resize", () => {
 });
 
 // Globus im Hintergrund vorbereiten, damit Stats schneller öffnet
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const statsScreen = document.getElementById("gamesStatsScreen");
-    if (!statsScreen) return;
 
-    renderGamesStats();
-  }, 900);
-});
 function pauseGlobe() {
   if (!gamesGlobeInstance) return;
   const controls = gamesGlobeInstance.controls();
@@ -2953,10 +2928,4 @@ function resumeGlobe() {
   const controls = gamesGlobeInstance.controls();
   if (controls) controls.autoRotate = true;
 }
-window.addEventListener("load", () => {
-  requestAnimationFrame(() => {
-    if (document.getElementById("gamesStatsScreen")?.classList.contains("active")) {
-      renderGamesStats();
-    }
-  });
-});
+
