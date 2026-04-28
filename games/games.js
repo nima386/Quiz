@@ -2674,7 +2674,9 @@ function renderGamesStats() {
     </div>
   `;
 
-  setTimeout(initGamesGlobeFinal, 120);
+ requestAnimationFrame(() => {
+  initGamesGlobeFinal();
+});
 }
 
 async function openContinentFocus(card, key) {
@@ -2830,9 +2832,15 @@ async function initGamesGlobeFinal() {
   const globeEl = document.getElementById("gamesGlobe");
   if (!globeEl || typeof Globe !== "function") return;
 
-  globeEl.innerHTML = "";
+ if (gamesGlobeInstance) {
+  const rect = globeEl.getBoundingClientRect();
+  gamesGlobeInstance.width(rect.width).height(rect.height);
+  return;
+}
 
-  gamesGlobeInstance = Globe()(globeEl)
+globeEl.innerHTML = "";
+
+gamesGlobeInstance = Globe()(globeEl)
     .backgroundColor("rgba(0,0,0,0)")
     .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
     .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
@@ -2870,15 +2878,15 @@ async function initGamesGlobeFinal() {
     });
 
   gamesGlobeInstance.controls().autoRotate = true;
-  gamesGlobeInstance.controls().autoRotateSpeed = 0.45;
+  gamesGlobeInstance.controls().autoRotateSpeed = 0.22;
   gamesGlobeInstance.controls().enableDamping = true;
-  gamesGlobeInstance.controls().dampingFactor = 0.08;
+  gamesGlobeInstance.controls().dampingFactor = 0.04;
 
   const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
 
   try {
-    const res = await fetch("maps/world/countries.geojson?v=" + Date.now());
+    const res = await fetch("maps/world/countries.geojson");
     const geo = await res.json();
 
     const features = geo.features.map(feature => {
