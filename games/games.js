@@ -2583,6 +2583,126 @@ function openContinentStats(key, clickedCard = null) {
   }, 120);
 }
 
+const CONTINENT_MAP_PATHS = {
+  europe: "maps/europe/europe.svg",
+  asia: "maps/asia/asia.svg",
+  africa: "maps/africa/africa.svg",
+  southAmerica: "maps/southAmerica/southAmerica.svg",
+  northAmerica: "maps/northAmerica/northAmerica.svg"
+};
+
+const CONTINENT_MAP_IDS = {
+  europe: "detailEuropeMap",
+  asia: "detailAsiaMap",
+  africa: "detailAfricaMap",
+  southAmerica: "detailSouthAmericaMap",
+  northAmerica: "detailNorthAmericaMap"
+};
+
+async function initContinentDetailMap(key) {
+  const box = document.getElementById(CONTINENT_MAP_IDS[key]);
+  if (!box || box.dataset.loaded === "true") return;
+
+  const res = await fetch(CONTINENT_MAP_PATHS[key] + "?v=" + Date.now());
+  const svgText = await res.text();
+
+  box.innerHTML = svgText;
+  box.dataset.loaded = "true";
+
+  const svg = box.querySelector("svg");
+  if (!svg) return;
+
+  svg.classList.add("continent-detail-svg");
+
+  let state = { x: 0, y: 0, scale: 1 };
+  let drag = null;
+
+  const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  viewport.classList.add("continent-detail-viewport");
+
+  while (svg.firstChild) {
+    viewport.appendChild(svg.firstChild);
+  }
+
+  svg.appendChild(viewport);
+
+  function apply() {
+    viewport.setAttribute(
+      "transform",
+      `translate(${state.x} ${state.y}) scale(${state.scale})`
+    );
+  }
+
+  const countryList = CONTINENT_META[key].countries || [];
+
+  countryList.forEach(id => {
+    const land = box.querySelector(`#${id}`);
+    if (!land) return;
+
+    land.classList.add("detail-country");
+
+    const stats = getGameRun(key);
+
+    if (stats.time) {
+      if ((stats.correct || 0) >= (stats.wrong || 0)) {
+        land.classList.add("detail-correct");
+      } else {
+        land.classList.add("detail-wrong");
+      }
+    } else {
+      land.classList.add("detail-empty");
+    }
+  });
+
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+
+    const factor = e.deltaY < 0 ? 1.18 : 0.84;
+    const oldScale = state.scale;
+    const newScale = Math.min(Math.max(oldScale * factor, 1), 6);
+
+    const rect = svg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    state.x = x - (x - state.x) * (newScale / oldScale);
+    state.y = y - (y - state.y) * (newScale / oldScale);
+    state.scale = newScale;
+
+    apply();
+  }, { passive: false });
+
+  svg.addEventListener("pointerdown", e => {
+    svg.setPointerCapture(e.pointerId);
+
+    drag = {
+      lastX: e.clientX,
+      lastY: e.clientY
+    };
+  });
+
+  svg.addEventListener("pointermove", e => {
+    if (!drag) return;
+
+    const dx = e.clientX - drag.lastX;
+    const dy = e.clientY - drag.lastY;
+
+    state.x += dx * 1.15;
+    state.y += dy * 1.15;
+
+    drag.lastX = e.clientX;
+    drag.lastY = e.clientY;
+
+    apply();
+  });
+
+  svg.addEventListener("pointerup", () => {
+    drag = null;
+  });
+
+  apply();
+}
+
 async function loadContinent2DMap(key) {
   const box = document.getElementById("continent2DMap");
   if (!box) return;
