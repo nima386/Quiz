@@ -64,8 +64,6 @@ document.getElementById("gamesNavStats").onclick = () => {
   });
 };
   
-
-
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
   openUpperDrawer();
 };
