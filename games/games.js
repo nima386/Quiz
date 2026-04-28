@@ -2537,22 +2537,93 @@ document.getElementById("backToNorthAmericaStart").onclick = () => {
   showScreen(document.getElementById("northAmericaGameHome"), true);
 };
 
-
-
 let gamesGlobeInstance = null;
 let selectedStatsCard = null;
+let gamesGlobeGeoLoaded = false;
 
 const CONTINENT_META_FINAL = {
-  europe: { name: "Europa", emoji: "🌍", color: "#22c55e", path: "maps/europe/europe.svg", run: () => loadEuropeBestRun() },
-  asia: { name: "Asien", emoji: "🌏", color: "#38bdf8", path: "maps/asia/asia.svg", run: () => JSON.parse(localStorage.getItem("asiaBestRun")) || { correct: 0, wrong: 0, time: null } },
-  africa: { name: "Afrika", emoji: "🌍", color: "#f97316", path: "maps/africa/africa.svg", run: () => JSON.parse(localStorage.getItem("africaBestRun")) || { correct: 0, wrong: 0, time: null } },
-  southAmerica: { name: "Südamerika", emoji: "🌎", color: "#a855f7", path: "maps/southAmerica/southAmerica.svg", run: () => JSON.parse(localStorage.getItem("southAmericaBestRun")) || { correct: 0, wrong: 0, time: null } },
-  northAmerica: { name: "Nordamerika", emoji: "🌎", color: "#eab308", path: "maps/northAmerica/northAmerica.svg", run: () => loadNorthAmericaBestRun() }
+  europe: {
+    name: "Europa",
+    emoji: "🌍",
+    color: "rgba(34,197,94,.72)",
+    path: "maps/europe/europe.svg",
+    countries: Object.keys(EUROPE_COUNTRY_NAMES),
+    run: () => loadEuropeBestRun()
+  },
+  asia: {
+    name: "Asien",
+    emoji: "🌏",
+    color: "rgba(56,189,248,.72)",
+    path: "maps/asia/asia.svg",
+    countries: Object.keys(ASIA_COUNTRY_NAMES),
+    run: () => JSON.parse(localStorage.getItem("asiaBestRun")) || { correct: 0, wrong: 0, time: null }
+  },
+  africa: {
+    name: "Afrika",
+    emoji: "🌍",
+    color: "rgba(249,115,22,.72)",
+    path: "maps/africa/africa.svg",
+    countries: Object.keys(AFRICA_COUNTRY_NAMES),
+    run: () => JSON.parse(localStorage.getItem("africaBestRun")) || { correct: 0, wrong: 0, time: null }
+  },
+  southAmerica: {
+    name: "Südamerika",
+    emoji: "🌎",
+    color: "rgba(168,85,247,.72)",
+    path: "maps/southAmerica/southAmerica.svg",
+    countries: Object.keys(SOUTH_AMERICA_COUNTRY_NAMES),
+    run: () => JSON.parse(localStorage.getItem("southAmericaBestRun")) || { correct: 0, wrong: 0, time: null }
+  },
+  northAmerica: {
+    name: "Nordamerika",
+    emoji: "🌎",
+    color: "rgba(234,179,8,.72)",
+    path: "maps/northAmerica/northAmerica.svg",
+    countries: Object.keys(NORTH_AMERICA_COUNTRY_NAMES),
+    run: () => loadNorthAmericaBestRun()
+  }
 };
 
 function getStatsAccuracy(run) {
   const total = (run.correct || 0) + (run.wrong || 0);
   return total ? Math.round((run.correct / total) * 100) : 0;
+}
+
+function getContinentByCountryId(countryId) {
+  const id = String(countryId || "").toUpperCase();
+
+  return Object.keys(CONTINENT_META_FINAL).find(key =>
+    CONTINENT_META_FINAL[key].countries.includes(id)
+  );
+}
+
+function getGeoCountryId(feature) {
+  const p = feature.properties || {};
+
+  return (
+    p.ISO_A2 ||
+    p.iso_a2 ||
+    p.ISO2 ||
+    p.iso2 ||
+    p.ADM0_A3 ||
+    p.adm0_a3 ||
+    feature.id ||
+    ""
+  );
+}
+
+function getGlobeColor(continentKey) {
+  if (!continentKey) return "rgba(148,163,184,.28)";
+
+  const meta = CONTINENT_META_FINAL[continentKey];
+  const run = meta.run();
+  const accuracy = getStatsAccuracy(run);
+  const total = (run.correct || 0) + (run.wrong || 0);
+
+  if (!total) return "rgba(148,163,184,.28)";
+  if (accuracy >= 80) return "rgba(34,197,94,.72)";
+  if (accuracy >= 55) return "rgba(234,179,8,.72)";
+  return "rgba(239,68,68,.72)";
 }
 
 function renderGamesStats() {
@@ -2562,14 +2633,20 @@ function renderGamesStats() {
   const games = Object.keys(CONTINENT_META_FINAL).map(key => {
     const meta = CONTINENT_META_FINAL[key];
     const run = meta.run();
-    return { key, meta, run, accuracy: getStatsAccuracy(run) };
+
+    return {
+      key,
+      meta,
+      run,
+      accuracy: getStatsAccuracy(run)
+    };
   });
 
   const best = games
     .filter(g => g.run.time)
     .sort((a, b) => b.accuracy - a.accuracy || a.run.time - b.run.time)[0];
 
- box.innerHTML = `
+  box.innerHTML = `
     <div class="best-card games-best-card clean-best">
       <p>Bestes Gebiet</p>
       <h2>${best ? best.meta.name : "Noch kein Spiel"}</h2>
@@ -2605,9 +2682,12 @@ async function openContinentFocus(card, key) {
   const run = meta.run();
   const accuracy = getStatsAccuracy(run);
 
-  if (selectedStatsCard && selectedStatsCard !== card) {
-    selectedStatsCard.classList.remove("continent-expanded");
-  }
+  document.querySelectorAll(".continent-focus-card.continent-expanded").forEach(openCard => {
+    if (openCard !== card) {
+      openCard.classList.remove("continent-expanded");
+      renderGamesStats();
+    }
+  });
 
   selectedStatsCard = card;
   card.classList.add("continent-expanded");
@@ -2636,17 +2716,105 @@ async function openContinentFocus(card, key) {
     </button>
   `;
 
+  await loadFocusMap(key);
+}
+
+async function loadFocusMap(key) {
+  const meta = CONTINENT_META_FINAL[key];
+  const run = meta.run();
+  const mapBox = document.getElementById(`focusMap-${key}`);
+  if (!mapBox) return;
+
   try {
     const res = await fetch(meta.path + "?v=" + Date.now());
-    const svg = await res.text();
-    const mapBox = document.getElementById(`focusMap-${key}`);
-    mapBox.innerHTML = svg;
+    const svgText = await res.text();
 
-    mapBox.querySelectorAll("svg path, svg .land").forEach(path => {
+    mapBox.innerHTML = svgText;
+
+    const svg = mapBox.querySelector("svg");
+    if (!svg) return;
+
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+    let state = { x: 0, y: 0, scale: 1 };
+    let drag = null;
+
+    const viewport = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+    while (svg.firstChild) {
+      viewport.appendChild(svg.firstChild);
+    }
+
+    svg.appendChild(viewport);
+
+    function apply() {
+      viewport.setAttribute(
+        "transform",
+        `translate(${state.x} ${state.y}) scale(${state.scale})`
+      );
+    }
+
+    mapBox.querySelectorAll("path, .land").forEach(path => {
       path.classList.add("focus-map-land");
+
+      const total = (run.correct || 0) + (run.wrong || 0);
+
+      if (!total) {
+        path.classList.add("map-empty");
+      } else if ((run.wrong || 0) === 0) {
+        path.classList.add("map-good");
+      } else {
+        path.classList.add("map-bad");
+      }
     });
-  } catch {
-    document.getElementById(`focusMap-${key}`).innerHTML = "Karte konnte nicht geladen werden.";
+
+    svg.addEventListener("pointerdown", e => {
+      svg.setPointerCapture(e.pointerId);
+      drag = {
+        lastX: e.clientX,
+        lastY: e.clientY
+      };
+    });
+
+    svg.addEventListener("pointermove", e => {
+      if (!drag) return;
+
+      const dx = e.clientX - drag.lastX;
+      const dy = e.clientY - drag.lastY;
+
+      state.x += dx * 1.15;
+      state.y += dy * 1.15;
+
+      drag.lastX = e.clientX;
+      drag.lastY = e.clientY;
+
+      apply();
+    });
+
+    svg.addEventListener("pointerup", () => {
+      drag = null;
+    });
+
+    svg.addEventListener("wheel", e => {
+      e.preventDefault();
+
+      const oldScale = state.scale;
+      const newScale = Math.min(Math.max(oldScale * (e.deltaY < 0 ? 1.18 : 0.84), 1), 6);
+
+      const rect = svg.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      state.x = x - (x - state.x) * (newScale / oldScale);
+      state.y = y - (y - state.y) * (newScale / oldScale);
+      state.scale = newScale;
+
+      apply();
+    }, { passive: false });
+
+    apply();
+  } catch (error) {
+    mapBox.innerHTML = "Karte konnte nicht geladen werden.";
   }
 }
 
@@ -2658,7 +2826,7 @@ function startFocusGame(key) {
   if (key === "northAmerica") startNorthAmericaMapQuiz();
 }
 
-function initGamesGlobeFinal() {
+async function initGamesGlobeFinal() {
   const globeEl = document.getElementById("gamesGlobe");
   if (!globeEl || typeof Globe !== "function") return;
 
@@ -2670,11 +2838,72 @@ function initGamesGlobeFinal() {
     .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
     .showAtmosphere(true)
     .atmosphereColor("#7dd3fc")
-    .atmosphereAltitude(0.24);
+    .atmosphereAltitude(0.25)
+    .polygonGeoJsonGeometry(d => d.geometry)
+    .polygonCapColor(d => getGlobeColor(d.__continent))
+    .polygonSideColor(() => "rgba(255,255,255,.08)")
+    .polygonStrokeColor(() => "rgba(255,255,255,.28)")
+    .polygonAltitude(d => d.__continent ? 0.018 : 0.004)
+    .polygonLabel(d => {
+      if (!d.__continent) return "";
+
+      const meta = CONTINENT_META_FINAL[d.__continent];
+      const run = meta.run();
+      const accuracy = getStatsAccuracy(run);
+
+      return `
+        <div style="padding:8px 10px;">
+          <b>${meta.emoji} ${meta.name}</b><br>
+          Accuracy: ${accuracy}%<br>
+          Richtig: ${run.correct || 0}<br>
+          Falsch: ${run.wrong || 0}
+        </div>
+      `;
+    })
+    .onPolygonClick(d => {
+      if (!d.__continent) return;
+
+      const card = [...document.querySelectorAll(".continent-focus-card")]
+        .find(el => el.innerText.includes(CONTINENT_META_FINAL[d.__continent].name));
+
+      if (card) openContinentFocus(card, d.__continent);
+    });
 
   gamesGlobeInstance.controls().autoRotate = true;
-  gamesGlobeInstance.controls().autoRotateSpeed = 0.55;
+  gamesGlobeInstance.controls().autoRotateSpeed = 0.45;
+  gamesGlobeInstance.controls().enableDamping = true;
+  gamesGlobeInstance.controls().dampingFactor = 0.08;
 
   const rect = globeEl.getBoundingClientRect();
   gamesGlobeInstance.width(rect.width).height(rect.height);
+
+  try {
+    const res = await fetch("maps/world/countries.geojson?v=" + Date.now());
+    const geo = await res.json();
+
+    const features = geo.features.map(feature => {
+      const countryId = getGeoCountryId(feature);
+      const continent = getContinentByCountryId(countryId);
+
+      return {
+        ...feature,
+        __continent: continent
+      };
+    });
+
+    gamesGlobeInstance.polygonsData(features);
+    gamesGlobeGeoLoaded = true;
+  } catch (error) {
+    console.error("countries.geojson Fehler:", error);
+  }
 }
+
+window.addEventListener("resize", () => {
+  const globeEl = document.getElementById("gamesGlobe");
+  if (!globeEl || !gamesGlobeInstance) return;
+
+  const rect = globeEl.getBoundingClientRect();
+  gamesGlobeInstance.width(rect.width).height(rect.height);
+});
+
+
