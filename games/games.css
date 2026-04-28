@@ -3538,3 +3538,22 @@ html {
     opacity .2s ease !important;
   will-change: left, transform;
 }
+/* FIX: Text in Games-Nav-Icons komplett ausblenden */
+#gamesNav .games-nav-item span,
+#gamesNav .games-nav-item small,
+#gamesNav .games-nav-item::before,
+#gamesNav .games-nav-item::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* FIX: Morph-Label bei Games-Nav deaktivieren */
+body:has(#gamesScreen.active) #navFloatingLabel,
+body:has(#gamesStatsScreen.active) #navFloatingLabel,
+body:has(#europeGameHome.active) #navFloatingLabel,
+body:has(#asiaGameHome.active) #navFloatingLabel,
+body:has(#africaGameHome.active) #navFloatingLabel,
+body:has(#southAmericaGameHome.active) #navFloatingLabel,
+body:has(#northAmericaGameHome.active) #navFloatingLabel {
+  display: none !important;
+}
