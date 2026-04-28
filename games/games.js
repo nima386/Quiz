@@ -2799,9 +2799,14 @@ function renderGamesStats() {
   `;
 
   document.querySelectorAll("[data-continent-card]").forEach(card => {
-    card.onclick = () => {
-      openContinentStats(card.dataset.continentCard);
-    };
+   card.onclick = () => {
+  card.classList.add("morph-source");
+
+  setTimeout(() => {
+    openContinentStats(card.dataset.continentCard);
+    card.classList.remove("morph-source");
+  }, 180);
+};
   });
 
   document.getElementById("statsTabGlobal").onclick = () => {
