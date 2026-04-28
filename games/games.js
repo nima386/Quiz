@@ -59,10 +59,12 @@ document.getElementById("gamesNavStats").onclick = () => {
   showScreen(document.getElementById("gamesStatsScreen"), true);
 
   requestAnimationFrame(() => {
-    resumeGlobe();
     renderGamesStats();
+    resumeGlobe();
   });
 };
+
+
 document.getElementById("gamesUpperMenuBtn").onclick = () => {
   openUpperDrawer();
 };
