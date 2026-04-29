@@ -3,6 +3,26 @@
   --safe-bottom: env(safe-area-inset-bottom);
 }
 
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background: #08051f;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -22,6 +42,12 @@ html, body {
   height: 100dvh;
   padding: 20px;
   overflow: hidden;
+}
+
+.screen {
+  min-height: 100dvh;
+  padding-top: calc(18px + var(--safe-top));
+  padding-bottom: calc(110px + var(--safe-bottom));
 }
 
 .screen.active {
@@ -3494,4 +3520,25 @@ body {
 #gamesNav,
 #gamesNav * {
   pointer-events: auto;
+}
+
+@media (display-mode: standalone) and (max-width: 430px) {
+  body {
+    background: #08051f;
+  }
+
+  .screen {
+    min-height: 100dvh !important;
+    padding-top: calc(10px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(95px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .top-bar {
+    margin-top: 0 !important;
+  }
+
+  .bottom-nav,
+  .games-nav {
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  }
 }
