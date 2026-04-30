@@ -47,14 +47,23 @@
     <div class="home-layout">
       <main class="home-main">
         <header class="home-welcome">
-          <div>
+          <button id="homeUpperMenuBtn" class="upper-menu-btn home-menu-btn" aria-label="Oberkategorien öffnen">
+            <span></span>
+            <span></span>
+          </button>
+
+          <div class="home-welcome-copy">
             <span class="home-kicker">Heute lernen</span>
             <h1 id="homeGreeting">Willkommen zurück</h1>
             <p>Deine heutige Challenge wartet. Sammle XP, spiele Maps und bleib mit Freunden im Duell.</p>
           </div>
-          <button id="homeUpperMenuBtn" class="upper-menu-btn">
-            <span></span>
-            <span></span>
+          <button id="homeProfileTopBtn" class="home-profile-chip glass-card" aria-label="Profil öffnen">
+            <img id="homeTopAvatar" src="avatars/avatar1.png" alt="">
+            <span>
+              <strong id="homeTopUsername">Gast</strong>
+              <small id="homeTopLevel">Level 1</small>
+              <i class="xp-mini-bar"><em id="homeTopXpFill"></em></i>
+            </span>
           </button>
         </header>
 
@@ -345,6 +354,10 @@
 
   <button id="openGamesSearch" class="circle-btn">
     <img class="circle-icon-img" src="icon/search.png">
+  </button>
+
+  <button id="gamesProfileBtn" class="games-profile-btn" aria-label="Profil öffnen">
+    <img id="gamesTopAvatar" src="avatars/avatar1.png" alt="">
   </button>
 
   <div class="games-title-pill">Länder, Karten & mehr</div>
@@ -946,6 +959,14 @@
     <button id="closeUpperDrawer" class="circle-btn">×</button>
   </div>
 
+  <div id="openDashboardFromDrawer" class="drawer-game-entry">
+    <div class="drawer-game-icon">⌂</div>
+    <div>
+      <strong>Dashboard</strong>
+      <span>Daily, Fortschritt & Empfehlungen</span>
+    </div>
+  </div>
+
   <div id="upperList"></div>
 
 <div class="drawer-divider"></div>
@@ -1004,9 +1025,6 @@
   <div id="navStats" class="nav-item">
     <img class="nav-img-icon" src="icon/stats.png">
    
-  </div>
-  <div id="navArena" class="nav-item arena-nav-symbol">
-    <img class="nav-img-icon" src="icon/arena.svg">
   </div>
 </nav>
 
