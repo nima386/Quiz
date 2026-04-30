@@ -599,6 +599,11 @@ document.getElementById("gamesStatsUpperMenuBtn").onclick = () => {
 };
 
 document.getElementById("openGamesFromDrawer").onclick = () => {
+  if (typeof window.openGamesHub === "function") {
+    window.openGamesHub();
+    return;
+  }
+
   closeUpperDrawer();
   setGamesNavActive("gamesNavStart");
   showScreen(document.getElementById("gamesScreen"), true);
@@ -3741,7 +3746,7 @@ function startSelectedMapMode(mode) {
 /* === COUNTRY SHAPE GAME ENGINE === */
 
 const EUROPE_CAPITALS = {
-  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Bruessel", BA: "Sarajevo",
+  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Brüssel", BA: "Sarajevo",
   BG: "Sofia", HR: "Zagreb", CY: "Nikosia", CZ: "Prag", DK: "Kopenhagen", EE: "Tallinn",
   FI: "Helsinki", FR: "Paris", DE: "Berlin", GR: "Athen", HU: "Budapest", IS: "Reykjavik",
   IE: "Dublin", IT: "Rom", LV: "Riga", LT: "Vilnius", LU: "Luxemburg", MD: "Chisinau",
@@ -3794,7 +3799,7 @@ const COUNTRY_SHAPE_GAME_CONFIG = {
   europe: { name: "Europa", folder: "maps/europe/countries", countries: EUROPE_COUNTRY_NAMES, capitals: EUROPE_CAPITALS, files: COUNTRY_SHAPE_FILES.europe, homeId: "europeGameHome" },
   asia: { name: "Asien", folder: "maps/asia/countries", countries: ASIA_COUNTRY_NAMES, capitals: ASIA_CAPITALS, files: COUNTRY_SHAPE_FILES.asia, homeId: "asiaGameHome" },
   africa: { name: "Afrika", folder: "maps/africa/countries", countries: AFRICA_COUNTRY_NAMES, capitals: AFRICA_CAPITALS, files: COUNTRY_SHAPE_FILES.africa, homeId: "africaGameHome" },
-  southAmerica: { name: "Suedamerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
+  southAmerica: { name: "Südamerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
   northAmerica: { name: "Nordamerika", folder: "maps/northAmerica/countries", countries: NORTH_AMERICA_COUNTRY_NAMES, capitals: NORTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.northAmerica, homeId: "northAmericaGameHome" }
 };
 
@@ -3855,6 +3860,32 @@ function startCountryShapeGame(continentKey, mode) {
   loadNextCountryShape();
 }
 
+function normalizeCountryShapeSvg(box) {
+  const svg = box.querySelector("svg");
+  if (!svg) return;
+
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  svg.style.background = "transparent";
+
+  svg.querySelectorAll("style").forEach(style => style.remove());
+  svg.querySelectorAll("rect").forEach(rect => {
+    const width = rect.getAttribute("width") || "";
+    const height = rect.getAttribute("height") || "";
+    const fill = (rect.getAttribute("fill") || rect.style.fill || "").toLowerCase();
+    if (fill.includes("000") || width.includes("100") || height.includes("100")) rect.remove();
+  });
+
+  svg.querySelectorAll("path, polygon, polyline, circle, ellipse").forEach(shape => {
+    shape.removeAttribute("class");
+    shape.removeAttribute("style");
+    shape.setAttribute("fill", "#f8fbff");
+    shape.setAttribute("stroke", "#f8fbff");
+    shape.setAttribute("stroke-width", "1.2");
+    shape.setAttribute("stroke-linejoin", "round");
+    shape.setAttribute("stroke-linecap", "round");
+  });
+}
+
 async function loadNextCountryShape() {
   const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
   const next = countryShapeState.deck[countryShapeState.index];
@@ -3876,7 +3907,7 @@ async function loadNextCountryShape() {
     const response = await fetch(`${config.folder}/${encodeURIComponent(next.file)}`);
     if (!response.ok) throw new Error(next.file);
     box.innerHTML = await response.text();
-    box.querySelector("svg")?.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    normalizeCountryShapeSvg(box);
   } catch (error) {
     console.warn("Länderform konnte nicht geladen werden:", error);
     box.innerHTML = `<div class="shape-loading error">SVG fehlt: ${next.name}</div>`;
@@ -4034,8 +4065,8 @@ function wireMapEngine() {
     button.addEventListener("click", () => startCountryShapeGame(countryShapeState.continentKey, button.dataset.shapeMode));
   });
   document.getElementById("countryShapeModeBack")?.addEventListener("click", () => {
-    const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
-    showScreen(document.getElementById(config?.homeId || "gamesScreen"), true);
+    if (typeof window.goBackOneStep === "function") window.goBackOneStep("continentModeSelect");
+    else showScreen(document.getElementById("continentModeSelect"), true);
   });
   document.getElementById("countryShapeBack")?.addEventListener("click", () => {
     clearInterval(countryShapeState.timer);
@@ -4048,9 +4079,8 @@ function wireMapEngine() {
     startCountryShapeGame(countryShapeState.continentKey, countryShapeState.mode);
   });
   document.getElementById("countryShapeResultHome")?.addEventListener("click", () => {
-    const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
     document.getElementById("countryShapeResultModal")?.classList.remove("show");
-    showScreen(document.getElementById(config?.homeId || "gamesScreen"), true);
+    openCountryShapeModeSelect(countryShapeState.continentKey);
   });
 }
 

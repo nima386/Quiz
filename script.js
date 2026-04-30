@@ -1394,7 +1394,7 @@ const ARENA_GAME_LABELS = {
   "map:europe": "Europa Map",
   "map:asia": "Asien Map",
   "map:africa": "Afrika Map",
-  "map:southAmerica": "Suedamerika Map",
+  "map:southAmerica": "Südamerika Map",
   "map:northAmerica": "Nordamerika Map"
 };
 
@@ -1759,6 +1759,15 @@ function openLearningHome() {
   setActiveNav("navStart");
   renderHome();
   showScreen(home, true);
+}
+
+function openGamesHub() {
+  closeUpperDrawer();
+  setActiveNav("navStart");
+  showScreen(gamesScreen, true);
+
+  document.querySelectorAll(".games-nav-item").forEach(item => item.classList.remove("active"));
+  document.getElementById("gamesNavStart")?.classList.add("active");
 }
 
 function normalizeArenaFriend(friend = {}) {
@@ -2453,7 +2462,7 @@ function populateArenaGameOptions() {
     ["map:europe", "Europa Map"],
     ["map:asia", "Asien Map"],
     ["map:africa", "Afrika Map"],
-    ["map:southAmerica", "Suedamerika Map"],
+    ["map:southAmerica", "Südamerika Map"],
     ["map:northAmerica", "Nordamerika Map"]
   ];
 
@@ -2940,7 +2949,7 @@ function initArena() {
 
   document.getElementById("homeUpperMenuBtn")?.addEventListener("click", openUpperDrawer);
   document.getElementById("startDailyBtn")?.addEventListener("click", startDailyChallenge);
-  document.getElementById("openLearningHomeBtn")?.addEventListener("click", openLearningHome);
+  document.getElementById("openLearningHomeBtn")?.addEventListener("click", openGamesHub);
   document.getElementById("homeArenaBtn")?.addEventListener("click", () => {
     renderArena();
     showScreen(arenaScreen, true);
@@ -2987,6 +2996,7 @@ window.declineArenaRequest = declineArenaRequest;
 window.sendArenaFriendRequest = sendArenaFriendRequest;
 window.playArenaDuel = playArenaDuel;
 window.openLearningHome = openLearningHome;
+window.openGamesHub = openGamesHub;
 window.openDailyDetails = openDailyDetails;
 window.completeDailyMapGame = (mapKey, result) => {
   if (!pendingDailyGameId) return false;
@@ -3484,20 +3494,6 @@ document.getElementById("createUpperBtn").onclick = () => {
   
   showScreen(home, true);
 };
-
-document.getElementById("upperMenuBtn").addEventListener("click", () => {
-  document.getElementById("upperOverlay").classList.add("show");
-  document.getElementById("upperDrawer").classList.add("show");
-  renderUpperList();
-});
-
-document.getElementById("closeUpperDrawer").addEventListener("click", () => {
-  closeUpperDrawer();
-});
-
-document.getElementById("upperOverlay").addEventListener("click", () => {
-  closeUpperDrawer();
-});
 
 function updateProfileUI() {
   const profileUsername = document.getElementById("profileUsername");
@@ -4262,6 +4258,15 @@ const showRegisterBtn = document.getElementById("showRegisterBtn");
 const backToLoginBtn = document.getElementById("backToLoginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const loginBtn = document.getElementById("loginBtn");
+const authForm = document.getElementById("authForm");
+
+authForm?.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const registerOpen = registerBtn && registerBtn.style.display !== "none";
+  if (registerOpen) registerBtn.click();
+  else loginBtn?.click();
+});
 
 showRegisterBtn.onclick = () => {
 
@@ -4444,14 +4449,6 @@ const openGamesFromDrawerBtn = document.getElementById("openGamesFromDrawer");
 
 if (openGamesFromDrawerBtn) {
   openGamesFromDrawerBtn.onclick = () => {
-    closeUpperDrawer();
-    setActiveNav("navStart");
-
-    const gamesScreen = document.getElementById("gamesScreen");
-    showScreen(gamesScreen, true);
-
-    document.querySelectorAll(".games-nav-item").forEach(i => i.classList.remove("active"));
-    const startBtn = document.getElementById("gamesNavStart");
-    if (startBtn) startBtn.classList.add("active");
+    openGamesHub();
   };
 }

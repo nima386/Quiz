@@ -6,6 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -41,19 +42,19 @@
 </header>
   
   <section id="authScreen" class="auth-screen hide">
-  <div class="auth-card">
+  <form id="authForm" class="auth-card" autocomplete="on">
     <div class="auth-logo">◈</div>
 
     <h1>Willkommen</h1>
     <p>Sync an. Fortschritt sicher.</p>
 
-    <input id="authName" placeholder="Username">
-    <input id="authPassword" type="password" placeholder="Passwort">
+    <input id="authName" name="username" autocomplete="username" placeholder="Username">
+    <input id="authPassword" name="password" type="password" autocomplete="current-password" placeholder="Passwort">
 
-    <button id="loginBtn" class="main-btn">Einloggen</button>
-    <button id="showRegisterBtn" class="main-btn secondary">Account erstellen</button>
-<button id="registerBtn" class="main-btn secondary" style="display:none;">Registrierung bestätigen</button>
-<button id="backToLoginBtn" class="main-btn secondary" style="display:none;">Zurück zum Login</button>
+    <button id="loginBtn" type="button" class="main-btn">Einloggen</button>
+    <button id="showRegisterBtn" type="button" class="main-btn secondary">Account erstellen</button>
+<button id="registerBtn" type="button" class="main-btn secondary" style="display:none;">Registrierung bestätigen</button>
+<button id="backToLoginBtn" type="button" class="main-btn secondary" style="display:none;">Zurück zum Login</button>
 
     
     <p id="authMessage"></p>
@@ -462,12 +463,12 @@
       <b>Fortgeschritten</b>
     </button>
     <button id="startShapeModeBtn" class="mode-card shape">
-      <span>LÃ¤nderform</span>
+      <span>Länderform</span>
       <h2>Umriss erkennen</h2>
-      <p>Du siehst nur die Form eines Landes und wÃ¤hlst die richtige Antwort aus der Liste.</p>
+      <p>Du siehst nur die Form eines Landes und wählst die richtige Antwort aus der Liste.</p>
       <b>Neuer Profi-Modus</b>
     </button>
-  </div>
+  </form>
 </section>
 <!-- europa -->
   <section id="europeGameHome" class="screen scroll-screen">
@@ -489,7 +490,7 @@
   
 
     <button id="startEuropeMapGame" class="main-btn">Spiel starten</button>
-    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('europe')">LÃ¤nderform erkennen</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('europe')">Länderform erkennen</button>
   </div>
 </section>
 
@@ -574,7 +575,7 @@
     <button onclick="startAsiaMapQuiz()" class="primary-btn">
       Spiel starten
     </button>
-    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('asia')">LÃ¤nderform erkennen</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('asia')">Länderform erkennen</button>
   </div>
 
 </section>
@@ -632,7 +633,7 @@
     <button onclick="startAfricaMapQuiz()" class="primary-btn">
       Spiel starten
     </button>
-    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('africa')">LÃ¤nderform erkennen</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('africa')">Länderform erkennen</button>
   </div>
 
 </section>
@@ -660,7 +661,7 @@
     <button id="startSouthAmericaGame" class="main-btn">
       Spiel starten
     </button>
-    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('southAmerica')">LÃ¤nderform erkennen</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('southAmerica')">Länderform erkennen</button>
   </div>
 </section>
 
@@ -716,41 +717,41 @@
     <button id="startNorthAmericaGame" class="main-btn">
       Spiel starten
     </button>
-    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('northAmerica')">LÃ¤nderform erkennen</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('northAmerica')">Länderform erkennen</button>
   </div>
 </section>
 
 <section id="countryShapeModeSelect" class="screen scroll-screen">
   <div class="games-top">
-    <button id="countryShapeModeBack" class="circle-btn">â†</button>
-    <div class="games-title-pill" id="countryShapeModeTitle">LÃ¤nderform</div>
+    <button id="countryShapeModeBack" class="circle-btn">←</button>
+    <div class="games-title-pill" id="countryShapeModeTitle">Länderform</div>
   </div>
 
   <div class="shape-mode-hero">
     <span>Formen-Training</span>
     <h1 id="countryShapeModeHeading">Europa</h1>
-    <p>Erkenne LÃ¤nder nur an ihrer Umrisskarte. WÃ¤hle den passenden Schwierigkeitsgrad.</p>
+    <p>Erkenne Länder nur an ihrer Umrisskarte. Wähle den passenden Schwierigkeitsgrad.</p>
   </div>
 
   <div class="shape-mode-grid">
     <button class="shape-mode-card ultra" data-shape-mode="ultra">
-      <i>ðŸ”¥</i>
+      <i>🔥</i>
       <span>Ultra Hard</span>
       <h2>Nur Profis</h2>
-      <p>Nur die LÃ¤nderform. Ein Versuch pro Land, kein Hinweis.</p>
+      <p>Nur die Länderform. Ein Versuch pro Land, kein Hinweis.</p>
       <b>1 Versuch</b>
     </button>
 
     <button class="shape-mode-card hard" data-shape-mode="hard">
-      <i>âš¡</i>
+      <i>⚡</i>
       <span>Hard</span>
       <h2>Zwei Leben</h2>
-      <p>Zwei Chancen pro Land. Beim zweiten Fehler wird aufgelÃ¶st.</p>
+      <p>Zwei Chancen pro Land. Beim zweiten Fehler wird aufgelöst.</p>
       <b>2 Leben</b>
     </button>
 
     <button class="shape-mode-card learn" data-shape-mode="learn">
-      <i>ðŸ§ </i>
+      <i>🧠</i>
       <span>Lernmodus</span>
       <h2>Mit Hinweisen</h2>
       <p>Kontinent, Hauptstadt und am Ende die richtige Antwort helfen dir beim Lernen.</p>
@@ -761,7 +762,7 @@
 
 <section id="countryShapeGame" class="screen scroll-screen">
   <div class="shape-game-top">
-    <button id="countryShapeBack" class="circle-btn">â†</button>
+    <button id="countryShapeBack" class="circle-btn">←</button>
     <div class="shape-live-pill">
       <span>Timer</span>
       <strong id="countryShapeTimer">0:00</strong>
@@ -779,7 +780,7 @@
 
   <div class="shape-question-card">
     <span>Welches Land ist das?</span>
-    <h1 id="countryShapeQuestion">WÃ¤hle ein Land</h1>
+    <h1 id="countryShapeQuestion">Wähle ein Land</h1>
     <div id="countryShapeHint" class="shape-hint-box"></div>
   </div>
 
@@ -804,7 +805,7 @@
     </div>
 
     <button id="countryShapeRestart" class="avatar-sheet-btn primary">Nochmal spielen</button>
-    <button id="countryShapeResultHome" class="avatar-sheet-btn muted">ZurÃ¼ck</button>
+    <button id="countryShapeResultHome" class="avatar-sheet-btn muted">Zurück</button>
   </div>
 </div>
 
@@ -939,7 +940,7 @@
     <div class="arena-hero-copy">
       <span class="arena-kicker">Arena Friends</span>
       <h1>Duell-Arena</h1>
-      <p>Fordere Freunde heraus, sammle Season-Punkte und baue Rivalitaeten auf.</p>
+      <p>Fordere Freunde heraus, sammle Season-Punkte und baue Rivalitäten auf.</p>
     </div>
 
     <div class="arena-player-card">
@@ -1007,8 +1008,8 @@
     <div class="arena-daily-card">
       <div>
         <span>Daily Arena</span>
-        <h2 id="dailyArenaTitle">Laender-Speedrun</h2>
-        <p>2 Versuche pro Tag. Der beste Score zaehlt fuer die Season.</p>
+        <h2 id="dailyArenaTitle">Länder-Speedrun</h2>
+        <p>2 Versuche pro Tag. Der beste Score zählt für die Season.</p>
       </div>
       <button id="playDailyArenaBtn" class="main-btn">Daily spielen</button>
     </div>
@@ -1018,7 +1019,7 @@
 
 <section id="friendProfileScreen" class="screen scroll-screen arena-screen">
   <div class="arena-profile-top">
-    <button id="backArenaFromProfile" class="circle-btn">Zurueck</button>
+    <button id="backArenaFromProfile" class="circle-btn">Zurück</button>
     <div class="profile-title-pill">Rivalen-Profil</div>
   </div>
   <div id="friendProfileBox"></div>
@@ -1033,7 +1034,7 @@
     <div class="sheet-handle"></div>
     <div class="avatar-sheet-head">
       <h2>Herausfordern</h2>
-      <p id="challengeFriendName">Waehle ein Duell</p>
+      <p id="challengeFriendName">Wähle ein Duell</p>
     </div>
 
     <div class="challenge-grid">
@@ -1043,7 +1044,7 @@
           <option value="map:europe">Europa Map</option>
           <option value="map:asia">Asien Map</option>
           <option value="map:africa">Afrika Map</option>
-          <option value="map:southAmerica">Suedamerika Map</option>
+          <option value="map:southAmerica">Südamerika Map</option>
           <option value="map:northAmerica">Nordamerika Map</option>
         </select>
       </label>

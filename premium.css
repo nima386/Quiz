@@ -623,3 +623,203 @@ body.light-mode .arena-search-row input {
     scroll-behavior: auto !important;
   }
 }
+
+/* Final interaction and layout polish */
+#homeUpperMenuBtn,
+#arenaUpperMenuBtn,
+#gamesUpperMenuBtn,
+#gamesStatsUpperMenuBtn,
+#gamesScreen .games-top #openGamesSearch,
+#gamesScreen .games-top #gamesProfileBtn,
+.home-profile-chip {
+  display: none !important;
+}
+
+.app-header {
+  grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+}
+
+.app-header-search img {
+  filter: invert(1) brightness(1.25) contrast(.9);
+}
+
+body.light-mode .app-header-search img {
+  filter: none;
+}
+
+.home-layout {
+  width: min(1280px, calc(100vw - 2 * var(--px))) !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .72fr) !important;
+}
+
+#homeScreen,
+#arenaScreen,
+#gamesScreen,
+#gamesStatsScreen,
+#continentModeSelect,
+#countryShapeModeSelect {
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.home-welcome {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.home-welcome h1 {
+  max-width: min(760px, 100%) !important;
+  overflow-wrap: normal !important;
+}
+
+.landing-text-nav {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 2px !important;
+  overflow: hidden !important;
+  padding: 6px !important;
+}
+
+.landing-text-nav button {
+  min-width: 0 !important;
+  padding: 0 4px !important;
+  font-size: clamp(11px, 3vw, 15px) !important;
+  white-space: nowrap !important;
+}
+
+.daily-meta-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.daily-meta-row > div,
+.home-stat-grid > div,
+.arena-home-stats > div {
+  min-width: 0 !important;
+}
+
+.daily-meta-row b,
+.daily-meta-row small,
+.home-stat-grid b,
+.home-stat-grid small,
+.arena-home-stats b,
+.arena-home-stats small {
+  overflow-wrap: anywhere;
+}
+
+.upper-overlay {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 180ms var(--ease-premium) !important;
+}
+
+.upper-overlay.show {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.upper-drawer {
+  transform: translate3d(-105%, 0, 0) !important;
+  will-change: transform !important;
+  pointer-events: none !important;
+  transition: transform 240ms var(--ease-premium) !important;
+}
+
+.upper-drawer.show {
+  transform: translate3d(0, 0, 0) !important;
+  pointer-events: auto !important;
+}
+
+.drawer-game-entry,
+.upper-row,
+.circle-btn,
+.main-btn,
+.primary-btn,
+.landing-text-nav button,
+.arena-tabs button {
+  touch-action: manipulation !important;
+}
+
+.arena-hero {
+  display: grid !important;
+  gap: 18px !important;
+  padding: clamp(24px, 5vw, 40px) !important;
+}
+
+.arena-hero-copy h1 {
+  font-size: clamp(42px, 8vw, 78px) !important;
+  line-height: .94 !important;
+}
+
+.arena-hero-copy p {
+  max-width: 44ch !important;
+}
+
+.arena-hero-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+#arenaFriendCode {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.arena-search-row {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+
+.arena-search-row input {
+  min-width: 0 !important;
+}
+
+#gamesStatsScreen {
+  padding-bottom: calc(var(--safe-bottom) + 124px) !important;
+}
+
+@media (min-width: 1180px) {
+  .home-welcome h1 {
+    font-size: clamp(52px, 5.4vw, 82px) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-layout {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-welcome h1 {
+    font-size: clamp(36px, 12vw, 58px) !important;
+  }
+
+  .arena-hero {
+    padding: 20px !important;
+  }
+
+  .arena-hero-copy h1 {
+    font-size: clamp(40px, 13vw, 64px) !important;
+  }
+
+  .arena-hero-stats {
+    gap: 10px !important;
+  }
+
+  .arena-search-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .arena-search-row button {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .landing-text-nav button {
+    font-size: 10.5px !important;
+  }
+}

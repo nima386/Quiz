@@ -255,6 +255,11 @@ body.light-mode {
   border-color: rgba(103, 232, 249, .62) !important;
 }
 
+.shape-option span,
+.shape-option small {
+  line-height: 1.18 !important;
+}
+
 .shape-confirm-btn {
   bottom: calc(env(safe-area-inset-bottom, 0px) + 82px) !important;
 }
@@ -385,5 +390,118 @@ body.light-mode .premium-globe-card {
     grid-column: 1 / -1;
     min-height: 38px !important;
     justify-content: center;
+  }
+}
+
+/* Final game-flow polish */
+.map-game-top {
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+}
+
+.map-game-top h2,
+#asiaMapGame .map-game-top h2,
+#africaMapGame .map-game-top h2,
+#southAmericaMapGame .map-game-top h2,
+#northAmericaMapGame .map-game-top h2 {
+  display: none !important;
+}
+
+.map-live-timer {
+  min-height: 58px !important;
+  border-radius: 22px !important;
+  padding-inline: 18px !important;
+}
+
+.map-live-timer strong {
+  font-size: clamp(20px, 5.4vw, 30px) !important;
+}
+
+.shape-svg-box svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  background: transparent !important;
+}
+
+.shape-svg-box svg path,
+.shape-svg-box svg polygon,
+.shape-svg-box svg polyline,
+.shape-svg-box svg circle,
+.shape-svg-box svg ellipse {
+  fill: #f8fbff !important;
+  stroke: #f8fbff !important;
+  stroke-width: 1.2 !important;
+  stroke-linejoin: round !important;
+  stroke-linecap: round !important;
+}
+
+.shape-mode-card i {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", system-ui, sans-serif !important;
+  line-height: 1 !important;
+}
+
+#countryShapeModeSelect .games-top {
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+}
+
+#countryShapeModeSelect .games-title-pill {
+  justify-self: stretch !important;
+  text-align: center !important;
+}
+
+#countryShapeGame.active {
+  min-height: 100dvh !important;
+}
+
+#countryShapeGame .shape-stage-card {
+  padding: clamp(14px, 3.4vw, 24px) !important;
+}
+
+#countryShapeGame .shape-options-list {
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+#countryShapeGame .shape-confirm-btn {
+  min-height: 62px !important;
+}
+
+@media (max-width: 430px) {
+  .map-game-top {
+    grid-template-columns: 46px minmax(0, 1fr) !important;
+  }
+
+  .map-live-timer {
+    min-height: 56px !important;
+  }
+
+  #countryShapeGame.active {
+    grid-template-rows: auto minmax(0, 29vh) auto minmax(0, 1fr) auto !important;
+  }
+
+  #countryShapeGame .shape-stage-card {
+    padding: 14px !important;
+  }
+
+  #countryShapeGame .shape-question-card {
+    padding: 14px 16px !important;
+  }
+
+  #countryShapeGame .shape-options-list {
+    padding: 10px !important;
+  }
+
+  #countryShapeGame .shape-confirm-btn {
+    min-height: 58px !important;
+  }
+
+  #gamesStatsScreen .globe-shell,
+  #gamesStatsScreen #gamesGlobe {
+    height: 300px !important;
+    min-height: 300px !important;
+  }
+
+  #gamesStatsScreen .continent-stat-card {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 112px) !important;
   }
 }
