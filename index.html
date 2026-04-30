@@ -89,8 +89,46 @@
     <span>Suche</span>
   </button>
 
-  <button id="appHeaderProfile" class="app-header-profile" aria-label="Profil öffnen">
-    <img id="appHeaderAvatar" src="avatars/avatar1.png" alt="">
+  <button id="appHeaderProfile" class="app-header-profile app-header-dice-profile" aria-label="Profil öffnen">
+    <svg class="header-dice-svg" width="36" height="36" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="headerDiceTopStroke" x1="72" y1="28" x2="154" y2="110">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="58%" stop-color="#c8c4ff"/>
+          <stop offset="100%" stop-color="#7f77dd"/>
+        </linearGradient>
+        <linearGradient id="headerDiceBotStroke" x1="36" y1="100" x2="128" y2="192">
+          <stop offset="0%" stop-color="#a9a2ff"/>
+          <stop offset="58%" stop-color="#5f55d6"/>
+          <stop offset="100%" stop-color="#342b93"/>
+        </linearGradient>
+        <radialGradient id="headerDiceGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d8d4ff" stop-opacity=".62"/>
+          <stop offset="70%" stop-color="#6f65e8" stop-opacity=".16"/>
+          <stop offset="100%" stop-color="#534ab7" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse class="header-dice-glow" cx="88" cy="154" rx="72" ry="55" fill="url(#headerDiceGlow)"/>
+      <g class="header-dice-top">
+        <rect class="header-dice-glass" x="72" y="28" width="82" height="82" rx="14"
+          stroke="url(#headerDiceTopStroke)" stroke-width="2.8" transform="rotate(-10, 113, 69)"/>
+        <circle cx="96" cy="50" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+        <circle cx="130" cy="50" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+        <circle cx="113" cy="69" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+        <circle cx="96" cy="88" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+        <circle cx="130" cy="88" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+      </g>
+      <g class="header-dice-bot">
+        <rect class="header-dice-glass" x="36" y="100" width="92" height="92" rx="16"
+          stroke="url(#headerDiceBotStroke)" stroke-width="3.3"/>
+        <circle cx="62" cy="122" r="6" fill="#5f55d6"/>
+        <circle cx="102" cy="122" r="6" fill="#5f55d6"/>
+        <circle cx="62" cy="146" r="6" fill="#5f55d6"/>
+        <circle cx="102" cy="146" r="6" fill="#5f55d6"/>
+        <circle cx="62" cy="170" r="6" fill="#5f55d6"/>
+        <circle cx="102" cy="170" r="6" fill="#5f55d6"/>
+      </g>
+    </svg>
   </button>
 </header>
   

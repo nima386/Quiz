@@ -469,6 +469,19 @@ function goBackOneStep(fallbackId = "gamesScreen") {
 
 window.goBackOneStep = goBackOneStep;
 
+function replayHeaderDice() {
+  const profileButton = document.getElementById("appHeaderProfile");
+  if (!profileButton) return;
+
+  profileButton.classList.remove("dice-replay");
+  void profileButton.offsetWidth;
+  profileButton.classList.add("dice-replay");
+
+  setTimeout(() => {
+    profileButton.classList.remove("dice-replay");
+  }, 900);
+}
+
 function renderUpperList() {
   const list = document.getElementById("upperList");
   list.innerHTML = "";
@@ -3173,7 +3186,8 @@ document.getElementById("topAvatar").onclick = () => {
 };
 
 document.getElementById("closeProfile").onclick = () => {
-  showScreen(home, true);
+  goBackOneStep("homeScreen");
+  setTimeout(replayHeaderDice, 120);
 };
 
 document.getElementById("backLibrary").onclick = () => {
@@ -3345,7 +3359,47 @@ document.getElementById("openSearch").onclick = () => {
   setTimeout(() => document.getElementById("searchInput").focus(), 150);
 };
 
+function closeSearchSmart() {
+  const input = document.getElementById("searchInput");
+  const screen = document.getElementById("searchScreen");
+  if (screen?.classList.contains("search-closing")) return;
+  input?.blur();
+  screen?.classList.add("search-closing");
+
+  setTimeout(() => {
+    screen?.classList.remove("search-closing");
+    if (searchOnlyCurrentCategory) {
+      searchOnlyCurrentCategory = false;
+      showScreen(questionList, true, { replace: true });
+      renderQuestionList();
+      return;
+    }
+
+    goBackOneStep("homeScreen");
+  }, 180);
+}
+
 document.getElementById("closeSearch").onclick = () => {
+  closeSearchSmart();
+};
+
+document.getElementById("searchInput").addEventListener("blur", e => {
+  setTimeout(() => {
+    const activeId = document.querySelector(".screen.active")?.id;
+    const hasQuery = e.target.value.trim().length > 0;
+    if (activeId === "searchScreen" && !hasQuery && !document.getElementById("searchScreen")?.classList.contains("search-closing")) {
+      closeSearchSmart();
+    }
+  }, 160);
+});
+
+document.getElementById("searchInput").addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    closeSearchSmart();
+  }
+});
+
+/*
   if (searchOnlyCurrentCategory) {
     searchOnlyCurrentCategory = false;
     showScreen(questionList, true);
@@ -3354,7 +3408,7 @@ document.getElementById("closeSearch").onclick = () => {
   }
 
   showScreen(home, true);
-};
+*/
 
 document.getElementById("searchInput").oninput = e => {
   runSearch(e.target.value);

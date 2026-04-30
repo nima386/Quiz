@@ -128,6 +128,70 @@ body {
   object-fit: cover;
 }
 
+.app-header-dice-profile {
+  overflow: visible !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .045)),
+    rgba(7, 11, 24, .72) !important;
+}
+
+.header-dice-svg {
+  width: 38px;
+  height: 38px;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 5px rgba(195, 190, 255, .38))
+    drop-shadow(0 8px 12px rgba(83, 74, 183, .26));
+}
+
+.header-dice-glass {
+  fill: rgba(255, 255, 255, .045);
+}
+
+.header-dice-top {
+  transform-origin: 113px 69px;
+  transform: translate3d(-7px, 70px, 0) rotate(8deg);
+}
+
+.header-dice-bot {
+  transform-origin: 82px 146px;
+}
+
+.header-dice-glow {
+  opacity: .44;
+}
+
+.app-header-dice-profile.dice-replay .header-dice-top {
+  animation: headerTopDiceReplay 780ms cubic-bezier(.18, .92, .2, 1) both;
+}
+
+.app-header-dice-profile.dice-replay .header-dice-bot {
+  animation: headerBottomDiceReplay 780ms cubic-bezier(.18, .92, .2, 1) both;
+}
+
+.app-header-dice-profile.dice-replay .header-dice-glow {
+  animation: headerDiceGlowReplay 780ms cubic-bezier(.18, .92, .2, 1) both;
+}
+
+@keyframes headerTopDiceReplay {
+  0% { transform: translate3d(-7px, 70px, 0) rotate(8deg) scale(1); }
+  42% { transform: translate3d(-7px, 52px, 0) rotate(14deg) scale(.98, 1.02); }
+  72% { transform: translate3d(-7px, 73px, 0) rotate(10deg) scale(1.02, .98); }
+  100% { transform: translate3d(-7px, 70px, 0) rotate(8deg) scale(1); }
+}
+
+@keyframes headerBottomDiceReplay {
+  0%, 44% { transform: translate3d(0, 0, 0) scale(1); }
+  70% { transform: translate3d(1px, 3px, 0) rotate(-1deg) scale(1.025, .975); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+}
+
+@keyframes headerDiceGlowReplay {
+  0%, 42% { opacity: .35; transform: scale(.95); }
+  70% { opacity: .88; transform: scale(1.08); }
+  100% { opacity: .44; transform: scale(1); }
+}
+
 body:not(.app-header-hidden) .screen {
   padding-top: calc(var(--safe-top) + 82px) !important;
 }
@@ -393,6 +457,31 @@ select:focus,
 .arena-search-row input:focus {
   border-color: rgba(103, 232, 249, .54) !important;
   box-shadow: 0 0 0 4px rgba(103, 232, 249, .12) !important;
+}
+
+#searchScreen {
+  transition:
+    opacity 220ms var(--ease-premium),
+    transform 220ms var(--ease-premium),
+    filter 220ms var(--ease-premium) !important;
+}
+
+#searchScreen.search-closing {
+  opacity: 0 !important;
+  transform: translate3d(0, 16px, 0) scale(.985) !important;
+  filter: blur(8px) !important;
+}
+
+.search-top {
+  position: sticky !important;
+  top: 8px !important;
+  z-index: 20 !important;
+  padding: 0 !important;
+  margin-bottom: 18px !important;
+}
+
+.search-top #closeSearch {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .22) !important;
 }
 
 .bottom-nav,
@@ -744,7 +833,7 @@ body.light-mode .app-header-search img {
 }
 
 .arena-hero {
-  display: grid !important;
+  display: grid;
   gap: 18px !important;
   padding: clamp(24px, 5vw, 40px) !important;
 }
@@ -845,6 +934,28 @@ body [contenteditable="true"] {
   user-select: text;
 }
 
+.bottom-nav,
+.games-nav {
+  bottom: calc(var(--safe-bottom) + 4px) !important;
+}
+
+.nav-floating-label {
+  display: none !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--safe-bottom) + 118px);
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(7, 11, 24, 0), rgba(7, 11, 24, .92) 58%, rgba(7, 11, 24, 1));
+}
+
 .home-welcome {
   display: none !important;
 }
@@ -855,7 +966,7 @@ body [contenteditable="true"] {
 
 .landing-text-nav {
   position: sticky !important;
-  top: calc(var(--safe-top) + 74px) !important;
+  top: 10px !important;
   z-index: 3400 !important;
   margin-top: 0 !important;
   margin-bottom: 18px !important;
@@ -867,7 +978,7 @@ body [contenteditable="true"] {
 }
 
 #homeDailySection {
-  margin-top: 64px !important;
+  margin-top: 16px !important;
 }
 
 #homeArenaInbox:empty {
@@ -893,11 +1004,11 @@ body [contenteditable="true"] {
 
 @media (max-width: 760px) {
   .landing-text-nav {
-    top: calc(var(--safe-top) + 76px) !important;
+    top: 8px !important;
   }
 
   #homeScreen {
-    scroll-padding-top: calc(var(--safe-top) + 148px) !important;
+    scroll-padding-top: 78px !important;
   }
 }
 
@@ -906,7 +1017,7 @@ body [contenteditable="true"] {
   position: fixed !important;
   inset: 0 !important;
   z-index: 15000 !important;
-  display: grid !important;
+  display: grid;
   place-items: center !important;
   padding: calc(var(--safe-top) + 28px) 24px calc(var(--safe-bottom) + 28px) !important;
   overflow: hidden !important;

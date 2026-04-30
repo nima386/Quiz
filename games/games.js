@@ -2585,6 +2585,7 @@ let selectedStatsCard = null;
 let gamesGlobeGeoLoaded = false;
 let gamesGlobeRetryTimer = null;
 let gamesGlobeScriptPromise = null;
+let gamesGlobeInitInFlight = false;
 
 const CONTINENT_META_FINAL = {
   europe: {
@@ -2674,11 +2675,14 @@ function getGlobeColor(continentKey) {
 function renderGamesStats() {
   const box = document.getElementById("gamesStatsBox");
   const globeEl = document.getElementById("gamesGlobe");
-if (globeEl && !gamesGlobeInstance) {
-  requestAnimationFrame(() => {
-    initGamesGlobeFinal();
-  });
-}
+  if (globeEl && !gamesGlobeInstance && !gamesGlobeInitInFlight) {
+    globeEl.innerHTML = `
+      <div class="empty-globe-bubble globe-loading-premium">
+        <strong>Globus wird vorbereitet</strong>
+        <p>Stats sind sofort da. Die 3D-Ansicht lädt im Hintergrund.</p>
+      </div>
+    `;
+  }
   if (!box) return;
 
   const games = Object.keys(CONTINENT_META_FINAL).map(key => {
@@ -2725,9 +2729,12 @@ if (globeEl && !gamesGlobeInstance) {
     </div>
   `;
 
- requestAnimationFrame(() => {
-  initGamesGlobeFinal();
-});
+  const startGlobe = () => initGamesGlobeFinal();
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(startGlobe, { timeout: 900 });
+  } else {
+    setTimeout(startGlobe, 120);
+  }
 }
 async function openContinentFocus(card, key) {
   const meta = CONTINENT_META_FINAL[key];
@@ -2903,6 +2910,8 @@ async function initGamesGlobeFinal() {
   const globeEl = document.getElementById("gamesGlobe");
 
   if (!globeEl) return;
+  if (gamesGlobeInitInFlight) return;
+  gamesGlobeInitInFlight = true;
 
   if (typeof Globe !== "function") {
     globeEl.innerHTML = `
@@ -2915,6 +2924,7 @@ async function initGamesGlobeFinal() {
     try {
       await loadGamesGlobeLibrary();
     } catch (error) {
+      gamesGlobeInitInFlight = false;
       globeEl.innerHTML = `
         <div class="empty-globe-bubble">
           <strong>Globus nicht erreichbar</strong>
@@ -2926,6 +2936,7 @@ async function initGamesGlobeFinal() {
     }
 
     clearTimeout(gamesGlobeRetryTimer);
+    gamesGlobeInitInFlight = false;
     gamesGlobeRetryTimer = setTimeout(initGamesGlobeFinal, 80);
     return;
   }
@@ -2933,6 +2944,7 @@ async function initGamesGlobeFinal() {
   const rect = globeEl.getBoundingClientRect();
 
   if (rect.width < 50 || rect.height < 50) {
+    gamesGlobeInitInFlight = false;
     requestAnimationFrame(() => initGamesGlobeFinal());
     return;
   }
@@ -2940,6 +2952,7 @@ async function initGamesGlobeFinal() {
   if (gamesGlobeInstance) {
     gamesGlobeInstance.width(rect.width).height(rect.height);
     resumeGlobe();
+    gamesGlobeInitInFlight = false;
     return;
   }
 
@@ -2998,6 +3011,8 @@ async function initGamesGlobeFinal() {
     gamesGlobeGeoLoaded = true;
   } catch (error) {
     console.error("countries.geojson Fehler:", error);
+  } finally {
+    gamesGlobeInitInFlight = false;
   }
 }
 
@@ -3025,6 +3040,11 @@ function loadGamesGlobeLibrary() {
 
   return gamesGlobeScriptPromise;
 }
+
+setTimeout(() => {
+  loadGamesGlobeLibrary().catch(() => {});
+}, 1800);
+
 window.addEventListener("resize", () => {
   const globeEl = document.getElementById("gamesGlobe");
   if (!globeEl || !gamesGlobeInstance) return;
