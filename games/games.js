@@ -3633,7 +3633,11 @@ const MapQuizEngine = (() => {
         sheet.classList.add("result-pop");
       }
     } else {
-      showScreen(byId(config.homeId), true);
+      if (typeof window.goBackOneStep === "function") {
+        window.goBackOneStep("continentModeSelect");
+      } else {
+        showScreen(byId(config.homeId), true);
+      }
     }
 
     showIsland("Runde beendet", "success");
@@ -3651,7 +3655,11 @@ const MapQuizEngine = (() => {
     } catch (error) {
       console.error(error);
       showIsland("Karte konnte nicht geladen werden", "danger");
-      showScreen(byId(config.homeId), true);
+      if (typeof window.goBackOneStep === "function") {
+        window.goBackOneStep("continentModeSelect");
+      } else {
+        showScreen(byId(config.homeId), true);
+      }
       return;
     }
 
@@ -4005,6 +4013,23 @@ function wireMapEngine() {
   document.getElementById("startMasterModeBtn")?.addEventListener("click", () => startSelectedMapMode("master"));
   document.getElementById("startShapeModeBtn")?.addEventListener("click", () => openCountryShapeModeSelect(selectedMapModeKey));
 
+  [
+    ["backEuropeHome", "europe"],
+    ["backAsiaHome", "asia"],
+    ["backAfricaHome", "africa"],
+    ["backSouthAmericaHome", "southAmerica"],
+    ["backNorthAmericaHome", "northAmerica"]
+  ].forEach(([id, key]) => {
+    const button = document.getElementById(id);
+    if (!button) return;
+    button.onclick = () => {
+      resetMapQuiz(key);
+      document.body.classList.remove("map-playing");
+      if (typeof window.goBackOneStep === "function") window.goBackOneStep("continentModeSelect");
+      else openMapModeSelect(key);
+    };
+  });
+
   document.querySelectorAll("[data-shape-mode]").forEach(button => {
     button.addEventListener("click", () => startCountryShapeGame(countryShapeState.continentKey, button.dataset.shapeMode));
   });
@@ -4014,7 +4039,8 @@ function wireMapEngine() {
   });
   document.getElementById("countryShapeBack")?.addEventListener("click", () => {
     clearInterval(countryShapeState.timer);
-    openCountryShapeModeSelect(countryShapeState.continentKey);
+    if (typeof window.goBackOneStep === "function") window.goBackOneStep("countryShapeModeSelect");
+    else openCountryShapeModeSelect(countryShapeState.continentKey);
   });
   document.getElementById("countryShapeConfirm")?.addEventListener("click", confirmCountryShapeAnswer);
   document.getElementById("countryShapeRestart")?.addEventListener("click", () => {

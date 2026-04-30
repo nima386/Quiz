@@ -18,11 +18,27 @@
 <body>
 
   <div id="appIsland" class="app-island"></div>
-  <div id="appLoader" class="app-loader">
+<div id="appLoader" class="app-loader">
   <div class="loader-card"></div>
   <div class="loader-card small"></div>
   <div class="loader-card wide"></div>
 </div>
+
+<header id="appHeader" class="app-header">
+  <button id="appHeaderMenu" class="app-header-icon app-header-menu" aria-label="Oberkategorien öffnen">
+    <span></span>
+    <span></span>
+  </button>
+
+  <button id="appHeaderSearch" class="app-header-search" aria-label="Suche öffnen">
+    <img src="icon/search.png" alt="">
+    <span>Suche</span>
+  </button>
+
+  <button id="appHeaderProfile" class="app-header-profile" aria-label="Profil öffnen">
+    <img id="appHeaderAvatar" src="avatars/avatar1.png" alt="">
+  </button>
+</header>
   
   <section id="authScreen" class="auth-screen hide">
   <div class="auth-card">
@@ -69,7 +85,15 @@
           </button>
         </header>
 
-        <section class="daily-hero-card glass-card">
+        <nav class="landing-text-nav" aria-label="Dashboard Navigation">
+          <button data-home-jump="homeDailySection">Daily</button>
+          <button data-home-jump="homeRecommendedSection">Spiele</button>
+          <button data-home-jump="homeProgressSection">Fortschritt</button>
+          <button data-home-jump="homeArenaSection">Arena</button>
+          <button data-home-jump="homeActivitySection">Aktivität</button>
+        </nav>
+
+        <section id="homeDailySection" class="daily-hero-card glass-card">
           <div class="daily-hero-copy">
             <span>Daily</span>
             <h2 id="dailyGameTitle">Europa Map</h2>
@@ -83,7 +107,7 @@
           <button id="startDailyBtn" class="main-btn">Jetzt spielen</button>
         </section>
 
-        <section class="home-section">
+        <section id="homeRecommendedSection" class="home-section">
           <div class="home-section-head">
             <h2>Für dich empfohlen</h2>
             <button id="openLearningHomeBtn">Alle</button>
@@ -91,7 +115,7 @@
           <div id="recommendedGames" class="recommended-grid"></div>
         </section>
 
-        <section class="home-section">
+        <section id="homeActivitySection" class="home-section">
           <div class="home-section-head">
             <h2>Letzte Aktivitäten</h2>
           </div>
@@ -109,7 +133,7 @@
           </div>
         </button>
 
-        <section class="progress-widget glass-card">
+        <section id="homeProgressSection" class="progress-widget glass-card">
           <span>Fortschritt</span>
           <h2 id="homeProgressLevel">Level 1</h2>
           <div class="level-bar"><i id="homeLevelFill"></i></div>
@@ -121,7 +145,7 @@
           </div>
         </section>
 
-        <section class="arena-home-card glass-card">
+        <section id="homeArenaSection" class="arena-home-card glass-card">
           <span>Arena</span>
           <h2>Freunde & Duelle</h2>
           <p>Fordere deine Freunde heraus und zeige, wer heute stärker ist.</p>

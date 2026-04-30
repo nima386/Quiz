@@ -52,6 +52,67 @@ body.light-mode {
   align-items: center !important;
 }
 
+.map-game-top {
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) auto !important;
+  justify-content: initial !important;
+}
+
+.map-game-top .circle-btn,
+.map-game-top #backEuropeHome,
+.map-game-top #backAsiaHome,
+.map-game-top #backAfricaHome,
+.map-game-top #backSouthAmericaHome,
+.map-game-top #backNorthAmericaHome {
+  position: static !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+.map-live-timer {
+  position: static !important;
+  left: auto !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  gap: 8px !important;
+  align-items: center !important;
+  padding: 0 14px !important;
+  transform: none !important;
+  text-align: left !important;
+  border-radius: 18px !important;
+}
+
+.map-live-timer span,
+.map-live-timer small {
+  color: var(--g-muted) !important;
+  font-size: 11px !important;
+  font-weight: 950 !important;
+  text-transform: uppercase !important;
+}
+
+.map-live-timer strong {
+  justify-self: end;
+  color: var(--g-text) !important;
+  font-size: 18px !important;
+}
+
+.map-game-top h2 {
+  position: static !important;
+  right: auto !important;
+  min-height: 48px !important;
+  display: grid !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 14px !important;
+  border-radius: 18px !important;
+  color: #06111f !important;
+  background: linear-gradient(135deg, var(--g-cyan), var(--g-violet)) !important;
+  white-space: nowrap !important;
+}
+
 .games-title-pill,
 .map-live-timer,
 .shape-live-pill,
@@ -198,6 +259,49 @@ body.light-mode {
   bottom: calc(env(safe-area-inset-bottom, 0px) + 82px) !important;
 }
 
+#countryShapeGame.active {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 38vh) auto minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+}
+
+#countryShapeGame .shape-stage-card,
+#countryShapeGame .shape-question-card,
+#countryShapeGame .shape-options-list,
+#countryShapeGame .shape-game-top {
+  width: min(980px, 100%) !important;
+}
+
+#countryShapeGame .shape-stage-card {
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+}
+
+#countryShapeGame .shape-svg-box {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+#countryShapeGame .shape-question-card {
+  margin-top: 0 !important;
+}
+
+#countryShapeGame .shape-options-list {
+  min-height: 0 !important;
+  max-height: none !important;
+  margin-top: 0 !important;
+}
+
+#countryShapeGame .shape-confirm-btn {
+  position: relative !important;
+  bottom: auto !important;
+  width: min(980px, 100%) !important;
+  margin-top: 0 !important;
+}
+
 .games-nav.show {
   animation: gameNavIn 260ms var(--g-ease) both;
 }
@@ -258,5 +362,28 @@ body.light-mode .premium-globe-card {
 
   .shape-confirm-btn {
     bottom: calc(env(safe-area-inset-bottom, 0px) + 76px) !important;
+  }
+
+  #countryShapeGame.active {
+    grid-template-rows: auto minmax(0, 30vh) auto minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+  }
+
+  #countryShapeGame .shape-question-card h1 {
+    font-size: 22px !important;
+  }
+
+  #countryShapeGame .shape-option {
+    min-height: 50px !important;
+  }
+
+  .map-game-top {
+    grid-template-columns: 46px minmax(0, 1fr) !important;
+  }
+
+  .map-game-top h2 {
+    grid-column: 1 / -1;
+    min-height: 38px !important;
+    justify-content: center;
   }
 }

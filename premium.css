@@ -50,6 +50,123 @@ body {
   letter-spacing: 0 !important;
 }
 
+.app-header {
+  position: fixed;
+  top: calc(var(--safe-top) + 8px);
+  left: 50%;
+  z-index: 3600;
+  width: min(1040px, calc(100vw - 24px));
+  height: 58px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  gap: 10px;
+  align-items: center;
+  transform: translate3d(-50%, -110%, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-premium), transform 240ms var(--ease-premium);
+}
+
+.app-header.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.app-header-icon,
+.app-header-search,
+.app-header-profile {
+  height: 48px;
+  border: 1px solid var(--line);
+  color: var(--text-0);
+  background: rgba(7, 11, 24, .62);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+
+.app-header-icon,
+.app-header-profile {
+  width: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+}
+
+.app-header-menu span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.app-header-menu span + span {
+  margin-top: 6px;
+}
+
+.app-header-search {
+  display: grid;
+  grid-template-columns: 20px auto;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  border-radius: 999px;
+  font-weight: 950;
+}
+
+.app-header-search img {
+  width: 18px;
+  height: 18px;
+  opacity: .9;
+}
+
+.app-header-profile img {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+  object-fit: cover;
+}
+
+body:not(.app-header-hidden) .screen {
+  padding-top: calc(var(--safe-top) + 82px) !important;
+}
+
+body.app-header-hidden .app-header {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, -110%, 0);
+}
+
+body.app-header-hidden .screen {
+  padding-top: calc(var(--safe-top) + 10px) !important;
+}
+
+body.auth-open {
+  overflow: hidden !important;
+}
+
+body.auth-open .app-header,
+body.auth-open .bottom-nav,
+body.auth-open .games-nav,
+body.auth-open #navFloatingLabel,
+body.auth-open #addQuestionBtn {
+  display: none !important;
+}
+
+.auth-screen {
+  z-index: 22000 !important;
+  pointer-events: auto !important;
+}
+
+.auth-screen:not(.hide) {
+  display: flex !important;
+}
+
+.auth-card {
+  pointer-events: auto;
+}
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -74,6 +191,35 @@ button {
 
 .screen.active {
   animation: premiumScreenIn 300ms var(--ease-premium) both;
+}
+
+.top-bar {
+  display: none !important;
+}
+
+#gamesScreen .games-top #gamesUpperMenuBtn,
+#gamesScreen .games-top #openGamesSearch,
+#gamesScreen .games-top #gamesProfileBtn {
+  display: none !important;
+}
+
+#gamesScreen .games-top {
+  grid-template-columns: minmax(0, 1fr) !important;
+  min-height: auto !important;
+  margin-bottom: 14px !important;
+}
+
+#gamesScreen .games-title-pill {
+  justify-self: start;
+}
+
+.search-top {
+  display: none !important;
+}
+
+.profile-top,
+.library-head {
+  margin-top: 0 !important;
 }
 
 @keyframes premiumScreenIn {
@@ -296,6 +442,37 @@ select:focus,
   line-height: .96 !important;
 }
 
+.landing-text-nav {
+  display: flex;
+  gap: 8px;
+  margin: -2px 0 12px;
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  scrollbar-width: none;
+}
+
+.landing-text-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.landing-text-nav button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--text-0);
+  background: transparent;
+  font-weight: 950;
+}
+
+.landing-text-nav button:active {
+  background: rgba(103, 232, 249, .13);
+}
+
 .home-profile-chip {
   max-width: min(220px, 36vw);
 }
@@ -397,8 +574,23 @@ body.light-mode .arena-search-row input {
   }
 
   .home-welcome {
-    grid-template-columns: 48px minmax(0, 1fr) 54px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
     gap: 10px !important;
+  }
+
+  .home-menu-btn,
+  .home-profile-chip {
+    display: none !important;
+  }
+
+  .home-welcome h1 {
+    font-size: clamp(29px, 10vw, 42px) !important;
+  }
+
+  .home-welcome p {
+    max-width: 34ch;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
   }
 
   .daily-hero-card {

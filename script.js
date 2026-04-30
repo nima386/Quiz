@@ -61,8 +61,11 @@ const gamesStatsScreen = document.getElementById("gamesStatsScreen");
 const arenaScreen = document.getElementById("arenaScreen");
 const friendProfileScreen = document.getElementById("friendProfileScreen");
 const duelResultScreen = document.getElementById("duelResultScreen");
+const appHeader = document.getElementById("appHeader");
+const appHeaderAvatar = document.getElementById("appHeaderAvatar");
 
 let currentUser = null;
+let screenHistory = [];
 
 const authScreen = document.getElementById("authScreen");
 const authName = document.getElementById("authName");
@@ -320,7 +323,7 @@ function prepareQuizOrder(category) {
   }
 }
 
-function showScreen(screen, showNav = true) {
+function showScreen(screen, showNav = true, options = {}) {
   if (!screen) {
     console.warn("showScreen: screen wurde nicht gefunden");
     return;
@@ -331,6 +334,12 @@ function showScreen(screen, showNav = true) {
   document.querySelectorAll(".swipe-wrapper.open").forEach(item => {
     item.classList.remove("open");
   });
+
+  const previousScreen = document.querySelector(".screen.active");
+  if (!options.replace && previousScreen && previousScreen !== screen) {
+    screenHistory.push(previousScreen.id);
+    if (screenHistory.length > 40) screenHistory.shift();
+  }
 
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
@@ -354,6 +363,8 @@ function showScreen(screen, showNav = true) {
   const isNoNavArea =
   screen.id === "homeScreen" ||
   screen.id === "arenaScreen" ||
+  screen.id === "countryShapeModeSelect" ||
+  screen.id === "countryShapeGame" ||
   screen.id === "questionList" ||
   screen.id === "questionDetail" ||
   screen.id === "friendProfileScreen" ||
@@ -367,6 +378,18 @@ showNav === false;
 
   const showMainNav = !isGamesArea && !isNoNavArea;
   const showGamesNav = isGamesArea && !isNoNavArea;
+  const hideAppHeader =
+    screen.id === "quiz" ||
+    screen.id === "europeMapGame" ||
+    screen.id === "asiaMapGame" ||
+    screen.id === "africaMapGame" ||
+    screen.id === "southAmericaMapGame" ||
+    screen.id === "northAmericaMapGame" ||
+    screen.id === "countryShapeGame" ||
+    showNav === false;
+
+  document.body.classList.toggle("app-header-hidden", hideAppHeader);
+  if (appHeader) appHeader.classList.toggle("show", !hideAppHeader);
 
   if (mainNav) {
     mainNav.style.display = showMainNav ? "flex" : "none";
@@ -422,6 +445,25 @@ showNav === false;
   }, 40);
 }
 
+function goBackOneStep(fallbackId = "gamesScreen") {
+  const currentId = document.querySelector(".screen.active")?.id;
+
+  while (screenHistory.length) {
+    const id = screenHistory.pop();
+    if (!id || id === currentId) continue;
+    const target = document.getElementById(id);
+    if (target) {
+      showScreen(target, true, { replace: true });
+      return;
+    }
+  }
+
+  const fallback = document.getElementById(fallbackId);
+  if (fallback) showScreen(fallback, true, { replace: true });
+}
+
+window.goBackOneStep = goBackOneStep;
+
 function renderUpperList() {
   const list = document.getElementById("upperList");
   list.innerHTML = "";
@@ -450,19 +492,10 @@ function renderUpperList() {
     `;
 
     let startX = 0;
+    let startY = 0;
+    let handledPointer = false;
 
-row.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
-
-row.addEventListener("touchend", e => {
-  const endX = e.changedTouches[0].clientX;
-
-  if (startX - endX > 55) wrapper.classList.add("open");
-  if (endX - startX > 55) wrapper.classList.remove("open");
-});
-    
-    row.onclick = () => {
+    const selectUpperCategory = () => {
       saveAppStore();
       activeUpper = name;
       hydrateActiveUpper();
@@ -472,6 +505,34 @@ row.addEventListener("touchend", e => {
       renderLibrary();
       setActiveNav("navStart");
       showScreen(home, true);
+    };
+
+    row.addEventListener("pointerdown", e => {
+      startX = e.clientX;
+      startY = e.clientY;
+      handledPointer = false;
+    }, { passive: true });
+
+    row.addEventListener("pointerup", e => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      handledPointer = true;
+
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) wrapper.classList.add("open");
+        else wrapper.classList.remove("open");
+        return;
+      }
+
+      selectUpperCategory();
+    }, { passive: true });
+
+    row.onclick = () => {
+      if (handledPointer) {
+        handledPointer = false;
+        return;
+      }
+      selectUpperCategory();
     };
 
     deleteBtn.onclick = async () => {
@@ -2896,6 +2957,24 @@ function initArena() {
     showScreen(profile, false);
     updateProfileUI();
   });
+  document.getElementById("appHeaderMenu")?.addEventListener("click", openUpperDrawer);
+  document.getElementById("appHeaderSearch")?.addEventListener("click", () => {
+    showScreen(searchScreen, false);
+    setTimeout(() => document.getElementById("searchInput")?.focus(), 120);
+  });
+  document.getElementById("appHeaderProfile")?.addEventListener("click", () => {
+    showScreen(profile, false);
+    updateProfileUI();
+  });
+  document.querySelectorAll("[data-home-jump]").forEach(button => {
+    button.addEventListener("click", () => {
+      const target = document.getElementById(button.dataset.homeJump);
+      const scroller = document.getElementById("homeScreen");
+      if (!target || !scroller) return;
+      const offset = target.offsetTop - 96;
+      scroller.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
+    });
+  });
   document.getElementById("closeDailyDetailBtn")?.addEventListener("click", () => {
     document.getElementById("dailyDetailModal")?.classList.remove("show");
   });
@@ -3452,7 +3531,7 @@ profileStatus.textContent = "Bitte anmelden";
   const avatar = getArenaAvatar();
   const displayName = getArenaName();
   const level = `Level ${getArenaLevel(loadArenaStore().profile)}`;
-  ["homeAvatar", "homeTopAvatar", "gamesTopAvatar", "topAvatar"].forEach(id => {
+  ["homeAvatar", "homeTopAvatar", "gamesTopAvatar", "topAvatar", "appHeaderAvatar"].forEach(id => {
     const img = document.getElementById(id);
     if (img) img.src = avatar;
   });
@@ -3460,6 +3539,7 @@ profileStatus.textContent = "Bitte anmelden";
   const homeTopLevel = document.getElementById("homeTopLevel");
   if (homeTopUsername) homeTopUsername.textContent = displayName;
   if (homeTopLevel) homeTopLevel.textContent = level;
+  if (appHeaderAvatar) appHeaderAvatar.src = avatar;
 }
 
 function renderAvatarGrid() {
@@ -3487,6 +3567,7 @@ function selectAvatar(src) {
   const gamesTopAvatar = document.getElementById("gamesTopAvatar");
   if (homeTopAvatar) homeTopAvatar.src = src;
   if (gamesTopAvatar) gamesTopAvatar.src = src;
+  if (appHeaderAvatar) appHeaderAvatar.src = src;
   localStorage.setItem("userAvatar", src);
   if (src === DEFAULT_AVATAR) {
   localStorage.setItem("userAvatar", DEFAULT_AVATAR);
@@ -3728,6 +3809,84 @@ async function deleteTrashItemForever(type, index) {
 function showAuthMessage(text, type = "error") {
   authMessage.textContent = text;
   authMessage.className = type;
+}
+
+function setAuthModeLogin() {
+  const loginButton = document.getElementById("loginBtn");
+  const showRegisterButton = document.getElementById("showRegisterBtn");
+  const registerButton = document.getElementById("registerBtn");
+  const backButton = document.getElementById("backToLoginBtn");
+
+  if (loginButton) loginButton.style.display = "block";
+  if (showRegisterButton) showRegisterButton.style.display = "block";
+  if (registerButton) registerButton.style.display = "none";
+  if (backButton) backButton.style.display = "none";
+}
+
+function closeBlockingOverlays() {
+  [
+    "settingsModal",
+    "avatarModal",
+    "avatarActionModal",
+    "dailyDetailModal",
+    "challengeModal",
+    "upperModal",
+    "modal",
+    "menuModal",
+    "folderModal"
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove("show", "closing");
+  });
+
+  closeUpperDrawer();
+}
+
+function showLoginGate(message = "") {
+  closeBlockingOverlays();
+  setAuthModeLogin();
+  if (authPassword) authPassword.value = "";
+  showAuthMessage(message, message ? "success" : "error");
+  authScreen.classList.remove("hide");
+  document.body.classList.add("auth-open");
+  screenHistory = [];
+  showScreen(homeScreen, false, { replace: true });
+
+  setTimeout(() => {
+    authName?.focus();
+    authName?.select?.();
+  }, 120);
+}
+
+function hideLoginGate() {
+  authScreen.classList.add("hide");
+  document.body.classList.remove("auth-open");
+  showAuthMessage("");
+}
+
+function updateLogoutButton(isLoggedIn) {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (!logoutBtn) return;
+
+  logoutBtn.innerHTML = isLoggedIn
+    ? `<span class="setting-icon">↪</span><span>Ausloggen</span><span class="setting-arrow">›</span>`
+    : `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
+  logoutBtn.classList.toggle("danger", isLoggedIn);
+  logoutBtn.classList.toggle("success", !isLoggedIn);
+}
+
+async function saveBeforeLogoutSafely() {
+  if (!currentUser || !pendingCloudSave || !navigator.onLine) return;
+
+  try {
+    await Promise.race([
+      saveCloudData(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Cloud save timeout")), 3500))
+    ]);
+  } catch (error) {
+    console.warn("Cloud-Save vor Logout übersprungen:", error);
+  }
 }
 
 function showIsland(text, type = "success") {
@@ -3996,9 +4155,9 @@ const result = await createUserWithEmailAndPassword(auth, email, password);
     });
 
     await saveUserProfile(result.user, username);
-    authScreen.classList.add("hide");
+    hideLoginGate();
 renderHomeScreen();
-showScreen(homeScreen, true);
+showScreen(homeScreen, true, { replace: true });
 
 showIsland("Account erstellt", "success");
 setTimeout(() => {
@@ -4048,9 +4207,9 @@ document.getElementById("loginBtn").onclick = async () => {
 
 await signInWithEmailAndPassword(auth, email, password);
 
-authScreen.classList.add("hide");
+hideLoginGate();
 renderHomeScreen();
-showScreen(homeScreen, true);
+showScreen(homeScreen, true, { replace: true });
 
 showIsland("Eingeloggt", "success");
     setTimeout(() => {
@@ -4067,16 +4226,11 @@ showIsland("Eingeloggt", "success");
 };
 
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
-  const logoutBtn = document.getElementById("logoutBtn");
-
   if (user) {
     currentUser = user;
+    updateLogoutButton(true);
 
-    logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Ausloggen</span><span class="setting-arrow">›</span>`;
-    logoutBtn.classList.remove("success");
-    logoutBtn.classList.add("danger");
-
-    authScreen.classList.add("hide");
+    hideLoginGate();
 
     await loadUserCloudData(user);
 
@@ -4092,16 +4246,12 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
 }, 120);
     setActiveNav("navStart");
     updateProfileUI();
-    showScreen(homeScreen, true);
+    showScreen(homeScreen, true, { replace: true });
   } else {
     currentUser = null;
+    updateLogoutButton(false);
 
-    logoutBtn.innerHTML = `<span class="setting-icon">↪</span><span>Einloggen</span><span class="setting-arrow">›</span>`;
-    logoutBtn.classList.remove("danger");
-    logoutBtn.classList.add("success");
-
-    authScreen.classList.remove("hide");
-    showScreen(homeScreen, false);
+    showLoginGate("");
     updateProfileUI();
   }
 
@@ -4178,33 +4328,36 @@ document.getElementById("closeSettingsBtn").onclick = () => {
 
 document.getElementById("logoutBtn").onclick = async () => {
   const button = document.getElementById("logoutBtn");
+  const firebaseAuth = window.firebaseTools?.auth;
+  const activeAuthUser = currentUser || firebaseAuth?.currentUser;
 
-  if (!currentUser) {
-    document.getElementById("settingsModal")?.classList.remove("show");
-    authScreen.classList.remove("hide");
-    showScreen(homeScreen, false);
+  if (!activeAuthUser) {
+    showLoginGate("");
     return;
   }
 
-  await startButtonLoading(button, "danger");
+  try {
+    await startButtonLoading(button, "danger");
+    await saveBeforeLogoutSafely();
 
-  if (pendingCloudSave && navigator.onLine) {
-    await saveCloudData();
+    const { auth, signOut } = window.firebaseTools;
+    await signOut(auth);
+
+    currentUser = null;
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("pendingCloudSave");
+    pendingCloudSave = false;
+    sessionStorage.clear();
+    updateLogoutButton(false);
+    updateProfileUI();
+    renderHomeScreen();
+    showLoginGate("Ausgeloggt. Du kannst dich jetzt neu anmelden.");
+    showIsland("Ausgeloggt", "danger");
+  } catch (error) {
+    console.error("Logout fehlgeschlagen:", error);
+    showLoginGate("Logout wurde gestartet. Bitte erneut anmelden.");
+    showIsland("Logout geprüft", "danger");
   }
-
-  const { auth, signOut } = window.firebaseTools;
-  await signOut(auth);
-
-  currentUser = null;
-  localStorage.removeItem("currentUser");
-  sessionStorage.clear();
-  document.getElementById("settingsModal")?.classList.remove("show");
-
-  authScreen.classList.remove("hide");
-  renderHomeScreen();
-  showScreen(homeScreen, false);
-
-  showIsland("Ausgeloggt", "danger");
 };
 
 /* Start */
