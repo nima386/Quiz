@@ -322,6 +322,8 @@ function showScreen(screen, showNav = true) {
   screen.id === "gamesStatsScreen";
 
   const isNoNavArea =
+  screen.id === "homeScreen" ||
+  screen.id === "arenaScreen" ||
   screen.id === "questionList" ||
   screen.id === "questionDetail" ||
   screen.id === "friendProfileScreen" ||
@@ -354,8 +356,7 @@ showNav === false;
         navStart: "Start",
         navLibrary: "Bibliothek",
         navRemembered: "Gemerkt",
-        navStats: "Stats",
-        navArena: "Arena"
+        navStats: "Stats"
       };
 
       navLabel.textContent = labelMap[activeMain.id] || "";
@@ -1180,13 +1181,12 @@ function updateFloatingLabel() {
 }
 
 function setActiveNav(activeId) {
-  const items = ["navStart", "navLibrary", "navRemembered", "navStats", "navArena"];
+  const items = ["navStart", "navLibrary", "navRemembered", "navStats"];
   const labels = {
     navStart: "Start",
     navLibrary: "Bibliothek",
     navRemembered: "Gemerkt",
-    navStats: "Stats",
-    navArena: "Arena"
+    navStats: "Stats"
     
   };
 
@@ -1487,6 +1487,16 @@ function renderHomeScreen() {
   document.getElementById("homeUsername").textContent = getArenaName();
   document.getElementById("homeUserLevel").textContent = `Level ${getArenaLevel(store.profile)}`;
   document.getElementById("homeXpFill").style.width = `${xpPercent}%`;
+  const homeTopAvatar = document.getElementById("homeTopAvatar");
+  const homeTopUsername = document.getElementById("homeTopUsername");
+  const homeTopLevel = document.getElementById("homeTopLevel");
+  const homeTopXpFill = document.getElementById("homeTopXpFill");
+  const gamesTopAvatar = document.getElementById("gamesTopAvatar");
+  if (homeTopAvatar) homeTopAvatar.src = getArenaAvatar();
+  if (homeTopUsername) homeTopUsername.textContent = getArenaName();
+  if (homeTopLevel) homeTopLevel.textContent = `Level ${getArenaLevel(store.profile)}`;
+  if (homeTopXpFill) homeTopXpFill.style.width = `${xpPercent}%`;
+  if (gamesTopAvatar) gamesTopAvatar.src = getArenaAvatar();
   document.getElementById("homeProgressLevel").textContent = `Level ${getArenaLevel(store.profile)}`;
   document.getElementById("homeLevelFill").style.width = `${xpPercent}%`;
   document.getElementById("homeXpText").textContent = `${xp} / ${xpTarget}`;
@@ -2604,7 +2614,6 @@ function completeArenaDuel(performance) {
     showIsland("Duell ausgewertet", "success");
   } else {
     showScreen(arenaScreen, true);
-    setActiveNav("navArena");
     switchArenaTab("challenges");
     showIsland("Dein Ergebnis ist gespeichert. Gegner wurde benachrichtigt.", "success");
   }
@@ -2655,7 +2664,6 @@ function playArenaDuel(duelId) {
 
   if (!isArenaDuelPlayable(duel)) {
     showScreen(arenaScreen, true);
-    setActiveNav("navArena");
     switchArenaTab("challenges");
     showIsland("Ergebnis gespeichert. Du bekommst Bescheid, wenn beide fertig sind.", "success");
     return;
@@ -2699,7 +2707,6 @@ function renderDuelResult(duelId) {
   const duel = store.duels.find(item => item.id === duelId);
   if (!duel || duel.status !== "finished") {
     showScreen(arenaScreen, true);
-    setActiveNav("navArena");
     switchArenaTab("challenges");
     return;
   }
@@ -2734,7 +2741,7 @@ function renderDuelResult(duelId) {
       </div>
 
       <button class="main-btn" onclick="openChallengeModal('${friend.id}')">Revanche fordern</button>
-      <button class="avatar-sheet-btn muted" onclick="showScreen(arenaScreen, true); setActiveNav('navArena'); renderArena();">Zur Arena</button>
+      <button class="avatar-sheet-btn muted" onclick="showScreen(arenaScreen, true); renderArena();">Zur Arena</button>
     </div>
   `;
 
@@ -2825,26 +2832,37 @@ function initArena() {
   document.getElementById("playDailyArenaBtn")?.addEventListener("click", playDailyArena);
   document.getElementById("backArenaFromProfile")?.addEventListener("click", () => {
     showScreen(arenaScreen, true);
-    setActiveNav("navArena");
     renderArena();
   });
   document.getElementById("arenaUpperMenuBtn")?.addEventListener("click", openUpperDrawer);
   document.getElementById("openArenaFromDrawer")?.addEventListener("click", () => {
     closeUpperDrawer();
-    setActiveNav("navArena");
     renderArena();
     showScreen(arenaScreen, true);
+  });
+  document.getElementById("openDashboardFromDrawer")?.addEventListener("click", () => {
+    closeUpperDrawer();
+    setActiveNav("navStart");
+    renderHomeScreen();
+    showScreen(homeScreen, true);
   });
 
   document.getElementById("homeUpperMenuBtn")?.addEventListener("click", openUpperDrawer);
   document.getElementById("startDailyBtn")?.addEventListener("click", startDailyChallenge);
   document.getElementById("openLearningHomeBtn")?.addEventListener("click", openLearningHome);
   document.getElementById("homeArenaBtn")?.addEventListener("click", () => {
-    setActiveNav("navArena");
     renderArena();
     showScreen(arenaScreen, true);
   });
   document.getElementById("homeProfileWidget")?.addEventListener("click", () => {
+    showScreen(profile, false);
+    updateProfileUI();
+  });
+  document.getElementById("homeProfileTopBtn")?.addEventListener("click", () => {
+    showScreen(profile, false);
+    updateProfileUI();
+  });
+  document.getElementById("gamesProfileBtn")?.addEventListener("click", () => {
     showScreen(profile, false);
     updateProfileUI();
   });
@@ -2976,8 +2994,7 @@ function finishExam() {
 
 document.getElementById("navStart").onclick = () => {
   setActiveNav("navStart");
-  renderHomeScreen();
-  showScreen(homeScreen, true);
+  openLearningHome();
 };
 
 document.getElementById("navLibrary").onclick = () => {
@@ -2999,16 +3016,6 @@ if (navStats) {
     setActiveNav("navStats");
     showScreen(statsScreen, true);
     renderStats();
-  };
-}
-
-const navArena = document.getElementById("navArena");
-
-if (navArena) {
-  navArena.onclick = () => {
-    setActiveNav("navArena");
-    renderArena();
-    showScreen(arenaScreen, true);
   };
 }
 
@@ -3411,6 +3418,18 @@ profileStatus.textContent = "Bitte anmelden";
       <span>Wenn du dich einloggst, wird dein Fortschritt online gesichert.</span>
     `;
   }
+
+  const avatar = getArenaAvatar();
+  const displayName = getArenaName();
+  const level = `Level ${getArenaLevel(loadArenaStore().profile)}`;
+  ["homeAvatar", "homeTopAvatar", "gamesTopAvatar", "topAvatar"].forEach(id => {
+    const img = document.getElementById(id);
+    if (img) img.src = avatar;
+  });
+  const homeTopUsername = document.getElementById("homeTopUsername");
+  const homeTopLevel = document.getElementById("homeTopLevel");
+  if (homeTopUsername) homeTopUsername.textContent = displayName;
+  if (homeTopLevel) homeTopLevel.textContent = level;
 }
 
 function renderAvatarGrid() {
@@ -3434,6 +3453,10 @@ function selectAvatar(src) {
   img.src = src;
 });
   document.getElementById("topAvatar").src = src;
+  const homeTopAvatar = document.getElementById("homeTopAvatar");
+  const gamesTopAvatar = document.getElementById("gamesTopAvatar");
+  if (homeTopAvatar) homeTopAvatar.src = src;
+  if (gamesTopAvatar) gamesTopAvatar.src = src;
   localStorage.setItem("userAvatar", src);
   if (src === DEFAULT_AVATAR) {
   localStorage.setItem("userAvatar", DEFAULT_AVATAR);

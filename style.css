@@ -310,6 +310,224 @@ body {
   }
 }
 
+/* === Final navigation and premium page routing polish === */
+
+.bottom-nav {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+
+.bottom-nav .nav-bubble {
+  width: calc((100% - 16px) / 4) !important;
+}
+
+.bottom-nav[data-active="0"] .nav-bubble {
+  transform: translateX(0) !important;
+}
+
+.bottom-nav[data-active="1"] .nav-bubble {
+  transform: translateX(100%) !important;
+}
+
+.bottom-nav[data-active="2"] .nav-bubble {
+  transform: translateX(200%) !important;
+}
+
+.bottom-nav[data-active="3"] .nav-bubble {
+  transform: translateX(300%) !important;
+}
+
+#homeScreen,
+#arenaScreen {
+  padding-bottom: calc(var(--app-safe-bottom) + 18px) !important;
+}
+
+.home-welcome {
+  display: grid !important;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: start !important;
+  gap: 14px !important;
+}
+
+.home-menu-btn {
+  justify-self: start;
+  margin-top: 2px;
+}
+
+.home-welcome-copy {
+  min-width: 0;
+}
+
+.home-welcome-copy h1,
+.home-welcome-copy p {
+  max-width: 700px;
+}
+
+.home-profile-chip {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 120px);
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 20px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-side > .profile-widget {
+  display: none !important;
+}
+
+.home-profile-chip img {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.home-profile-chip span,
+.home-profile-chip strong,
+.home-profile-chip small {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-profile-chip strong {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.home-profile-chip small {
+  margin-top: 1px;
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.home-profile-chip .xp-mini-bar {
+  display: block;
+  height: 6px;
+  margin-top: 6px;
+}
+
+.home-profile-chip .xp-mini-bar em {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22d3ee, #a7f3d0);
+}
+
+.games-top {
+  grid-template-columns: auto auto auto minmax(0, 1fr) !important;
+}
+
+.games-profile-btn {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+.games-profile-btn img {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.arena-screen {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(34, 211, 238, 0.12), transparent 34%),
+    radial-gradient(circle at 90% 18%, rgba(168, 85, 247, 0.12), transparent 32%),
+    #080b18 !important;
+}
+
+.arena-screen .arena-tabs {
+  margin: 14px auto 18px !important;
+  max-width: 980px;
+}
+
+.arena-screen .arena-panel,
+.arena-screen .arena-hero {
+  max-width: 980px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.arena-screen .arena-tabs button {
+  font-size: clamp(12px, 2.7vw, 14px);
+}
+
+body.light-mode .home-profile-chip strong {
+  color: #111827;
+}
+
+body.light-mode .home-profile-chip small {
+  color: rgba(17, 24, 39, 0.64);
+}
+
+body.light-mode .games-profile-btn {
+  color: #111827;
+  background: rgba(255, 255, 255, 0.74);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 620px) {
+  .home-welcome {
+    grid-template-columns: 48px minmax(0, 1fr) 54px;
+    align-items: start !important;
+  }
+
+  .home-profile-chip {
+    grid-template-columns: 38px;
+    width: 54px;
+    min-height: 54px;
+    padding: 8px;
+    justify-content: center;
+  }
+
+  .home-profile-chip img {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+  }
+
+  .home-profile-chip span {
+    display: none;
+  }
+
+  .home-welcome h1 {
+    font-size: clamp(28px, 10vw, 38px) !important;
+    line-height: 1.02 !important;
+  }
+
+  .home-welcome p {
+    font-size: 14px;
+  }
+
+  .games-top {
+    grid-template-columns: auto auto auto minmax(0, 1fr) !important;
+    gap: 9px !important;
+  }
+
+  .games-title-pill {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 /* === Arena premium polish, calm iOS glass === */
 
 .arena-screen {
