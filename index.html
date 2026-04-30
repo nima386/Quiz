@@ -9,9 +9,11 @@
 <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Quiz App</title>
+  <title>Quiz Arena</title>
   <link rel="stylesheet" href="style.css?v=999">
   <link rel="stylesheet" href="games/games.css?v=999">
+  <link rel="stylesheet" href="premium.css?v=1">
+  <link rel="stylesheet" href="games/premium-games.css?v=1">
 </head>
 <body>
 
@@ -27,7 +29,7 @@
     <div class="auth-logo">◈</div>
 
     <h1>Willkommen</h1>
-    <p>Melde dich an, damit dein Fortschritt gespeichert wird.</p>
+    <p>Sync an. Fortschritt sicher.</p>
 
     <input id="authName" placeholder="Username">
     <input id="authPassword" type="password" placeholder="Passwort">
@@ -53,9 +55,9 @@
           </button>
 
           <div class="home-welcome-copy">
-            <span class="home-kicker">Heute lernen</span>
+            <span class="home-kicker">Heute</span>
             <h1 id="homeGreeting">Willkommen zurück</h1>
-            <p>Deine heutige Challenge wartet. Sammle XP, spiele Maps und bleib mit Freunden im Duell.</p>
+            <p>Daily, Karten, Arena. Alles auf einen Blick.</p>
           </div>
           <button id="homeProfileTopBtn" class="home-profile-chip glass-card" aria-label="Profil öffnen">
             <img id="homeTopAvatar" src="avatars/avatar1.png" alt="">
@@ -69,9 +71,9 @@
 
         <section class="daily-hero-card glass-card">
           <div class="daily-hero-copy">
-            <span>Daily Challenge</span>
+            <span>Daily</span>
             <h2 id="dailyGameTitle">Europa Map</h2>
-            <p id="dailyGameText">Nutze deine 2 Versuche und sammle XP für dein Level.</p>
+            <p id="dailyGameText">Zwei Versuche. Ein Fokus. Maximale XP.</p>
             <div class="daily-meta-row">
               <div><b id="dailyAttempts">0/2</b><small>Versuche</small></div>
               <div><b id="dailyXp">bis 120</b><small>XP möglich</small></div>
@@ -84,7 +86,7 @@
         <section class="home-section">
           <div class="home-section-head">
             <h2>Für dich empfohlen</h2>
-            <button id="openLearningHomeBtn">Alle Kategorien</button>
+            <button id="openLearningHomeBtn">Alle</button>
           </div>
           <div id="recommendedGames" class="recommended-grid"></div>
         </section>
@@ -108,7 +110,7 @@
         </button>
 
         <section class="progress-widget glass-card">
-          <span>Dein Fortschritt</span>
+          <span>Fortschritt</span>
           <h2 id="homeProgressLevel">Level 1</h2>
           <div class="level-bar"><i id="homeLevelFill"></i></div>
           <div class="home-stat-grid">
@@ -435,6 +437,12 @@
       <p>Keine Hilfe, freie Karte, echte Prüfung. So wie dein bisheriger Map-Modus.</p>
       <b>Fortgeschritten</b>
     </button>
+    <button id="startShapeModeBtn" class="mode-card shape">
+      <span>LÃ¤nderform</span>
+      <h2>Umriss erkennen</h2>
+      <p>Du siehst nur die Form eines Landes und wÃ¤hlst die richtige Antwort aus der Liste.</p>
+      <b>Neuer Profi-Modus</b>
+    </button>
   </div>
 </section>
 <!-- europa -->
@@ -457,6 +465,7 @@
   
 
     <button id="startEuropeMapGame" class="main-btn">Spiel starten</button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('europe')">LÃ¤nderform erkennen</button>
   </div>
 </section>
 
@@ -541,6 +550,7 @@
     <button onclick="startAsiaMapQuiz()" class="primary-btn">
       Spiel starten
     </button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('asia')">LÃ¤nderform erkennen</button>
   </div>
 
 </section>
@@ -598,6 +608,7 @@
     <button onclick="startAfricaMapQuiz()" class="primary-btn">
       Spiel starten
     </button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('africa')">LÃ¤nderform erkennen</button>
   </div>
 
 </section>
@@ -625,6 +636,7 @@
     <button id="startSouthAmericaGame" class="main-btn">
       Spiel starten
     </button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('southAmerica')">LÃ¤nderform erkennen</button>
   </div>
 </section>
 
@@ -680,8 +692,97 @@
     <button id="startNorthAmericaGame" class="main-btn">
       Spiel starten
     </button>
+    <button class="shape-entry-btn" onclick="openCountryShapeModeSelect('northAmerica')">LÃ¤nderform erkennen</button>
   </div>
 </section>
+
+<section id="countryShapeModeSelect" class="screen scroll-screen">
+  <div class="games-top">
+    <button id="countryShapeModeBack" class="circle-btn">â†</button>
+    <div class="games-title-pill" id="countryShapeModeTitle">LÃ¤nderform</div>
+  </div>
+
+  <div class="shape-mode-hero">
+    <span>Formen-Training</span>
+    <h1 id="countryShapeModeHeading">Europa</h1>
+    <p>Erkenne LÃ¤nder nur an ihrer Umrisskarte. WÃ¤hle den passenden Schwierigkeitsgrad.</p>
+  </div>
+
+  <div class="shape-mode-grid">
+    <button class="shape-mode-card ultra" data-shape-mode="ultra">
+      <i>ðŸ”¥</i>
+      <span>Ultra Hard</span>
+      <h2>Nur Profis</h2>
+      <p>Nur die LÃ¤nderform. Ein Versuch pro Land, kein Hinweis.</p>
+      <b>1 Versuch</b>
+    </button>
+
+    <button class="shape-mode-card hard" data-shape-mode="hard">
+      <i>âš¡</i>
+      <span>Hard</span>
+      <h2>Zwei Leben</h2>
+      <p>Zwei Chancen pro Land. Beim zweiten Fehler wird aufgelÃ¶st.</p>
+      <b>2 Leben</b>
+    </button>
+
+    <button class="shape-mode-card learn" data-shape-mode="learn">
+      <i>ðŸ§ </i>
+      <span>Lernmodus</span>
+      <h2>Mit Hinweisen</h2>
+      <p>Kontinent, Hauptstadt und am Ende die richtige Antwort helfen dir beim Lernen.</p>
+      <b>3 Leben</b>
+    </button>
+  </div>
+</section>
+
+<section id="countryShapeGame" class="screen scroll-screen">
+  <div class="shape-game-top">
+    <button id="countryShapeBack" class="circle-btn">â†</button>
+    <div class="shape-live-pill">
+      <span>Timer</span>
+      <strong id="countryShapeTimer">0:00</strong>
+    </div>
+    <div class="shape-mode-badge" id="countryShapeModeBadge">Ultra Hard</div>
+  </div>
+
+  <div class="shape-stage-card">
+    <div class="shape-stage-head">
+      <span id="countryShapeProgress">1 / 10</span>
+      <div id="countryShapeLives" class="shape-lives"></div>
+    </div>
+    <div id="countryShapeSvgBox" class="shape-svg-box"></div>
+  </div>
+
+  <div class="shape-question-card">
+    <span>Welches Land ist das?</span>
+    <h1 id="countryShapeQuestion">WÃ¤hle ein Land</h1>
+    <div id="countryShapeHint" class="shape-hint-box"></div>
+  </div>
+
+  <div id="countryShapeOptions" class="shape-options-list"></div>
+
+  <button id="countryShapeConfirm" class="shape-confirm-btn">Antwort einloggen</button>
+</section>
+
+<div id="countryShapeResultModal" class="modal avatar-bottom-modal">
+  <div class="avatar-sheet shape-result-sheet">
+    <div class="sheet-handle"></div>
+    <div class="avatar-sheet-head">
+      <h2 id="countryShapeResultTitle">Runde beendet</h2>
+      <p id="countryShapeResultSub">Deine Zusammenfassung</p>
+    </div>
+
+    <div class="game-stats-mini result-stats shape-result-stats">
+      <div><strong id="countryShapeResultCorrect">0</strong><span>Richtig</span></div>
+      <div><strong id="countryShapeResultWrong">0</strong><span>Falsch</span></div>
+      <div><strong id="countryShapeResultPercent">0%</strong><span>Quote</span></div>
+      <div><strong id="countryShapeResultTime">0:00</strong><span>Zeit</span></div>
+    </div>
+
+    <button id="countryShapeRestart" class="avatar-sheet-btn primary">Nochmal spielen</button>
+    <button id="countryShapeResultHome" class="avatar-sheet-btn muted">ZurÃ¼ck</button>
+  </div>
+</div>
 
 <section id="northAmericaMapGame" class="screen scroll-screen">
   <div class="map-game-top">

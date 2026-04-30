@@ -1,18 +1,19 @@
-const CACHE_NAME = "quiz-app-v13";
+const CACHE_NAME = "quiz-app-v16";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./style.css",
+  "./premium.css",
   "./script.js",
   "./games/games.css",
+  "./games/premium-games.css",
   "./games/games.js",
   "./maps/europe/europe.svg",
   "./maps/asia/asia.svg",
   "./maps/africa/africa.svg",
   "./maps/southAmerica/southAmerica.svg",
   "./maps/northAmerica/northAmerica.svg",
-  "./maps/world/countries.geojson",
   "./questions.json",
   "./manifest.json",
   "./icon-192.png",

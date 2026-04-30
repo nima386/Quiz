@@ -3730,6 +3730,238 @@ function startSelectedMapMode(mode) {
   startMapQuiz(selectedMapModeKey, mode);
 }
 
+/* === COUNTRY SHAPE GAME ENGINE === */
+
+const EUROPE_CAPITALS = {
+  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Bruessel", BA: "Sarajevo",
+  BG: "Sofia", HR: "Zagreb", CY: "Nikosia", CZ: "Prag", DK: "Kopenhagen", EE: "Tallinn",
+  FI: "Helsinki", FR: "Paris", DE: "Berlin", GR: "Athen", HU: "Budapest", IS: "Reykjavik",
+  IE: "Dublin", IT: "Rom", LV: "Riga", LT: "Vilnius", LU: "Luxemburg", MD: "Chisinau",
+  ME: "Podgorica", NL: "Amsterdam", MK: "Skopje", NO: "Oslo", PL: "Warschau", PT: "Lissabon",
+  RO: "Bukarest", RS: "Belgrad", SK: "Bratislava", SI: "Ljubljana", ES: "Madrid",
+  SE: "Stockholm", CH: "Bern", TR: "Ankara", UA: "Kyjiw", GB: "London"
+};
+
+const ASIA_CAPITALS = {
+  AF: "Kabul", AM: "Jerewan", AZ: "Baku", BD: "Dhaka", CN: "Peking", GE: "Tiflis",
+  HK: "Hongkong", IN: "Neu-Delhi", ID: "Jakarta", IR: "Teheran", IQ: "Bagdad",
+  IL: "Jerusalem", JP: "Tokio", YE: "Sanaa", JO: "Amman", KH: "Phnom Penh",
+  KZ: "Astana", QA: "Doha", KG: "Bischkek", KW: "Kuwait-Stadt", LA: "Vientiane",
+  LB: "Beirut", MY: "Kuala Lumpur", MN: "Ulaanbaatar", MM: "Naypyidaw", NP: "Kathmandu",
+  KP: "Pjoengjang", OM: "Maskat", PK: "Islamabad", PS: "Ramallah", PH: "Manila",
+  SA: "Riad", SG: "Singapur", LK: "Sri Jayawardenepura Kotte", KR: "Seoul",
+  SY: "Damaskus", TJ: "Duschanbe", TW: "Taipeh", TH: "Bangkok", TR: "Ankara",
+  TM: "Aschgabat", UZ: "Taschkent", AE: "Abu Dhabi", VN: "Hanoi"
+};
+
+const AFRICA_CAPITALS = {
+  DZ: "Algier", AO: "Luanda", BW: "Gaborone", CM: "Yaounde", TD: "N'Djamena",
+  CG: "Brazzaville", CD: "Kinshasa", EG: "Kairo", ER: "Asmara", ET: "Addis Abeba",
+  GA: "Libreville", GH: "Accra", KE: "Nairobi", LR: "Monrovia", LY: "Tripolis",
+  MW: "Lilongwe", ML: "Bamako", MA: "Rabat", MZ: "Maputo", NA: "Windhoek",
+  NE: "Niamey", NG: "Abuja", RW: "Kigali", SN: "Dakar", ZA: "Pretoria",
+  SD: "Khartum", TZ: "Dodoma", TN: "Tunis", UG: "Kampala", ZM: "Lusaka", ZW: "Harare"
+};
+
+const SOUTH_AMERICA_CAPITALS = {
+  AR: "Buenos Aires", BO: "Sucre", BR: "Brasilia", CL: "Santiago de Chile",
+  CO: "Bogota", EC: "Quito", PY: "Asuncion", PE: "Lima", UY: "Montevideo", VE: "Caracas"
+};
+
+const NORTH_AMERICA_CAPITALS = {
+  CA: "Ottawa", MX: "Mexiko-Stadt", GL: "Nuuk", GT: "Guatemala-Stadt", HN: "Tegucigalpa",
+  SV: "San Salvador", NI: "Managua", CR: "San Jose", PA: "Panama-Stadt", CU: "Havanna",
+  HT: "Port-au-Prince", DO: "Santo Domingo"
+};
+
+const COUNTRY_SHAPE_FILES = {
+  europe: { RU: "russland.svg", XK: "kosovo.svg", AL: "albanien.svg", BY: "belarus.svg", BE: "belgien.svg", BA: "bosnienUndHerzegowina.svg", BG: "bulgarien.svg", HR: "kroatien.svg", CY: "zypern.svg", CZ: "tschechien.svg", DK: "daenemark.svg", EE: "estland.svg", FI: "finnland.svg", FR: "frankreich.svg", DE: "deutschland.svg", GR: "griechenland.svg", HU: "ungarn.svg", IS: "island.svg", IE: "irland.svg", IT: "italien.svg", LV: "lettland.svg", LT: "litauen.svg", LU: "luxemburg.svg", MD: "moldau.svg", ME: "montenegro.svg", NL: "niederlande.svg", MK: "nordmazedonien.svg", NO: "norwegen.svg", PL: "polen.svg", PT: "portugal.svg", RO: "rumaenien.svg", RS: "serbien.svg", SK: "slowakei.svg", SI: "slowenien.svg", ES: "spanien.svg", SE: "schweden.svg", CH: "schweiz.svg", UA: "ukraine.svg", GB: "vereinigtesKoenigreich.svg" },
+  asia: { AF: "afghanistan.svg", AM: "armenien.svg", AZ: "aserbaidschan.svg", BD: "bangladesch.svg", CN: "china.svg", GE: "georgien.svg", HK: "hongkong.svg", IN: "indien.svg", ID: "indonesien.svg", IR: "iran.svg", IQ: "irak.svg", IL: "israel.svg", JP: "japan.svg", YE: "jemen.svg", JO: "jordanien.svg", KH: "kambodscha.svg", KZ: "kasachstan.svg", QA: "katar.svg", KG: "kirgisistan.svg", KW: "kuwait.svg", LA: "laos.svg", LB: "libanon.svg", MY: "malaysia.svg", MN: "mongolei.svg", MM: "myanmar.svg", NP: "nepal.svg", KP: "nordkorea.svg", OM: "oman.svg", PK: "pakistan.svg", PS: "palaestina.svg", PH: "philippinen.svg", SA: "saudiArabien.svg", SG: "singapur.svg", LK: "sriLanka.svg", KR: "suedkorea.svg", SY: "syrien.svg", TJ: "tadschikistan.svg", TW: "taiwan.svg", TH: "thailand.svg", TR: "tuerkei.svg", TM: "turkmenistan.svg", UZ: "usbekistan.svg", AE: "vereinigteArabischeEmirate.svg", VN: "vietnam.svg" },
+  africa: { DZ: "algerien.svg", AO: "angola.svg", BW: "botswana.svg", CM: "kamerun.svg", TD: "tschad.svg", CG: "republikKongo.svg", CD: "demokratischeRepublikKongo.svg", EG: "aegypten.svg", ER: "eritrea.svg", ET: "aethiopien.svg", GA: "gabun.svg", GH: "ghana.svg", KE: "kenia.svg", LR: "liberia.svg", LY: "libyen.svg", MW: "malawi.svg", ML: "mali.svg", MA: "marokko.svg", MZ: "mosambik.svg", NA: "namibia.svg", NE: "niger.svg", NG: "nigeria.svg", RW: "ruanda.svg", SN: "senegal.svg", ZA: "suedafrika.svg", SD: "sudan.svg", TZ: "tansania.svg", TN: "tunesien.svg", UG: "uganda.svg", ZM: "sambia.svg", ZW: "simbabwe.svg" },
+  southAmerica: { AR: "argentinien.svg", BO: "bolivien.svg", BR: "brasilien.svg", CL: "chile.svg", CO: "kolumbien.svg", EC: "ecuador.svg", PY: "paraguay.svg", PE: "peru.svg", UY: "uruguay.svg", VE: "venezuela.svg" },
+  northAmerica: { CA: "kanada.svg", MX: "mexiko.svg", GL: "groenland.svg", GT: "guatemala.svg", HN: "honduras.svg", SV: "elSalvador.svg", NI: "nicaragua.svg", CR: "costaRica.svg", PA: "panama.svg", CU: "kuba.svg", HT: "haiti.svg", DO: "dominikanischeRepublik.svg" }
+};
+
+const COUNTRY_SHAPE_GAME_CONFIG = {
+  europe: { name: "Europa", folder: "maps/europe/countries", countries: EUROPE_COUNTRY_NAMES, capitals: EUROPE_CAPITALS, files: COUNTRY_SHAPE_FILES.europe, homeId: "europeGameHome" },
+  asia: { name: "Asien", folder: "maps/asia/countries", countries: ASIA_COUNTRY_NAMES, capitals: ASIA_CAPITALS, files: COUNTRY_SHAPE_FILES.asia, homeId: "asiaGameHome" },
+  africa: { name: "Afrika", folder: "maps/africa/countries", countries: AFRICA_COUNTRY_NAMES, capitals: AFRICA_CAPITALS, files: COUNTRY_SHAPE_FILES.africa, homeId: "africaGameHome" },
+  southAmerica: { name: "Suedamerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
+  northAmerica: { name: "Nordamerika", folder: "maps/northAmerica/countries", countries: NORTH_AMERICA_COUNTRY_NAMES, capitals: NORTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.northAmerica, homeId: "northAmericaGameHome" }
+};
+
+const COUNTRY_SHAPE_MODE_META = {
+  ultra: { label: "Ultra Hard", lives: 1 },
+  hard: { label: "Hard", lives: 2 },
+  learn: { label: "Lernmodus", lives: 3 }
+};
+
+const countryShapeState = { continentKey: "europe", mode: "ultra", deck: [], current: null, index: 0, selectedId: null, livesLeft: 1, correct: 0, wrong: 0, startTime: 0, timer: null, locked: false, lastResult: null };
+
+function getCountryShapeUserKey() {
+  return (typeof currentUser !== "undefined" && currentUser?.uid) ? currentUser.uid : "guest";
+}
+
+function getCountryShapeStatsKey(continentKey, mode) {
+  return `countryShapeStats_${continentKey}_${mode}_${getCountryShapeUserKey()}`;
+}
+
+function formatCountryShapeTime(ms = 0) {
+  const total = Math.max(0, Math.round(ms / 1000));
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
+
+function getCountryShapeCountries(config) {
+  return Object.keys(config.files || {})
+    .filter(id => config.countries[id])
+    .map(id => ({ id, name: config.countries[id], capital: config.capitals[id] || "nicht hinterlegt", file: config.files[id] }))
+    .sort((a, b) => a.name.localeCompare(b.name, "de"));
+}
+
+function openCountryShapeModeSelect(continentKey) {
+  const config = COUNTRY_SHAPE_GAME_CONFIG[continentKey];
+  if (!config) return;
+  countryShapeState.continentKey = continentKey;
+  document.getElementById("countryShapeModeTitle").textContent = `${config.name} · Länderform`;
+  document.getElementById("countryShapeModeHeading").textContent = config.name;
+  showScreen(document.getElementById("countryShapeModeSelect"), true);
+}
+
+function startCountryShapeGame(continentKey, mode) {
+  const config = COUNTRY_SHAPE_GAME_CONFIG[continentKey];
+  const meta = COUNTRY_SHAPE_MODE_META[mode] || COUNTRY_SHAPE_MODE_META.ultra;
+  if (!config) return;
+  const countries = getCountryShapeCountries(config);
+  if (!countries.length) return showIsland("Keine Länderformen für diesen Kontinent gefunden.", "danger");
+  clearInterval(countryShapeState.timer);
+  Object.assign(countryShapeState, {
+    continentKey, mode, deck: [...countries].sort(() => Math.random() - 0.5), current: null, index: 0,
+    selectedId: null, livesLeft: meta.lives, correct: 0, wrong: 0, startTime: Date.now(), locked: false
+  });
+  document.getElementById("countryShapeModeBadge").textContent = meta.label;
+  document.getElementById("countryShapeTimer").textContent = "0:00";
+  showScreen(document.getElementById("countryShapeGame"), true);
+  countryShapeState.timer = setInterval(() => {
+    document.getElementById("countryShapeTimer").textContent = formatCountryShapeTime(Date.now() - countryShapeState.startTime);
+  }, 500);
+  loadNextCountryShape();
+}
+
+async function loadNextCountryShape() {
+  const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+  const next = countryShapeState.deck[countryShapeState.index];
+  if (!next) return finishCountryShapeGame();
+  countryShapeState.current = next;
+  countryShapeState.selectedId = null;
+  countryShapeState.locked = false;
+  countryShapeState.livesLeft = COUNTRY_SHAPE_MODE_META[countryShapeState.mode].lives;
+  document.getElementById("countryShapeProgress").textContent = `${countryShapeState.index + 1} / ${countryShapeState.deck.length}`;
+  document.getElementById("countryShapeQuestion").textContent = "Wähle das passende Land";
+  document.getElementById("countryShapeHint").className = "shape-hint-box";
+  document.getElementById("countryShapeHint").textContent = "";
+  renderCountryShapeLives();
+  renderCountryShapeOptions();
+  const box = document.getElementById("countryShapeSvgBox");
+  box.classList.remove("shape-correct-pop", "shape-wrong-shake");
+  box.innerHTML = `<div class="shape-loading">Länderform wird geladen...</div>`;
+  try {
+    const response = await fetch(`${config.folder}/${encodeURIComponent(next.file)}`);
+    if (!response.ok) throw new Error(next.file);
+    box.innerHTML = await response.text();
+    box.querySelector("svg")?.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  } catch (error) {
+    console.warn("Länderform konnte nicht geladen werden:", error);
+    box.innerHTML = `<div class="shape-loading error">SVG fehlt: ${next.name}</div>`;
+  }
+}
+
+function renderCountryShapeLives() {
+  const total = COUNTRY_SHAPE_MODE_META[countryShapeState.mode].lives;
+  document.getElementById("countryShapeLives").innerHTML = Array.from({ length: total }, (_, index) => `<span class="${index < countryShapeState.livesLeft ? "active" : ""}"></span>`).join("");
+}
+
+function renderCountryShapeOptions() {
+  const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+  const options = getCountryShapeCountries(config);
+  const box = document.getElementById("countryShapeOptions");
+  box.innerHTML = options.map(country => `<button class="shape-option" data-country-id="${country.id}"><span>${country.name}</span><small>${config.name}</small></button>`).join("");
+  box.querySelectorAll(".shape-option").forEach(button => {
+    button.addEventListener("click", () => {
+      if (countryShapeState.locked) return;
+      countryShapeState.selectedId = button.dataset.countryId;
+      box.querySelectorAll(".shape-option").forEach(item => item.classList.remove("selected"));
+      button.classList.add("selected");
+    });
+  });
+}
+
+function confirmCountryShapeAnswer() {
+  if (countryShapeState.locked || !countryShapeState.current) return;
+  if (!countryShapeState.selectedId) return showIsland("Wähle zuerst ein Land aus.", "danger");
+  if (countryShapeState.selectedId === countryShapeState.current.id) {
+    countryShapeState.locked = true;
+    countryShapeState.correct++;
+    document.getElementById("countryShapeSvgBox").classList.add("shape-correct-pop");
+    const hint = document.getElementById("countryShapeHint");
+    hint.className = "shape-hint-box show success";
+    hint.textContent = `Richtig: ${countryShapeState.current.name}`;
+    setTimeout(() => { countryShapeState.index++; loadNextCountryShape(); }, 850);
+    return;
+  }
+  handleCountryShapeWrongAnswer();
+}
+
+function handleCountryShapeWrongAnswer() {
+  const current = countryShapeState.current;
+  const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+  countryShapeState.livesLeft--;
+  renderCountryShapeLives();
+  const shapeBox = document.getElementById("countryShapeSvgBox");
+  shapeBox.classList.remove("shape-wrong-shake");
+  void shapeBox.offsetWidth;
+  shapeBox.classList.add("shape-wrong-shake");
+  const hint = document.getElementById("countryShapeHint");
+  hint.className = "shape-hint-box show";
+  if (countryShapeState.mode === "learn" && countryShapeState.livesLeft === 2) {
+    hint.textContent = `Hinweis 1: Dieses Land liegt in ${config.name}.`;
+    return;
+  }
+  if (countryShapeState.mode === "learn" && countryShapeState.livesLeft === 1) {
+    hint.textContent = `Hinweis 2: Die Hauptstadt ist ${current.capital}.`;
+    return;
+  }
+  countryShapeState.locked = true;
+  countryShapeState.wrong++;
+  hint.className = "shape-hint-box show danger";
+  hint.textContent = `Richtig wäre: ${current.name}.`;
+  setTimeout(() => { countryShapeState.index++; loadNextCountryShape(); }, countryShapeState.mode === "ultra" ? 950 : 1350);
+}
+
+function finishCountryShapeGame() {
+  clearInterval(countryShapeState.timer);
+  const time = Date.now() - countryShapeState.startTime;
+  const total = countryShapeState.correct + countryShapeState.wrong;
+  const run = { correct: countryShapeState.correct, wrong: countryShapeState.wrong, percent: total ? Math.round((countryShapeState.correct / total) * 100) : 0, time, mode: countryShapeState.mode, finishedAt: new Date().toISOString() };
+  const key = getCountryShapeStatsKey(countryShapeState.continentKey, countryShapeState.mode);
+  const old = JSON.parse(localStorage.getItem(key) || "null");
+  if (!old || run.correct > old.correct || (run.correct === old.correct && run.time < old.time)) localStorage.setItem(key, JSON.stringify({ ...run, bestRun: true }));
+  countryShapeState.lastResult = run;
+  renderCountryShapeResult(run);
+}
+
+function renderCountryShapeResult(result = countryShapeState.lastResult) {
+  if (!result) return;
+  const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+  const modeLabel = COUNTRY_SHAPE_MODE_META[result.mode]?.label || result.mode;
+  document.getElementById("countryShapeResultTitle").textContent = `${config.name} abgeschlossen`;
+  document.getElementById("countryShapeResultSub").textContent = `${modeLabel} · ${result.correct + result.wrong} Länder`;
+  document.getElementById("countryShapeResultCorrect").textContent = result.correct;
+  document.getElementById("countryShapeResultWrong").textContent = result.wrong;
+  document.getElementById("countryShapeResultPercent").textContent = `${result.percent}%`;
+  document.getElementById("countryShapeResultTime").textContent = formatCountryShapeTime(result.time);
+  document.getElementById("countryShapeResultModal").classList.add("show");
+}
+
 function wireMapEngine() {
   startEuropeMapQuiz = (mode = "select") => mode === "select" ? openMapModeSelect("europe") : startMapQuiz("europe", mode);
   startAsiaMapQuiz = (mode = "select") => mode === "select" ? openMapModeSelect("asia") : startMapQuiz("asia", mode);
@@ -3748,6 +3980,14 @@ function wireMapEngine() {
 
   window.startMapQuiz = startMapQuiz;
   window.openMapModeSelect = openMapModeSelect;
+  window.openCountryShapeModeSelect = openCountryShapeModeSelect;
+  window.startCountryShapeGame = startCountryShapeGame;
+  window.loadNextCountryShape = loadNextCountryShape;
+  window.renderCountryShapeOptions = renderCountryShapeOptions;
+  window.confirmCountryShapeAnswer = confirmCountryShapeAnswer;
+  window.handleCountryShapeWrongAnswer = handleCountryShapeWrongAnswer;
+  window.finishCountryShapeGame = finishCountryShapeGame;
+  window.renderCountryShapeResult = renderCountryShapeResult;
   window.startEuropeMapQuiz = startEuropeMapQuiz;
   window.startAsiaMapQuiz = startAsiaMapQuiz;
   window.startAfricaMapQuiz = startAfricaMapQuiz;
@@ -3763,6 +4003,29 @@ function wireMapEngine() {
   });
   document.getElementById("startLearnModeBtn")?.addEventListener("click", () => startSelectedMapMode("learn"));
   document.getElementById("startMasterModeBtn")?.addEventListener("click", () => startSelectedMapMode("master"));
+  document.getElementById("startShapeModeBtn")?.addEventListener("click", () => openCountryShapeModeSelect(selectedMapModeKey));
+
+  document.querySelectorAll("[data-shape-mode]").forEach(button => {
+    button.addEventListener("click", () => startCountryShapeGame(countryShapeState.continentKey, button.dataset.shapeMode));
+  });
+  document.getElementById("countryShapeModeBack")?.addEventListener("click", () => {
+    const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+    showScreen(document.getElementById(config?.homeId || "gamesScreen"), true);
+  });
+  document.getElementById("countryShapeBack")?.addEventListener("click", () => {
+    clearInterval(countryShapeState.timer);
+    openCountryShapeModeSelect(countryShapeState.continentKey);
+  });
+  document.getElementById("countryShapeConfirm")?.addEventListener("click", confirmCountryShapeAnswer);
+  document.getElementById("countryShapeRestart")?.addEventListener("click", () => {
+    document.getElementById("countryShapeResultModal")?.classList.remove("show");
+    startCountryShapeGame(countryShapeState.continentKey, countryShapeState.mode);
+  });
+  document.getElementById("countryShapeResultHome")?.addEventListener("click", () => {
+    const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+    document.getElementById("countryShapeResultModal")?.classList.remove("show");
+    showScreen(document.getElementById(config?.homeId || "gamesScreen"), true);
+  });
 }
 
 wireMapEngine();

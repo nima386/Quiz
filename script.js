@@ -182,6 +182,34 @@ window.addEventListener("pointerdown", () => {
   userHasInteracted = true;
 }, { once: true });
 
+function initPremiumInteractionLayer() {
+  const selector = [
+    "button",
+    ".category-card",
+    ".folder-row",
+    ".question-row",
+    ".answer",
+    ".game-card",
+    ".recommend-card",
+    ".arena-friend-card",
+    ".shape-option"
+  ].join(",");
+
+  document.addEventListener("pointerdown", event => {
+    const target = event.target.closest(selector);
+    if (!target || target.disabled) return;
+    target.classList.add("is-pressing");
+  }, { passive: true });
+
+  ["pointerup", "pointercancel", "pointerleave"].forEach(type => {
+    document.addEventListener(type, () => {
+      document.querySelectorAll(".is-pressing").forEach(item => item.classList.remove("is-pressing"));
+    }, { passive: true });
+  });
+}
+
+initPremiumInteractionLayer();
+
 function softVibrate(ms = 18) {
   if (!userHasInteracted) return;
   if (navigator.vibrate) navigator.vibrate(ms);
@@ -319,6 +347,8 @@ function showScreen(screen, showNav = true) {
   screen.id === "southAmericaGameHome" ||
   screen.id === "northAmericaGameHome" ||
   screen.id === "continentModeSelect" ||
+  screen.id === "countryShapeModeSelect" ||
+  screen.id === "countryShapeGame" ||
   screen.id === "gamesStatsScreen";
 
   const isNoNavArea =
@@ -1482,7 +1512,7 @@ function renderHomeScreen() {
   const activeDuels = store.duels.filter(duel => duel.status !== "finished").length;
   const openRequests = store.requests.length;
 
-  document.getElementById("homeGreeting").textContent = `Willkommen zurück, ${getArenaName()}`;
+  document.getElementById("homeGreeting").textContent = `Zurück im Flow, ${getArenaName()}`;
   document.getElementById("homeAvatar").src = getArenaAvatar();
   document.getElementById("homeUsername").textContent = getArenaName();
   document.getElementById("homeUserLevel").textContent = `Level ${getArenaLevel(store.profile)}`;
@@ -1508,8 +1538,8 @@ function renderHomeScreen() {
 
   document.getElementById("dailyGameTitle").textContent = dailyGame.title;
   document.getElementById("dailyGameText").textContent = daily.attemptsUsed >= DAILY_MAX_ATTEMPTS
-    ? `Heute abgeschlossen. Bester Score: ${daily.bestScore}. Verdiente XP: +${daily.earnedXp}.`
-    : dailyGame.description;
+    ? `Abgeschlossen · ${daily.bestScore} Score · +${daily.earnedXp} XP`
+    : "Zwei Versuche. Ein Fokus. Maximale XP.";
   document.getElementById("dailyAttempts").textContent = `${daily.attemptsUsed}/${DAILY_MAX_ATTEMPTS}`;
   document.getElementById("dailyXp").textContent = daily.earnedXp ? `+${daily.earnedXp}` : "bis 120";
   document.getElementById("dailyBestScore").textContent = daily.bestScore || 0;
@@ -1525,7 +1555,7 @@ function renderHomeScreen() {
       <article class="recommend-card glass-card">
         <span>${game.label}</span>
         <h3>${game.title}</h3>
-        <p>Bestscore: ${best || "Noch offen"} · Genauigkeit: ${accuracy}%</p>
+        <p>${best || "Neu"} Score · ${accuracy}% Genauigkeit</p>
         <button onclick="${game.action}">Spielen</button>
       </article>
     `;
@@ -1538,7 +1568,7 @@ function renderHomeScreen() {
       <span>${getArenaDuelStatusText(nextDuel)}</span>
       <button onclick="playArenaDuel('${nextDuel.id}')">${isArenaDuelPlayable(nextDuel) ? "Jetzt spielen" : "Ansehen"}</button>
     </div>
-  ` : `<div class="home-inbox-mini muted">Keine offenen Duelle.</div>`;
+  ` : `<div class="home-inbox-mini muted">Arena ruhig. Bereit für den nächsten Move.</div>`;
 
   const results = Object.values(store.dailyResults || {}).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   document.getElementById("dailyHistoryList").innerHTML = results.length ? results.map(result => {
@@ -1550,13 +1580,13 @@ function renderHomeScreen() {
         <small>${result.date} · +${result.earnedXp} XP</small>
       </button>
     `;
-  }).join("") : `<div class="home-empty">Noch keine Daily gespielt.</div>`;
+  }).join("") : `<div class="home-empty">Noch keine Daily. Heute ist offen.</div>`;
 
   const activities = [];
   if (daily.earnedXp) activities.push(`Daily abgeschlossen · +${daily.earnedXp} XP`);
   if (store.notifications?.[0]) activities.push(store.notifications[0].text);
-  if (store.duels.find(duel => duel.status === "finished")) activities.push("Ein Duell wurde ausgewertet.");
-  document.getElementById("homeActivityList").innerHTML = (activities.length ? activities : ["Starte deine erste Daily Challenge.", "Baue deine Freundesliste in der Arena auf."])
+  if (store.duels.find(duel => duel.status === "finished")) activities.push("Duell ausgewertet.");
+  document.getElementById("homeActivityList").innerHTML = (activities.length ? activities : ["Daily starten.", "Arena aufbauen."])
     .slice(0, 4)
     .map(item => `<div class="activity-row">${item}</div>`)
     .join("");

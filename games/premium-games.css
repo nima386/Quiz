@@ -1,0 +1,262 @@
+:root {
+  --g-bg-0: #070b18;
+  --g-bg-1: #0d1328;
+  --g-text: #f8fbff;
+  --g-muted: rgba(226, 232, 240, .68);
+  --g-card: rgba(255, 255, 255, .09);
+  --g-card-strong: rgba(255, 255, 255, .14);
+  --g-line: rgba(255, 255, 255, .14);
+  --g-cyan: #67e8f9;
+  --g-violet: #a78bfa;
+  --g-green: #86efac;
+  --g-radius: 24px;
+  --g-radius-lg: 32px;
+  --g-shadow: 0 22px 70px rgba(0, 0, 0, .32);
+  --g-ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+body.light-mode {
+  --g-bg-0: #f6f8fc;
+  --g-bg-1: #e9eef7;
+  --g-text: #111827;
+  --g-muted: rgba(17, 24, 39, .64);
+  --g-card: rgba(255, 255, 255, .72);
+  --g-card-strong: rgba(255, 255, 255, .88);
+  --g-line: rgba(15, 23, 42, .09);
+  --g-shadow: 0 22px 70px rgba(30, 41, 59, .14);
+}
+
+#gamesScreen,
+#europeGameHome,
+#asiaGameHome,
+#africaGameHome,
+#southAmericaGameHome,
+#northAmericaGameHome,
+#continentModeSelect,
+#countryShapeModeSelect,
+#countryShapeGame,
+#gamesStatsScreen {
+  color: var(--g-text) !important;
+  background:
+    radial-gradient(circle at 14% -4%, rgba(103, 232, 249, .14), transparent 34%),
+    radial-gradient(circle at 92% 16%, rgba(167, 139, 250, .14), transparent 34%),
+    linear-gradient(180deg, var(--g-bg-0), var(--g-bg-1)) !important;
+}
+
+.games-top,
+.map-game-top,
+.question-detail-top,
+.shape-game-top {
+  min-height: 52px !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+.games-title-pill,
+.map-live-timer,
+.shape-live-pill,
+.shape-mode-badge,
+.best-run-card,
+.game-card,
+.game-hero-card,
+.map-question-card,
+.map-glass-frame,
+.mode-select-hero,
+.mode-card,
+.shape-mode-hero,
+.shape-mode-card,
+.shape-stage-card,
+.shape-question-card,
+.shape-options-list,
+.games-best-card,
+.continent-focus-card,
+.premium-globe-card {
+  color: var(--g-text) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .055)),
+    var(--g-card) !important;
+  border: 1px solid var(--g-line) !important;
+  box-shadow: var(--g-shadow) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.shape-mode-badge {
+  color: #06111f !important;
+  background: linear-gradient(135deg, var(--g-cyan), var(--g-violet)) !important;
+  box-shadow: 0 14px 34px rgba(103, 232, 249, .2) !important;
+}
+
+.game-card,
+.mode-card,
+.shape-mode-card,
+.shape-option {
+  transition: transform 240ms var(--g-ease), border-color 240ms var(--g-ease), box-shadow 240ms var(--g-ease), background 240ms var(--g-ease) !important;
+}
+
+@media (hover: hover) {
+  .game-card:hover,
+  .mode-card:hover,
+  .shape-mode-card:hover,
+  .shape-option:hover {
+    transform: translate3d(0, -3px, 0) !important;
+    border-color: rgba(103, 232, 249, .32) !important;
+    box-shadow: 0 28px 78px rgba(0, 0, 0, .34) !important;
+  }
+}
+
+.game-card {
+  min-height: 94px !important;
+  border-radius: var(--g-radius) !important;
+  grid-template-columns: 58px minmax(0, 1fr) auto !important;
+}
+
+.game-card h2,
+.game-card p,
+.game-hero-card h1,
+.game-hero-card p,
+.mode-card h2,
+.mode-card p,
+.shape-mode-card h2,
+.shape-mode-card p {
+  min-width: 0;
+  letter-spacing: 0 !important;
+}
+
+.game-card p,
+.game-hero-card p,
+.mode-card p,
+.shape-mode-card p,
+.map-question-card p {
+  color: var(--g-muted) !important;
+  line-height: 1.45 !important;
+}
+
+.game-icon,
+.game-big-icon,
+.drawer-game-icon {
+  background: linear-gradient(135deg, rgba(103, 232, 249, .2), rgba(167, 139, 250, .2)) !important;
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 14px 30px rgba(0, 0, 0, .18) !important;
+}
+
+.game-hero-card,
+.mode-select-hero,
+.shape-mode-hero,
+.shape-stage-card,
+.shape-question-card,
+.shape-options-list,
+.shape-game-top {
+  max-width: 980px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.mode-card-grid,
+.shape-mode-grid {
+  max-width: 1020px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.mode-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.mode-card,
+.shape-mode-card,
+.map-glass-frame,
+.shape-svg-box {
+  border-radius: var(--g-radius-lg) !important;
+}
+
+.map-question-card h1,
+.shape-question-card h1 {
+  overflow-wrap: anywhere;
+}
+
+.shape-options-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(103, 232, 249, .45) transparent;
+}
+
+.shape-options-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.shape-options-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(103, 232, 249, .38);
+}
+
+.shape-option.selected {
+  color: var(--g-text) !important;
+  border-color: rgba(103, 232, 249, .62) !important;
+}
+
+.shape-confirm-btn {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 82px) !important;
+}
+
+.games-nav.show {
+  animation: gameNavIn 260ms var(--g-ease) both;
+}
+
+@keyframes gameNavIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+body.light-mode .games-title-pill,
+body.light-mode .map-live-timer,
+body.light-mode .shape-live-pill,
+body.light-mode .best-run-card,
+body.light-mode .game-card,
+body.light-mode .game-hero-card,
+body.light-mode .map-question-card,
+body.light-mode .map-glass-frame,
+body.light-mode .mode-select-hero,
+body.light-mode .mode-card,
+body.light-mode .shape-mode-hero,
+body.light-mode .shape-mode-card,
+body.light-mode .shape-stage-card,
+body.light-mode .shape-question-card,
+body.light-mode .shape-options-list,
+body.light-mode .games-best-card,
+body.light-mode .continent-focus-card,
+body.light-mode .premium-globe-card {
+  color: #111827 !important;
+}
+
+@media (max-width: 860px) {
+  .mode-card-grid,
+  .shape-mode-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .game-card {
+    min-height: 86px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .games-top,
+  .map-game-top,
+  .question-detail-top {
+    min-height: 48px !important;
+  }
+
+  .game-hero-card {
+    padding: 18px !important;
+  }
+
+  .shape-confirm-btn {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 76px) !important;
+  }
+}
