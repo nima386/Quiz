@@ -9,7 +9,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Quiz Arena</title>
   <link rel="stylesheet" href="style.css?v=999">
   <link rel="stylesheet" href="games/games.css?v=999">
@@ -19,10 +19,63 @@
 <body>
 
   <div id="appIsland" class="app-island"></div>
-<div id="appLoader" class="app-loader">
-  <div class="loader-card"></div>
-  <div class="loader-card small"></div>
-  <div class="loader-card wide"></div>
+<div id="appLoader" class="app-loader" aria-label="App wird gestartet">
+  <div class="splash-aura splash-aura-one"></div>
+  <div class="splash-aura splash-aura-two"></div>
+  <div class="splash-card">
+    <svg class="splash-logo-svg" width="172" height="172" viewBox="0 0 200 200" role="img" aria-hidden="true">
+      <defs>
+        <linearGradient id="splashTopStroke" x1="72" y1="28" x2="154" y2="110">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="52%" stop-color="#c8c4ff"/>
+          <stop offset="100%" stop-color="#7f77dd"/>
+        </linearGradient>
+        <linearGradient id="splashBotStroke" x1="36" y1="100" x2="128" y2="192">
+          <stop offset="0%" stop-color="#a9a2ff"/>
+          <stop offset="55%" stop-color="#5f55d6"/>
+          <stop offset="100%" stop-color="#342b93"/>
+        </linearGradient>
+        <radialGradient id="splashGlowGradient" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d8d4ff" stop-opacity=".66"/>
+          <stop offset="55%" stop-color="#6f65e8" stop-opacity=".20"/>
+          <stop offset="100%" stop-color="#534ab7" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <ellipse class="splash-impact-glow" cx="88" cy="154" rx="72" ry="55" fill="url(#splashGlowGradient)"/>
+
+      <g class="splash-dice-top">
+        <g class="splash-face-top">
+          <rect class="splash-dice-glass" x="72" y="28" width="82" height="82" rx="14"
+            stroke="url(#splashTopStroke)" stroke-width="2.8"
+            transform="rotate(-10, 113, 69)"/>
+          <circle class="splash-dd1" cx="96" cy="50" r="5" fill="#f7f5ff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-dd2" cx="130" cy="88" r="5" fill="#f7f5ff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-five-dot1" cx="96" cy="50" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-five-dot2" cx="130" cy="50" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-five-dot3" cx="113" cy="69" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-five-dot4" cx="96" cy="88" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+          <circle class="splash-five-dot5" cx="130" cy="88" r="5" fill="#ffffff" transform="rotate(-10,113,69)"/>
+        </g>
+      </g>
+
+      <g class="splash-dice-bot">
+        <rect class="splash-dice-glass" x="36" y="100" width="92" height="92" rx="16"
+          stroke="url(#splashBotStroke)" stroke-width="3.3"/>
+        <circle class="splash-dd3" cx="62" cy="122" r="6" fill="#5f55d6"/>
+        <circle class="splash-dd4" cx="102" cy="122" r="6" fill="#5f55d6"/>
+        <circle class="splash-dd5" cx="62" cy="146" r="6" fill="#5f55d6"/>
+        <circle class="splash-dd6" cx="102" cy="146" r="6" fill="#5f55d6"/>
+        <circle class="splash-dd7" cx="62" cy="170" r="6" fill="#5f55d6"/>
+        <circle class="splash-dd8" cx="102" cy="170" r="6" fill="#5f55d6"/>
+      </g>
+    </svg>
+    <div class="splash-copy">
+      <strong>Quiz Arena</strong>
+      <span>Lernen. Spielen. Wachsen.</span>
+    </div>
+    <div class="splash-progress"><i></i></div>
+  </div>
 </div>
 
 <header id="appHeader" class="app-header">
@@ -58,7 +111,7 @@
 
     
     <p id="authMessage"></p>
-  </div>
+  </form>
 </section>
   
   <!-- LANDING / HOME -->
@@ -88,7 +141,7 @@
 
         <nav class="landing-text-nav" aria-label="Dashboard Navigation">
           <button data-home-jump="homeDailySection">Daily</button>
-          <button data-home-jump="homeRecommendedSection">Spiele</button>
+          <button data-home-action="games">Spiele</button>
           <button data-home-jump="homeProgressSection">Fortschritt</button>
           <button data-home-jump="homeArenaSection">Arena</button>
           <button data-home-jump="homeActivitySection">Aktivität</button>
@@ -106,14 +159,6 @@
             </div>
           </div>
           <button id="startDailyBtn" class="main-btn">Jetzt spielen</button>
-        </section>
-
-        <section id="homeRecommendedSection" class="home-section">
-          <div class="home-section-head">
-            <h2>Für dich empfohlen</h2>
-            <button id="openLearningHomeBtn">Alle</button>
-          </div>
-          <div id="recommendedGames" class="recommended-grid"></div>
         </section>
 
         <section id="homeActivitySection" class="home-section">
@@ -468,7 +513,7 @@
       <p>Du siehst nur die Form eines Landes und wählst die richtige Antwort aus der Liste.</p>
       <b>Neuer Profi-Modus</b>
     </button>
-  </form>
+  </div>
 </section>
 <!-- europa -->
   <section id="europeGameHome" class="screen scroll-screen">

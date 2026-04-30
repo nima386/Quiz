@@ -677,7 +677,7 @@ body.light-mode .app-header-search img {
 }
 
 .landing-text-nav {
-  display: grid !important;
+  display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   gap: 2px !important;
   overflow: hidden !important;
@@ -821,5 +821,391 @@ body.light-mode .app-header-search img {
 @media (max-width: 390px) {
   .landing-text-nav button {
     font-size: 10.5px !important;
+  }
+}
+
+html,
+body,
+body * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html,
+body {
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+body input,
+body textarea,
+body [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.home-welcome {
+  display: none !important;
+}
+
+.home-main {
+  align-content: start !important;
+}
+
+.landing-text-nav {
+  position: sticky !important;
+  top: calc(var(--safe-top) + 74px) !important;
+  z-index: 3400 !important;
+  margin-top: 0 !important;
+  margin-bottom: 18px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .055)),
+    rgba(7, 11, 24, .72) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+}
+
+#homeDailySection {
+  margin-top: 64px !important;
+}
+
+#homeArenaInbox:empty {
+  display: none !important;
+}
+
+.daily-history-card {
+  align-content: start !important;
+}
+
+#dailyHistoryList {
+  min-height: 92px;
+  display: grid;
+  align-content: start;
+}
+
+.daily-history-card .home-empty {
+  margin-top: 10px !important;
+  min-height: 68px;
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 760px) {
+  .landing-text-nav {
+    top: calc(var(--safe-top) + 76px) !important;
+  }
+
+  #homeScreen {
+    scroll-padding-top: calc(var(--safe-top) + 148px) !important;
+  }
+}
+
+/* Premium launch splash */
+.app-loader {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 15000 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: calc(var(--safe-top) + 28px) 24px calc(var(--safe-bottom) + 28px) !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, .18), transparent 26%),
+    radial-gradient(circle at 20% 16%, rgba(103, 232, 249, .16), transparent 30%),
+    radial-gradient(circle at 82% 74%, rgba(167, 139, 250, .22), transparent 32%),
+    linear-gradient(160deg, rgba(3, 7, 18, .96), rgba(18, 13, 50, .94) 48%, rgba(7, 11, 24, .96)) !important;
+  backdrop-filter: blur(34px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(170%) !important;
+  opacity: 1 !important;
+  transform: translateZ(0) scale(1) !important;
+  transition:
+    opacity 520ms cubic-bezier(.2, .8, .2, 1),
+    transform 520ms cubic-bezier(.2, .8, .2, 1),
+    filter 520ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.app-loader.hide {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateZ(0) scale(1.035) !important;
+  filter: blur(10px) saturate(115%) !important;
+}
+
+.splash-aura {
+  position: absolute;
+  width: min(78vw, 440px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(42px);
+  opacity: .42;
+  transform: translateZ(0);
+}
+
+.splash-aura-one {
+  top: 10%;
+  left: 50%;
+  background: rgba(103, 232, 249, .24);
+  animation: splashAuraOne 3.8s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.splash-aura-two {
+  right: 3%;
+  bottom: 4%;
+  background: rgba(167, 139, 250, .34);
+  animation: splashAuraTwo 3.8s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.splash-card {
+  position: relative;
+  width: min(86vw, 310px);
+  min-height: 372px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 18px;
+  padding: 30px 26px 26px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 38px;
+  color: #ffffff;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .055)),
+    rgba(10, 13, 34, .54);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .24),
+    0 30px 90px rgba(0, 0, 0, .36),
+    0 0 48px rgba(109, 99, 232, .18);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  animation: splashCardIn 760ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.splash-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .30), transparent 35%),
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, .18), transparent 38%);
+  mask: linear-gradient(#000, transparent 72%);
+}
+
+.splash-logo-svg {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 7px rgba(195, 190, 255, .36))
+    drop-shadow(0 18px 24px rgba(83, 74, 183, .22));
+  transform: translateZ(0);
+}
+
+.splash-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  animation: splashCopyIn 620ms cubic-bezier(.16, 1, .3, 1) 900ms both;
+}
+
+.splash-copy strong {
+  font-size: clamp(26px, 8vw, 34px);
+  line-height: .96;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.splash-copy span {
+  color: rgba(255, 255, 255, .68);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.splash-progress {
+  position: relative;
+  z-index: 1;
+  width: min(172px, 58vw);
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
+}
+
+.splash-progress i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #67e8f9, #c4b5fd, #ffffff);
+  transform: translateX(-104%);
+  animation: splashProgress 2.55s cubic-bezier(.18, .92, .2, 1) .28s forwards;
+}
+
+.splash-impact-glow {
+  opacity: .35;
+  animation: splashImpactGlow 1.6s cubic-bezier(.18, .92, .2, 1) 2.05s forwards;
+}
+
+.splash-dice-top {
+  animation:
+    splashDiceSlide .85s cubic-bezier(.16, 1, .3, 1) .25s both,
+    splashTopDiceFall 1.6s cubic-bezier(.18, .92, .2, 1) 2.05s forwards;
+  transform-origin: 113px 69px;
+  will-change: transform, opacity;
+}
+
+.splash-dice-bot {
+  animation:
+    splashDiceDrop .85s cubic-bezier(.16, 1, .3, 1) .45s both,
+    splashBottomImpact 1.6s cubic-bezier(.18, .92, .2, 1) 2.05s forwards;
+  transform-origin: 82px 146px;
+  will-change: transform, opacity;
+}
+
+.splash-face-top {
+  animation: splashFaceFlip .9s cubic-bezier(.16, 1, .3, 1) 2.38s forwards;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}
+
+.splash-dice-glass {
+  fill: rgba(255, 255, 255, .045);
+  filter:
+    drop-shadow(0 0 6px rgba(195, 190, 255, .32))
+    drop-shadow(0 0 12px rgba(83, 74, 183, .16));
+}
+
+.splash-dd1 {
+  animation: splashDotFade .32s ease 1.08s both, splashTwoHide .9s ease 2.38s forwards;
+  transform-origin: 96px 50px;
+}
+
+.splash-dd2 {
+  animation: splashDotFade .32s ease 1.18s both, splashTwoHide .9s ease 2.38s forwards;
+  transform-origin: 130px 88px;
+}
+
+.splash-dd3 { animation: splashDotFade .32s ease 1.28s both; transform-origin: 62px 122px; }
+.splash-dd4 { animation: splashDotFade .32s ease 1.38s both; transform-origin: 102px 122px; }
+.splash-dd5 { animation: splashDotFade .32s ease 1.48s both; transform-origin: 62px 146px; }
+.splash-dd6 { animation: splashDotFade .32s ease 1.58s both; transform-origin: 102px 146px; }
+.splash-dd7 { animation: splashDotFade .32s ease 1.68s both; transform-origin: 62px 170px; }
+.splash-dd8 { animation: splashDotFade .32s ease 1.78s both; transform-origin: 102px 170px; }
+
+.splash-five-dot1 { animation: splashFiveShow .9s cubic-bezier(.34, 1.56, .64, 1) 2.38s both; transform-origin: 96px 50px; }
+.splash-five-dot2 { animation: splashFiveShow .9s cubic-bezier(.34, 1.56, .64, 1) 2.38s both; transform-origin: 130px 50px; }
+.splash-five-dot3 { animation: splashFiveShow .9s cubic-bezier(.34, 1.56, .64, 1) 2.38s both; transform-origin: 113px 69px; }
+.splash-five-dot4 { animation: splashFiveShow .9s cubic-bezier(.34, 1.56, .64, 1) 2.38s both; transform-origin: 96px 88px; }
+.splash-five-dot5 { animation: splashFiveShow .9s cubic-bezier(.34, 1.56, .64, 1) 2.38s both; transform-origin: 130px 88px; }
+
+@keyframes splashCardIn {
+  from { opacity: 0; transform: translate3d(0, 18px, 0) scale(.96); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes splashCopyIn {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes splashProgress {
+  0% { transform: translateX(-104%); }
+  62% { transform: translateX(-22%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes splashAuraOne {
+  from { opacity: 0; transform: translate3d(-52%, -10px, 0) scale(.78); }
+  to { opacity: .42; transform: translate3d(-50%, 0, 0) scale(1); }
+}
+
+@keyframes splashAuraTwo {
+  from { opacity: 0; transform: translate3d(18px, 18px, 0) scale(.76); }
+  to { opacity: .42; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes splashDiceSlide {
+  0% { opacity: 0; transform: translate3d(0, -18px, 0) rotate(-8deg) scale(.96); }
+  70% { opacity: 1; transform: translate3d(0, 3px, 0) rotate(1.5deg) scale(1.015); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+}
+
+@keyframes splashDiceDrop {
+  0% { opacity: 0; transform: translate3d(0, 18px, 0) rotate(6deg) scale(.96); }
+  70% { opacity: 1; transform: translate3d(0, -3px, 0) rotate(-1.5deg) scale(1.015); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+}
+
+@keyframes splashTopDiceFall {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  42% { transform: translate3d(-4px, 44px, 0) rotate(14deg) scale(1.015); }
+  70% { transform: translate3d(-7px, 83px, 0) rotate(22deg) scale(1.04, .96); }
+  82% { transform: translate3d(-7px, 64px, 0) rotate(14deg) scale(.985, 1.02); }
+  92% { transform: translate3d(-7px, 74px, 0) rotate(10deg) scale(1.01, .99); }
+  100% { transform: translate3d(-7px, 70px, 0) rotate(8deg) scale(1); }
+}
+
+@keyframes splashBottomImpact {
+  0%, 60% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  70% { transform: translate3d(1px, 5px, 0) rotate(-1deg) scale(1.025, .975); }
+  82% { transform: translate3d(0, -3px, 0) rotate(.5deg) scale(.99, 1.012); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+}
+
+@keyframes splashFaceFlip {
+  0%, 32% { transform: rotateY(0deg); }
+  50% { transform: rotateY(88deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+@keyframes splashTwoHide {
+  0%, 45% { opacity: 1; transform: scale(1); }
+  50%, 100% { opacity: 0; transform: scale(.4); }
+}
+
+@keyframes splashFiveShow {
+  0%, 49% { opacity: 0; transform: scale(.4); }
+  58% { opacity: 1; transform: scale(1.18); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes splashDotFade {
+  0% { opacity: 0; transform: scale(0); }
+  70% { opacity: 1; transform: scale(1.22); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes splashImpactGlow {
+  0%, 58% { opacity: .35; transform: scale(.95); }
+  70% { opacity: .88; transform: scale(1.08); }
+  100% { opacity: .42; transform: scale(1); }
+}
+
+@media (max-width: 430px) {
+  .splash-card {
+    width: min(88vw, 294px);
+    min-height: 350px;
+    border-radius: 34px;
+    padding: 26px 22px 24px;
+  }
+
+  .splash-logo-svg {
+    width: 158px;
+    height: 158px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-loader *,
+  .splash-card,
+  .splash-progress i {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
   }
 }

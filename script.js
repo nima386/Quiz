@@ -66,6 +66,11 @@ const appHeaderAvatar = document.getElementById("appHeaderAvatar");
 
 let currentUser = null;
 let screenHistory = [];
+let authStateReady = false;
+let redirectHomeAfterAuth = false;
+const APP_SPLASH_START_MS = 2850;
+let appSplashMinUntil = Date.now() + APP_SPLASH_START_MS;
+let appSplashHideTimer = null;
 
 const authScreen = document.getElementById("authScreen");
 const authName = document.getElementById("authName");
@@ -1573,7 +1578,7 @@ function renderHomeScreen() {
   const activeDuels = store.duels.filter(duel => duel.status !== "finished").length;
   const openRequests = store.requests.length;
 
-  document.getElementById("homeGreeting").textContent = `Zurück im Flow, ${getArenaName()}`;
+  document.getElementById("homeGreeting").textContent = "";
   document.getElementById("homeAvatar").src = getArenaAvatar();
   document.getElementById("homeUsername").textContent = getArenaName();
   document.getElementById("homeUserLevel").textContent = `Level ${getArenaLevel(store.profile)}`;
@@ -1606,7 +1611,9 @@ function renderHomeScreen() {
   document.getElementById("dailyBestScore").textContent = daily.bestScore || 0;
   document.getElementById("startDailyBtn").textContent = daily.attemptsUsed >= DAILY_MAX_ATTEMPTS ? "Stats ansehen" : "Jetzt spielen";
 
-  document.getElementById("recommendedGames").innerHTML = getRecommendedGames().map(game => {
+  const recommendedGamesNode = document.getElementById("recommendedGames");
+  if (recommendedGamesNode) {
+    recommendedGamesNode.innerHTML = getRecommendedGames().map(game => {
     const correct = game.run?.correct || 0;
     const wrong = game.run?.wrong || 0;
     const total = correct + wrong;
@@ -1620,7 +1627,8 @@ function renderHomeScreen() {
         <button onclick="${game.action}">Spielen</button>
       </article>
     `;
-  }).join("");
+    }).join("");
+  }
 
   const nextDuel = store.duels.find(duel => duel.status === "yourTurn") || store.duels.find(duel => duel.status !== "finished");
   document.getElementById("homeArenaInbox").innerHTML = nextDuel ? `
@@ -1629,7 +1637,7 @@ function renderHomeScreen() {
       <span>${getArenaDuelStatusText(nextDuel)}</span>
       <button onclick="playArenaDuel('${nextDuel.id}')">${isArenaDuelPlayable(nextDuel) ? "Jetzt spielen" : "Ansehen"}</button>
     </div>
-  ` : `<div class="home-inbox-mini muted">Arena ruhig. Bereit für den nächsten Move.</div>`;
+  ` : "";
 
   const results = Object.values(store.dailyResults || {}).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   document.getElementById("dailyHistoryList").innerHTML = results.length ? results.map(result => {
@@ -1641,7 +1649,7 @@ function renderHomeScreen() {
         <small>${result.date} · +${result.earnedXp} XP</small>
       </button>
     `;
-  }).join("") : `<div class="home-empty">Noch keine Daily. Heute ist offen.</div>`;
+  }).join("") : `<div class="home-empty">Noch keine Daily gespielt.</div>`;
 
   const activities = [];
   if (daily.earnedXp) activities.push(`Daily abgeschlossen · +${daily.earnedXp} XP`);
@@ -2980,9 +2988,17 @@ function initArena() {
       const target = document.getElementById(button.dataset.homeJump);
       const scroller = document.getElementById("homeScreen");
       if (!target || !scroller) return;
-      const offset = target.offsetTop - 96;
+      const nav = document.querySelector(".landing-text-nav");
+      const navStyle = nav ? window.getComputedStyle(nav) : null;
+      const stickyTop = navStyle ? parseFloat(navStyle.top) || 0 : 96;
+      const navHeight = nav ? nav.getBoundingClientRect().height : 48;
+      const offset = target.offsetTop - stickyTop - navHeight - 18;
       scroller.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
     });
+  });
+
+  document.querySelectorAll("[data-home-action='games']").forEach(button => {
+    button.addEventListener("click", openGamesHub);
   });
   document.getElementById("closeDailyDetailBtn")?.addEventListener("click", () => {
     document.getElementById("dailyDetailModal")?.classList.remove("show");
@@ -3902,11 +3918,42 @@ function hideAppLoader() {
   const loader = document.getElementById("appLoader");
   if (!loader) return;
 
-  loader.classList.add("hide");
+  clearTimeout(appSplashHideTimer);
 
-  setTimeout(() => {
-    loader.style.display = "none";
-  }, 400);
+  const remaining = Math.max(0, appSplashMinUntil - Date.now());
+  appSplashHideTimer = setTimeout(() => {
+    loader.classList.add("hide");
+
+    setTimeout(() => {
+      if (loader.classList.contains("hide")) {
+        loader.style.display = "none";
+      }
+    }, 560);
+  }, remaining);
+}
+
+function showAppSplash(duration = 2600) {
+  const loader = document.getElementById("appLoader");
+  if (!loader) return;
+
+  clearTimeout(appSplashHideTimer);
+  appSplashMinUntil = Date.now() + duration;
+  loader.style.display = "grid";
+  loader.classList.remove("hide");
+
+  const animatedElements = loader.querySelectorAll(
+    ".splash-card, .splash-logo-svg *, .splash-progress i, .splash-copy, .splash-aura"
+  );
+
+  animatedElements.forEach(element => {
+    element.style.animation = "none";
+  });
+
+  void loader.offsetHeight;
+
+  animatedElements.forEach(element => {
+    element.style.animation = "";
+  });
 }
 
 // ✅ HIER EINFÜGEN (direkt nach der Funktion)
@@ -3922,6 +3969,17 @@ window.addEventListener("online", () => {
 window.addEventListener("offline", () => {
   showIsland("Offline-Modus", "danger");
 });
+
+let lastTouchEndAt = 0;
+
+document.addEventListener("touchend", event => {
+  const now = Date.now();
+  if (now - lastTouchEndAt < 320) event.preventDefault();
+  lastTouchEndAt = now;
+}, { passive: false });
+
+document.addEventListener("gesturestart", event => event.preventDefault(), { passive: false });
+document.addEventListener("dblclick", event => event.preventDefault(), { passive: false });
 
 function startButtonLoading(button, type = "success") {
   button.classList.add("auth-loading");
@@ -4142,6 +4200,7 @@ if (usernameSnap.exists()) {
     await startButtonLoading(button, "success");
   
 
+redirectHomeAfterAuth = true;
 const result = await createUserWithEmailAndPassword(auth, email, password);
 
     await setDoc(usernameRef, {
@@ -4152,16 +4211,13 @@ const result = await createUserWithEmailAndPassword(auth, email, password);
 
     await saveUserProfile(result.user, username);
     hideLoginGate();
-renderHomeScreen();
-showScreen(homeScreen, true, { replace: true });
-
-showIsland("Account erstellt", "success");
-setTimeout(() => {
-  showIsland(`Hallo ${username}`, "success");
-}, 2100);
+    showAppSplash(2650);
+    renderHomeScreen();
+    setTimeout(() => showIsland("Account erstellt", "success"), 2920);
     
     showAuthMessage("");
   } catch (error) {
+  redirectHomeAfterAuth = false;
   if (error.code === "auth/email-already-in-use") {
     showAuthMessage("Dieser Username ist bereits vergeben.");
   } else if (error.code === "auth/weak-password") {
@@ -4201,18 +4257,16 @@ document.getElementById("loginBtn").onclick = async () => {
 
     await startButtonLoading(button, "success");
 
+redirectHomeAfterAuth = true;
 await signInWithEmailAndPassword(auth, email, password);
 
 hideLoginGate();
+showAppSplash(2550);
 renderHomeScreen();
-showScreen(homeScreen, true, { replace: true });
-
-showIsland("Eingeloggt", "success");
-    setTimeout(() => {
-  showIsland(`Hallo ${username}`, "success");
-}, 2100);
+setTimeout(() => showIsland("Eingeloggt", "success"), 2820);
 
   } catch (error) {
+  redirectHomeAfterAuth = false;
   if (!navigator.onLine) {
     showAuthMessage("Keine Internetverbindung.");
   } else {
@@ -4223,6 +4277,8 @@ showIsland("Eingeloggt", "success");
 
 window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user => {
   if (user) {
+    const shouldRedirectHome = !authStateReady || redirectHomeAfterAuth || !document.querySelector(".screen.active");
+
     currentUser = user;
     updateLogoutButton(true);
 
@@ -4237,20 +4293,24 @@ window.firebaseTools.onAuthStateChanged(window.firebaseTools.auth, async user =>
     renderHome();
     renderHomeScreen();
     renderLibrary();
-    setTimeout(() => {
-  setActiveNav("navStart");
-}, 120);
-    setActiveNav("navStart");
     updateProfileUI();
-    showScreen(homeScreen, true, { replace: true });
+
+    if (shouldRedirectHome) {
+      setActiveNav("navStart");
+      showScreen(homeScreen, true, { replace: true });
+    }
+
+    redirectHomeAfterAuth = false;
   } else {
     currentUser = null;
     updateLogoutButton(false);
+    authStateReady = true;
 
     showLoginGate("");
     updateProfileUI();
   }
 
+  authStateReady = true;
   hideAppLoader();
 });
 
@@ -4396,7 +4456,10 @@ fetch("questions.json?v=" + Date.now())
     renderHomeScreen();
     renderLibrary();
     setActiveNav("navStart");
-    showScreen(homeScreen, true);
+    const activeScreen = document.querySelector(".screen.active");
+    if (!activeScreen || activeScreen.id === "homeScreen") {
+      showScreen(homeScreen, true, { replace: true });
+    }
     hideAppLoader();
   })
   .catch(error => {
@@ -4405,7 +4468,10 @@ fetch("questions.json?v=" + Date.now())
     renderHomeScreen();
     renderLibrary();
     setActiveNav("navStart");
-    showScreen(homeScreen, true);
+    const activeScreen = document.querySelector(".screen.active");
+    if (!activeScreen || activeScreen.id === "homeScreen") {
+      showScreen(homeScreen, true, { replace: true });
+    }
     hideAppLoader();
   });
 

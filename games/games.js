@@ -1,4 +1,4 @@
-const gamesScreenEl = document.getElementById("gamesScreen");
+﻿const gamesScreenEl = document.getElementById("gamesScreen");
 const europeGameHomeEl = document.getElementById("europeGameHome");
 const europeMapGameEl = document.getElementById("europeMapGame");
 const gamesStatsScreenEl = document.getElementById("gamesStatsScreen");
@@ -20,6 +20,34 @@ function saveGameStats() {
   }
 }
 
+function getLegacyMapPoint(svg, clientX, clientY) {
+  const point = svg.createSVGPoint();
+  point.x = clientX;
+  point.y = clientY;
+
+  const ctm = svg.getScreenCTM();
+  if (!ctm) return { x: clientX, y: clientY };
+
+  return point.matrixTransform(ctm.inverse());
+}
+
+function zoomLegacyMapAt(svg, state, clientX, clientY, zoomFactor, applyTransform) {
+  if (!svg) return;
+
+  const point = getLegacyMapPoint(svg, clientX, clientY);
+  const oldScale = state.scale;
+  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
+
+  if (newScale === oldScale) return;
+
+  const ratio = newScale / oldScale;
+  state.x = point.x - (point.x - state.x) * ratio;
+  state.y = point.y - (point.y - state.y) * ratio;
+  state.scale = newScale;
+
+  applyTransform();
+}
+
 function updateGamesFloatingLabel(activeId) {
   const label = document.getElementById("navFloatingLabel");
   const btn = document.getElementById(activeId);
@@ -27,7 +55,7 @@ function updateGamesFloatingLabel(activeId) {
   if (!label || !btn) return;
 
   const textMap = {
-    gamesNavStart: "Länder",
+    gamesNavStart: "LÃ¤nder",
     gamesNavStats: "Stats"
   };
 
@@ -69,14 +97,14 @@ document.getElementById("gamesUpperMenuBtn").onclick = () => {
 };
 
 document.getElementById("openGamesSearch").onclick = () => {
-  showIsland("Spielsuche kommt als Nächstes", "success");
+  showIsland("Spielsuche kommt als NÃ¤chstes", "success");
 };
 
 const EUROPE_COUNTRY_NAMES = {
   RU: "Russland",
   XK: "Kosovo",
   AL: "Albanien",
-  AT: "Österreich",
+  AT: "Ã–sterreich",
   BY: "Belarus",
   BE: "Belgien",
   BA: "Bosnien",
@@ -84,7 +112,7 @@ const EUROPE_COUNTRY_NAMES = {
   HR: "Kroatien",
   CY: "Zypern",
   CZ: "Tschechien",
-  DK: "Dänemark",
+  DK: "DÃ¤nemark",
   EE: "Estland",
   FI: "Finnland",
   FR: "Frankreich",
@@ -105,16 +133,16 @@ const EUROPE_COUNTRY_NAMES = {
   NO: "Norwegen",
   PL: "Polen",
   PT: "Portugal",
-  RO: "Rumänien",
+  RO: "RumÃ¤nien",
   RS: "Serbien",
   SK: "Slowakei",
   SI: "Slowenien",
   ES: "Spanien",
   SE: "Schweden",
   CH: "Schweiz",
-  TR: "Türkei",
+  TR: "TÃ¼rkei",
   UA: "Ukraine",
-  GB: "Vereinigtes Königreich",
+  GB: "Vereinigtes KÃ¶nigreich",
 };
 
 let europeCountries = [];
@@ -207,46 +235,41 @@ function applyMapTransform() {
 
 function zoomAt(clientX, clientY, zoomFactor) {
   const svg = document.getElementById("europeSvg");
-  if (!svg) return;
-
-  const rect = svg.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  const oldScale = mapState.scale;
-  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
-
-  mapState.x = x - (x - mapState.x) * (newScale / oldScale);
-  mapState.y = y - (y - mapState.y) * (newScale / oldScale);
-  mapState.scale = newScale;
-
-  applyMapTransform();
+  zoomLegacyMapAt(svg, mapState, clientX, clientY, zoomFactor, applyMapTransform);
 }
 
 function initEuropeMapTouch(svg) {
+  let pinchStartDistance = null;
+  let pinching = false;
+
   svg.addEventListener("wheel", e => {
     e.preventDefault();
     zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" && (e.isPrimary === false || pinching)) return;
     svg.setPointerCapture(e.pointerId);
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
 
     dragState = {
       startX: e.clientX,
       startY: e.clientY,
       lastX: e.clientX,
       lastY: e.clientY,
+      lastMapX: point.x,
+      lastMapY: point.y,
       moved: false,
       target: e.target.closest("[data-country]")
     };
   });
 
   svg.addEventListener("pointermove", e => {
-    if (!dragState) return;
+    if (!dragState || pinching) return;
 
-    const dx = e.clientX - dragState.lastX;
-    const dy = e.clientY - dragState.lastY;
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+    const dx = point.x - dragState.lastMapX;
+    const dy = point.y - dragState.lastMapY;
 
     if (
       Math.abs(e.clientX - dragState.startX) > 7 ||
@@ -255,11 +278,13 @@ function initEuropeMapTouch(svg) {
       dragState.moved = true;
     }
 
-    mapState.x += dx * 1.18;
-    mapState.y += dy * 1.18;
+    mapState.x += dx;
+    mapState.y += dy;
 
     dragState.lastX = e.clientX;
     dragState.lastY = e.clientY;
+    dragState.lastMapX = point.x;
+    dragState.lastMapY = point.y;
 
     applyMapTransform();
   });
@@ -267,19 +292,19 @@ function initEuropeMapTouch(svg) {
   svg.addEventListener("pointerup", () => {
     if (!dragState) return;
 
-    if (!dragState.moved && dragState.target) {
+    if (!pinching && !dragState.moved && dragState.target) {
       handleEuropeCountryClick(dragState.target.dataset.country);
     }
 
     dragState = null;
   });
 
-  let pinchStartDistance = null;
-
   svg.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
 
     e.preventDefault();
+    pinching = true;
+    dragState = null;
 
     const a = e.touches[0];
     const b = e.touches[1];
@@ -289,15 +314,20 @@ function initEuropeMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.18);
       zoomAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
   }, { passive: false });
 
-  svg.addEventListener("touchend", () => {
-    pinchStartDistance = null;
+  svg.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      pinchStartDistance = null;
+      setTimeout(() => {
+        pinching = false;
+      }, 90);
+    }
   });
 }
 
@@ -586,7 +616,7 @@ function renderEuropeGameHome() {
   }
 
   bestText.textContent =
-    `${europeBestRun.correct} richtig · ${europeBestRun.wrong} falsch`;
+    `${europeBestRun.correct} richtig Â· ${europeBestRun.wrong} falsch`;
 
   bestTime.textContent =
     `Zeit: ${formatEuropeTime(europeBestRun.time)}`;
@@ -647,7 +677,7 @@ document.getElementById("backToEuropeStart").onclick = () => {
 const ASIA_COUNTRY_NAMES = {
   RU: "Russland",
   YE: "Jemen",
-  PS: "Palästina",
+  PS: "PalÃ¤stina",
   VN: "Vietnam",
   UZ: "Usbekistan",
   TW: "Taiwan",
@@ -674,7 +704,7 @@ const ASIA_COUNTRY_NAMES = {
   LB: "Libanon",
   LA: "Laos",
   KW: "Kuwait",
-  KR: "Südkorea",
+  KR: "SÃ¼dkorea",
   KH: "Kambodscha",
   KG: "Kirgisistan",
   KZ: "Kasachstan",
@@ -775,46 +805,41 @@ function applyAsiaMapTransform() {
 
 function zoomAsiaAt(clientX, clientY, zoomFactor) {
   const svg = document.getElementById("asiaSvg");
-  if (!svg) return;
-
-  const rect = svg.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  const oldScale = asiaMapState.scale;
-  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
-
-  asiaMapState.x = x - (x - asiaMapState.x) * (newScale / oldScale);
-  asiaMapState.y = y - (y - asiaMapState.y) * (newScale / oldScale);
-  asiaMapState.scale = newScale;
-
-  applyAsiaMapTransform();
+  zoomLegacyMapAt(svg, asiaMapState, clientX, clientY, zoomFactor, applyAsiaMapTransform);
 }
 
 function initAsiaMapTouch(svg) {
+  let pinchStartDistance = null;
+  let pinching = false;
+
   svg.addEventListener("wheel", e => {
     e.preventDefault();
     zoomAsiaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" && (e.isPrimary === false || pinching)) return;
     svg.setPointerCapture(e.pointerId);
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
 
     asiaDragState = {
       startX: e.clientX,
       startY: e.clientY,
       lastX: e.clientX,
       lastY: e.clientY,
+      lastMapX: point.x,
+      lastMapY: point.y,
       moved: false,
       target: e.target.closest("[data-country]")
     };
   });
 
   svg.addEventListener("pointermove", e => {
-    if (!asiaDragState) return;
+    if (!asiaDragState || pinching) return;
 
-    const dx = e.clientX - asiaDragState.lastX;
-    const dy = e.clientY - asiaDragState.lastY;
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+    const dx = point.x - asiaDragState.lastMapX;
+    const dy = point.y - asiaDragState.lastMapY;
 
     if (
       Math.abs(e.clientX - asiaDragState.startX) > 7 ||
@@ -823,11 +848,13 @@ function initAsiaMapTouch(svg) {
       asiaDragState.moved = true;
     }
 
-    asiaMapState.x += dx * 1.18;
-    asiaMapState.y += dy * 1.18;
+    asiaMapState.x += dx;
+    asiaMapState.y += dy;
 
     asiaDragState.lastX = e.clientX;
     asiaDragState.lastY = e.clientY;
+    asiaDragState.lastMapX = point.x;
+    asiaDragState.lastMapY = point.y;
 
     applyAsiaMapTransform();
   });
@@ -835,19 +862,19 @@ function initAsiaMapTouch(svg) {
   svg.addEventListener("pointerup", () => {
     if (!asiaDragState) return;
 
-    if (!asiaDragState.moved && asiaDragState.target) {
+    if (!pinching && !asiaDragState.moved && asiaDragState.target) {
       handleAsiaCountryClick(asiaDragState.target.dataset.country);
     }
 
     asiaDragState = null;
   });
 
-  let pinchStartDistance = null;
-
   svg.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
 
     e.preventDefault();
+    pinching = true;
+    asiaDragState = null;
 
     const a = e.touches[0];
     const b = e.touches[1];
@@ -857,15 +884,20 @@ function initAsiaMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.18);
       zoomAsiaAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
   }, { passive: false });
 
-  svg.addEventListener("touchend", () => {
-    pinchStartDistance = null;
+  svg.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      pinchStartDistance = null;
+      setTimeout(() => {
+        pinching = false;
+      }, 90);
+    }
   });
 }
 
@@ -1110,17 +1142,17 @@ const AFRICA_COUNTRY_NAMES = {
   CG: "Republik Kongo",
   CD: "Demokratische Republik Kongo",
   DJ: "Dschibuti",
-  EG: "Ägypten",
-  GQ: "Äquatorialguinea",
+  EG: "Ã„gypten",
+  GQ: "Ã„quatorialguinea",
   ER: "Eritrea",
   SZ: "Eswatini",
-  ET: "Äthiopien",
+  ET: "Ã„thiopien",
   GA: "Gabun",
   GM: "Gambia",
   GH: "Ghana",
   GN: "Guinea",
   GW: "Guinea-Bissau",
-  CI: "Elfenbeinküste",
+  CI: "ElfenbeinkÃ¼ste",
   KE: "Kenia",
   LS: "Lesotho",
   LR: "Liberia",
@@ -1136,13 +1168,13 @@ const AFRICA_COUNTRY_NAMES = {
   NE: "Niger",
   NG: "Nigeria",
   RW: "Ruanda",
-  ST: "São Tomé und Príncipe",
+  ST: "SÃ£o TomÃ© und PrÃ­ncipe",
   SN: "Senegal",
   SC: "Seychellen",
   SL: "Sierra Leone",
   SO: "Somalia",
-  ZA: "Südafrika",
-  SS: "Südsudan",
+  ZA: "SÃ¼dafrika",
+  SS: "SÃ¼dsudan",
   SD: "Sudan",
   TZ: "Tansania",
   TG: "Togo",
@@ -1248,46 +1280,41 @@ function applyAfricaMapTransform() {
 
 function zoomAfricaAt(clientX, clientY, zoomFactor) {
   const svg = document.getElementById("africaSvg");
-  if (!svg) return;
-
-  const rect = svg.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  const oldScale = africaMapState.scale;
-  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
-
-  africaMapState.x = x - (x - africaMapState.x) * (newScale / oldScale);
-  africaMapState.y = y - (y - africaMapState.y) * (newScale / oldScale);
-  africaMapState.scale = newScale;
-
-  applyAfricaMapTransform();
+  zoomLegacyMapAt(svg, africaMapState, clientX, clientY, zoomFactor, applyAfricaMapTransform);
 }
 
 function initAfricaMapTouch(svg) {
+  let pinchStartDistance = null;
+  let pinching = false;
+
   svg.addEventListener("wheel", e => {
     e.preventDefault();
     zoomAfricaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" && (e.isPrimary === false || pinching)) return;
     svg.setPointerCapture(e.pointerId);
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
 
     africaDragState = {
       startX: e.clientX,
       startY: e.clientY,
       lastX: e.clientX,
       lastY: e.clientY,
+      lastMapX: point.x,
+      lastMapY: point.y,
       moved: false,
       target: e.target.closest("[data-country]")
     };
   });
 
   svg.addEventListener("pointermove", e => {
-    if (!africaDragState) return;
+    if (!africaDragState || pinching) return;
 
-    const dx = e.clientX - africaDragState.lastX;
-    const dy = e.clientY - africaDragState.lastY;
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+    const dx = point.x - africaDragState.lastMapX;
+    const dy = point.y - africaDragState.lastMapY;
 
     if (
       Math.abs(e.clientX - africaDragState.startX) > 7 ||
@@ -1296,11 +1323,13 @@ function initAfricaMapTouch(svg) {
       africaDragState.moved = true;
     }
 
-    africaMapState.x += dx * 1.18;
-    africaMapState.y += dy * 1.18;
+    africaMapState.x += dx;
+    africaMapState.y += dy;
 
     africaDragState.lastX = e.clientX;
     africaDragState.lastY = e.clientY;
+    africaDragState.lastMapX = point.x;
+    africaDragState.lastMapY = point.y;
 
     applyAfricaMapTransform();
   });
@@ -1308,19 +1337,19 @@ function initAfricaMapTouch(svg) {
   svg.addEventListener("pointerup", () => {
     if (!africaDragState) return;
 
-    if (!africaDragState.moved && africaDragState.target) {
+    if (!pinching && !africaDragState.moved && africaDragState.target) {
       handleAfricaCountryClick(africaDragState.target.dataset.country);
     }
 
     africaDragState = null;
   });
 
-  let pinchStartDistance = null;
-
   svg.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
 
     e.preventDefault();
+    pinching = true;
+    africaDragState = null;
 
     const a = e.touches[0];
     const b = e.touches[1];
@@ -1330,15 +1359,20 @@ function initAfricaMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.18);
       zoomAfricaAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
   }, { passive: false });
 
-  svg.addEventListener("touchend", () => {
-    pinchStartDistance = null;
+  svg.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      pinchStartDistance = null;
+      setTimeout(() => {
+        pinching = false;
+      }, 90);
+    }
   });
 }
 
@@ -1589,7 +1623,7 @@ const SOUTH_AMERICA_COUNTRY_NAMES = {
   SR: "Suriname",
   UY: "Uruguay",
   VE: "Venezuela",
-  GF: "Französisch-Guayana",
+  GF: "FranzÃ¶sisch-Guayana",
   FK: "Falklandinseln"
 };
 
@@ -1673,46 +1707,41 @@ function applySouthAmericaMapTransform() {
 
 function zoomSouthAmericaAt(clientX, clientY, zoomFactor) {
   const svg = document.getElementById("southAmericaSvg");
-  if (!svg) return;
-
-  const rect = svg.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  const oldScale = southAmericaMapState.scale;
-  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
-
-  southAmericaMapState.x = x - (x - southAmericaMapState.x) * (newScale / oldScale);
-  southAmericaMapState.y = y - (y - southAmericaMapState.y) * (newScale / oldScale);
-  southAmericaMapState.scale = newScale;
-
-  applySouthAmericaMapTransform();
+  zoomLegacyMapAt(svg, southAmericaMapState, clientX, clientY, zoomFactor, applySouthAmericaMapTransform);
 }
 
 function initSouthAmericaMapTouch(svg) {
+  let pinchStartDistance = null;
+  let pinching = false;
+
   svg.addEventListener("wheel", e => {
     e.preventDefault();
     zoomSouthAmericaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" && (e.isPrimary === false || pinching)) return;
     svg.setPointerCapture(e.pointerId);
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
 
     southAmericaDragState = {
       startX: e.clientX,
       startY: e.clientY,
       lastX: e.clientX,
       lastY: e.clientY,
+      lastMapX: point.x,
+      lastMapY: point.y,
       moved: false,
       target: e.target.closest("[data-country]")
     };
   });
 
   svg.addEventListener("pointermove", e => {
-    if (!southAmericaDragState) return;
+    if (!southAmericaDragState || pinching) return;
 
-    const dx = e.clientX - southAmericaDragState.lastX;
-    const dy = e.clientY - southAmericaDragState.lastY;
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+    const dx = point.x - southAmericaDragState.lastMapX;
+    const dy = point.y - southAmericaDragState.lastMapY;
 
     if (
       Math.abs(e.clientX - southAmericaDragState.startX) > 7 ||
@@ -1721,11 +1750,13 @@ function initSouthAmericaMapTouch(svg) {
       southAmericaDragState.moved = true;
     }
 
-    southAmericaMapState.x += dx * 1.18;
-    southAmericaMapState.y += dy * 1.18;
+    southAmericaMapState.x += dx;
+    southAmericaMapState.y += dy;
 
     southAmericaDragState.lastX = e.clientX;
     southAmericaDragState.lastY = e.clientY;
+    southAmericaDragState.lastMapX = point.x;
+    southAmericaDragState.lastMapY = point.y;
 
     applySouthAmericaMapTransform();
   });
@@ -1733,19 +1764,19 @@ function initSouthAmericaMapTouch(svg) {
   svg.addEventListener("pointerup", () => {
     if (!southAmericaDragState) return;
 
-    if (!southAmericaDragState.moved && southAmericaDragState.target) {
+    if (!pinching && !southAmericaDragState.moved && southAmericaDragState.target) {
       handleSouthAmericaCountryClick(southAmericaDragState.target.dataset.country);
     }
 
     southAmericaDragState = null;
   });
 
-  let pinchStartDistance = null;
-
   svg.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
 
     e.preventDefault();
+    pinching = true;
+    southAmericaDragState = null;
 
     const a = e.touches[0];
     const b = e.touches[1];
@@ -1755,15 +1786,20 @@ function initSouthAmericaMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.18);
       zoomSouthAmericaAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
   }, { passive: false });
 
-  svg.addEventListener("touchend", () => {
-    pinchStartDistance = null;
+  svg.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      pinchStartDistance = null;
+      setTimeout(() => {
+        pinching = false;
+      }, 90);
+    }
   });
 }
 
@@ -1962,7 +1998,7 @@ function resetSouthAmericaRound() {
 
 function finishSouthAmericaRound() {
   stopSouthAmericaTimer();
-  showIsland("Südamerika Runde beendet", "success");
+  showIsland("SÃ¼damerika Runde beendet", "success");
 
   resetSouthAmericaRound();
   showScreen(document.getElementById("gamesScreen"), true);
@@ -2006,7 +2042,7 @@ const NORTH_AMERICA_COUNTRY_NAMES = {
   CA: "Kanada",
   US: "Vereinigte Staaten",
   MX: "Mexiko",
-  GL: "Grönland",
+  GL: "GrÃ¶nland",
   GT: "Guatemala",
   BZ: "Belize",
   HN: "Honduras",
@@ -2031,9 +2067,9 @@ const NORTH_AMERICA_COUNTRY_NAMES = {
   AI: "Anguilla",
   AW: "Aruba",
   BM: "Bermuda",
-  BL: "Saint-Barthélemy",
+  BL: "Saint-BarthÃ©lemy",
   BQ: "Bonaire, Sint Eustatius und Saba",
-  CW: "Curaçao",
+  CW: "CuraÃ§ao",
   GP: "Guadeloupe",
   KY: "Kaimaninseln",
   MF: "Saint-Martin",
@@ -2143,46 +2179,41 @@ function applyNorthAmericaMapTransform() {
 
 function zoomNorthAmericaAt(clientX, clientY, zoomFactor) {
   const svg = document.getElementById("northAmericaSvg");
-  if (!svg) return;
-
-  const rect = svg.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-
-  const oldScale = northAmericaMapState.scale;
-  const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 6);
-
-  northAmericaMapState.x = x - (x - northAmericaMapState.x) * (newScale / oldScale);
-  northAmericaMapState.y = y - (y - northAmericaMapState.y) * (newScale / oldScale);
-  northAmericaMapState.scale = newScale;
-
-  applyNorthAmericaMapTransform();
+  zoomLegacyMapAt(svg, northAmericaMapState, clientX, clientY, zoomFactor, applyNorthAmericaMapTransform);
 }
 
 function initNorthAmericaMapTouch(svg) {
+  let pinchStartDistance = null;
+  let pinching = false;
+
   svg.addEventListener("wheel", e => {
     e.preventDefault();
     zoomNorthAmericaAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.22 : 0.82);
   }, { passive: false });
 
   svg.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" && (e.isPrimary === false || pinching)) return;
     svg.setPointerCapture(e.pointerId);
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
 
     northAmericaDragState = {
       startX: e.clientX,
       startY: e.clientY,
       lastX: e.clientX,
       lastY: e.clientY,
+      lastMapX: point.x,
+      lastMapY: point.y,
       moved: false,
       target: e.target.closest("[data-country]")
     };
   });
 
   svg.addEventListener("pointermove", e => {
-    if (!northAmericaDragState) return;
+    if (!northAmericaDragState || pinching) return;
 
-    const dx = e.clientX - northAmericaDragState.lastX;
-    const dy = e.clientY - northAmericaDragState.lastY;
+    const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+    const dx = point.x - northAmericaDragState.lastMapX;
+    const dy = point.y - northAmericaDragState.lastMapY;
 
     if (
       Math.abs(e.clientX - northAmericaDragState.startX) > 7 ||
@@ -2191,11 +2222,13 @@ function initNorthAmericaMapTouch(svg) {
       northAmericaDragState.moved = true;
     }
 
-    northAmericaMapState.x += dx * 1.18;
-    northAmericaMapState.y += dy * 1.18;
+    northAmericaMapState.x += dx;
+    northAmericaMapState.y += dy;
 
     northAmericaDragState.lastX = e.clientX;
     northAmericaDragState.lastY = e.clientY;
+    northAmericaDragState.lastMapX = point.x;
+    northAmericaDragState.lastMapY = point.y;
 
     applyNorthAmericaMapTransform();
   });
@@ -2203,19 +2236,19 @@ function initNorthAmericaMapTouch(svg) {
   svg.addEventListener("pointerup", () => {
     if (!northAmericaDragState) return;
 
-    if (!northAmericaDragState.moved && northAmericaDragState.target) {
+    if (!pinching && !northAmericaDragState.moved && northAmericaDragState.target) {
       handleNorthAmericaCountryClick(northAmericaDragState.target.dataset.country);
     }
 
     northAmericaDragState = null;
   });
 
-  let pinchStartDistance = null;
-
   svg.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
 
     e.preventDefault();
+    pinching = true;
+    northAmericaDragState = null;
 
     const a = e.touches[0];
     const b = e.touches[1];
@@ -2225,15 +2258,20 @@ function initNorthAmericaMapTouch(svg) {
     const centerY = (a.clientY + b.clientY) / 2;
 
     if (pinchStartDistance) {
-      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.35);
+      const pinchZoom = Math.pow(distance / pinchStartDistance, 1.18);
       zoomNorthAmericaAt(centerX, centerY, pinchZoom);
     }
 
     pinchStartDistance = distance;
   }, { passive: false });
 
-  svg.addEventListener("touchend", () => {
-    pinchStartDistance = null;
+  svg.addEventListener("touchend", e => {
+    if (e.touches.length < 2) {
+      pinchStartDistance = null;
+      setTimeout(() => {
+        pinching = false;
+      }, 90);
+    }
   });
 }
 
@@ -2509,7 +2547,7 @@ function renderNorthAmericaGameHome() {
   }
 
   bestText.textContent =
-    `${northAmericaBestRun.correct} richtig · ${northAmericaBestRun.wrong} falsch`;
+    `${northAmericaBestRun.correct} richtig Â· ${northAmericaBestRun.wrong} falsch`;
 
   bestTime.textContent =
     `Zeit: ${formatEuropeTime(northAmericaBestRun.time)}`;
@@ -2551,7 +2589,7 @@ let gamesGlobeScriptPromise = null;
 const CONTINENT_META_FINAL = {
   europe: {
     name: "Europa",
-    emoji: "🌍",
+    emoji: "ðŸŒ",
     color: "rgba(34,197,94,.72)",
     path: "maps/europe/europe.svg",
     countries: Object.keys(EUROPE_COUNTRY_NAMES),
@@ -2559,7 +2597,7 @@ const CONTINENT_META_FINAL = {
   },
   asia: {
     name: "Asien",
-    emoji: "🌏",
+    emoji: "ðŸŒ",
     color: "rgba(56,189,248,.72)",
     path: "maps/asia/asia.svg",
     countries: Object.keys(ASIA_COUNTRY_NAMES),
@@ -2567,15 +2605,15 @@ const CONTINENT_META_FINAL = {
   },
   africa: {
     name: "Afrika",
-    emoji: "🌍",
+    emoji: "ðŸŒ",
     color: "rgba(249,115,22,.72)",
     path: "maps/africa/africa.svg",
     countries: Object.keys(AFRICA_COUNTRY_NAMES),
     run: () => JSON.parse(localStorage.getItem("africaBestRun")) || { correct: 0, wrong: 0, time: null }
   },
   southAmerica: {
-    name: "Südamerika",
-    emoji: "🌎",
+    name: "SÃ¼damerika",
+    emoji: "ðŸŒŽ",
     color: "rgba(168,85,247,.72)",
     path: "maps/southAmerica/southAmerica.svg",
     countries: Object.keys(SOUTH_AMERICA_COUNTRY_NAMES),
@@ -2583,7 +2621,7 @@ const CONTINENT_META_FINAL = {
   },
   northAmerica: {
     name: "Nordamerika",
-    emoji: "🌎",
+    emoji: "ðŸŒŽ",
     color: "rgba(234,179,8,.72)",
     path: "maps/northAmerica/northAmerica.svg",
     countries: Object.keys(NORTH_AMERICA_COUNTRY_NAMES),
@@ -2663,7 +2701,7 @@ if (globeEl && !gamesGlobeInstance) {
     <div class="best-card games-best-card clean-best">
       <p>Bestes Gebiet</p>
       <h2>${best ? best.meta.name : "Noch kein Spiel"}</h2>
-      <span>${best ? `${best.accuracy}% Accuracy · ${formatEuropeTime(best.run.time)}` : "Starte deine erste Runde"}</span>
+      <span>${best ? `${best.accuracy}% Accuracy Â· ${formatEuropeTime(best.run.time)}` : "Starte deine erste Runde"}</span>
     </div>
 
     <div class="continent-card-grid">
@@ -2707,7 +2745,7 @@ async function openContinentFocus(card, key) {
 
   card.innerHTML = `
     <div class="focus-detail-head">
-      <button onclick="event.stopPropagation(); renderGamesStats();" class="circle-btn">←</button>
+      <button onclick="event.stopPropagation(); renderGamesStats();" class="circle-btn">â†</button>
       <div>
         <span>${meta.emoji} ${meta.name}</span>
         <h2>${accuracy}% Accuracy</h2>
@@ -2789,23 +2827,29 @@ async function loadFocusMap(key) {
 
     svg.addEventListener("pointerdown", e => {
       svg.setPointerCapture(e.pointerId);
+      const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
       drag = {
         lastX: e.clientX,
-        lastY: e.clientY
+        lastY: e.clientY,
+        lastMapX: point.x,
+        lastMapY: point.y
       };
     });
 
     svg.addEventListener("pointermove", e => {
       if (!drag) return;
 
-      const dx = e.clientX - drag.lastX;
-      const dy = e.clientY - drag.lastY;
+      const point = getLegacyMapPoint(svg, e.clientX, e.clientY);
+      const dx = point.x - drag.lastMapX;
+      const dy = point.y - drag.lastMapY;
 
-      state.x += dx * 1.15;
-      state.y += dy * 1.15;
+      state.x += dx;
+      state.y += dy;
 
       drag.lastX = e.clientX;
       drag.lastY = e.clientY;
+      drag.lastMapX = point.x;
+      drag.lastMapY = point.y;
 
       apply();
     });
@@ -2817,18 +2861,7 @@ async function loadFocusMap(key) {
     svg.addEventListener("wheel", e => {
       e.preventDefault();
 
-      const oldScale = state.scale;
-      const newScale = Math.min(Math.max(oldScale * (e.deltaY < 0 ? 1.18 : 0.84), 1), 6);
-
-      const rect = svg.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      state.x = x - (x - state.x) * (newScale / oldScale);
-      state.y = y - (y - state.y) * (newScale / oldScale);
-      state.scale = newScale;
-
-      apply();
+      zoomLegacyMapAt(svg, state, e.clientX, e.clientY, e.deltaY < 0 ? 1.18 : 0.84, apply);
     }, { passive: false });
 
     apply();
@@ -3000,7 +3033,7 @@ window.addEventListener("resize", () => {
   gamesGlobeInstance.width(rect.width).height(rect.height);
 });
 
-// Globus im Hintergrund vorbereiten, damit Stats schneller öffnet
+// Globus im Hintergrund vorbereiten, damit Stats schneller Ã¶ffnet
 
 function pauseGlobe() {
   if (!gamesGlobeInstance) return;
@@ -3076,7 +3109,7 @@ const MAP_ENGINE_CONFIG = {
     bestKey: () => "africaBestRun"
   },
   southAmerica: {
-    title: "Südamerika",
+    title: "SÃ¼damerika",
     countries: SOUTH_AMERICA_COUNTRY_NAMES,
     svgPath: "maps/southAmerica/southAmerica.svg",
     screenId: "southAmericaMapGame",
@@ -3149,7 +3182,8 @@ const MapQuizEngine = (() => {
         timer: null,
         transform: { x: 0, y: 0, scale: 1 },
         drag: null,
-        pinchDistance: null
+        pinchDistance: null,
+        pinching: false
       };
     }
 
@@ -3210,7 +3244,7 @@ const MapQuizEngine = (() => {
       return;
     }
 
-    bestRun.textContent = `${run.correct || 0} richtig · ${run.wrong || 0} falsch`;
+    bestRun.textContent = `${run.correct || 0} richtig Â· ${run.wrong || 0} falsch`;
     if (bestTime) bestTime.textContent = `Zeit: ${formatEuropeTime(run.time)}`;
   }
 
@@ -3224,15 +3258,25 @@ const MapQuizEngine = (() => {
     );
   }
 
+  function getSvgPoint(svg, clientX, clientY) {
+    const point = svg.createSVGPoint();
+    point.x = clientX;
+    point.y = clientY;
+
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: clientX, y: clientY };
+
+    return point.matrixTransform(ctm.inverse());
+  }
+
   function zoomAt(config, s, clientX, clientY, zoomFactor) {
     const svg = byId(config.svgId);
     if (!svg) return;
 
-    const rect = svg.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+    const { x, y } = getSvgPoint(svg, clientX, clientY);
     const oldScale = s.transform.scale;
     const newScale = Math.min(Math.max(oldScale * zoomFactor, 1), 7);
+    if (newScale === oldScale) return;
 
     s.transform.x = x - (x - s.transform.x) * (newScale / oldScale);
     s.transform.y = y - (y - s.transform.y) * (newScale / oldScale);
@@ -3368,7 +3412,9 @@ const MapQuizEngine = (() => {
     }, { passive: false });
 
     svg.addEventListener("pointerdown", e => {
-      if (e.pointerType === "touch" && e.isPrimary === false) return;
+      if (e.pointerType === "touch" && (e.isPrimary === false || s.pinching)) return;
+
+      const point = getSvgPoint(svg, e.clientX, e.clientY);
 
       svg.setPointerCapture?.(e.pointerId);
       s.drag = {
@@ -3376,17 +3422,20 @@ const MapQuizEngine = (() => {
         startY: e.clientY,
         lastX: e.clientX,
         lastY: e.clientY,
+        lastSvgX: point.x,
+        lastSvgY: point.y,
         moved: false,
         target: e.target.closest("[data-country]")
       };
     });
 
     svg.addEventListener("pointermove", e => {
-      if (!s.drag) return;
+      if (!s.drag || s.pinching) return;
       e.preventDefault();
 
-      const dx = e.clientX - s.drag.lastX;
-      const dy = e.clientY - s.drag.lastY;
+      const point = getSvgPoint(svg, e.clientX, e.clientY);
+      const dx = point.x - s.drag.lastSvgX;
+      const dy = point.y - s.drag.lastSvgY;
 
       if (
         Math.abs(e.clientX - s.drag.startX) > 7 ||
@@ -3395,10 +3444,12 @@ const MapQuizEngine = (() => {
         s.drag.moved = true;
       }
 
-      s.transform.x += dx * 1.12;
-      s.transform.y += dy * 1.12;
+      s.transform.x += dx;
+      s.transform.y += dy;
       s.drag.lastX = e.clientX;
       s.drag.lastY = e.clientY;
+      s.drag.lastSvgX = point.x;
+      s.drag.lastSvgY = point.y;
 
       applyTransform(config, s);
     });
@@ -3406,7 +3457,7 @@ const MapQuizEngine = (() => {
     const finishPointer = () => {
       if (!s.drag) return;
 
-      if (!s.drag.moved && s.drag.target) {
+      if (!s.pinching && !s.drag.moved && s.drag.target) {
         answer(config, s, s.drag.target.dataset.country);
       }
 
@@ -3421,6 +3472,8 @@ const MapQuizEngine = (() => {
     svg.addEventListener("touchmove", e => {
       if (e.touches.length !== 2) return;
       e.preventDefault();
+      s.pinching = true;
+      s.drag = null;
 
       const a = e.touches[0];
       const b = e.touches[1];
@@ -3436,8 +3489,13 @@ const MapQuizEngine = (() => {
       s.pinchDistance = distance;
     }, { passive: false });
 
-    svg.addEventListener("touchend", () => {
-      s.pinchDistance = null;
+    svg.addEventListener("touchend", e => {
+      if (e.touches.length < 2) {
+        s.pinchDistance = null;
+        setTimeout(() => {
+          s.pinching = false;
+        }, 90);
+      }
     });
   }
 
@@ -3456,7 +3514,7 @@ const MapQuizEngine = (() => {
     const target = byId(config.targetId);
     if (target) target.textContent = s.current.name;
 
-    setFeedback(config, s.mode === "learn" ? "Tippe eines der hervorgehobenen Länder an." : "");
+    setFeedback(config, s.mode === "learn" ? "Tippe eines der hervorgehobenen LÃ¤nder an." : "");
   }
 
   function prepareLearnOptions(config, s) {
@@ -3556,7 +3614,7 @@ const MapQuizEngine = (() => {
 
   function answerLearn(config, s, countryId, land) {
     if (!s.remainingOptions.includes(countryId)) {
-      showIsland("Wähle eines der markierten Länder", "success");
+      showIsland("WÃ¤hle eines der markierten LÃ¤nder", "success");
       return;
     }
 
@@ -3591,7 +3649,7 @@ const MapQuizEngine = (() => {
     }
 
     const left = Math.max(1, s.remainingOptions.length);
-    setFeedback(config, `${left} Auswahl${left === 1 ? "" : "en"} übrig`);
+    setFeedback(config, `${left} Auswahl${left === 1 ? "" : "en"} Ã¼brig`);
     showIsland(`${s.wrongAttempts} von 2`, "danger");
   }
 
@@ -3703,6 +3761,7 @@ const MapQuizEngine = (() => {
     s.startTime = null;
     s.drag = null;
     s.pinchDistance = null;
+    s.pinching = false;
 
     setFeedback(config);
     updateScore(config, s);
@@ -3733,7 +3792,7 @@ function openMapModeSelect(key) {
 
   const title = document.getElementById("modeSelectTitle");
   const heading = document.getElementById("modeSelectHeading");
-  if (title) title.textContent = `${config.title} · Modus wählen`;
+  if (title) title.textContent = `${config.title} Â· Modus wÃ¤hlen`;
   if (heading) heading.textContent = config.title;
 
   showScreen(document.getElementById("continentModeSelect"), true);
@@ -3746,7 +3805,7 @@ function startSelectedMapMode(mode) {
 /* === COUNTRY SHAPE GAME ENGINE === */
 
 const EUROPE_CAPITALS = {
-  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Brüssel", BA: "Sarajevo",
+  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "BrÃ¼ssel", BA: "Sarajevo",
   BG: "Sofia", HR: "Zagreb", CY: "Nikosia", CZ: "Prag", DK: "Kopenhagen", EE: "Tallinn",
   FI: "Helsinki", FR: "Paris", DE: "Berlin", GR: "Athen", HU: "Budapest", IS: "Reykjavik",
   IE: "Dublin", IT: "Rom", LV: "Riga", LT: "Vilnius", LU: "Luxemburg", MD: "Chisinau",
@@ -3799,7 +3858,7 @@ const COUNTRY_SHAPE_GAME_CONFIG = {
   europe: { name: "Europa", folder: "maps/europe/countries", countries: EUROPE_COUNTRY_NAMES, capitals: EUROPE_CAPITALS, files: COUNTRY_SHAPE_FILES.europe, homeId: "europeGameHome" },
   asia: { name: "Asien", folder: "maps/asia/countries", countries: ASIA_COUNTRY_NAMES, capitals: ASIA_CAPITALS, files: COUNTRY_SHAPE_FILES.asia, homeId: "asiaGameHome" },
   africa: { name: "Afrika", folder: "maps/africa/countries", countries: AFRICA_COUNTRY_NAMES, capitals: AFRICA_CAPITALS, files: COUNTRY_SHAPE_FILES.africa, homeId: "africaGameHome" },
-  southAmerica: { name: "Südamerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
+  southAmerica: { name: "SÃ¼damerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
   northAmerica: { name: "Nordamerika", folder: "maps/northAmerica/countries", countries: NORTH_AMERICA_COUNTRY_NAMES, capitals: NORTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.northAmerica, homeId: "northAmericaGameHome" }
 };
 
@@ -3835,7 +3894,7 @@ function openCountryShapeModeSelect(continentKey) {
   const config = COUNTRY_SHAPE_GAME_CONFIG[continentKey];
   if (!config) return;
   countryShapeState.continentKey = continentKey;
-  document.getElementById("countryShapeModeTitle").textContent = `${config.name} · Länderform`;
+  document.getElementById("countryShapeModeTitle").textContent = `${config.name} Â· LÃ¤nderform`;
   document.getElementById("countryShapeModeHeading").textContent = config.name;
   showScreen(document.getElementById("countryShapeModeSelect"), true);
 }
@@ -3845,7 +3904,7 @@ function startCountryShapeGame(continentKey, mode) {
   const meta = COUNTRY_SHAPE_MODE_META[mode] || COUNTRY_SHAPE_MODE_META.ultra;
   if (!config) return;
   const countries = getCountryShapeCountries(config);
-  if (!countries.length) return showIsland("Keine Länderformen für diesen Kontinent gefunden.", "danger");
+  if (!countries.length) return showIsland("Keine LÃ¤nderformen fÃ¼r diesen Kontinent gefunden.", "danger");
   clearInterval(countryShapeState.timer);
   Object.assign(countryShapeState, {
     continentKey, mode, deck: [...countries].sort(() => Math.random() - 0.5), current: null, index: 0,
@@ -3895,21 +3954,21 @@ async function loadNextCountryShape() {
   countryShapeState.locked = false;
   countryShapeState.livesLeft = COUNTRY_SHAPE_MODE_META[countryShapeState.mode].lives;
   document.getElementById("countryShapeProgress").textContent = `${countryShapeState.index + 1} / ${countryShapeState.deck.length}`;
-  document.getElementById("countryShapeQuestion").textContent = "Wähle das passende Land";
+  document.getElementById("countryShapeQuestion").textContent = "WÃ¤hle das passende Land";
   document.getElementById("countryShapeHint").className = "shape-hint-box";
   document.getElementById("countryShapeHint").textContent = "";
   renderCountryShapeLives();
   renderCountryShapeOptions();
   const box = document.getElementById("countryShapeSvgBox");
   box.classList.remove("shape-correct-pop", "shape-wrong-shake");
-  box.innerHTML = `<div class="shape-loading">Länderform wird geladen...</div>`;
+  box.innerHTML = `<div class="shape-loading">LÃ¤nderform wird geladen...</div>`;
   try {
     const response = await fetch(`${config.folder}/${encodeURIComponent(next.file)}`);
     if (!response.ok) throw new Error(next.file);
     box.innerHTML = await response.text();
     normalizeCountryShapeSvg(box);
   } catch (error) {
-    console.warn("Länderform konnte nicht geladen werden:", error);
+    console.warn("LÃ¤nderform konnte nicht geladen werden:", error);
     box.innerHTML = `<div class="shape-loading error">SVG fehlt: ${next.name}</div>`;
   }
 }
@@ -3936,7 +3995,7 @@ function renderCountryShapeOptions() {
 
 function confirmCountryShapeAnswer() {
   if (countryShapeState.locked || !countryShapeState.current) return;
-  if (!countryShapeState.selectedId) return showIsland("Wähle zuerst ein Land aus.", "danger");
+  if (!countryShapeState.selectedId) return showIsland("WÃ¤hle zuerst ein Land aus.", "danger");
   if (countryShapeState.selectedId === countryShapeState.current.id) {
     countryShapeState.locked = true;
     countryShapeState.correct++;
@@ -3972,7 +4031,7 @@ function handleCountryShapeWrongAnswer() {
   countryShapeState.locked = true;
   countryShapeState.wrong++;
   hint.className = "shape-hint-box show danger";
-  hint.textContent = `Richtig wäre: ${current.name}.`;
+  hint.textContent = `Richtig wÃ¤re: ${current.name}.`;
   setTimeout(() => { countryShapeState.index++; loadNextCountryShape(); }, countryShapeState.mode === "ultra" ? 950 : 1350);
 }
 
@@ -3993,7 +4052,7 @@ function renderCountryShapeResult(result = countryShapeState.lastResult) {
   const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
   const modeLabel = COUNTRY_SHAPE_MODE_META[result.mode]?.label || result.mode;
   document.getElementById("countryShapeResultTitle").textContent = `${config.name} abgeschlossen`;
-  document.getElementById("countryShapeResultSub").textContent = `${modeLabel} · ${result.correct + result.wrong} Länder`;
+  document.getElementById("countryShapeResultSub").textContent = `${modeLabel} Â· ${result.correct + result.wrong} LÃ¤nder`;
   document.getElementById("countryShapeResultCorrect").textContent = result.correct;
   document.getElementById("countryShapeResultWrong").textContent = result.wrong;
   document.getElementById("countryShapeResultPercent").textContent = `${result.percent}%`;

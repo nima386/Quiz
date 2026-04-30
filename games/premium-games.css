@@ -412,6 +412,12 @@ body.light-mode .premium-globe-card {
   padding-inline: 18px !important;
 }
 
+.map-glass-frame svg,
+.shape-svg-box svg {
+  touch-action: none !important;
+  -ms-touch-action: none !important;
+}
+
 .map-live-timer strong {
   font-size: clamp(20px, 5.4vw, 30px) !important;
 }
