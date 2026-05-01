@@ -11,10 +11,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Quiz Arena</title>
-  <link rel="stylesheet" href="style.css?v=26">
-  <link rel="stylesheet" href="games/games.css?v=26">
-  <link rel="stylesheet" href="premium.css?v=26">
-  <link rel="stylesheet" href="games/premium-games.css?v=26">
+  <link rel="stylesheet" href="style.css?v=29">
+  <link rel="stylesheet" href="games/games.css?v=29">
+  <link rel="stylesheet" href="premium.css?v=29">
+  <link rel="stylesheet" href="games/premium-games.css?v=29">
 </head>
 <body>
 
@@ -75,6 +75,49 @@
       <span>Lernen. Spielen. Wachsen.</span>
     </div>
     <div class="splash-progress"><i></i></div>
+  </div>
+</div>
+
+<div id="onboardingOverlay" class="onboarding-overlay" aria-hidden="true">
+  <div class="onboarding-card">
+    <div class="onboarding-mark">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <rect x="70" y="26" width="84" height="84" rx="18" transform="rotate(-10 112 68)"></rect>
+        <rect x="36" y="96" width="94" height="94" rx="20"></rect>
+        <circle cx="96" cy="50" r="5"></circle>
+        <circle cx="130" cy="86" r="5"></circle>
+        <circle cx="62" cy="122" r="6"></circle>
+        <circle cx="102" cy="122" r="6"></circle>
+        <circle cx="62" cy="146" r="6"></circle>
+        <circle cx="102" cy="146" r="6"></circle>
+        <circle cx="62" cy="170" r="6"></circle>
+        <circle cx="102" cy="170" r="6"></circle>
+      </svg>
+    </div>
+
+    <span class="onboarding-kicker">Startklar</span>
+    <h1>Wähle deinen Fokus</h1>
+    <p>Ein kurzer Setup-Moment. Danach landest du direkt in deiner Daily.</p>
+
+    <div class="onboarding-choice-grid">
+      <button class="onboarding-choice active" data-onboarding-interest="bauzeichner">
+        <strong>Bauzeichner</strong>
+        <span>Politik, Prüfung, Wiederholung</span>
+      </button>
+      <button class="onboarding-choice" data-onboarding-interest="countries">
+        <strong>Länder</strong>
+        <span>Karten, Umrisse, Globus</span>
+      </button>
+      <button class="onboarding-choice" data-onboarding-interest="arena">
+        <strong>Arena</strong>
+        <span>Freunde, Duelle, Season</span>
+      </button>
+    </div>
+
+    <div class="onboarding-actions">
+      <button id="finishOnboardingBtn" class="main-btn">Mit Daily starten</button>
+      <button id="skipOnboardingBtn" class="avatar-sheet-btn muted">Später</button>
+    </div>
   </div>
 </div>
 
@@ -195,6 +238,8 @@
               <div><b id="dailyXp">bis 120</b><small>XP möglich</small></div>
               <div><b id="dailyBestScore">0</b><small>Bestscore</small></div>
             </div>
+            <div id="dailyRewardStrip" class="daily-reward-strip"></div>
+            <div id="dailyWeekStrip" class="daily-week-strip"></div>
           </div>
           <button id="startDailyBtn" class="main-btn">Jetzt spielen</button>
         </section>
@@ -843,7 +888,7 @@
   </div>
 </section>
 
-<section id="countryShapeGame" class="screen scroll-screen">
+<section id="countryShapeGame" class="screen">
   <div class="shape-game-top">
     <button id="countryShapeBack" class="circle-btn">←</button>
     <div class="shape-live-pill">
@@ -865,6 +910,11 @@
     <span>Welches Land ist das?</span>
     <h1 id="countryShapeQuestion">Wähle ein Land</h1>
     <div id="countryShapeHint" class="shape-hint-box"></div>
+    <button id="countryShapeSelectedAnswer" class="shape-selected-answer" type="button">
+      <span>Auswahl</span>
+      <strong>Noch kein Land gewählt</strong>
+      <small>Tippe hier, um die Auswahl zu lösen.</small>
+    </button>
   </div>
 
   <div id="countryShapeOptions" class="shape-options-list"></div>

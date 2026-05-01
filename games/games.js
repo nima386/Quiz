@@ -55,7 +55,7 @@ function updateGamesFloatingLabel(activeId) {
   if (!label || !btn) return;
 
   const textMap = {
-    gamesNavStart: "L?nder",
+    gamesNavStart: "Länder",
     gamesNavStats: "Stats"
   };
 
@@ -97,7 +97,7 @@ document.getElementById("gamesUpperMenuBtn").onclick = () => {
 };
 
 document.getElementById("openGamesSearch").onclick = () => {
-  showIsland("Spielsuche kommt als N?chstes", "success");
+  showIsland("Spielsuche kommt als Nächstes", "success");
 };
 
 const EUROPE_COUNTRY_NAMES = {
@@ -112,7 +112,7 @@ const EUROPE_COUNTRY_NAMES = {
   HR: "Kroatien",
   CY: "Zypern",
   CZ: "Tschechien",
-  DK: "D?nemark",
+  DK: "Dänemark",
   EE: "Estland",
   FI: "Finnland",
   FR: "Frankreich",
@@ -133,16 +133,16 @@ const EUROPE_COUNTRY_NAMES = {
   NO: "Norwegen",
   PL: "Polen",
   PT: "Portugal",
-  RO: "Rum?nien",
+  RO: "Rumänien",
   RS: "Serbien",
   SK: "Slowakei",
   SI: "Slowenien",
   ES: "Spanien",
   SE: "Schweden",
   CH: "Schweiz",
-  TR: "T?rkei",
+  TR: "Türkei",
   UA: "Ukraine",
-  GB: "Vereinigtes K?nigreich",
+  GB: "Vereinigtes Königreich",
 };
 
 let europeCountries = [];
@@ -616,7 +616,7 @@ function renderEuropeGameHome() {
   }
 
   bestText.textContent =
-    `${europeBestRun.correct} richtig ? ${europeBestRun.wrong} falsch`;
+    `${europeBestRun.correct} richtig · ${europeBestRun.wrong} falsch`;
 
   bestTime.textContent =
     `Zeit: ${formatEuropeTime(europeBestRun.time)}`;
@@ -677,7 +677,7 @@ document.getElementById("backToEuropeStart").onclick = () => {
 const ASIA_COUNTRY_NAMES = {
   RU: "Russland",
   YE: "Jemen",
-  PS: "Pal?stina",
+  PS: "Palästina",
   VN: "Vietnam",
   UZ: "Usbekistan",
   TW: "Taiwan",
@@ -704,7 +704,7 @@ const ASIA_COUNTRY_NAMES = {
   LB: "Libanon",
   LA: "Laos",
   KW: "Kuwait",
-  KR: "S?dkorea",
+  KR: "Südkorea",
   KH: "Kambodscha",
   KG: "Kirgisistan",
   KZ: "Kasachstan",
@@ -1152,7 +1152,7 @@ const AFRICA_COUNTRY_NAMES = {
   GH: "Ghana",
   GN: "Guinea",
   GW: "Guinea-Bissau",
-  CI: "Elfenbeink?ste",
+  CI: "Elfenbeinküste",
   KE: "Kenia",
   LS: "Lesotho",
   LR: "Liberia",
@@ -1168,13 +1168,13 @@ const AFRICA_COUNTRY_NAMES = {
   NE: "Niger",
   NG: "Nigeria",
   RW: "Ruanda",
-  ST: "S?o Tom? und Pr?ncipe",
+  ST: "São Tomé und Príncipe",
   SN: "Senegal",
   SC: "Seychellen",
   SL: "Sierra Leone",
   SO: "Somalia",
-  ZA: "S?dafrika",
-  SS: "S?dsudan",
+  ZA: "Südafrika",
+  SS: "Südsudan",
   SD: "Sudan",
   TZ: "Tansania",
   TG: "Togo",
@@ -1623,7 +1623,7 @@ const SOUTH_AMERICA_COUNTRY_NAMES = {
   SR: "Suriname",
   UY: "Uruguay",
   VE: "Venezuela",
-  GF: "Franz?sisch-Guayana",
+  GF: "Französisch-Guayana",
   FK: "Falklandinseln"
 };
 
@@ -1998,7 +1998,7 @@ function resetSouthAmericaRound() {
 
 function finishSouthAmericaRound() {
   stopSouthAmericaTimer();
-  showIsland("S?damerika Runde beendet", "success");
+  showIsland("Südamerika Runde beendet", "success");
 
   resetSouthAmericaRound();
   showScreen(document.getElementById("gamesScreen"), true);
@@ -2042,7 +2042,7 @@ const NORTH_AMERICA_COUNTRY_NAMES = {
   CA: "Kanada",
   US: "Vereinigte Staaten",
   MX: "Mexiko",
-  GL: "Gr?nland",
+  GL: "Grönland",
   GT: "Guatemala",
   BZ: "Belize",
   HN: "Honduras",
@@ -2067,9 +2067,9 @@ const NORTH_AMERICA_COUNTRY_NAMES = {
   AI: "Anguilla",
   AW: "Aruba",
   BM: "Bermuda",
-  BL: "Saint-Barth?lemy",
+  BL: "Saint-Barthélemy",
   BQ: "Bonaire, Sint Eustatius und Saba",
-  CW: "Cura?ao",
+  CW: "Curaçao",
   GP: "Guadeloupe",
   KY: "Kaimaninseln",
   MF: "Saint-Martin",
@@ -2547,7 +2547,7 @@ function renderNorthAmericaGameHome() {
   }
 
   bestText.textContent =
-    `${northAmericaBestRun.correct} richtig ? ${northAmericaBestRun.wrong} falsch`;
+    `${northAmericaBestRun.correct} richtig · ${northAmericaBestRun.wrong} falsch`;
 
   bestTime.textContent =
     `Zeit: ${formatEuropeTime(northAmericaBestRun.time)}`;
@@ -2613,7 +2613,7 @@ const CONTINENT_META_FINAL = {
     run: () => JSON.parse(localStorage.getItem("africaBestRun")) || { correct: 0, wrong: 0, time: null }
   },
   southAmerica: {
-    name: "S?damerika",
+    name: "Südamerika",
     badge: "SA",
     color: "rgba(168,85,247,.72)",
     path: "maps/southAmerica/southAmerica.svg",
@@ -2700,24 +2700,46 @@ function renderGamesStats() {
   const best = games
     .filter(g => g.run.time)
     .sort((a, b) => b.accuracy - a.accuracy || a.run.time - b.run.time)[0];
+  const played = games.filter(g => (g.run.correct || 0) + (g.run.wrong || 0));
+  const totalCorrect = games.reduce((sum, g) => sum + (g.run.correct || 0), 0);
+  const totalWrong = games.reduce((sum, g) => sum + (g.run.wrong || 0), 0);
+  const globalAccuracy = totalCorrect + totalWrong ? Math.round((totalCorrect / (totalCorrect + totalWrong)) * 100) : 0;
+  const sortedGames = [...games].sort((a, b) => {
+    const aPlayed = (a.run.correct || 0) + (a.run.wrong || 0);
+    const bPlayed = (b.run.correct || 0) + (b.run.wrong || 0);
+    return b.accuracy - a.accuracy || bPlayed - aPlayed || a.meta.name.localeCompare(b.meta.name, "de");
+  });
 
   box.innerHTML = `
-    <div class="best-card games-best-card clean-best">
-      <p>Bestes Gebiet</p>
-      <h2>${best ? best.meta.name : "Noch kein Spiel"}</h2>
-      <span>${best ? `${best.accuracy}% Accuracy ? ${formatEuropeTime(best.run.time)}` : "Starte deine erste Runde"}</span>
+    <div class="games-stats-command">
+      <div class="games-command-copy">
+        <span>Performance</span>
+        <h2>${best ? best.meta.name : "Noch kein Spiel"}</h2>
+        <p>${best ? `Deine stärkste Region liegt bei ${best.accuracy}% Accuracy.` : "Starte eine Map-Runde, damit dein Globus lebendig wird."}</p>
+      </div>
+      <div class="games-command-grid">
+        <div><b>${globalAccuracy}%</b><small>Gesamt</small></div>
+        <div><b>${played.length}/5</b><small>Gebiete</small></div>
+        <div><b>${totalCorrect}</b><small>Richtig</small></div>
+      </div>
     </div>
 
-    <div class="continent-card-grid">
-      ${games.map(g => `
-        <div class="continent-focus-card" onclick="openContinentFocus(this, '${g.key}')">
+    <div class="continent-card-grid premium-stat-grid">
+      ${sortedGames.map((g, index) => {
+        const attempts = (g.run.correct || 0) + (g.run.wrong || 0);
+        const heatLabel = !attempts ? "Noch offen" : g.accuracy >= 80 ? "Stark" : g.accuracy >= 55 ? "Solide" : "Training";
+        return `
+        <div class="continent-focus-card premium-continent-card rank-${index + 1}" onclick="openContinentFocus(this, '${g.key}')">
           <div class="continent-card-head">
             <span>${g.meta.badge}</span>
-            <h2>${g.meta.name}</h2>
+            <div>
+              <h2>${g.meta.name}</h2>
+              <small>${heatLabel}</small>
+            </div>
           </div>
 
           <div class="continent-accuracy">${g.accuracy}%</div>
-          <p>Accuracy</p>
+          <div class="continent-heatbar"><i style="width:${g.accuracy}%"></i></div>
 
           <div class="continent-mini-grid">
             <div><b>${g.run.correct || 0}</b><small>Richtig</small></div>
@@ -2725,7 +2747,7 @@ function renderGamesStats() {
             <div><b>${g.run.time ? formatEuropeTime(g.run.time).replace(" min", "") : "0:00"}</b><small>Zeit</small></div>
           </div>
         </div>
-      `).join("")}
+      `}).join("")}
     </div>
   `;
 
@@ -3053,7 +3075,7 @@ window.addEventListener("resize", () => {
   gamesGlobeInstance.width(rect.width).height(rect.height);
 });
 
-// Globus im Hintergrund vorbereiten, damit Stats schneller ?ffnet
+// Globus im Hintergrund vorbereiten, damit Stats schneller öffnet
 
 function pauseGlobe() {
   if (!gamesGlobeInstance) return;
@@ -3129,7 +3151,7 @@ const MAP_ENGINE_CONFIG = {
     bestKey: () => "africaBestRun"
   },
   southAmerica: {
-    title: "S?damerika",
+    title: "Südamerika",
     countries: SOUTH_AMERICA_COUNTRY_NAMES,
     svgPath: "maps/southAmerica/southAmerica.svg",
     screenId: "southAmericaMapGame",
@@ -3264,7 +3286,7 @@ const MapQuizEngine = (() => {
       return;
     }
 
-    bestRun.textContent = `${run.correct || 0} richtig ? ${run.wrong || 0} falsch`;
+    bestRun.textContent = `${run.correct || 0} richtig · ${run.wrong || 0} falsch`;
     if (bestTime) bestTime.textContent = `Zeit: ${formatEuropeTime(run.time)}`;
   }
 
@@ -3534,7 +3556,7 @@ const MapQuizEngine = (() => {
     const target = byId(config.targetId);
     if (target) target.textContent = s.current.name;
 
-    setFeedback(config, s.mode === "learn" ? "Tippe eines der hervorgehobenen L?nder an." : "");
+    setFeedback(config, s.mode === "learn" ? "Tippe eines der hervorgehobenen Länder an." : "");
   }
 
   function prepareLearnOptions(config, s) {
@@ -3634,7 +3656,7 @@ const MapQuizEngine = (() => {
 
   function answerLearn(config, s, countryId, land) {
     if (!s.remainingOptions.includes(countryId)) {
-      showIsland("W?hle eines der markierten L?nder", "success");
+      showIsland("Wähle eines der markierten Länder", "success");
       return;
     }
 
@@ -3669,7 +3691,7 @@ const MapQuizEngine = (() => {
     }
 
     const left = Math.max(1, s.remainingOptions.length);
-    setFeedback(config, `${left} Auswahl${left === 1 ? "" : "en"} ?brig`);
+    setFeedback(config, `${left} Auswahl${left === 1 ? "" : "en"} übrig`);
     showIsland(`${s.wrongAttempts} von 2`, "danger");
   }
 
@@ -3812,7 +3834,7 @@ function openMapModeSelect(key) {
 
   const title = document.getElementById("modeSelectTitle");
   const heading = document.getElementById("modeSelectHeading");
-  if (title) title.textContent = `${config.title} ? Modus w?hlen`;
+  if (title) title.textContent = `${config.title} · Modus wählen`;
   if (heading) heading.textContent = config.title;
 
   showScreen(document.getElementById("continentModeSelect"), true);
@@ -3825,7 +3847,7 @@ function startSelectedMapMode(mode) {
 /* === COUNTRY SHAPE GAME ENGINE === */
 
 const EUROPE_CAPITALS = {
-  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Br?ssel", BA: "Sarajevo",
+  RU: "Moskau", XK: "Pristina", AL: "Tirana", BY: "Minsk", BE: "Brüssel", BA: "Sarajevo",
   BG: "Sofia", HR: "Zagreb", CY: "Nikosia", CZ: "Prag", DK: "Kopenhagen", EE: "Tallinn",
   FI: "Helsinki", FR: "Paris", DE: "Berlin", GR: "Athen", HU: "Budapest", IS: "Reykjavik",
   IE: "Dublin", IT: "Rom", LV: "Riga", LT: "Vilnius", LU: "Luxemburg", MD: "Chisinau",
@@ -3878,7 +3900,7 @@ const COUNTRY_SHAPE_GAME_CONFIG = {
   europe: { name: "Europa", folder: "maps/europe/countries", countries: EUROPE_COUNTRY_NAMES, capitals: EUROPE_CAPITALS, files: COUNTRY_SHAPE_FILES.europe, homeId: "europeGameHome" },
   asia: { name: "Asien", folder: "maps/asia/countries", countries: ASIA_COUNTRY_NAMES, capitals: ASIA_CAPITALS, files: COUNTRY_SHAPE_FILES.asia, homeId: "asiaGameHome" },
   africa: { name: "Afrika", folder: "maps/africa/countries", countries: AFRICA_COUNTRY_NAMES, capitals: AFRICA_CAPITALS, files: COUNTRY_SHAPE_FILES.africa, homeId: "africaGameHome" },
-  southAmerica: { name: "S?damerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
+  southAmerica: { name: "Südamerika", folder: "maps/southAmerica/countries", countries: SOUTH_AMERICA_COUNTRY_NAMES, capitals: SOUTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.southAmerica, homeId: "southAmericaGameHome" },
   northAmerica: { name: "Nordamerika", folder: "maps/northAmerica/countries", countries: NORTH_AMERICA_COUNTRY_NAMES, capitals: NORTH_AMERICA_CAPITALS, files: COUNTRY_SHAPE_FILES.northAmerica, homeId: "northAmericaGameHome" }
 };
 
@@ -3914,7 +3936,7 @@ function openCountryShapeModeSelect(continentKey) {
   const config = COUNTRY_SHAPE_GAME_CONFIG[continentKey];
   if (!config) return;
   countryShapeState.continentKey = continentKey;
-  document.getElementById("countryShapeModeTitle").textContent = `${config.name} ? L?nderform`;
+  document.getElementById("countryShapeModeTitle").textContent = `${config.name} · Länderform`;
   document.getElementById("countryShapeModeHeading").textContent = config.name;
   showScreen(document.getElementById("countryShapeModeSelect"), true);
 }
@@ -3924,7 +3946,7 @@ function startCountryShapeGame(continentKey, mode) {
   const meta = COUNTRY_SHAPE_MODE_META[mode] || COUNTRY_SHAPE_MODE_META.ultra;
   if (!config) return;
   const countries = getCountryShapeCountries(config);
-  if (!countries.length) return showIsland("Keine L?nderformen f?r diesen Kontinent gefunden.", "danger");
+  if (!countries.length) return showIsland("Keine Länderformen für diesen Kontinent gefunden.", "danger");
   clearInterval(countryShapeState.timer);
   Object.assign(countryShapeState, {
     continentKey, mode, deck: [...countries].sort(() => Math.random() - 0.5), current: null, index: 0,
@@ -3974,21 +3996,22 @@ async function loadNextCountryShape() {
   countryShapeState.locked = false;
   countryShapeState.livesLeft = COUNTRY_SHAPE_MODE_META[countryShapeState.mode].lives;
   document.getElementById("countryShapeProgress").textContent = `${countryShapeState.index + 1} / ${countryShapeState.deck.length}`;
-  document.getElementById("countryShapeQuestion").textContent = "W?hle das passende Land";
+  document.getElementById("countryShapeQuestion").textContent = "Wähle das passende Land";
   document.getElementById("countryShapeHint").className = "shape-hint-box";
   document.getElementById("countryShapeHint").textContent = "";
   renderCountryShapeLives();
   renderCountryShapeOptions();
+  updateCountryShapeSelectedAnswer();
   const box = document.getElementById("countryShapeSvgBox");
   box.classList.remove("shape-correct-pop", "shape-wrong-shake");
-  box.innerHTML = `<div class="shape-loading">L?nderform wird geladen...</div>`;
+  box.innerHTML = `<div class="shape-loading">Länderform wird geladen...</div>`;
   try {
     const response = await fetch(`${config.folder}/${encodeURIComponent(next.file)}`);
     if (!response.ok) throw new Error(next.file);
     box.innerHTML = await response.text();
     normalizeCountryShapeSvg(box);
   } catch (error) {
-    console.warn("L?nderform konnte nicht geladen werden:", error);
+    console.warn("Länderform konnte nicht geladen werden:", error);
     box.innerHTML = `<div class="shape-loading error">SVG fehlt: ${next.name}</div>`;
   }
 }
@@ -4009,13 +4032,36 @@ function renderCountryShapeOptions() {
       countryShapeState.selectedId = button.dataset.countryId;
       box.querySelectorAll(".shape-option").forEach(item => item.classList.remove("selected"));
       button.classList.add("selected");
+      updateCountryShapeSelectedAnswer();
     });
+  });
+}
+
+function updateCountryShapeSelectedAnswer() {
+  const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
+  const selected = countryShapeState.selectedId
+    ? getCountryShapeCountries(config).find(country => country.id === countryShapeState.selectedId)
+    : null;
+  const selectedButton = document.getElementById("countryShapeSelectedAnswer");
+  const list = document.getElementById("countryShapeOptions");
+
+  if (!selectedButton || !list) return;
+
+  selectedButton.classList.toggle("show", Boolean(selected));
+  selectedButton.innerHTML = selected
+    ? `<span>Deine Auswahl</span><strong>${selected.name}</strong><small>Tippe hier, um neu zu wählen.</small>`
+    : `<span>Auswahl</span><strong>Noch kein Land gewählt</strong><small>Tippe unten auf ein Land.</small>`;
+
+  list.classList.toggle("has-selection", Boolean(selected));
+  list.querySelectorAll(".shape-option").forEach(option => {
+    option.classList.toggle("selected", option.dataset.countryId === countryShapeState.selectedId);
+    option.classList.toggle("picked-out", option.dataset.countryId === countryShapeState.selectedId);
   });
 }
 
 function confirmCountryShapeAnswer() {
   if (countryShapeState.locked || !countryShapeState.current) return;
-  if (!countryShapeState.selectedId) return showIsland("W?hle zuerst ein Land aus.", "danger");
+  if (!countryShapeState.selectedId) return showIsland("Wähle zuerst ein Land aus.", "danger");
   if (countryShapeState.selectedId === countryShapeState.current.id) {
     countryShapeState.locked = true;
     countryShapeState.correct++;
@@ -4042,16 +4088,26 @@ function handleCountryShapeWrongAnswer() {
   hint.className = "shape-hint-box show";
   if (countryShapeState.mode === "learn" && countryShapeState.livesLeft === 2) {
     hint.textContent = `Hinweis 1: Dieses Land liegt in ${config.name}.`;
+    countryShapeState.selectedId = null;
+    updateCountryShapeSelectedAnswer();
     return;
   }
   if (countryShapeState.mode === "learn" && countryShapeState.livesLeft === 1) {
     hint.textContent = `Hinweis 2: Die Hauptstadt ist ${current.capital}.`;
+    countryShapeState.selectedId = null;
+    updateCountryShapeSelectedAnswer();
+    return;
+  }
+  if (countryShapeState.livesLeft > 0) {
+    hint.textContent = "Noch ein Versuch. Wähle ein anderes Land.";
+    countryShapeState.selectedId = null;
+    updateCountryShapeSelectedAnswer();
     return;
   }
   countryShapeState.locked = true;
   countryShapeState.wrong++;
   hint.className = "shape-hint-box show danger";
-  hint.textContent = `Richtig w?re: ${current.name}.`;
+  hint.textContent = `Richtig wäre: ${current.name}.`;
   setTimeout(() => { countryShapeState.index++; loadNextCountryShape(); }, countryShapeState.mode === "ultra" ? 950 : 1350);
 }
 
@@ -4072,7 +4128,7 @@ function renderCountryShapeResult(result = countryShapeState.lastResult) {
   const config = COUNTRY_SHAPE_GAME_CONFIG[countryShapeState.continentKey];
   const modeLabel = COUNTRY_SHAPE_MODE_META[result.mode]?.label || result.mode;
   document.getElementById("countryShapeResultTitle").textContent = `${config.name} abgeschlossen`;
-  document.getElementById("countryShapeResultSub").textContent = `${modeLabel} ? ${result.correct + result.wrong} L?nder`;
+  document.getElementById("countryShapeResultSub").textContent = `${modeLabel} · ${result.correct + result.wrong} Länder`;
   document.getElementById("countryShapeResultCorrect").textContent = result.correct;
   document.getElementById("countryShapeResultWrong").textContent = result.wrong;
   document.getElementById("countryShapeResultPercent").textContent = `${result.percent}%`;
@@ -4102,6 +4158,7 @@ function wireMapEngine() {
   window.startCountryShapeGame = startCountryShapeGame;
   window.loadNextCountryShape = loadNextCountryShape;
   window.renderCountryShapeOptions = renderCountryShapeOptions;
+  window.updateCountryShapeSelectedAnswer = updateCountryShapeSelectedAnswer;
   window.confirmCountryShapeAnswer = confirmCountryShapeAnswer;
   window.handleCountryShapeWrongAnswer = handleCountryShapeWrongAnswer;
   window.finishCountryShapeGame = finishCountryShapeGame;
@@ -4153,6 +4210,11 @@ function wireMapEngine() {
     else openCountryShapeModeSelect(countryShapeState.continentKey);
   });
   document.getElementById("countryShapeConfirm")?.addEventListener("click", confirmCountryShapeAnswer);
+  document.getElementById("countryShapeSelectedAnswer")?.addEventListener("click", () => {
+    if (countryShapeState.locked) return;
+    countryShapeState.selectedId = null;
+    updateCountryShapeSelectedAnswer();
+  });
   document.getElementById("countryShapeRestart")?.addEventListener("click", () => {
     document.getElementById("countryShapeResultModal")?.classList.remove("show");
     startCountryShapeGame(countryShapeState.continentKey, countryShapeState.mode);

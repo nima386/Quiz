@@ -42,6 +42,54 @@ let current = 0;
 let answerCount = 4;
 let selectedCorrect = 0;
 
+const TEXT_REPAIR_MAP = {
+  "\u00c3\u00a4": "ä", "\u00c3\u00b6": "ö", "\u00c3\u00bc": "ü", "\u00c3\u009f": "ß",
+  "\u00c3\u0084": "Ä", "\u00c3\u0096": "Ö", "\u00c3\u009c": "Ü",
+  "\u00c3\u00a9": "é", "\u00c3\u00a1": "á", "\u00c3\u00ad": "í", "\u00c3\u00b3": "ó",
+  "\u00c2\u00b7": "·", "\u00e2\u0080\u00a2": "•", "\u00e2\u0080\u0093": "–",
+  "\u00e2\u0080\u0094": "—", "\u00e2\u0080\u009e": "„", "\u00e2\u0080\u009c": "“",
+  "\u00e2\u0080\u009d": "”", "\u00e2\u0080\u0098": "‘", "\u00e2\u0080\u0099": "’"
+};
+
+function repairTextValue(value) {
+  if (typeof value !== "string") return value;
+  return Object.entries(TEXT_REPAIR_MAP).reduce(
+    (text, [broken, fixed]) => text.split(broken).join(fixed),
+    value
+  );
+}
+
+function normalizeQuestion(question) {
+  if (!question || typeof question !== "object") return null;
+
+  const answers = Array.isArray(question.answers)
+    ? question.answers.map(answer => repairTextValue(String(answer || ""))).filter(Boolean)
+    : [];
+
+  if (!repairTextValue(question.text || "").trim() || answers.length < 2) return null;
+
+  const correct = Number.isInteger(question.correct) ? question.correct : Number(question.correct);
+
+  return {
+    ...question,
+    text: repairTextValue(question.text).trim(),
+    answers,
+    correct: Number.isInteger(correct) && correct >= 0 && correct < answers.length ? correct : 0
+  };
+}
+
+function normalizeQuestionStore(store = {}) {
+  const normalized = {};
+
+  Object.entries(store || {}).forEach(([category, questions]) => {
+    if (!Array.isArray(questions)) return;
+    const cleanQuestions = questions.map(normalizeQuestion).filter(Boolean);
+    if (cleanQuestions.length) normalized[repairTextValue(category)] = cleanQuestions;
+  });
+
+  return normalized;
+}
+
 const home = document.getElementById("home");
 const homeScreen = document.getElementById("homeScreen");
 const quiz = document.getElementById("quiz");
@@ -273,12 +321,14 @@ function getActiveStore() {
 function hydrateActiveUpper() {
   const store = getActiveStore();
 
-  data = store.data || {};
+  data = normalizeQuestionStore(store.data || {});
   progress = store.progress || {};
   quizOrders = store.quizOrders || {};
   stats = store.stats || {};
   remembered = store.remembered || {};
   wrongQuestions = store.wrongQuestions || {};
+
+  store.data = data;
 }
 
 function syncActiveUpper() {
@@ -320,7 +370,11 @@ function shuffleArray(array) {
 }
 
 function prepareQuizOrder(category) {
-  const total = data[category].length;
+  const questions = Array.isArray(data[category]) ? data[category].map(normalizeQuestion).filter(Boolean) : [];
+  data[category] = questions;
+  const total = questions.length;
+
+  if (!total) return;
 
   if (!quizOrders[category] || quizOrders[category].length !== total) {
     quizOrders[category] = shuffleArray([...Array(total).keys()]);
@@ -676,6 +730,8 @@ categoriesToSearch.forEach(category => {
 }
 
 function startQuiz(category) {
+  data[category] = Array.isArray(data[category]) ? data[category].map(normalizeQuestion).filter(Boolean) : [];
+
   if (!data[category] || data[category].length === 0) {
     alert("Dieser Ordner hat noch keine Fragen.");
     return;
@@ -754,10 +810,18 @@ if (quizMode === "normal") {
   const order = quizOrders[currentCategory];
   const index = order[current] ?? 0;
 
-  q = data[currentCategory][index];
+  q = normalizeQuestion(data[currentCategory][index]);
 } else {
-  q = source[current];
+  q = normalizeQuestion(source[current]);
 }
+
+  if (!q) {
+    document.getElementById("questionText").textContent = "Diese Frage konnte nicht geladen werden.";
+    document.getElementById("feedback").textContent = "Die Daten wurden bereinigt. Starte die Kategorie bitte neu.";
+    document.getElementById("answers").innerHTML = "";
+    document.getElementById("answerActions").style.display = "flex";
+    return;
+  }
 
   document.getElementById("currentNumber").textContent = current + 1;
   document.getElementById("totalNumber").textContent = source.length;
@@ -793,10 +857,12 @@ function checkAnswer(index, clicked) {
   if (quizMode === "normal") {
     const order = quizOrders[currentCategory];
     const realIndex = order[current];
-    q = data[currentCategory][realIndex];
+    q = normalizeQuestion(data[currentCategory][realIndex]);
   } else {
-    q = source[current];
+    q = normalizeQuestion(source[current]);
   }
+
+  if (!q) return;
 
   const all = document.querySelectorAll(".answer");
   all.forEach(a => a.onclick = null);
@@ -836,6 +902,7 @@ function checkAnswer(index, clicked) {
       if (!exists) {
         wrongQuestions[currentCategory].push(q);
         localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+        saveAppStore();
       }
     }
   }
@@ -854,6 +921,7 @@ function checkAnswer(index, clicked) {
       if (isCorrect) {
         remembered[currentCategory].splice(current, 1);
         localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+        saveAppStore();
       } else {
         current++;
       }
@@ -861,6 +929,7 @@ function checkAnswer(index, clicked) {
       if (!remembered[currentCategory] || remembered[currentCategory].length === 0) {
         delete remembered[currentCategory];
         localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+        saveAppStore();
         showScreen(rememberedScreen, true);
         renderRemembered();
         return;
@@ -878,6 +947,7 @@ function checkAnswer(index, clicked) {
       if (isCorrect) {
         wrongQuestions[currentCategory].splice(current, 1);
         localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+        saveAppStore();
       } else {
         current++;
       }
@@ -885,6 +955,7 @@ function checkAnswer(index, clicked) {
       if (!wrongQuestions[currentCategory] || wrongQuestions[currentCategory].length === 0) {
         delete wrongQuestions[currentCategory];
         localStorage.setItem("wrongQuestions", JSON.stringify(wrongQuestions));
+        saveAppStore();
         showScreen(home, true);
         renderHome();
         return;
@@ -916,6 +987,7 @@ function goNextQuestion() {
   }
 
   localStorage.setItem("quizProgress", JSON.stringify(progress));
+  saveAppStore();
 
   if (current < data[currentCategory].length) {
     loadQuestion();
@@ -947,6 +1019,7 @@ const q = data[currentCategory][realIndex];
   if (!exists) {
     remembered[currentCategory].push(q);
     localStorage.setItem("rememberedQuestions", JSON.stringify(remembered));
+    saveAppStore();
 
   }
 
@@ -1347,6 +1420,7 @@ function recordStats(isCorrect) {
   }
 
   localStorage.setItem("quizStats", JSON.stringify(stats));
+  saveAppStore();
 }
 
 
@@ -1431,6 +1505,7 @@ function createArenaStore() {
       code: createArenaFriendCode(),
       level: 1,
       title: "Arena Rookie",
+      seasonKey: getArenaSeasonKey(),
       seasonPoints: 0,
       wins: 0,
       losses: 0,
@@ -1441,8 +1516,27 @@ function createArenaStore() {
     sentRequests: [],
     duels: [],
     daily: [],
+    dailyResults: {},
     notifications: []
   };
+}
+
+function getArenaSeasonKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function normalizeArenaSeason(store) {
+  const currentSeason = getArenaSeasonKey();
+  store.profile ||= createArenaStore().profile;
+  if (!store.profile.seasonKey) {
+    store.profile.seasonKey = currentSeason;
+    return store;
+  }
+  if (store.profile.seasonKey !== currentSeason) {
+    store.profile.seasonKey = currentSeason;
+    store.profile.seasonPoints = 0;
+  }
+  return store;
 }
 
 function createArenaFriendCode() {
@@ -1458,11 +1552,12 @@ function loadArenaStore() {
     saved.sentRequests ||= [];
     saved.duels ||= [];
     saved.daily ||= [];
+    saved.dailyResults ||= {};
     saved.notifications ||= [];
     saved.profile ||= createArenaStore().profile;
     saved.friends = saved.friends.map(normalizeArenaFriend);
     saved.duels = saved.duels.map(normalizeArenaDuel);
-    return saved;
+    return normalizeArenaSeason(saved);
   }
 
   const store = createArenaStore();
@@ -1526,6 +1621,25 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function getDateKeyOffset(offsetDays = 0) {
+  const date = new Date();
+  date.setDate(date.getDate() + offsetDays);
+  return date.toISOString().slice(0, 10);
+}
+
+function calculateDailyStreak(dailyResults = {}) {
+  let streak = 0;
+
+  for (let offset = 0; offset > -365; offset -= 1) {
+    const key = getDateKeyOffset(offset);
+    const result = dailyResults[key];
+    if (!result?.completedAt && !(result?.attemptsUsed > 0)) break;
+    streak += 1;
+  }
+
+  return streak;
+}
+
 function getTodayDailyGame() {
   const seed = Number(getTodayKey().replaceAll("-", ""));
   return dailyGames[seed % dailyGames.length] || dailyGames[0];
@@ -1558,6 +1672,25 @@ function getDailyResult(store = loadArenaStore(), date = getTodayKey()) {
     stats: null,
     history: []
   };
+}
+
+function getDailyWeekItems(store = loadArenaStore()) {
+  const formatter = new Intl.DateTimeFormat("de-DE", { weekday: "short" });
+  const today = new Date();
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - index));
+    const key = date.toISOString().slice(0, 10);
+    const result = store.dailyResults?.[key];
+
+    return {
+      key,
+      label: formatter.format(date).replace(".", ""),
+      done: Boolean(result?.earnedXp || result?.attemptsUsed),
+      today: key === getTodayKey()
+    };
+  });
 }
 
 function saveDailyResult(result) {
@@ -1623,6 +1756,28 @@ function renderHomeScreen() {
   document.getElementById("dailyXp").textContent = daily.earnedXp ? `+${daily.earnedXp}` : "bis 120";
   document.getElementById("dailyBestScore").textContent = daily.bestScore || 0;
   document.getElementById("startDailyBtn").textContent = daily.attemptsUsed >= DAILY_MAX_ATTEMPTS ? "Stats ansehen" : "Jetzt spielen";
+
+  const rewardStrip = document.getElementById("dailyRewardStrip");
+  if (rewardStrip) {
+    const left = Math.max(0, DAILY_MAX_ATTEMPTS - (daily.attemptsUsed || 0));
+    rewardStrip.innerHTML = `
+      <div>
+        <strong>${daily.attemptsUsed >= DAILY_MAX_ATTEMPTS ? "Heute abgeschlossen" : `${left} Versuche verfügbar`}</strong>
+        <span>${daily.attemptsUsed >= DAILY_MAX_ATTEMPTS ? "Streak bleibt aktiv. Morgen wartet ein neues Spiel." : "Bester Versuch zählt für XP, Season und Verlauf."}</span>
+      </div>
+      <b>${daily.earnedXp ? `+${daily.earnedXp}` : "XP"}</b>
+    `;
+  }
+
+  const weekStrip = document.getElementById("dailyWeekStrip");
+  if (weekStrip) {
+    weekStrip.innerHTML = getDailyWeekItems(store).map(day => `
+      <span class="daily-day-pill ${day.done ? "done" : ""} ${day.today ? "today" : ""}">
+        <small>${day.label}</small>
+        <b>${day.done ? "✓" : "•"}</b>
+      </span>
+    `).join("");
+  }
 
   const recommendedGamesNode = document.getElementById("recommendedGames");
   if (recommendedGamesNode) {
@@ -1726,7 +1881,7 @@ function completeDailyChallenge(performance) {
   store.profile.levelXp = (store.profile.levelXp || 0) + xp;
   store.profile.totalXp = (store.profile.totalXp || 0) + xp;
   store.profile.seasonPoints = (store.profile.seasonPoints || 0) + xp;
-  store.profile.dailyStreak = result.attemptsUsed === 1 ? (store.profile.dailyStreak || 0) + 1 : (store.profile.dailyStreak || 1);
+  store.profile.dailyStreak = calculateDailyStreak(store.dailyResults);
 
   pendingDailyGameId = null;
   pendingDailyStartedAt = 0;
@@ -1879,18 +2034,30 @@ function mergeArenaStore(localStore, cloudStore) {
     sentRequests: Array.isArray(localStore?.sentRequests) ? localStore.sentRequests : [],
     duels: [],
     daily: Array.isArray(cloudStore?.daily) ? cloudStore.daily : (localStore?.daily || []),
+    dailyResults: {
+      ...(cloudStore?.dailyResults || {}),
+      ...(localStore?.dailyResults || {})
+    },
     notifications: Array.isArray(localStore?.notifications) ? localStore.notifications : []
   };
 
   [...(localStore?.friends || []), ...(cloudStore?.friends || [])].forEach(friend => upsertArenaFriend(merged, friend));
   [...(localStore?.duels || []), ...(cloudStore?.duels || [])].forEach(duel => upsertArenaDuel(merged, duel));
 
-  merged.profile.seasonPoints = Math.max(cloudStore?.profile?.seasonPoints || 0, localStore?.profile?.seasonPoints || 0);
+  const currentSeason = getArenaSeasonKey();
+  const cloudSeasonPoints = !cloudStore?.profile?.seasonKey || cloudStore.profile.seasonKey === currentSeason
+    ? (cloudStore?.profile?.seasonPoints || 0)
+    : 0;
+  const localSeasonPoints = !localStore?.profile?.seasonKey || localStore.profile.seasonKey === currentSeason
+    ? (localStore?.profile?.seasonPoints || 0)
+    : 0;
+
+  merged.profile.seasonPoints = Math.max(cloudSeasonPoints, localSeasonPoints);
   merged.profile.wins = Math.max(cloudStore?.profile?.wins || 0, localStore?.profile?.wins || 0);
   merged.profile.losses = Math.max(cloudStore?.profile?.losses || 0, localStore?.profile?.losses || 0);
   merged.profile.dailyBest = Math.max(cloudStore?.profile?.dailyBest || 0, localStore?.profile?.dailyBest || 0);
 
-  return merged;
+  return normalizeArenaSeason(merged);
 }
 
 function getArenaWinrate(profile) {
@@ -2569,31 +2736,6 @@ function sendArenaChallenge() {
   startArenaDuelPlay(duel.id);
 }
 
-function createArenaPlayerScore(gameType, category = "") {
-  if (gameType.startsWith("map:")) {
-    const key = gameType.replace("map:", "");
-    const runKey = `${key}BestRun_guest`;
-    const run = JSON.parse(localStorage.getItem(runKey) || localStorage.getItem(`${key}BestRun`) || "null");
-    if (run?.time) {
-      return Math.max(1000, Math.round((run.correct || 0) * 250 - (run.wrong || 0) * 120 + 6000 - (run.time || 0) / 100));
-    }
-  }
-
-  if (gameType.startsWith("upper:") && category && stats[category]) {
-    const item = stats[category];
-    return Math.max(1000, (item.correct || 0) * 260 - (item.wrong || 0) * 120 + 5200);
-  }
-
-  return 5000 + getArenaAccuracy() * 35 + loadArenaStore().profile.wins * 80;
-}
-
-function createArenaOpponentScore(friendId, gameType, category = "") {
-  const friend = loadArenaStore().friends.find(item => item.id === friendId);
-  const base = friend?.seasonPoints ? Math.min(8200, 4700 + friend.seasonPoints / 3) : 5000;
-  const rivalryBoost = (friend?.wins || 0) * 70 - (friend?.losses || 0) * 45;
-  return Math.max(1000, Math.round(base + rivalryBoost));
-}
-
 function getArenaGameLabel(duel) {
   if (duel.gameType?.startsWith("upper:")) {
     return `${duel.gameType.replace("upper:", "")} · ${duel.category || "Quiz"}`;
@@ -2918,19 +3060,10 @@ function openFriendProfile(friendId) {
   showScreen(friendProfileScreen, false);
 }
 
-function createArenaScore() {
-  return Math.max(1000, Math.round(3600 + getArenaAccuracy() * 42 + Math.random() * 1400));
-}
-
 function playDailyArena() {
-  const store = loadArenaStore();
-  const score = createArenaScore();
-  store.profile.dailyBest = Math.max(store.profile.dailyBest || 0, score);
-  store.profile.seasonPoints += score >= 9000 ? 45 : 20;
-  saveArenaStore(store);
-  renderArena();
-  switchArenaTab("daily");
-  showIsland(`Daily Score: ${score}`, "success");
+  showScreen(homeScreen, true);
+  renderHomeScreen();
+  setTimeout(() => startDailyChallenge(), 180);
 }
 
 function initArena() {
@@ -3168,8 +3301,7 @@ if (navStats) {
 }
 
 document.getElementById("backHome").addEventListener("click", () => {
-  
-  showScreen(home, true);
+  goBackOneStep("home");
   renderHome();
 });
 
@@ -3981,6 +4113,7 @@ function hideAppLoader() {
     setTimeout(() => {
       if (loader.classList.contains("hide")) {
         loader.style.display = "none";
+        setTimeout(maybeShowOnboarding, 180);
       }
     }, 560);
   }, remaining);
@@ -4011,6 +4144,47 @@ function showAppSplash(duration = 2600) {
 }
 
 // ✅ HIER EINFÜGEN (direkt nach der Funktion)
+
+function maybeShowOnboarding() {
+  const overlay = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+  if (localStorage.getItem("onboardingComplete") === "true") return;
+  if (!authScreen?.classList.contains("hide")) return;
+  if (document.querySelector(".modal.show, .avatar-bottom-modal.show, .menu-modal.show")) return;
+
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden", "false");
+}
+
+function closeOnboarding(startDaily = false) {
+  const overlay = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+
+  const active = overlay.querySelector(".onboarding-choice.active");
+  localStorage.setItem("onboardingInterest", active?.dataset.onboardingInterest || "bauzeichner");
+  localStorage.setItem("onboardingComplete", "true");
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden", "true");
+
+  if (startDaily) {
+    setTimeout(() => startDailyChallenge(), 260);
+  }
+}
+
+function initOnboarding() {
+  const overlay = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+
+  overlay.querySelectorAll(".onboarding-choice").forEach(button => {
+    button.addEventListener("click", () => {
+      overlay.querySelectorAll(".onboarding-choice").forEach(item => item.classList.remove("active"));
+      button.classList.add("active");
+    });
+  });
+
+  document.getElementById("finishOnboardingBtn")?.addEventListener("click", () => closeOnboarding(true));
+  document.getElementById("skipOnboardingBtn")?.addEventListener("click", () => closeOnboarding(false));
+}
 
 window.addEventListener("online", () => {
   showIsland("Wieder online", "success");
@@ -4483,6 +4657,7 @@ document.getElementById("logoutBtn").onclick = async () => {
 
 initAppearanceSettings();
 initArena();
+initOnboarding();
 setInterval(syncArenaInbox, 45000);
 hydrateActiveUpper();
 let savedAvatar = localStorage.getItem("userAvatar");
@@ -4496,11 +4671,11 @@ if (!savedAvatar) {
 fetch("questions.json?v=" + Date.now())
   .then(res => res.json())
   .then(serverData => {
-    const publicData = serverData.Politik ? serverData : { Politik: serverData };
+    const publicData = normalizeQuestionStore(serverData.Politik ? serverData : { Politik: serverData });
 
    if (activeUpper === "Bauzeichner") {
   if (!data["Politik"] || data["Politik"].length === 0) {
-    data["Politik"] = publicData["Politik"] || publicData;
+    data["Politik"] = publicData["Politik"] || [];
     save();
   }
 }
