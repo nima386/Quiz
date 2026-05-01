@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizLearn — Design System Prompt</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* ─── CORE PALETTE ─── */
+  --bg-base:        #0f0f1a;
+  --bg-surface:     #161628;
+  --bg-card:        #1c1c35;
+  --bg-card-hover:  #21213e;
+  --bg-elevated:    #252545;
+  --bg-overlay:     rgba(22,22,40,0.85);
+
+  --border-subtle:  rgba(255,255,255,0.05);
+  --border-default: rgba(255,255,255,0.10);
+  --border-focus:   rgba(110,99,242,0.6);
+  --border-glow:    rgba(110,99,242,0.25);
+
+  /* ─── BRAND ─── */
+  --purple-900: #1a1830;
+  --purple-700: #3b3785;
+  --purple-500: #6e63f2;
+  --purple-400: #8a80f8;
+  --purple-300: #a29bfe;
+  --purple-100: #eeedff;
+
+  /* ─── ACCENTS ─── */
+  --pink:   #f06292;
+  --teal:   #26c6da;
+  --amber:  #ffca28;
+  --green:  #26d47c;
+  --red:    #f06060;
+
+  /* ─── TEXT ─── */
+  --text-primary:   #f0eeff;
+  --text-secondary: #9190b8;
+  --text-muted:     #4e4d72;
+  --text-disabled:  #2e2e50;
+
+  /* ─── SHADOWS ─── */
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:   0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg:   0 8px 40px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 24px rgba(110,99,242,0.35);
+  --shadow-pink: 0 0 20px rgba(240,98,146,0.35);
+
+  /* ─── RADIUS ─── */
+  --r-xs:  6px;
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+  --r-xl:  30px;
+  --r-full: 9999px;
+
+  /* ─── SPACING ─── */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+
+  /* ─── TRANSITION ─── */
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms; --dur-base: 250ms; --dur-slow: 400ms;
+
+  /* UI */
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { padding: 0 0 6rem; min-height: 100vh; overflow-x: hidden; }
+
+/* ─── LAYOUT ─── */
+.page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+.header {
+  border-bottom: 1px solid var(--border-default);
+  padding: 2.5rem 2rem 2rem;
+  background: linear-gradient(180deg, rgba(110,99,242,0.08) 0%, transparent 100%);
+  margin-bottom: 3rem;
+}
+.header h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #f0eeff 0%, #a29bfe 60%, #f06292 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+.header p { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--text-muted); letter-spacing: .15em; }
+
+.section { margin-bottom: 3rem; }
+.section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .2em; color: var(--purple-400);
+  text-transform: uppercase; margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::after { content:''; flex:1; height:1px; background: var(--border-subtle); }
+
+/* ─── PROMPT BOX ─── */
+.prompt-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.prompt-box::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(110,99,242,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.prompt-box pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .76rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.prompt-box pre .k { color: var(--purple-300); }
+.prompt-box pre .v { color: #f0eeff; }
+.prompt-box pre .c { color: var(--text-muted); font-style: italic; }
+.prompt-box pre .a { color: var(--pink); }
+.prompt-box pre .t { color: var(--teal); }
+.prompt-box pre .g { color: var(--green); }
+.prompt-box pre .am { color: var(--amber); }
+
+/* ─── LIVE PREVIEW ─── */
+.preview-wrap {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Colors */
+.swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.swatch-color {
+  width: 52px; height: 52px; border-radius: var(--r-md);
+  border: 1px solid var(--border-subtle);
+}
+.swatch span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .52rem; color: var(--text-muted); text-align: center;
+}
+
+/* Typography */
+.type-row { display: flex; flex-direction: column; gap: 6px; }
+.t-display { font-size: 2rem; font-weight: 800; letter-spacing: -.03em; color: var(--text-primary); }
+.t-h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; color: var(--text-primary); }
+.t-h2 { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); }
+.t-body { font-size: .9rem; font-weight: 400; color: var(--text-secondary); }
+.t-caption { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--text-muted); letter-spacing: .1em; }
+.t-label { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--purple-300); }
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 10px 22px; border-radius: var(--r-full); border: none; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: .85rem; font-weight: 600;
+  transition: all var(--dur-base) var(--ease);
+  text-decoration: none; white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--purple-500), #8a52f0);
+  color: #fff; box-shadow: var(--shadow-glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 32px rgba(110,99,242,.5); }
+.btn-secondary {
+  background: var(--bg-elevated); color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+.btn-secondary:hover { border-color: var(--purple-400); background: var(--bg-card-hover); }
+.btn-ghost { background: transparent; color: var(--purple-300); border: 1px solid var(--border-glow); }
+.btn-ghost:hover { background: var(--purple-900); }
+.btn-pink {
+  background: linear-gradient(135deg, var(--pink), #e91e8c);
+  color: #fff; box-shadow: var(--shadow-pink);
+}
+.btn-icon {
+  width: 40px; height: 40px; padding: 0; border-radius: var(--r-md);
+  background: var(--bg-elevated); border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+}
+.btn-sm { padding: 7px 16px; font-size: .78rem; }
+.btn-lg { padding: 14px 32px; font-size: 1rem; }
+
+/* Input */
+.input-group { display: flex; flex-direction: column; gap: 10px; }
+.field-wrap { position: relative; }
+.field-label {
+  font-size: .75rem; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 6px; display: block; letter-spacing: .04em;
+}
+.field {
+  width: 100%; background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md); padding: 11px 16px;
+  font-family: 'Outfit', sans-serif; font-size: .88rem;
+  color: var(--text-primary); outline: none;
+  transition: border-color var(--dur-base) var(--ease),
+              box-shadow var(--dur-base) var(--ease);
+}
+.field::placeholder { color: var(--text-muted); }
+.field:focus { border-color: var(--purple-500); box-shadow: 0 0 0 3px rgba(110,99,242,.15); }
+.field-search {
+  padding-left: 42px;
+}
+.search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); font-size: .9rem;
+}
+.field-error { border-color: var(--red); }
+.field-success { border-color: var(--green); }
+.hint { font-size: .72rem; color: var(--text-muted); margin-top: 4px; }
+.hint.err { color: var(--red); }
+.hint.ok  { color: var(--green); }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: 1.4rem;
+  transition: all var(--dur-base) var(--ease);
+  cursor: pointer;
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(110,99,242,0.04) 0%, transparent 60%);
+}
+.card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(110,99,242,.12);
+}
+.card-icon {
+  width: 42px; height: 42px; border-radius: var(--r-sm);
+  background: var(--bg-elevated);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 12px;
+}
+.card-title { font-size: .9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.card-sub   { font-size: .76rem; color: var(--text-secondary); }
+.card-accent { border-color: rgba(110,99,242,.3); background: linear-gradient(135deg, var(--bg-card), rgba(110,99,242,.06)); }
+
+/* Stat blocks */
+.stat-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.stat {
+  flex: 1; min-width: 110px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md); padding: 1rem 1.2rem;
+}
+.stat-label { font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.stat-value { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); letter-spacing: -.02em; line-height: 1; }
+.stat-sub   { font-size: .72rem; margin-top: 5px; }
+.up   { color: var(--green); } .down { color: var(--red); }
+
+/* Badge */
+.badge-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: var(--r-full);
+  font-size: .7rem; font-weight: 600; letter-spacing: .04em;
+}
+.badge-purple { background: rgba(110,99,242,.15); color: var(--purple-300); border: 1px solid rgba(110,99,242,.25); }
+.badge-green  { background: rgba(38,212,124,.12);  color: var(--green);      border: 1px solid rgba(38,212,124,.2); }
+.badge-red    { background: rgba(240,96,96,.12);   color: var(--red);        border: 1px solid rgba(240,96,96,.2); }
+.badge-amber  { background: rgba(255,202,40,.1);   color: var(--amber);      border: 1px solid rgba(255,202,40,.2); }
+.badge-pink   { background: rgba(240,98,146,.12);  color: var(--pink);       border: 1px solid rgba(240,98,146,.2); }
+.badge-dot::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+/* Progress */
+.progress-wrap { display: flex; flex-direction: column; gap: 12px; }
+.prog-item { display: flex; flex-direction: column; gap: 6px; }
+.prog-header { display: flex; justify-content: space-between; }
+.prog-label  { font-size: .78rem; color: var(--text-secondary); font-weight: 500; }
+.prog-val    { font-size: .78rem; font-weight: 700; color: var(--text-primary); }
+.prog-track  {
+  height: 6px; background: var(--bg-elevated); border-radius: var(--r-full); overflow: hidden;
+}
+.prog-fill   { height: 100%; border-radius: var(--r-full); transition: width .6s var(--ease); }
+.prog-purple { background: linear-gradient(90deg, var(--purple-500), var(--purple-300)); }
+.prog-pink   { background: linear-gradient(90deg, var(--pink), #ff8a65); }
+.prog-teal   { background: linear-gradient(90deg, var(--teal), #80deea); }
+
+/* Toggle */
+.toggle-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.toggle-track {
+  width: 44px; height: 24px; border-radius: var(--r-full);
+  background: var(--bg-elevated); border: 1px solid var(--border-default);
+  position: relative; transition: background var(--dur-base) var(--ease);
+}
+.toggle-track.on { background: var(--purple-500); border-color: var(--purple-500); }
+.toggle-thumb {
+  width: 18px; height: 18px; border-radius: 50%; background: #fff;
+  position: absolute; top: 2px; left: 3px;
+  transition: transform var(--dur-base) var(--ease-bounce);
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+.toggle-track.on .toggle-thumb { transform: translateX(20px); }
+.toggle-label { font-size: .82rem; color: var(--text-secondary); }
+
+/* Tabs */
+.tabs { display: flex; gap: 2px; background: var(--bg-card); border-radius: var(--r-md); padding: 4px; }
+.tab {
+  flex: 1; padding: 8px 16px; border-radius: calc(var(--r-md) - 4px);
+  font-size: .82rem; font-weight: 500; color: var(--text-muted);
+  border: none; background: transparent; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease); text-align: center;
+}
+.tab.active { background: var(--bg-elevated); color: var(--text-primary); font-weight: 600; }
+.tab:hover:not(.active) { color: var(--text-secondary); }
+
+/* Section card (full-width) */
+.section-card {
+  background: var(--bg-card); border: 1px solid var(--border-default);
+  border-radius: var(--r-xl); padding: 1.6rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.section-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.section-kicker { font-family: 'JetBrains Mono', monospace; font-size: .63rem; letter-spacing: .18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.section-heading { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.section-desc   { font-size: .8rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* Divider */
+.divider { height: 1px; background: var(--border-subtle); margin: .5rem 0; }
+
+/* List item */
+.list { display: flex; flex-direction: column; gap: 2px; }
+.list-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--r-sm);
+  transition: background var(--dur-fast) var(--ease); cursor: pointer;
+}
+.list-item:hover { background: var(--bg-elevated); }
+.list-icon { width: 34px; height: 34px; border-radius: var(--r-sm); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; }
+.list-title { font-size: .85rem; font-weight: 500; color: var(--text-primary); }
+.list-sub   { font-size: .72rem; color: var(--text-muted); }
+.list-right { margin-left: auto; font-size: .78rem; color: var(--text-muted); }
+
+/* Avatar */
+.avatar-row { display: flex; gap: 10px; align-items: center; }
+.avatar { border-radius: 50%; border: 2px solid var(--border-default); overflow: hidden; background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--purple-300); font-size: .75rem; flex-shrink: 0; }
+.avatar-stack { display: flex; }
+.avatar-stack .avatar { margin-left: -10px; border-color: var(--bg-surface); }
+.avatar-stack .avatar:first-child { margin-left: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="max-width:900px;margin:0 auto;">
+    <h1>QuizLearn Design System</h1>
+    <p>// DESIGN PROMPT · TOKENS · LIVE COMPONENTS</p>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ═══════════════════════════════════
+     DESIGN PROMPT
+════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">01 — master design prompt</div>
+  <div class="prompt-box">
+    <pre>
+<span class="c">/* ─── QUIZLEARN MASTER DESIGN PROMPT ─── */</span>
+<span class="c">/* Kopiere diesen Block in jede KI-Anfrage oder Systemkonfiguration */</span>
+
+<span class="k">STYLE:</span>     <span class="v">Dark Glassmorphism · Indigo-Purple · Minimal · Smooth</span>
+<span class="k">VIBE:</span>      <span class="v">Modern Quiz-App · Lernplattform · Motivierend · Premium</span>
+<span class="k">REFERENCE:</span> <span class="v">Midnight-blue UI mit purple glow, ähnlich wie dark finance dashboards</span>
+
+<span class="c">// ── HINTERGRUND ──────────────────────────────</span>
+<span class="k">background-base:</span>    <span class="v">#0f0f1a</span>   <span class="c">/* tiefes Nacht-Dunkel */</span>
+<span class="k">background-surface:</span> <span class="v">#161628</span>   <span class="c">/* Cards, Panels */</span>
+<span class="k">background-card:</span>    <span class="v">#1c1c35</span>   <span class="c">/* innere Cards */</span>
+<span class="k">background-elevated:</span><span class="v">#252545</span>   <span class="c">/* Hover, aktive Elemente */</span>
+
+<span class="c">// ── FARBEN ────────────────────────────────────</span>
+<span class="k">primary:</span>    <span class="v">#6e63f2</span>   <span class="c">/* Indigo-Purple – Buttons, CTA, Fokus */</span>
+<span class="k">primary-light:</span> <span class="v">#a29bfe</span>  <span class="c">/* Labels, Icons, Highlights */</span>
+<span class="k">accent-pink:</span>   <span class="v">#f06292</span>  <span class="c">/* Fehler, Streak, Energie */</span>
+<span class="k">accent-teal:</span>   <span class="v">#26c6da</span>  <span class="c">/* Erfolg-alt, Linien, Charts */</span>
+<span class="k">accent-amber:</span>  <span class="v">#ffca28</span>  <span class="c">/* Sterne, Punkte, Rewards */</span>
+<span class="k">accent-green:</span>  <span class="v">#26d47c</span>  <span class="c">/* Korrekt, Fortschritt, +Stats */</span>
+<span class="k">accent-red:</span>    <span class="v">#f06060</span>  <span class="c">/* Falsch, Warnung, -Stats */</span>
+
+<span class="c">// ── TEXT ──────────────────────────────────────</span>
+<span class="k">text-primary:</span>   <span class="v">#f0eeff</span>  <span class="c">/* Überschriften, wichtige Werte */</span>
+<span class="k">text-secondary:</span> <span class="v">#9190b8</span>  <span class="c">/* Body, Beschreibungen */</span>
+<span class="k">text-muted:</span>     <span class="v">#4e4d72</span>  <span class="c">/* Hints, Timestamps, disabled */</span>
+
+<span class="c">// ── TYPOGRAFIE ────────────────────────────────</span>
+<span class="k">font-display:</span>   <span class="v">Outfit 800</span>          <span class="c">/* Hero-Titel, Splash */</span>
+<span class="k">font-heading:</span>   <span class="v">Outfit 700/600</span>      <span class="c">/* Section-Titel, Card-Titel */</span>
+<span class="k">font-body:</span>      <span class="v">Outfit 400/500</span>      <span class="c">/* Fließtext, Labels */</span>
+<span class="k">font-mono:</span>      <span class="v">JetBrains Mono 500</span>  <span class="c">/* Zahlen, Stats, Codes */</span>
+<span class="k">letter-spacing:</span> <span class="v">−0.03em (Titel)</span> · <span class="v">+0.08em (Labels/Caps)</span>
+
+<span class="c">// ── BUTTONS ───────────────────────────────────</span>
+<span class="k">btn-primary:</span>
+  <span class="v">background: linear-gradient(135deg, #6e63f2, #8a52f0)</span>
+  <span class="v">color: white · radius: 9999px · padding: 10px 24px</span>
+  <span class="v">box-shadow: 0 0 24px rgba(110,99,242,0.35)</span>
+  <span class="v">hover: translateY(-2px) · glow stärker</span>
+
+<span class="k">btn-secondary:</span>
+  <span class="v">background: #252545 · border: 1px solid rgba(255,255,255,0.1)</span>
+  <span class="v">color: #f0eeff · radius: 9999px</span>
+  <span class="v">hover: border-color: #a29bfe</span>
+
+<span class="k">btn-ghost:</span>
+  <span class="v">background: transparent · border: 1px solid rgba(110,99,242,0.25)</span>
+  <span class="v">color: #a29bfe</span>
+  <span class="v">hover: background: #1a1830</span>
+
+<span class="k">btn-cta-round:</span> <span class="c">/* großer runder FAB-Button */</span>
+  <span class="v">background: linear-gradient(135deg, #f06292, #e91e8c)</span>
+  <span class="v">width/height: 56px · radius: 50% · box-shadow: shadow-pink</span>
+
+<span class="c">// ── CARDS ─────────────────────────────────────</span>
+<span class="k">card-base:</span>
+  <span class="v">background: #1c1c35 · border: 1px solid rgba(255,255,255,0.10)</span>
+  <span class="v">border-radius: 22px · padding: 20–24px</span>
+  <span class="v">hover: translateY(-3px) · border-color: rgba(110,99,242,0.25)</span>
+  <span class="v">inner-gradient: linear-gradient(135deg, rgba(110,99,242,0.04), transparent)</span>
+
+<span class="k">card-accent:</span>
+  <span class="v">border-color: rgba(110,99,242,0.30)</span>
+  <span class="v">background: linear-gradient(135deg, #1c1c35, rgba(110,99,242,0.06))</span>
+
+<span class="c">// ── INPUTS / SUCHLEISTE ───────────────────────</span>
+<span class="k">input-default:</span>
+  <span class="v">background: #1c1c35 · border: 1px solid rgba(255,255,255,0.10)</span>
+  <span class="v">border-radius: 16px · padding: 11px 16px</span>
+  <span class="v">color: #f0eeff · placeholder: #4e4d72</span>
+  <span class="v">focus: border-color #6e63f2 · box-shadow: 0 0 0 3px rgba(110,99,242,0.15)</span>
+
+<span class="k">search-bar:</span>
+  <span class="v">padding-left: 42px · icon links: #4e4d72</span>
+  <span class="v">border-radius: 9999px für pill-search</span>
+
+<span class="c">// ── STATS / ZAHLEN ────────────────────────────</span>
+<span class="k">stat-block:</span>
+  <span class="v">background: #1c1c35 · border: 1px solid rgba(255,255,255,0.10)</span>
+  <span class="v">border-radius: 16px · padding: 16px 20px</span>
+  <span class="v">label: font-size 0.68rem, letter-spacing +0.1em, color #4e4d72</span>
+  <span class="v">value: font-family Outfit 700, font-size 1.6rem, color #f0eeff</span>
+  <span class="v">delta-up: color #26d47c ↑ · delta-down: color #f06060 ↓</span>
+
+<span class="c">// ── BADGES / TAGS ─────────────────────────────</span>
+<span class="k">badge-format:</span>
+  <span class="v">padding: 3px 10px · radius: 9999px · font-size: 0.70rem · font-weight: 600</span>
+  <span class="v">purple: bg rgba(110,99,242,0.15) · border rgba(110,99,242,0.25) · text #a29bfe</span>
+  <span class="v">green:  bg rgba(38,212,124,0.12) · border rgba(38,212,124,0.20) · text #26d47c</span>
+  <span class="v">red:    bg rgba(240,96,96,0.12)  · border rgba(240,96,96,0.20)  · text #f06060</span>
+  <span class="v">amber:  bg rgba(255,202,40,0.10) · border rgba(255,202,40,0.20) · text #ffca28</span>
+  <span class="v">pink:   bg rgba(240,98,146,0.12) · border rgba(240,98,146,0.20) · text #f06292</span>
+
+<span class="c">// ── FORTSCHRITT / PROGRESS ────────────────────</span>
+<span class="k">progress-track:</span>
+  <span class="v">height: 6px · background: #252545 · radius: 9999px</span>
+<span class="k">progress-fill-primary:</span>
+  <span class="v">gradient(90deg, #6e63f2 → #a29bfe)</span>
+<span class="k">progress-fill-success:</span>
+  <span class="v">gradient(90deg, #26c6da → #80deea)</span>
+<span class="k">progress-fill-streak:</span>
+  <span class="v">gradient(90deg, #f06292 → #ff8a65)</span>
+
+<span class="c">// ── BORDERS & GLOW ────────────────────────────</span>
+<span class="k">border-subtle:</span>  <span class="v">rgba(255,255,255, 0.05)</span>
+<span class="k">border-default:</span> <span class="v">rgba(255,255,255, 0.10)</span>
+<span class="k">border-focus:</span>   <span class="v">rgba(110,99,242,  0.60)</span>
+<span class="k">glow-primary:</span>   <span class="v">0 0 24px rgba(110,99,242, 0.35)</span>
+<span class="k">glow-pink:</span>      <span class="v">0 0 20px rgba(240,98,146, 0.35)</span>
+
+<span class="c">// ── RADIUS SYSTEM ─────────────────────────────</span>
+<span class="k">xs:   </span><span class="v">6px</span>   <span class="k">sm: </span><span class="v">10px</span>  <span class="k">md: </span><span class="v">16px</span>
+<span class="k">lg:  </span><span class="v">22px</span>   <span class="k">xl: </span><span class="v">30px</span>  <span class="k">full: </span><span class="v">9999px</span>
+
+<span class="c">// ── ANIMATIONEN ───────────────────────────────</span>
+<span class="k">ease:</span>        <span class="v">cubic-bezier(0.25, 0.46, 0.45, 0.94)</span>
+<span class="k">ease-bounce:</span> <span class="v">cubic-bezier(0.34, 1.56, 0.64, 1.00)</span>
+<span class="k">dur-fast:</span>    <span class="v">150ms</span>   <span class="k">dur-base:</span> <span class="v">250ms</span>   <span class="k">dur-slow:</span> <span class="v">400ms</span>
+<span class="k">hover:</span>       <span class="v">translateY(-2px bis -4px) + glow intensiver</span>
+<span class="k">tap/press:</span>   <span class="v">scale(0.97)</span>
+<span class="k">reveal:</span>      <span class="v">opacity 0→1 + translateY(12px→0), staggered 80ms</span>
+
+<span class="c">// ── SECTIONS ──────────────────────────────────</span>
+<span class="k">section-kicker:</span> <span class="v">JetBrains Mono 0.63rem, letter-spacing +0.18em, color #4e4d72</span>
+<span class="k">section-title:</span>  <span class="v">Outfit 700 1.05rem, color #f0eeff</span>
+<span class="k">section-divider:</span><span class="v">1px solid rgba(255,255,255,0.05)</span>
+<span class="k">section-padding:</span><span class="v">24px (mobile) → 32px (desktop)</span>
+
+<span class="c">// ── GLOBALE REGELN ────────────────────────────</span>
+<span class="am">RULE 1:</span> <span class="v">Niemals weiße Hintergründe. Immer dark.</span>
+<span class="am">RULE 2:</span> <span class="v">Jede interaktive Fläche hat einen hover-State.</span>
+<span class="am">RULE 3:</span> <span class="v">Zahlen immer mit JetBrains Mono.</span>
+<span class="am">RULE 4:</span> <span class="v">Radius immer >= 10px. Keine harten Ecken.</span>
+<span class="am">RULE 5:</span> <span class="v">Gradient-Buttons haben immer einen matching glow-shadow.</span>
+<span class="am">RULE 6:</span> <span class="v">Icons: Outline-Stil, Stroke-Width 1.5–2px, Farbe text-muted oder primary-light.</span>
+<span class="am">RULE 7:</span> <span class="v">Kein reines Schwarz (#000) und kein reines Weiß (#fff) im UI.</span>
+<span class="am">RULE 8:</span> <span class="v">Abstände in 4px-Raster (4, 8, 12, 16, 20, 24, 32, 40, 48).</span>
+    </pre>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     LIVE PREVIEW
+════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">02 — live preview · alle komponenten</div>
+  <div class="preview-wrap">
+
+    <!-- COLORS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Palette</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-color" style="background:#0f0f1a"></div><span>#0f0f1a</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#161628"></div><span>#161628</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#1c1c35"></div><span>#1c1c35</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#252545"></div><span>#252545</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#6e63f2"></div><span>#6e63f2</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#a29bfe"></div><span>#a29bfe</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#f06292"></div><span>#f06292</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#26c6da"></div><span>#26c6da</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#ffca28"></div><span>#ffca28</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#26d47c"></div><span>#26d47c</span></div>
+        <div class="swatch"><div class="swatch-color" style="background:#f06060"></div><span>#f06060</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TYPOGRAPHY -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Typografie</div>
+      <div class="type-row">
+        <div class="t-display">Display 800 — Lernen macht Spaß</div>
+        <div class="t-h1">Heading 1 — Dein Fortschritt</div>
+        <div class="t-h2">Heading 2 — Statistiken</div>
+        <div class="t-body">Body — Beantworte Fragen, sammle Punkte und verfolge deinen Lernfortschritt.</div>
+        <div class="t-caption">CAPTION MONO — 01 / 06 · 2.345670%</div>
+        <div class="t-label">Label · Section Kicker</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BUTTONS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Buttons</div>
+      <div class="btn-row">
+        <button class="btn btn-primary">Starten ›</button>
+        <button class="btn btn-secondary">Überspringen</button>
+        <button class="btn btn-ghost">Mehr anzeigen</button>
+        <button class="btn btn-pink">🎲 Würfeln</button>
+        <button class="btn btn-icon">⚙</button>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-primary btn-sm">Klein</button>
+        <button class="btn btn-primary">Normal</button>
+        <button class="btn btn-primary btn-lg">Groß · Los geht's</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- INPUTS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Inputs & Suchleiste</div>
+      <div class="input-group" style="max-width:380px">
+        <div>
+          <label class="field-label">Quiz-Titel</label>
+          <input class="field" placeholder="z.B. Geografie Europa…" />
+        </div>
+        <div class="field-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="field field-search" placeholder="Themen, Fragen suchen…" />
+        </div>
+        <div>
+          <input class="field field-error" value="Falsches Passwort" />
+          <div class="hint err">Mindestens 8 Zeichen erforderlich</div>
+        </div>
+        <div>
+          <input class="field field-success" value="quiz@example.com" />
+          <div class="hint ok">E-Mail ist verfügbar ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CARDS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Cards</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🌍</div>
+          <div class="card-title">Geografie</div>
+          <div class="card-sub">48 Fragen · Mittel</div>
+        </div>
+        <div class="card card-accent">
+          <div class="card-icon">🎲</div>
+          <div class="card-title">Zufalls-Quiz</div>
+          <div class="card-sub">Alle Kategorien</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✏️</div>
+          <div class="card-title">Eigene Sets</div>
+          <div class="card-sub">3 erstellt</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="card-title">Statistiken</div>
+          <div class="card-sub">Dein Fortschritt</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- STATS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Stats Blöcke</div>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-label">Gesamt-Score</div>
+          <div class="stat-value">2.847</div>
+          <div class="stat-sub up">↑ +4.2% heute</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Streak</div>
+          <div class="stat-value">12🔥</div>
+          <div class="stat-sub" style="color:var(--amber)">Tage am Stück</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Richtig</div>
+          <div class="stat-value">87%</div>
+          <div class="stat-sub up">↑ +2.1%</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Falsch</div>
+          <div class="stat-value">13%</div>
+          <div class="stat-sub down">↓ −2.1%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BADGES -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Badges & Tags</div>
+      <div class="badge-row">
+        <span class="badge badge-purple badge-dot">Quiz</span>
+        <span class="badge badge-green badge-dot">Richtig</span>
+        <span class="badge badge-red badge-dot">Falsch</span>
+        <span class="badge badge-amber badge-dot">Neu</span>
+        <span class="badge badge-pink badge-dot">Streak</span>
+        <span class="badge badge-purple">Leicht</span>
+        <span class="badge badge-amber">Mittel</span>
+        <span class="badge badge-red">Schwer</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PROGRESS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Progress Bars</div>
+      <div class="progress-wrap">
+        <div class="prog-item">
+          <div class="prog-header"><span class="prog-label">Geografie</span><span class="prog-val">78%</span></div>
+          <div class="prog-track"><div class="prog-fill prog-purple" style="width:78%"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-header"><span class="prog-label">Geschichte</span><span class="prog-val">52%</span></div>
+          <div class="prog-track"><div class="prog-fill prog-teal" style="width:52%"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-header"><span class="prog-label">Streak Ziel</span><span class="prog-val">12/30</span></div>
+          <div class="prog-track"><div class="prog-fill prog-pink" style="width:40%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TOGGLE + TABS -->
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start">
+      <div>
+        <div class="t-label" style="margin-bottom:10px">Toggles</div>
+        <div class="toggle-row">
+          <div class="toggle">
+            <div class="toggle-track on"><div class="toggle-thumb"></div></div>
+            <span class="toggle-label">Benachrichtigungen</span>
+          </div>
+          <div class="toggle">
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            <span class="toggle-label">Dark Mode</span>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div class="t-label" style="margin-bottom:10px">Tabs</div>
+        <div class="tabs">
+          <button class="tab active">Alle</button>
+          <button class="tab">Meine</button>
+          <button class="tab">Neu</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- LIST ITEMS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Listen / Section Cards</div>
+      <div class="section-card">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Zuletzt gespielt</div>
+            <div class="section-heading">Letzte Aktivitäten</div>
+          </div>
+          <button class="btn btn-ghost btn-sm">Alle →</button>
+        </div>
+        <div class="list">
+          <div class="list-item">
+            <div class="list-icon">🌍</div>
+            <div><div class="list-title">Hauptstädte Europa</div><div class="list-sub">vor 2 Std. · 24 Fragen</div></div>
+            <div class="list-right"><span class="badge badge-green">92%</span></div>
+          </div>
+          <div class="list-item">
+            <div class="list-icon">🎲</div>
+            <div><div class="list-title">Zufalls-Challenge</div><div class="list-sub">Gestern · 12 Fragen</div></div>
+            <div class="list-right"><span class="badge badge-amber">75%</span></div>
+          </div>
+          <div class="list-item">
+            <div class="list-icon">✏️</div>
+            <div><div class="list-title">Mein Mathe-Set</div><div class="list-sub">vor 3 Tagen · 8 Fragen</div></div>
+            <div class="list-right"><span class="badge badge-red">48%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- AVATARS -->
+    <div>
+      <div class="t-label" style="margin-bottom:10px">Avatare</div>
+      <div class="avatar-row">
+        <div class="avatar" style="width:44px;height:44px;font-size:.9rem">AM</div>
+        <div class="avatar" style="width:36px;height:36px;font-size:.75rem;background:rgba(110,99,242,.2)">KL</div>
+        <div class="avatar-stack">
+          <div class="avatar" style="width:32px;height:32px;font-size:.7rem">A</div>
+          <div class="avatar" style="width:32px;height:32px;font-size:.7rem;background:rgba(240,98,146,.2)">B</div>
+          <div class="avatar" style="width:32px;height:32px;font-size:.7rem;background:rgba(38,212,124,.15)">C</div>
+          <div class="avatar" style="width:32px;height:32px;font-size:.65rem;color:var(--text-muted)">+12</div>
+        </div>
+        <span class="t-body" style="font-size:.8rem">12 Spieler online</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     USAGE HINTS
+════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">03 — so nutzt du diesen prompt</div>
+  <div class="prompt-box">
+    <pre>
+<span class="c">/* ─── IN CHATGPT / CLAUDE / CURSOR / V0 / BOLT ─── */</span>
+
+<span class="k">BEISPIEL-PROMPT für eine neue Screen:</span>
+
+<span class="v">"Erstelle einen Quiz-Screen für meine App.
+Verwende folgendes Design-System:
+
+background: #0f0f1a → #1c1c35 (cards)
+primary: #6e63f2, accent-pink: #f06292, text: #f0eeff/#9190b8
+font: Outfit (headings), JetBrains Mono (zahlen/stats)
+border-radius: 22px (cards), 9999px (buttons/badges)
+buttons: gradient primary mit glow-shadow
+cards: dark mit subtle purple-gradient innen
+stats: mono font, grün für +, rot für −
+badges: pill-style mit semi-transparent hintergrund
+progress: 6px track, gradient fill
+
+Der Screen soll zeigen: [DEINE BESCHREIBUNG]"</span>
+
+<span class="c">/* ─── FÜR CSS CUSTOM PROPERTIES (copy-paste ready) ─── */</span>
+
+<span class="v">:root {
+  --bg-base: #0f0f1a; --bg-surface: #161628;
+  --bg-card: #1c1c35; --bg-elevated: #252545;
+  --primary: #6e63f2; --primary-light: #a29bfe;
+  --pink: #f06292; --teal: #26c6da;
+  --amber: #ffca28; --green: #26d47c; --red: #f06060;
+  --text-1: #f0eeff; --text-2: #9190b8; --text-3: #4e4d72;
+  --border: rgba(255,255,255,0.10);
+  --border-focus: rgba(110,99,242,0.60);
+  --glow: 0 0 24px rgba(110,99,242,0.35);
+  --r-card: 22px; --r-btn: 9999px; --r-input: 16px;
+}</span>
+
+<span class="c">/* ─── FÜR TAILWIND ─── */</span>
+<span class="v">// tailwind.config.js → extend → colors
+primary: { DEFAULT: '#6e63f2', light: '#a29bfe' }
+surface: { base: '#0f0f1a', card: '#1c1c35', elevated: '#252545' }
+accent:  { pink: '#f06292', teal: '#26c6da', amber: '#ffca28' }</span>
+    </pre>
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
