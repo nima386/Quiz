@@ -536,13 +536,42 @@ function replayHeaderDice() {
   }, 900);
 }
 
+function getUpperIconPath(name = "") {
+  const normalized = normalizeUsername(name);
+  if (normalized.includes("bau") || normalized.includes("zeichner")) return "icon/icon2/quill.png";
+  if (normalized.includes("land") || normalized.includes("geo") || normalized.includes("karte")) return "icon/icon2/earth.png";
+  if (normalized.includes("arena") || normalized.includes("duell")) return "icon/icon2/astronaut.png";
+  if (normalized.includes("politik") || normalized.includes("schule") || normalized.includes("lernen")) return "icon/icon2/research.png";
+  return "icon/icon2/dice.png";
+}
+
 function renderUpperList() {
   const list = document.getElementById("upperList");
   list.innerHTML = "";
 
-  Object.keys(appStore.upperCategories).forEach(name => {
+  const upperNames = Object.keys(appStore.upperCategories);
+
+  if (!upperNames.length) {
+    list.innerHTML = `
+      <div class="upper-empty-state">
+        <strong>Noch kein Lernbereich</strong>
+        <span>Erstelle deine erste Oberkategorie und baue deine App nach deinem System auf.</span>
+      </div>
+    `;
+    return;
+  }
+
+  upperNames.forEach(name => {
     const store = appStore.upperCategories[name];
     const categoryCount = Object.keys(store.data || {}).length;
+    const questionCount = Object.values(store.data || {}).reduce((sum, questions) => {
+      return sum + (Array.isArray(questions) ? questions.length : 0);
+    }, 0);
+    const completedCount = Object.entries(store.progress || {}).reduce((sum, [category, done]) => {
+      const total = Array.isArray(store.data?.[category]) ? store.data[category].length : 0;
+      return sum + Math.min(Number(done) || 0, total);
+    }, 0);
+    const progressPercent = questionCount ? Math.round((completedCount / questionCount) * 100) : 0;
 
     const wrapper = document.createElement("div");
     wrapper.className = "upper-swipe";
@@ -556,10 +585,17 @@ function renderUpperList() {
     if (name === activeUpper) row.classList.add("active");
 
     row.innerHTML = `
-      <div class="upper-icon">◈</div>
-      <div>
+      <div class="upper-icon">
+        <img src="${getUpperIconPath(name)}" alt="">
+      </div>
+      <div class="upper-row-main">
         <div class="upper-title">${name}</div>
-        <div class="upper-sub">${categoryCount} Kategorien</div>
+        <div class="upper-sub">${categoryCount} Kategorien · ${questionCount} Fragen</div>
+        <div class="upper-progress-line"><i style="width:${progressPercent}%"></i></div>
+        <div class="upper-mini-meta">
+          <span>${progressPercent}% gelernt</span>
+          <span>${name === activeUpper ? "Aktiv" : "Öffnen"}</span>
+        </div>
       </div>
     `;
 
@@ -660,7 +696,33 @@ function renderHome() {
   const box = document.getElementById("homeCategories");
   box.innerHTML = "";
 
+  const title = document.getElementById("upperHomeTitle");
+  const subtitle = document.getElementById("upperHomeSubtitle");
+  const kicker = document.getElementById("upperHomeKicker");
+  const categoryNames = Object.keys(data || {});
+  const questionTotal = categoryNames.reduce((sum, category) => sum + (Array.isArray(data[category]) ? data[category].length : 0), 0);
+
+  if (kicker) kicker.textContent = activeUpper || "Lernbereich";
+  if (title) title.textContent = categoryNames.length ? "Mach da weiter, wo du aufgehört hast" : "Bereit für deinen ersten Bereich";
+  if (subtitle) {
+    subtitle.textContent = categoryNames.length
+      ? `${categoryNames.length} Kategorien · ${questionTotal} Fragen`
+      : "Erstelle eine Kategorie oder importiere Fragen, dann wird dieser Bereich lebendig.";
+  }
+
   const categoriesToSearch = searchOnlyCurrentCategory ? [currentCategory] : Object.keys(data);
+
+if (!categoriesToSearch.length) {
+    box.innerHTML = `
+      <div class="upper-page-empty glass-card">
+        <span>Startklar</span>
+        <h2>Noch keine Kategorien</h2>
+        <p>Füge Fragen hinzu oder importiere eine Excel-Datei. Danach erscheinen deine Lernkarten hier.</p>
+        <button class="main-btn" onclick="document.getElementById('addQuestionBtn')?.click()">Fragen hinzufügen</button>
+      </div>
+    `;
+    return;
+  }
 
 categoriesToSearch.forEach(category => {
     const total = data[category].length;
@@ -3654,6 +3716,7 @@ document.getElementById("addUpperBtn").onclick = () => {
   setTimeout(() => {
     document.getElementById("upperModal").classList.add("show");
     document.getElementById("upperNameInput").value = "";
+    setTimeout(() => document.getElementById("upperNameInput")?.focus(), 80);
   }, 260);
 };
 
@@ -3670,12 +3733,22 @@ function closeUpperModal() {
 document.getElementById("cancelUpperBtn").onclick = closeUpperModal;
 
 document.getElementById("createUpperBtn").onclick = () => {
-  const name = document.getElementById("upperNameInput").value.trim();
+  const input = document.getElementById("upperNameInput");
+  const name = input.value.trim().replace(/\s+/g, " ");
 
-  if (!name) return alert("Bitte Namen eingeben.");
+  if (!name) {
+    input.focus();
+    showIsland("Gib einen Namen ein.", "danger");
+    return;
+  }
+
+  if (name.length > 32 || /[\\/]/.test(name)) {
+    showIsland("Bitte einen kurzen, klaren Namen nutzen.", "danger");
+    return;
+  }
 
   if (appStore.upperCategories[name]) {
-    alert("Diese Oberkategorie gibt es schon.");
+    showIsland("Diese Oberkategorie gibt es schon.", "danger");
     return;
   }
 

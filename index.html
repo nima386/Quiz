@@ -11,10 +11,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Quiz Arena</title>
-  <link rel="stylesheet" href="style.css?v=31">
-  <link rel="stylesheet" href="games/games.css?v=31">
-  <link rel="stylesheet" href="premium.css?v=31">
-  <link rel="stylesheet" href="games/premium-games.css?v=31">
+  <link rel="stylesheet" href="style.css?v=34">
+  <link rel="stylesheet" href="games/games.css?v=34">
+  <link rel="stylesheet" href="premium.css?v=34">
+  <link rel="stylesheet" href="games/premium-games.css?v=34">
 </head>
 <body>
 
@@ -309,7 +309,11 @@
       <img id="topAvatar" class="avatar top-avatar" src="avatars/avatar1.png">
     </div>
 
-    <h1>Mach da weiter, wo du aufgehört hast</h1>
+    <div class="upper-page-hero glass-card">
+      <span id="upperHomeKicker">Lernbereich</span>
+      <h1 id="upperHomeTitle">Mach da weiter, wo du aufgehört hast</h1>
+      <p id="upperHomeSubtitle">Wähle eine Kategorie und starte direkt in deinen Flow.</p>
+    </div>
 
     <div id="homeCategories"></div>
   </section>
@@ -518,7 +522,7 @@
 </div>
 
   <div class="game-card" id="openEuropeGame">
-    <div class="game-icon">🌍</div>
+    <div class="game-icon"><img src="icon/icon2/earth.png" alt=""></div>
     <div>
       <h2>Europa</h2>
       <p>Karten, Länder, Flaggen & Geografie</p>
@@ -527,7 +531,7 @@
   </div>
 
    <div onclick="openAsiaGame()" class="game-card">
-  <div class="game-icon">🌍</div>
+  <div class="game-icon"><img src="icon/icon2/earth.png" alt=""></div>
   <div>
     <h2>Asien</h2>
     <p>Länder auf der Asien-Karte erkennen</p>
@@ -535,7 +539,7 @@
 </div>
 
 <div onclick="openAfricaGame()" class="game-card">
-  <div class="game-icon">🌍</div>
+  <div class="game-icon"><img src="icon/icon2/earth.png" alt=""></div>
   <div>
     <h2>Afrika</h2>
     <p>Länder auf der Afrika-Karte erkennen</p>
@@ -544,7 +548,7 @@
 </div>
 
 <div onclick="openSouthAmericaGame()" class="game-card">
-  <div class="game-icon">🌎</div>
+  <div class="game-icon"><img src="icon/icon2/earth.png" alt=""></div>
   <div>
     <h2>Südamerika</h2>
     <p>Länder auf der Südamerika-Karte erkennen</p>
@@ -553,7 +557,7 @@
 </div>
 
 <div onclick="openNorthAmericaGame()" class="game-card">
-  <div class="game-icon">🌎</div>
+  <div class="game-icon"><img src="icon/icon2/earth.png" alt=""></div>
   <div>
      <h2>Nordamerika</h2>
     <p>Länder auf der Nordamerika-Karte erkennen</p>
@@ -1218,7 +1222,7 @@
   </div>
 
   <div id="openDashboardFromDrawer" class="drawer-game-entry">
-    <div class="drawer-game-icon">⌂</div>
+    <div class="drawer-game-icon"><img src="icon/icon2/research.png" alt=""></div>
     <div>
       <strong>Dashboard</strong>
       <span>Daily, Fortschritt & Empfehlungen</span>
@@ -1230,7 +1234,7 @@
 <div class="drawer-divider"></div>
 
 <div id="openGamesFromDrawer" class="drawer-game-entry">
-  <div class="drawer-game-icon">🌍</div>
+  <div class="drawer-game-icon"><img src="icon/icon2/earth.png" alt=""></div>
   <div>
     <strong>Länder, Karten & mehr</strong>
 <span>Geografie, Flaggen & Karten</span>
@@ -1238,7 +1242,7 @@
 </div>
 
 <div id="openArenaFromDrawer" class="drawer-game-entry">
-  <div class="drawer-game-icon">VS</div>
+  <div class="drawer-game-icon"><img src="icon/icon2/astronaut.png" alt=""></div>
   <div>
     <strong>Arena Friends</strong>
     <span>Freunde, Duelle & Seasons</span>
@@ -1250,10 +1254,16 @@
 
 <div id="upperModal" class="modal">
   <div class="folder-create-box">
+    <div class="upper-create-mark">◈</div>
+    <span class="modal-kicker">Neuer Bereich</span>
     <h2>Oberkategorie erstellen</h2>
-    <input id="upperNameInput">
-    <button id="createUpperBtn" class="main-btn">Erstellen</button>
-    <button id="cancelUpperBtn" class="main-btn secondary">Abbrechen</button>
+    <p class="upper-create-copy">Lege einen eigenen Lernraum an, zum Beispiel Schule, Ausbildung oder Länder.</p>
+    <label class="upper-input-label" for="upperNameInput">Name</label>
+    <input id="upperNameInput" maxlength="32" placeholder="z. B. Bauzeichner, Politik, Länder">
+    <div class="upper-modal-actions">
+      <button id="createUpperBtn" class="main-btn">Erstellen</button>
+      <button id="cancelUpperBtn" class="main-btn secondary">Abbrechen</button>
+    </div>
   </div>
 </div>
   

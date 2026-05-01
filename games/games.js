@@ -2731,14 +2731,14 @@ function renderGamesStats() {
         return `
         <div class="continent-focus-card premium-continent-card rank-${index + 1}" onclick="openContinentFocus(this, '${g.key}')">
           <div class="continent-card-head">
-            <span>${g.meta.badge}</span>
+            <span aria-hidden="true">${g.meta.badge}</span>
             <div>
               <h2>${g.meta.name}</h2>
               <small>${heatLabel}</small>
             </div>
           </div>
 
-          <div class="continent-accuracy">${g.accuracy}%</div>
+          <div class="continent-accuracy"><b>${g.accuracy}</b><span>%</span></div>
           <div class="continent-heatbar"><i style="width:${g.accuracy}%"></i></div>
 
           <div class="continent-mini-grid">

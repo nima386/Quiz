@@ -1,4 +1,4 @@
-const CACHE_NAME = "quiz-app-v31";
+const CACHE_NAME = "quiz-app-v34";
 
 const FILES_TO_CACHE = [
   "./",
@@ -24,6 +24,11 @@ const FILES_TO_CACHE = [
   "./icon/stats.png",
   "./icon/search.png",
   "./icon/arena.svg",
+  "./icon/icon2/astronaut.png",
+  "./icon/icon2/dice.png",
+  "./icon/icon2/earth.png",
+  "./icon/icon2/quill.png",
+  "./icon/icon2/research.png",
   "./avatars/avatar0.png",
   "./avatars/avatar1.png",
   "./avatars/avatar2.png",
