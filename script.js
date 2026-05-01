@@ -830,11 +830,14 @@ if (quizMode === "normal") {
     ((current + 1) / source.length) * 100 + "%";
 
   document.getElementById("questionText").textContent = q.text;
-  document.getElementById("feedback").textContent = "";
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = "";
+  feedback.classList.remove("feedback-correct", "feedback-wrong");
   document.getElementById("answerActions").style.display = "none";
 
   const answers = document.getElementById("answers");
   answers.innerHTML = "";
+  answers.classList.remove("answered");
 
   q.answers.forEach((answer, index) => {
     const div = document.createElement("div");
@@ -864,7 +867,10 @@ function checkAnswer(index, clicked) {
 
   if (!q) return;
 
+  const answersBox = document.getElementById("answers");
+  const feedback = document.getElementById("feedback");
   const all = document.querySelectorAll(".answer");
+  answersBox.classList.add("answered");
   all.forEach(a => a.onclick = null);
 
   const isCorrect = index === q.correct;
@@ -909,11 +915,15 @@ function checkAnswer(index, clicked) {
 
   if (isCorrect) {
     clicked.classList.add("correct");
-    document.getElementById("feedback").textContent = "Richtig!";
+    feedback.textContent = "Richtig.";
+    feedback.classList.add("feedback-correct");
+    feedback.classList.remove("feedback-wrong");
   } else {
     clicked.classList.add("wrong");
     all[q.correct].classList.add("correct");
-    document.getElementById("feedback").textContent = "Keine Sorge, du lernst ja noch!";
+    feedback.textContent = "Falsch. Die richtige Antwort ist markiert.";
+    feedback.classList.add("feedback-wrong");
+    feedback.classList.remove("feedback-correct");
   }
 
   if (quizMode === "remembered") {
