@@ -138,6 +138,7 @@ body {
 }
 
 .app-header-dice-profile {
+  position: relative !important;
   overflow: visible !important;
   background: transparent !important;
   border-color: transparent !important;
@@ -146,17 +147,38 @@ body {
   -webkit-backdrop-filter: none !important;
 }
 
+.app-header-dice-profile::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 54% 48%, rgba(255, 255, 255, .18), transparent 34%),
+    radial-gradient(circle at 50% 52%, rgba(129, 140, 248, .24), transparent 62%);
+  filter: blur(8px);
+  opacity: .82;
+  transform: translateZ(0);
+  pointer-events: none;
+}
+
 .header-dice-svg {
-  width: 48px;
-  height: 48px;
+  position: relative;
+  z-index: 1;
+  width: 54px;
+  height: 54px;
   overflow: visible;
   filter:
-    drop-shadow(0 0 7px rgba(195, 190, 255, .50))
-    drop-shadow(0 10px 16px rgba(83, 74, 183, .34));
+    drop-shadow(0 0 8px rgba(216, 212, 255, .62))
+    drop-shadow(0 8px 18px rgba(83, 74, 183, .42))
+    drop-shadow(0 0 18px rgba(103, 232, 249, .16));
 }
 
 .header-dice-glass {
-  fill: rgba(255, 255, 255, .045);
+  fill: rgba(255, 255, 255, .08);
+  stroke-linejoin: round;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 255, 255, .18))
+    drop-shadow(0 0 10px rgba(129, 140, 248, .22));
 }
 
 .header-dice-top {
@@ -169,7 +191,7 @@ body {
 }
 
 .header-dice-glow {
-  opacity: .44;
+  opacity: .58;
 }
 
 .app-header-dice-profile.dice-replay .header-dice-top {
@@ -1228,7 +1250,7 @@ body.light-mode .app-header-search img {
 
 .landing-text-nav {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   gap: 2px !important;
   overflow: hidden !important;
   padding: 6px !important;
@@ -1444,14 +1466,13 @@ body > * {
 }
 
 .landing-text-nav {
-  position: fixed !important;
-  top: calc(var(--safe-top) + 78px) !important;
-  left: 50% !important;
+  position: sticky !important;
+  top: 8px !important;
+  left: auto !important;
   z-index: 3500 !important;
-  width: min(900px, calc(100vw - 56px)) !important;
-  transform: translateX(-50%) !important;
-  margin-top: 0 !important;
-  margin-bottom: 18px !important;
+  width: 100% !important;
+  transform: none !important;
+  margin: 0 0 18px !important;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .055)),
     rgba(7, 11, 24, .72) !important;
@@ -1460,11 +1481,11 @@ body > * {
 }
 
 #homeDailySection {
-  margin-top: 20px !important;
+  margin-top: 0 !important;
 }
 
 .home-landing.active .home-main {
-  padding-top: 74px !important;
+  padding-top: 0 !important;
 }
 
 #homeArenaInbox:empty {
@@ -1490,12 +1511,12 @@ body > * {
 
 @media (max-width: 760px) {
   .landing-text-nav {
-    top: calc(var(--safe-top) + 76px) !important;
-    width: calc(100vw - 56px) !important;
+    top: 6px !important;
+    width: 100% !important;
   }
 
   #homeScreen {
-    scroll-padding-top: calc(var(--safe-top) + 150px) !important;
+    scroll-padding-top: 76px !important;
   }
 }
 
@@ -1806,4 +1827,40 @@ body > * {
     animation-duration: 1ms !important;
     animation-delay: 0ms !important;
   }
+}
+
+/* Landing header final pass */
+#appHeader.app-header {
+  grid-template-columns: 52px minmax(0, 1fr) 52px !important;
+}
+
+#homeScreen .landing-text-nav {
+  position: sticky !important;
+  top: 8px !important;
+  left: auto !important;
+  z-index: 3600 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  transform: none !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin: 0 0 18px !important;
+}
+
+#homeScreen .landing-text-nav button {
+  min-width: 0 !important;
+  padding-inline: clamp(3px, 2vw, 12px) !important;
+  font-size: clamp(11px, 3.25vw, 14px) !important;
+}
+
+#appHeaderProfile.app-header-dice-profile {
+  width: 52px !important;
+  height: 52px !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+#appHeaderProfile .header-dice-svg {
+  width: 58px !important;
+  height: 58px !important;
+  transform: translate3d(0, 0, 0) scale(1.02);
 }

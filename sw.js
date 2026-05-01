@@ -1,4 +1,4 @@
-const CACHE_NAME = "quiz-app-v30";
+const CACHE_NAME = "quiz-app-v31";
 
 const FILES_TO_CACHE = [
   "./",

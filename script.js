@@ -3153,9 +3153,6 @@ function initArena() {
     });
   });
 
-  document.querySelectorAll("[data-home-action='games']").forEach(button => {
-    button.addEventListener("click", openGamesHub);
-  });
   document.getElementById("closeDailyDetailBtn")?.addEventListener("click", () => {
     document.getElementById("dailyDetailModal")?.classList.remove("show");
   });
