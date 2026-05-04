@@ -39,23 +39,28 @@
   --r-xs:  6px; --r-sm: 10px; --r-md: 16px;
   --r-lg:  22px; --r-xl: 30px; --r-full: 9999px;
   --ease: cubic-bezier(0.25,0.46,0.45,0.94);
-  --nav-h: 64px;
+  --nav-h: 72px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
+  --scroll-bottom: calc(var(--nav-h) + var(--safe-bottom) + 28px);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{min-height:100%;min-height:-webkit-fill-available;background:var(--bg-base);}
 html,body{
   background:var(--bg-base);color:var(--text-primary);
   font-family:'Outfit',sans-serif;line-height:1.5;
-  height:100%;overflow:hidden;
+  width:100%;min-height:100%;overflow:hidden;
   -webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
 }
+body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;}
 
 /* ── APP SHELL ── */
 #app{
   display:flex;flex-direction:column;
-  height:100dvh;height:100vh;
+  height:100vh;height:-webkit-fill-available;height:100dvh;
+  min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;
   max-width:430px;margin:0 auto;
   position:relative;overflow:hidden;
   background:var(--bg-base);
@@ -119,7 +124,8 @@ html,body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  padding:0 18px calc(var(--nav-h) + var(--safe-bottom) + 16px);
+  padding:0 18px var(--scroll-bottom);
+  scroll-padding-bottom:var(--scroll-bottom);
   position:relative;z-index:1;
 }
 .screen-body::-webkit-scrollbar{display:none;}
@@ -497,17 +503,26 @@ html,body{
 /* ── BOTTOM NAV ── */
 .bottom-nav{
   position:absolute;bottom:0;left:0;right:0;
-  background:rgba(22,22,40,0.94);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  min-height:calc(var(--nav-h) + var(--safe-bottom));
+  background:
+    linear-gradient(180deg,rgba(22,22,40,0.72),rgba(22,22,40,0.96) 42%,var(--bg-base));
+  backdrop-filter:blur(24px) saturate(1.25);-webkit-backdrop-filter:blur(24px) saturate(1.25);
   border-top:1px solid var(--border-default);
-  padding:10px 6px calc(10px + var(--safe-bottom));
+  padding:10px calc(6px + env(safe-area-inset-right,0px)) calc(10px + var(--safe-bottom)) calc(6px + env(safe-area-inset-left,0px));
   display:flex;justify-content:space-around;
   z-index:10;
+  box-shadow:0 -18px 34px rgba(15,15,26,0.34);
+}
+.bottom-nav::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;
+  height:var(--safe-bottom);pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,15,26,0),var(--bg-base));
 }
 .nav-item{
   display:flex;flex-direction:column;align-items:center;gap:3px;
   cursor:pointer;padding:5px 12px;border-radius:var(--r-md);
   transition:all .2s var(--ease);flex:1;touch-action:manipulation;
+  min-width:0;position:relative;z-index:1;
 }
 .nav-icon{font-size:1.1rem;filter:grayscale(1);opacity:.5;transition:all .2s;}
 .nav-label{
@@ -896,6 +911,7 @@ saveState(S);
 // HELPERS
 // ═══════════════════════════════════════════════════
 const DE_DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const DE_DAYS_FULL = ['sonntag','montag','dienstag','mittwoch','donnerstag','freitag','samstag'];
 const DE_MONTHS = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 
 function getWeek(d){
@@ -967,7 +983,7 @@ document.getElementById('back-btn').addEventListener('click',()=>{
 // ═══════════════════════════════════════════════════
 function renderTraining(){
   const {plan, week, dow} = getTodayPlan();
-  const dateStr = `${DE_DAYS[today.getDay()].toLowerCase()} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('train-kicker').textContent = `// ${dateStr}`;
   document.getElementById('train-title').textContent = 'Hey Champion 👊';
 
@@ -1186,7 +1202,7 @@ function renderProgressionHint(ex){
 // RENDER: NUTRITION
 // ═══════════════════════════════════════════════════
 function renderNutrition(){
-  const dateStr = `${DE_DAYS[today.getDay()].toLowerCase()} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('nutr-kicker').textContent = `// ${dateStr}`;
 
   const meals = DEFAULT_MEALS;
@@ -1247,7 +1263,7 @@ function renderHydration(){
 // RENDER: HABITS
 // ═══════════════════════════════════════════════════
 function renderHabits(){
-  const dateStr = `${DE_DAYS[today.getDay()].toLowerCase()} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('habit-kicker').textContent = `// ${dateStr}`;
   document.getElementById('streak-num').textContent = S.streak;
   document.getElementById('freeze-val').textContent = `${S.freeze} ❄️`;
