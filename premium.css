@@ -2348,3 +2348,349 @@ body.light-mode .upper-empty-state {
     font-size: 18px !important;
   }
 }
+
+/* === QuizLearn Light Design System === */
+:root {
+  --ql-bg-base: #f4f3ff;
+  --ql-bg-surface: #ffffff;
+  --ql-bg-card: #ffffff;
+  --ql-bg-card-hover: #f8f7ff;
+  --ql-bg-elevated: #eeecff;
+  --ql-bg-muted: #f0effe;
+  --ql-border-subtle: rgba(110, 99, 242, .07);
+  --ql-border: rgba(110, 99, 242, .15);
+  --ql-border-focus: rgba(110, 99, 242, .55);
+  --ql-purple-100: #eeecff;
+  --ql-purple-300: #a29bfe;
+  --ql-purple-500: #6e63f2;
+  --ql-purple-600: #5347d4;
+  --ql-purple-700: #3b3785;
+  --ql-pink: #e91e7a;
+  --ql-teal: #0097a7;
+  --ql-amber: #f59f00;
+  --ql-green: #0cb96a;
+  --ql-red: #e53535;
+  --ql-text: #1a1835;
+  --ql-text-2: #5c5a8a;
+  --ql-text-3: #9896c0;
+  --ql-text-4: #c8c7e0;
+  --ql-shadow-xs: 0 1px 4px rgba(110, 99, 242, .08);
+  --ql-shadow-sm: 0 2px 12px rgba(110, 99, 242, .10);
+  --ql-shadow-md: 0 4px 24px rgba(110, 99, 242, .13);
+  --ql-shadow-lg: 0 8px 48px rgba(110, 99, 242, .16);
+  --ql-glow: 0 0 24px rgba(110, 99, 242, .28);
+  --ql-pink-glow: 0 0 20px rgba(233, 30, 122, .28);
+  --ql-r-sm: 10px;
+  --ql-r-md: 16px;
+  --ql-r-lg: 22px;
+  --ql-r-xl: 30px;
+  --ql-r-full: 9999px;
+  --bg-0: var(--ql-bg-base);
+  --bg-1: var(--ql-bg-muted);
+  --text-0: var(--ql-text);
+  --text-1: var(--ql-text-2);
+  --surface: var(--ql-bg-card);
+  --surface-strong: var(--ql-bg-elevated);
+  --line: var(--ql-border);
+  --cyan: var(--ql-teal);
+  --violet: var(--ql-purple-500);
+  --green: var(--ql-green);
+  --red: var(--ql-red);
+  --r-sm: var(--ql-r-sm);
+  --r-md: var(--ql-r-md);
+  --r-lg: var(--ql-r-lg);
+  --r-xl: var(--ql-r-xl);
+  --shadow-soft: var(--ql-shadow-md);
+  --shadow-hero: var(--ql-shadow-lg);
+  --premium-blur: none;
+  --premium-card-bg: var(--ql-bg-card);
+}
+
+html,
+body.quizlearn-light {
+  background: var(--ql-bg-base) !important;
+  color: var(--ql-text) !important;
+}
+
+body.quizlearn-light {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(110, 99, 242, .13), transparent 32%),
+    radial-gradient(circle at 94% 4%, rgba(233, 30, 122, .08), transparent 28%),
+    linear-gradient(180deg, #f4f3ff 0%, #f8f7ff 52%, #eeecff 100%) !important;
+  font-family: Outfit, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif !important;
+}
+
+body.quizlearn-light::before,
+body.quizlearn-light::after {
+  display: none !important;
+  content: none !important;
+}
+
+body.quizlearn-light h1,
+body.quizlearn-light h2,
+body.quizlearn-light h3,
+body.quizlearn-light strong,
+body.quizlearn-light b {
+  color: var(--ql-text) !important;
+  letter-spacing: -0.015em !important;
+}
+
+body.quizlearn-light p,
+body.quizlearn-light span,
+body.quizlearn-light small,
+body.quizlearn-light label {
+  color: var(--ql-text-2) !important;
+}
+
+body.quizlearn-light .screen {
+  background: transparent !important;
+}
+
+body.quizlearn-light .app-header-icon,
+body.quizlearn-light .app-header-search,
+body.quizlearn-light .app-header-profile {
+  color: var(--ql-text) !important;
+  background: rgba(255, 255, 255, .84) !important;
+  border: 1.5px solid var(--ql-border) !important;
+  box-shadow: var(--ql-shadow-sm) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+}
+
+body.quizlearn-light .app-header-search img,
+body.quizlearn-light .ui-search-icon,
+body.quizlearn-light .circle-icon-img {
+  filter: none !important;
+}
+
+body.quizlearn-light .app-header-dice-profile::before {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(110, 99, 242, .18), transparent 48%),
+    radial-gradient(circle at 50% 52%, rgba(233, 30, 122, .10), transparent 66%);
+}
+
+body.quizlearn-light .glass-card,
+body.quizlearn-light .auth-card,
+body.quizlearn-light .category-card,
+body.quizlearn-light .folder-row,
+body.quizlearn-light .question-row,
+body.quizlearn-light .detail-card,
+body.quizlearn-light .quiz-content,
+body.quizlearn-light .answer,
+body.quizlearn-light .settings-card,
+body.quizlearn-light .sync-info-card,
+body.quizlearn-light .stat-card,
+body.quizlearn-light .best-card,
+body.quizlearn-light .search-box,
+body.quizlearn-light .search-panel,
+body.quizlearn-light .search-result,
+body.quizlearn-light .profile-widget,
+body.quizlearn-light .progress-widget,
+body.quizlearn-light .arena-home-card,
+body.quizlearn-light .daily-history-card,
+body.quizlearn-light .daily-hero-card,
+body.quizlearn-light .recommend-card,
+body.quizlearn-light .home-inbox-mini,
+body.quizlearn-light .activity-row,
+body.quizlearn-light .daily-history-row,
+body.quizlearn-light .avatar-sheet,
+body.quizlearn-light .theme-setting-block,
+body.quizlearn-light #home .upper-page-hero,
+body.quizlearn-light .upper-page-empty,
+body.quizlearn-light #upperList .upper-row,
+body.quizlearn-light .drawer-game-entry,
+body.quizlearn-light #upperModal .folder-create-box {
+  color: var(--ql-text) !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .035), transparent 60%),
+    var(--ql-bg-card) !important;
+  border: 1.5px solid var(--ql-border) !important;
+  box-shadow: var(--ql-shadow-sm) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.quizlearn-light .daily-hero-card,
+body.quizlearn-light #home .upper-page-hero,
+body.quizlearn-light .games-stats-command {
+  background:
+    radial-gradient(circle at 86% 12%, rgba(233, 30, 122, .10), transparent 30%),
+    linear-gradient(135deg, rgba(110, 99, 242, .09), rgba(255, 255, 255, .86)),
+    var(--ql-bg-card) !important;
+  box-shadow: var(--ql-shadow-lg) !important;
+}
+
+body.quizlearn-light .main-btn,
+body.quizlearn-light .primary-btn,
+body.quizlearn-light .avatar-sheet-btn.primary,
+body.quizlearn-light .glass-action.primary,
+body.quizlearn-light .recommend-card button,
+body.quizlearn-light .home-inbox-mini button,
+body.quizlearn-light .arena-card-actions button.primary,
+body.quizlearn-light .arena-request-card button,
+body.quizlearn-light .arena-duel-card button,
+body.quizlearn-light #openLearningHomeBtn,
+body.quizlearn-light #addUpperBtn,
+body.quizlearn-light .shape-confirm-btn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--ql-purple-500), #8a52f0) !important;
+  border: 0 !important;
+  border-radius: var(--ql-r-full) !important;
+  box-shadow: var(--ql-glow) !important;
+}
+
+body.quizlearn-light .main-btn.secondary,
+body.quizlearn-light .avatar-sheet-btn.muted,
+body.quizlearn-light .glass-action,
+body.quizlearn-light .circle-btn,
+body.quizlearn-light .upper-menu-btn,
+body.quizlearn-light .theme-segment button,
+body.quizlearn-light .arena-icon-btn {
+  color: var(--ql-purple-600) !important;
+  background: var(--ql-bg-elevated) !important;
+  border: 1.5px solid var(--ql-border) !important;
+  border-radius: var(--ql-r-full) !important;
+  box-shadow: var(--ql-shadow-xs) !important;
+}
+
+body.quizlearn-light input,
+body.quizlearn-light textarea,
+body.quizlearn-light select,
+body.quizlearn-light #searchInput,
+body.quizlearn-light .country-search-input,
+body.quizlearn-light .answer-input,
+body.quizlearn-light .arena-search-row input,
+body.quizlearn-light #upperNameInput {
+  color: var(--ql-text) !important;
+  background: #ffffff !important;
+  border: 1.5px solid var(--ql-border) !important;
+  border-radius: var(--ql-r-md) !important;
+  box-shadow: var(--ql-shadow-xs) !important;
+}
+
+body.quizlearn-light input::placeholder,
+body.quizlearn-light textarea::placeholder {
+  color: var(--ql-text-4) !important;
+}
+
+body.quizlearn-light input:focus,
+body.quizlearn-light textarea:focus,
+body.quizlearn-light select:focus,
+body.quizlearn-light #searchInput:focus,
+body.quizlearn-light .country-search-input:focus,
+body.quizlearn-light .answer-input:focus,
+body.quizlearn-light #upperNameInput:focus {
+  border-color: var(--ql-border-focus) !important;
+  box-shadow: 0 0 0 4px rgba(110, 99, 242, .12), var(--ql-shadow-sm) !important;
+}
+
+body.quizlearn-light .bottom-nav,
+body.quizlearn-light .games-nav,
+body.quizlearn-light .nav-floating-label,
+body.quizlearn-light .landing-text-nav {
+  color: var(--ql-text) !important;
+  background: rgba(255, 255, 255, .86) !important;
+  border: 1.5px solid var(--ql-border) !important;
+  box-shadow: var(--ql-shadow-md) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+}
+
+body.quizlearn-light .bottom-nav .nav-bubble,
+body.quizlearn-light .games-nav-item.active,
+body.quizlearn-light .landing-text-nav button:active {
+  background: linear-gradient(135deg, rgba(110, 99, 242, .16), rgba(233, 30, 122, .08)) !important;
+  box-shadow: var(--ql-shadow-xs) !important;
+}
+
+body.quizlearn-light .nav-img-icon {
+  filter: none !important;
+}
+
+body.quizlearn-light #upperHomeKicker,
+body.quizlearn-light .modal-kicker,
+body.quizlearn-light .upper-page-empty > span,
+body.quizlearn-light .games-command-copy span,
+body.quizlearn-light .home-kicker,
+body.quizlearn-light .daily-hero-copy > span,
+body.quizlearn-light .section-kicker {
+  color: var(--ql-purple-500) !important;
+  background: rgba(110, 99, 242, .10) !important;
+  border: 1px solid rgba(110, 99, 242, .18) !important;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace !important;
+}
+
+body.quizlearn-light .upper-icon,
+body.quizlearn-light .drawer-game-icon,
+body.quizlearn-light .game-icon,
+body.quizlearn-light .game-big-icon,
+body.quizlearn-light .list-icon,
+body.quizlearn-light .card-icon {
+  background: var(--ql-bg-elevated) !important;
+  border: 1.5px solid var(--ql-border) !important;
+  box-shadow: var(--ql-shadow-xs) !important;
+}
+
+body.quizlearn-light .upper-progress-line,
+body.quizlearn-light .prog-track,
+body.quizlearn-light .daily-week-strip,
+body.quizlearn-light .xp-mini-bar,
+body.quizlearn-light .quiz-progress .bar {
+  background: var(--ql-bg-elevated) !important;
+}
+
+body.quizlearn-light .upper-progress-line i,
+body.quizlearn-light .prog-fill,
+body.quizlearn-light #quizBarFill,
+body.quizlearn-light .xp-mini-bar em {
+  background: linear-gradient(90deg, var(--ql-purple-500), var(--ql-purple-300)) !important;
+}
+
+body.quizlearn-light #quiz.active {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(110, 99, 242, .12), transparent 34%),
+    linear-gradient(180deg, #f4f3ff 0%, #f8f7ff 100%) !important;
+}
+
+body.quizlearn-light #quiz #answers .answer {
+  color: var(--ql-text) !important;
+  background: #ffffff !important;
+  border: 1.5px solid var(--ql-border) !important;
+  box-shadow: var(--ql-shadow-xs) !important;
+}
+
+body.quizlearn-light #quiz #answers .answer.correct {
+  color: #065f46 !important;
+  background: rgba(12, 185, 106, .10) !important;
+  border-color: rgba(12, 185, 106, .48) !important;
+  box-shadow: 0 0 0 4px rgba(12, 185, 106, .09), var(--ql-shadow-sm) !important;
+}
+
+body.quizlearn-light #quiz #answers .answer.wrong {
+  color: #8b1e1e !important;
+  background: rgba(229, 53, 53, .10) !important;
+  border-color: rgba(229, 53, 53, .48) !important;
+  box-shadow: 0 0 0 4px rgba(229, 53, 53, .09), var(--ql-shadow-sm) !important;
+}
+
+body.quizlearn-light .upper-delete,
+body.quizlearn-light .avatar-sheet-btn.danger {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--ql-red), #f06262) !important;
+  box-shadow: 0 0 20px rgba(229, 53, 53, .24) !important;
+}
+
+body.quizlearn-light .app-island {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--ql-purple-600), var(--ql-pink)) !important;
+  box-shadow: var(--ql-glow) !important;
+}
+
+body.quizlearn-light .design-locked-card {
+  display: block !important;
+}
+
+body.quizlearn-light .design-locked-card .theme-setting-block {
+  margin: 0 !important;
+}

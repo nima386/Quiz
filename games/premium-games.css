@@ -1057,3 +1057,144 @@ body.light-mode .premium-globe-card {
     min-height: 62px !important;
   }
 }
+
+/* QuizLearn Light for games */
+body.quizlearn-light {
+  --g-bg-0: #f4f3ff;
+  --g-bg-1: #f8f7ff;
+  --g-text: #1a1835;
+  --g-muted: #5c5a8a;
+  --g-card: #ffffff;
+  --g-card-strong: #eeecff;
+  --g-line: rgba(110, 99, 242, .15);
+  --g-cyan: #0097a7;
+  --g-violet: #6e63f2;
+  --g-green: #0cb96a;
+  --g-shadow: 0 4px 24px rgba(110, 99, 242, .13);
+}
+
+body.quizlearn-light #gamesScreen,
+body.quizlearn-light #europeGameHome,
+body.quizlearn-light #asiaGameHome,
+body.quizlearn-light #africaGameHome,
+body.quizlearn-light #southAmericaGameHome,
+body.quizlearn-light #northAmericaGameHome,
+body.quizlearn-light #continentModeSelect,
+body.quizlearn-light #countryShapeModeSelect,
+body.quizlearn-light #countryShapeGame,
+body.quizlearn-light #gamesStatsScreen {
+  color: #1a1835 !important;
+  background:
+    radial-gradient(circle at 14% -4%, rgba(110, 99, 242, .12), transparent 34%),
+    radial-gradient(circle at 92% 10%, rgba(233, 30, 122, .07), transparent 30%),
+    linear-gradient(180deg, #f4f3ff, #f8f7ff) !important;
+}
+
+body.quizlearn-light .games-title-pill,
+body.quizlearn-light .map-live-timer,
+body.quizlearn-light .shape-live-pill,
+body.quizlearn-light .shape-mode-badge,
+body.quizlearn-light .best-run-card,
+body.quizlearn-light .game-card,
+body.quizlearn-light .game-hero-card,
+body.quizlearn-light .map-question-card,
+body.quizlearn-light .map-glass-frame,
+body.quizlearn-light .mode-select-hero,
+body.quizlearn-light .mode-card,
+body.quizlearn-light .shape-mode-hero,
+body.quizlearn-light .shape-mode-card,
+body.quizlearn-light .shape-stage-card,
+body.quizlearn-light .shape-question-card,
+body.quizlearn-light .shape-options-list,
+body.quizlearn-light .games-best-card,
+body.quizlearn-light .continent-focus-card,
+body.quizlearn-light .premium-globe-card,
+body.quizlearn-light .games-stats-command {
+  color: #1a1835 !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .035), transparent 60%),
+    #ffffff !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+  box-shadow: 0 2px 12px rgba(110, 99, 242, .10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.quizlearn-light .game-card,
+body.quizlearn-light .premium-continent-card,
+body.quizlearn-light .games-stats-command,
+body.quizlearn-light .game-hero-card {
+  box-shadow: 0 4px 24px rgba(110, 99, 242, .13) !important;
+}
+
+body.quizlearn-light .game-card:hover,
+body.quizlearn-light .mode-card:hover,
+body.quizlearn-light .shape-mode-card:hover,
+body.quizlearn-light .shape-option:hover {
+  border-color: rgba(110, 99, 242, .32) !important;
+  box-shadow: 0 8px 48px rgba(110, 99, 242, .16) !important;
+}
+
+body.quizlearn-light .game-card h2,
+body.quizlearn-light .game-hero-card h1,
+body.quizlearn-light .mode-card h2,
+body.quizlearn-light .shape-mode-card h2,
+body.quizlearn-light .continent-card-head h2,
+body.quizlearn-light .continent-accuracy,
+body.quizlearn-light .games-command-copy h2,
+body.quizlearn-light .games-command-grid b,
+body.quizlearn-light .continent-mini-grid b {
+  color: #1a1835 !important;
+}
+
+body.quizlearn-light .game-card p,
+body.quizlearn-light .game-hero-card p,
+body.quizlearn-light .mode-card p,
+body.quizlearn-light .shape-mode-card p,
+body.quizlearn-light .map-question-card p,
+body.quizlearn-light .games-command-copy p,
+body.quizlearn-light .games-command-grid small,
+body.quizlearn-light .continent-card-head small,
+body.quizlearn-light .continent-mini-grid small {
+  color: #5c5a8a !important;
+}
+
+body.quizlearn-light .shape-mode-badge,
+body.quizlearn-light .map-game-top h2,
+body.quizlearn-light .shape-confirm-btn,
+body.quizlearn-light .shape-entry-btn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #8a52f0) !important;
+  box-shadow: 0 0 24px rgba(110, 99, 242, .28) !important;
+}
+
+body.quizlearn-light .game-icon,
+body.quizlearn-light .game-big-icon,
+body.quizlearn-light .drawer-game-icon {
+  background: #eeecff !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+  box-shadow: 0 1px 4px rgba(110, 99, 242, .08) !important;
+}
+
+body.quizlearn-light .continent-card-head span {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #a29bfe) !important;
+}
+
+body.quizlearn-light .continent-heatbar,
+body.quizlearn-light .map-progress-track,
+body.quizlearn-light .shape-progress-track {
+  background: #eeecff !important;
+}
+
+body.quizlearn-light .continent-heatbar i {
+  background: linear-gradient(90deg, #e53535, #f59f00 45%, #0cb96a) !important;
+}
+
+body.quizlearn-light #gamesStatsScreen .globe-shell {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(110, 99, 242, .12), transparent 42%),
+    #ffffff !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+  box-shadow: 0 4px 24px rgba(110, 99, 242, .13) !important;
+}

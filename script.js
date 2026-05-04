@@ -143,66 +143,43 @@ const DEFAULT_AVATAR = "avatars/avatar0.png";
 
 const APPEARANCE_DEFAULTS = {
   theme: "default",
-  tone: "dark"
+  tone: "light"
 };
 
 function getAppearanceSettings() {
   return {
-    theme: localStorage.getItem("appTheme") || APPEARANCE_DEFAULTS.theme,
-    tone: localStorage.getItem("appTone") || APPEARANCE_DEFAULTS.tone
+    theme: APPEARANCE_DEFAULTS.theme,
+    tone: APPEARANCE_DEFAULTS.tone
   };
 }
 
 function applyAppearanceSettings() {
-  let { theme, tone } = getAppearanceSettings();
+  localStorage.removeItem("appTheme");
+  localStorage.removeItem("appTone");
 
-  if (theme === "neuro" && tone === "light") {
-    tone = "dark";
-    localStorage.setItem("appTone", "dark");
-  }
-
-  document.body.classList.toggle("neuro-theme", theme === "neuro");
-  document.body.classList.toggle("default-theme", theme !== "neuro");
-  document.body.classList.toggle("light-mode", tone === "light");
-  document.body.classList.toggle("dark-mode", tone !== "light");
-  document.documentElement.style.colorScheme = tone === "light" ? "light" : "dark";
+  document.body.classList.remove("neuro-theme", "light-mode", "dark-mode");
+  document.body.classList.add("quizlearn-light", "default-theme");
+  document.documentElement.style.colorScheme = "light";
 
   updateAppearanceControls();
 }
 
 function updateAppearanceControls() {
-  const { theme, tone } = getAppearanceSettings();
-
-  document.querySelectorAll("[data-theme-option]").forEach(button => {
-    button.classList.toggle("active", button.dataset.themeOption === theme);
-    button.setAttribute("aria-pressed", button.dataset.themeOption === theme ? "true" : "false");
-  });
-
-  document.querySelectorAll("[data-tone-option]").forEach(button => {
-    button.classList.toggle("active", button.dataset.toneOption === tone);
-    button.disabled = theme === "neuro";
-    button.setAttribute("aria-pressed", button.dataset.toneOption === tone ? "true" : "false");
+  document.querySelectorAll("[data-theme-option], [data-tone-option]").forEach(button => {
+    button.disabled = true;
+    button.classList.remove("active");
+    button.setAttribute("aria-pressed", "false");
   });
 }
 
 function setAppearanceTheme(theme) {
-  localStorage.setItem("appTheme", theme === "neuro" ? "neuro" : "default");
-  if (theme === "neuro") {
-    localStorage.setItem("appTone", "dark");
-  }
   applyAppearanceSettings();
-  showIsland(theme === "neuro" ? "Neuro Glass aktiv" : "Standard Design aktiv", "success");
+  showIsland("QuizLearn Light ist aktiv", "success");
 }
 
 function setAppearanceTone(tone) {
-  if (getAppearanceSettings().theme === "neuro") {
-    showIsland("Light/Dark gibt es im Standard Design", "success");
-    return;
-  }
-
-  localStorage.setItem("appTone", tone === "light" ? "light" : "dark");
   applyAppearanceSettings();
-  showIsland(tone === "light" ? "Light Mode aktiv" : "Dark Mode aktiv", "success");
+  showIsland("Design ist fest aktiviert", "success");
 }
 
 function initAppearanceSettings() {
