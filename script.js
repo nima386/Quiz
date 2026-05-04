@@ -142,20 +142,25 @@ const avatars = [
 const DEFAULT_AVATAR = "avatars/avatar0.png";
 
 const APPEARANCE_DEFAULTS = {
-  theme: "default",
+  theme: "quizlearn-dark",
   tone: "dark"
 };
+const APPEARANCE_SCHEMA = "mood-v2";
 const APPEARANCE_THEMES = new Set(["default", "quizlearn-light", "quizlearn-dark"]);
 const APPEARANCE_THEME_LABELS = {
-  default: "Standard Design aktiv",
-  "quizlearn-light": "QuizLearn Light aktiv",
-  "quizlearn-dark": "QuizLearn Dark aktiv"
+  default: "Mood 2 Standard aktiv",
+  "quizlearn-light": "Mood 1 Light aktiv",
+  "quizlearn-dark": "Mood 1 Dark aktiv"
 };
 
 function getAppearanceSettings() {
   const savedTheme = localStorage.getItem("appTheme");
+  const savedSchema = localStorage.getItem("appAppearanceSchema");
+  const migratedTheme = savedSchema !== APPEARANCE_SCHEMA && savedTheme === "default"
+    ? APPEARANCE_DEFAULTS.theme
+    : savedTheme;
   return {
-    theme: APPEARANCE_THEMES.has(savedTheme) ? savedTheme : APPEARANCE_DEFAULTS.theme,
+    theme: APPEARANCE_THEMES.has(migratedTheme) ? migratedTheme : APPEARANCE_DEFAULTS.theme,
     tone: APPEARANCE_DEFAULTS.tone
   };
 }
@@ -193,6 +198,7 @@ function updateAppearanceControls() {
 function setAppearanceTheme(theme) {
   const nextTheme = APPEARANCE_THEMES.has(theme) ? theme : "default";
   localStorage.setItem("appTheme", nextTheme);
+  localStorage.setItem("appAppearanceSchema", APPEARANCE_SCHEMA);
   applyAppearanceSettings();
   showIsland(APPEARANCE_THEME_LABELS[nextTheme], "success");
 }

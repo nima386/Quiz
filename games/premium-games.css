@@ -1387,3 +1387,98 @@ body.quizlearn-dark .shape-stage-card svg {
     drop-shadow(0 20px 36px rgba(0, 0, 0, .42))
     drop-shadow(0 0 18px rgba(110, 99, 242, .22)) !important;
 }
+
+/* Mood polish for country and game screens */
+body.quizlearn-light .shape-option,
+body.quizlearn-light .shape-hint-box,
+body.quizlearn-light .shape-life-pill,
+body.quizlearn-light .mode-card button,
+body.quizlearn-light .game-hero-actions button {
+  color: #1a1835 !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .035), transparent 62%),
+    rgba(255, 255, 255, .88) !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+  box-shadow: 0 8px 24px rgba(43, 37, 122, .10) !important;
+}
+
+body.quizlearn-light .shape-option span,
+body.quizlearn-light .shape-hint-box span,
+body.quizlearn-light .shape-life-pill span {
+  color: #5c5a8a !important;
+}
+
+body.quizlearn-light .shape-option.selected,
+body.quizlearn-light .shape-option.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #8a52f0) !important;
+  border-color: rgba(110, 99, 242, .42) !important;
+  box-shadow: 0 0 24px rgba(110, 99, 242, .22) !important;
+}
+
+body.quizlearn-light .shape-option.selected span,
+body.quizlearn-light .shape-option.active span {
+  color: rgba(255, 255, 255, .86) !important;
+}
+
+body.quizlearn-light .games-title-pill,
+body.quizlearn-light .profile-title-pill,
+body.quizlearn-light .map-live-timer,
+body.quizlearn-light .shape-live-pill,
+body.quizlearn-light .shape-mode-badge {
+  color: #3b3785 !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .09), rgba(255, 255, 255, .90)),
+    #ffffff !important;
+  border: 1.5px solid rgba(110, 99, 242, .16) !important;
+  box-shadow: 0 8px 24px rgba(43, 37, 122, .11) !important;
+}
+
+body.quizlearn-light .shape-confirm-btn,
+body.quizlearn-light .shape-entry-btn,
+body.quizlearn-light .mode-card button.primary,
+body.quizlearn-light .game-hero-actions button.primary {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #8a52f0) !important;
+  border: 0 !important;
+}
+
+body.quizlearn-light .premium-continent-card,
+body.quizlearn-light .continent-focus-card,
+body.quizlearn-light .premium-globe-card {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(110, 99, 242, .10), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, .92), rgba(246, 245, 255, .88)) !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+}
+
+body.quizlearn-dark .games-title-pill,
+body.quizlearn-dark .profile-title-pill,
+body.quizlearn-dark .map-live-timer,
+body.quizlearn-dark .shape-live-pill,
+body.quizlearn-dark .shape-mode-badge {
+  color: #f0eeff !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .20), rgba(37, 37, 69, .88)),
+    #1c1c35 !important;
+  border: 1px solid rgba(255, 255, 255, .10) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .38), 0 0 18px rgba(110, 99, 242, .18) !important;
+}
+
+body.quizlearn-dark .shape-entry-btn,
+body.quizlearn-dark .shape-confirm-btn,
+body.quizlearn-dark .mode-card button,
+body.quizlearn-dark .game-hero-actions button {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #8a52f0) !important;
+  border: 0 !important;
+  box-shadow: 0 0 24px rgba(110, 99, 242, .35) !important;
+}
+
+body.quizlearn-dark .game-icon img,
+body.quizlearn-dark .game-big-icon img,
+body.quizlearn-dark .drawer-game-icon img,
+body.quizlearn-dark .games-nav img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, .16)) !important;
+  opacity: .96 !important;
+}

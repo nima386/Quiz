@@ -3105,3 +3105,186 @@ body.quizlearn-dark .design-locked-card {
 body.quizlearn-dark .design-locked-card .theme-setting-block {
   margin: 0 !important;
 }
+
+/* === Mood refinements: QuizLearn Light / Dark === */
+body.quizlearn-light .theme-segment,
+body.quizlearn-dark .theme-segment {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 6px !important;
+  border-radius: 9999px !important;
+}
+
+body.quizlearn-light .theme-segment button,
+body.quizlearn-dark .theme-segment button {
+  min-width: 0 !important;
+  min-height: 42px !important;
+  padding: 9px 10px !important;
+  font-size: clamp(11px, 2.7vw, 13px) !important;
+  line-height: 1.05 !important;
+  white-space: normal !important;
+}
+
+body.quizlearn-light #upperOverlay {
+  background: rgba(244, 243, 255, .48) !important;
+  backdrop-filter: blur(10px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(130%) !important;
+}
+
+body.quizlearn-light #upperDrawer.upper-drawer,
+body.quizlearn-light #upperModal .folder-create-box,
+body.quizlearn-light .avatar-sheet.arena-challenge-sheet {
+  color: #1a1835 !important;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(233, 30, 122, .10), transparent 36%),
+    radial-gradient(circle at 4% 6%, rgba(110, 99, 242, .12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(246, 245, 255, .92)) !important;
+  border: 1.5px solid rgba(110, 99, 242, .16) !important;
+  box-shadow: 0 28px 70px rgba(43, 37, 122, .18) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+body.quizlearn-light #upperDrawer h2,
+body.quizlearn-light #upperModal h2,
+body.quizlearn-light .arena-screen h1,
+body.quizlearn-light .arena-screen h2,
+body.quizlearn-light .arena-section-head h2,
+body.quizlearn-light .arena-tabs button,
+body.quizlearn-light .arena-player-card strong {
+  color: #1a1835 !important;
+}
+
+body.quizlearn-light #upperDrawer span,
+body.quizlearn-light #upperDrawer small,
+body.quizlearn-light #upperModal p,
+body.quizlearn-light .arena-screen p,
+body.quizlearn-light .arena-screen span,
+body.quizlearn-light .arena-screen small {
+  color: #5c5a8a !important;
+}
+
+body.quizlearn-light #upperDrawer .drawer-game-entry,
+body.quizlearn-light #upperList .upper-row,
+body.quizlearn-light .arena-hero,
+body.quizlearn-light .arena-player-card,
+body.quizlearn-light .arena-search-card,
+body.quizlearn-light .arena-friend-card,
+body.quizlearn-light .arena-request-card,
+body.quizlearn-light .arena-duel-card,
+body.quizlearn-light .arena-season-card,
+body.quizlearn-light .arena-daily-card,
+body.quizlearn-light .arena-rank-card,
+body.quizlearn-light .friend-profile-hero,
+body.quizlearn-light .friend-rivalry-card,
+body.quizlearn-light .arena-history-card,
+body.quizlearn-light .arena-notice-card,
+body.quizlearn-light .duel-winner-card {
+  color: #1a1835 !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .045), transparent 62%),
+    rgba(255, 255, 255, .82) !important;
+  border: 1.5px solid rgba(110, 99, 242, .15) !important;
+  box-shadow: 0 10px 34px rgba(43, 37, 122, .12) !important;
+}
+
+body.quizlearn-light .arena-screen {
+  background:
+    radial-gradient(circle at 12% -4%, rgba(110, 99, 242, .14), transparent 34%),
+    radial-gradient(circle at 92% 8%, rgba(233, 30, 122, .08), transparent 32%),
+    linear-gradient(180deg, #f4f3ff, #fafaff) !important;
+}
+
+body.quizlearn-light .arena-tabs {
+  background: rgba(255, 255, 255, .86) !important;
+  border: 1.5px solid rgba(110, 99, 242, .14) !important;
+  box-shadow: 0 12px 34px rgba(43, 37, 122, .12) !important;
+  backdrop-filter: blur(18px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+}
+
+body.quizlearn-light .arena-tabs button.active,
+body.quizlearn-light .arena-tabs button:hover {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #6e63f2, #8a52f0) !important;
+  box-shadow: 0 0 24px rgba(110, 99, 242, .22) !important;
+}
+
+body.quizlearn-light .arena-search-row input,
+body.quizlearn-light #arenaSearchInput,
+body.quizlearn-light .challenge-field select {
+  color: #1a1835 !important;
+  background: rgba(255, 255, 255, .92) !important;
+  border: 1.5px solid rgba(110, 99, 242, .16) !important;
+}
+
+body.quizlearn-light .arena-icon-btn,
+body.quizlearn-light .arena-card-actions button:not(.primary),
+body.quizlearn-light #closeUpperDrawer {
+  color: #3b3785 !important;
+  background: #eeecff !important;
+  border-color: rgba(110, 99, 242, .16) !important;
+}
+
+body.quizlearn-light .drawer-game-icon img,
+body.quizlearn-light .upper-icon img,
+body.quizlearn-light .arena-player-card img {
+  filter: none !important;
+}
+
+body.quizlearn-light .upper-delete {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #f06060, #f06292) !important;
+}
+
+body.quizlearn-light .app-header-dice-profile,
+body.quizlearn-light .app-header-profile {
+  background: rgba(255, 255, 255, .72) !important;
+}
+
+body.quizlearn-light .app-header-search img,
+body.quizlearn-light .ui-search-icon,
+body.quizlearn-light .nav-img-icon {
+  filter: brightness(0) saturate(100%) invert(12%) sepia(22%) saturate(1676%) hue-rotate(214deg) brightness(96%) contrast(94%) !important;
+}
+
+body.quizlearn-dark .app-header-search img,
+body.quizlearn-dark .ui-search-icon,
+body.quizlearn-dark .nav-img-icon,
+body.quizlearn-dark .bottom-nav img,
+body.quizlearn-dark .games-nav img,
+body.quizlearn-dark .bottom-nav svg,
+body.quizlearn-dark .games-nav svg {
+  color: #ffffff !important;
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, .18)) !important;
+  opacity: .96 !important;
+}
+
+body.quizlearn-dark .app-header-search span,
+body.quizlearn-dark .app-header-search strong,
+body.quizlearn-dark .bottom-nav span,
+body.quizlearn-dark .games-nav span {
+  color: #ffffff !important;
+}
+
+body.quizlearn-dark .games-title-pill,
+body.quizlearn-dark .profile-title-pill,
+body.quizlearn-dark .shape-mode-badge,
+body.quizlearn-dark .map-live-timer,
+body.quizlearn-dark .shape-live-pill {
+  color: #f0eeff !important;
+  background:
+    linear-gradient(135deg, rgba(110, 99, 242, .20), rgba(37, 37, 69, .86)),
+    #1c1c35 !important;
+  border: 1px solid rgba(255, 255, 255, .10) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .38), 0 0 18px rgba(110, 99, 242, .18) !important;
+}
+
+@media (max-width: 430px) {
+  body.quizlearn-light .theme-segment,
+  body.quizlearn-dark .theme-segment {
+    grid-template-columns: 1fr !important;
+    border-radius: 22px !important;
+  }
+}
