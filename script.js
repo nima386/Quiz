@@ -145,11 +145,17 @@ const APPEARANCE_DEFAULTS = {
   theme: "default",
   tone: "dark"
 };
+const APPEARANCE_THEMES = new Set(["default", "quizlearn-light", "quizlearn-dark"]);
+const APPEARANCE_THEME_LABELS = {
+  default: "Standard Design aktiv",
+  "quizlearn-light": "QuizLearn Light aktiv",
+  "quizlearn-dark": "QuizLearn Dark aktiv"
+};
 
 function getAppearanceSettings() {
   const savedTheme = localStorage.getItem("appTheme");
   return {
-    theme: savedTheme === "quizlearn-light" ? "quizlearn-light" : APPEARANCE_DEFAULTS.theme,
+    theme: APPEARANCE_THEMES.has(savedTheme) ? savedTheme : APPEARANCE_DEFAULTS.theme,
     tone: APPEARANCE_DEFAULTS.tone
   };
 }
@@ -158,9 +164,10 @@ function applyAppearanceSettings() {
   localStorage.removeItem("appTone");
   const { theme } = getAppearanceSettings();
 
-  document.body.classList.remove("neuro-theme", "light-mode", "dark-mode", "quizlearn-light", "default-theme");
+  document.body.classList.remove("neuro-theme", "light-mode", "dark-mode", "quizlearn-light", "quizlearn-dark", "default-theme");
   document.body.classList.add("default-theme");
   if (theme === "quizlearn-light") document.body.classList.add("quizlearn-light");
+  if (theme === "quizlearn-dark") document.body.classList.add("quizlearn-dark");
   document.documentElement.style.colorScheme = theme === "quizlearn-light" ? "light" : "dark";
 
   updateAppearanceControls();
@@ -184,9 +191,10 @@ function updateAppearanceControls() {
 }
 
 function setAppearanceTheme(theme) {
-  localStorage.setItem("appTheme", theme === "quizlearn-light" ? "quizlearn-light" : "default");
+  const nextTheme = APPEARANCE_THEMES.has(theme) ? theme : "default";
+  localStorage.setItem("appTheme", nextTheme);
   applyAppearanceSettings();
-  showIsland(theme === "quizlearn-light" ? "QuizLearn Light aktiv" : "Standard Design aktiv", "success");
+  showIsland(APPEARANCE_THEME_LABELS[nextTheme], "success");
 }
 
 function setAppearanceTone(tone) {
