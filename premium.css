@@ -3288,3 +3288,264 @@ body.quizlearn-dark .shape-live-pill {
     border-radius: 22px !important;
   }
 }
+
+/* === Final PWA mobile compact pass === */
+@media (max-width: 520px) {
+  :root {
+    --app-nav-height: 62px;
+    --nav-h: 62px;
+    --app-bottom-space: 86px;
+    --px: 14px;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+    background-attachment: scroll !important;
+  }
+
+  .app-header {
+    top: calc(env(safe-area-inset-top, 0px) + 6px) !important;
+    width: calc(100vw - 20px) !important;
+    grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+    gap: 9px !important;
+    padding: 0 !important;
+  }
+
+  .app-header-icon,
+  .app-header-search,
+  .app-header-profile {
+    height: 46px !important;
+    min-height: 46px !important;
+    border-radius: 18px !important;
+  }
+
+  .app-header-search {
+    grid-template-columns: 18px auto !important;
+    gap: 8px !important;
+    padding-inline: 12px !important;
+  }
+
+  .app-header-search span {
+    font-size: 15px !important;
+    line-height: 1 !important;
+  }
+
+  .app-header-dice-profile::after {
+    width: 34px !important;
+    height: 34px !important;
+    background-size: contain !important;
+  }
+
+  .screen,
+  .scroll-screen,
+  #homeScreen,
+  #home,
+  #library,
+  #questionList,
+  #remembered,
+  #stats,
+  #profile,
+  #arenaScreen,
+  #gamesScreen,
+  #gamesStatsScreen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 72px) !important;
+    padding-inline: 14px !important;
+    padding-bottom: 96px !important;
+  }
+
+  body.app-header-hidden .screen,
+  body.app-header-hidden .scroll-screen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 14px) !important;
+  }
+
+  .bottom-nav,
+  .games-nav {
+    width: min(316px, calc(100vw - 42px)) !important;
+    height: 60px !important;
+    max-height: 60px !important;
+    bottom: 8px !important;
+    border-radius: 24px !important;
+    padding: 6px !important;
+  }
+
+  .bottom-nav button,
+  .games-nav button,
+  .bottom-nav .nav-item,
+  .games-nav-item {
+    min-width: 0 !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    border-radius: 19px !important;
+  }
+
+  .bottom-nav .nav-bubble,
+  .games-nav .nav-bubble {
+    height: 48px !important;
+    border-radius: 19px !important;
+  }
+
+  .nav-img-icon,
+  .bottom-nav img,
+  .games-nav img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .nav-floating-label {
+    display: none !important;
+  }
+
+  #upperDrawer.upper-drawer {
+    width: min(338px, calc(100vw - 16px)) !important;
+    height: calc(100dvh - env(safe-area-inset-top, 0px) - 16px) !important;
+    top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+    left: 6px !important;
+    padding: 16px 12px 14px !important;
+    border-radius: 0 26px 26px 0 !important;
+  }
+
+  .upper-drawer-head {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .upper-drawer-head h2 {
+    font-size: clamp(22px, 6vw, 28px) !important;
+  }
+
+  #closeUpperDrawer {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 16px !important;
+    font-size: 22px !important;
+  }
+
+  #upperList {
+    gap: 9px !important;
+  }
+
+  .upper-swipe {
+    min-height: 78px !important;
+    border-radius: 21px !important;
+  }
+
+  #upperList .upper-row,
+  .upper-row,
+  .drawer-game-entry {
+    min-height: 76px !important;
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 10px !important;
+    border-radius: 21px !important;
+  }
+
+  .upper-icon,
+  .drawer-game-icon {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    border-radius: 16px !important;
+    font-size: 17px !important;
+  }
+
+  .upper-title,
+  .drawer-game-entry strong {
+    font-size: 16px !important;
+    line-height: 1.08 !important;
+  }
+
+  .upper-sub,
+  .drawer-game-entry span {
+    font-size: 11px !important;
+    line-height: 1.16 !important;
+  }
+
+  .upper-progress-line,
+  .upper-mini-meta {
+    display: none !important;
+  }
+
+  .drawer-divider {
+    margin: 12px 0 !important;
+  }
+
+  #addUpperBtn {
+    min-height: 50px !important;
+    margin-top: 12px !important;
+    border-radius: 19px !important;
+    font-size: 18px !important;
+  }
+
+  #home .upper-page-hero,
+  .daily-hero-card,
+  .arena-home-card,
+  .daily-history-card,
+  .profile-widget,
+  .progress-widget,
+  .category-card,
+  .glass-card {
+    border-radius: 24px !important;
+  }
+
+  #home .upper-page-hero,
+  .daily-hero-card,
+  .arena-home-card,
+  .daily-history-card {
+    padding: 18px !important;
+  }
+
+  #homeCategories .category-card {
+    min-height: 172px !important;
+    padding: 18px !important;
+  }
+
+  #upperHomeTitle,
+  .home-hero-copy h1,
+  .arena-hero-copy h1 {
+    font-size: clamp(30px, 9vw, 42px) !important;
+    line-height: 1 !important;
+  }
+
+  .arena-hero,
+  .arena-search-card,
+  .arena-season-card,
+  .arena-daily-card {
+    padding: 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .arena-hero-stats,
+  .arena-home-stats,
+  .progress-mini-grid {
+    gap: 8px !important;
+  }
+
+  .arena-hero-stats > div,
+  .arena-home-stats > div,
+  .progress-mini-grid > div {
+    min-height: 70px !important;
+    padding: 10px !important;
+    border-radius: 18px !important;
+  }
+
+  .arena-tabs {
+    min-height: 52px !important;
+    gap: 4px !important;
+    padding: 5px !important;
+    border-radius: 21px !important;
+  }
+
+  .arena-tabs button {
+    min-height: 42px !important;
+    padding-inline: 8px !important;
+    font-size: 12px !important;
+    border-radius: 17px !important;
+  }
+}
