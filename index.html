@@ -11,12 +11,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Quiz Arena</title>
-  <link rel="stylesheet" href="style.css?v=35">
-  <link rel="stylesheet" href="games/games.css?v=35">
-  <link rel="stylesheet" href="premium.css?v=35">
-  <link rel="stylesheet" href="games/premium-games.css?v=35">
+  <link rel="stylesheet" href="style.css?v=36">
+  <link rel="stylesheet" href="games/games.css?v=36">
+  <link rel="stylesheet" href="premium.css?v=36">
+  <link rel="stylesheet" href="games/premium-games.css?v=36">
 </head>
-<body class="quizlearn-light default-theme">
+<body class="default-theme">
 
   <div id="appIsland" class="app-island"></div>
 <div id="appLoader" class="app-loader" aria-label="App wird gestartet">
@@ -1409,11 +1409,15 @@ document.body.appendChild(appScript);
       <p>Gelöschte Inhalte verwalten</p>
     </div>
 
-    <div class="theme-settings design-locked-card">
+    <div class="theme-settings">
       <div class="theme-setting-block">
         <div class="theme-setting-head">
-          <strong>QuizLearn Light</strong>
-          <span>Neues Premium-Design aktiv</span>
+          <strong>Design</strong>
+          <span>Standard oder QuizLearn Light</span>
+        </div>
+        <div class="theme-segment" role="group" aria-label="Design">
+          <button id="themeDefaultBtn" type="button" data-theme-option="default">Standard</button>
+          <button id="themeQuizLightBtn" type="button" data-theme-option="quizlearn-light">QuizLearn Light</button>
         </div>
       </div>
     </div>

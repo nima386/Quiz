@@ -143,29 +143,40 @@ const DEFAULT_AVATAR = "avatars/avatar0.png";
 
 const APPEARANCE_DEFAULTS = {
   theme: "default",
-  tone: "light"
+  tone: "dark"
 };
 
 function getAppearanceSettings() {
+  const savedTheme = localStorage.getItem("appTheme");
   return {
-    theme: APPEARANCE_DEFAULTS.theme,
+    theme: savedTheme === "quizlearn-light" ? "quizlearn-light" : APPEARANCE_DEFAULTS.theme,
     tone: APPEARANCE_DEFAULTS.tone
   };
 }
 
 function applyAppearanceSettings() {
-  localStorage.removeItem("appTheme");
   localStorage.removeItem("appTone");
+  const { theme } = getAppearanceSettings();
 
-  document.body.classList.remove("neuro-theme", "light-mode", "dark-mode");
-  document.body.classList.add("quizlearn-light", "default-theme");
-  document.documentElement.style.colorScheme = "light";
+  document.body.classList.remove("neuro-theme", "light-mode", "dark-mode", "quizlearn-light", "default-theme");
+  document.body.classList.add("default-theme");
+  if (theme === "quizlearn-light") document.body.classList.add("quizlearn-light");
+  document.documentElement.style.colorScheme = theme === "quizlearn-light" ? "light" : "dark";
 
   updateAppearanceControls();
 }
 
 function updateAppearanceControls() {
-  document.querySelectorAll("[data-theme-option], [data-tone-option]").forEach(button => {
+  const { theme } = getAppearanceSettings();
+
+  document.querySelectorAll("[data-theme-option]").forEach(button => {
+    const active = button.dataset.themeOption === theme;
+    button.disabled = false;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+
+  document.querySelectorAll("[data-tone-option]").forEach(button => {
     button.disabled = true;
     button.classList.remove("active");
     button.setAttribute("aria-pressed", "false");
@@ -173,8 +184,9 @@ function updateAppearanceControls() {
 }
 
 function setAppearanceTheme(theme) {
+  localStorage.setItem("appTheme", theme === "quizlearn-light" ? "quizlearn-light" : "default");
   applyAppearanceSettings();
-  showIsland("QuizLearn Light ist aktiv", "success");
+  showIsland(theme === "quizlearn-light" ? "QuizLearn Light aktiv" : "Standard Design aktiv", "success");
 }
 
 function setAppearanceTone(tone) {
@@ -187,10 +199,6 @@ function initAppearanceSettings() {
 
   document.querySelectorAll("[data-theme-option]").forEach(button => {
     button.onclick = () => setAppearanceTheme(button.dataset.themeOption);
-  });
-
-  document.querySelectorAll("[data-tone-option]").forEach(button => {
-    button.onclick = () => setAppearanceTone(button.dataset.toneOption);
   });
 }
 

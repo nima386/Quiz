@@ -2385,6 +2385,9 @@ body.light-mode .upper-empty-state {
   --ql-r-lg: 22px;
   --ql-r-xl: 30px;
   --ql-r-full: 9999px;
+}
+
+body.quizlearn-light {
   --bg-0: var(--ql-bg-base);
   --bg-1: var(--ql-bg-muted);
   --text-0: var(--ql-text);
@@ -2406,7 +2409,6 @@ body.light-mode .upper-empty-state {
   --premium-card-bg: var(--ql-bg-card);
 }
 
-html,
 body.quizlearn-light {
   background: var(--ql-bg-base) !important;
   color: var(--ql-text) !important;
