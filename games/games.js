@@ -3834,7 +3834,7 @@ function openMapModeSelect(key) {
 
   const title = document.getElementById("modeSelectTitle");
   const heading = document.getElementById("modeSelectHeading");
-  if (title) title.textContent = `${config.title} · Modus wählen`;
+  if (title) title.textContent = `${config.title} Modus`;
   if (heading) heading.textContent = config.title;
 
   showScreen(document.getElementById("continentModeSelect"), true);

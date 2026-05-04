@@ -1793,3 +1793,254 @@ body.quizlearn-dark .games-nav img {
     grid-template-rows: auto minmax(0, 22vh) auto minmax(0, 1fr) auto !important;
   }
 }
+
+/* === iPhone game raster v40 === */
+@media (max-width: 520px) {
+  :root {
+    --game-ios-x: 16px;
+    --game-ios-gap: 12px;
+    --game-ios-card: 22px;
+    --game-ios-header-top: calc(env(safe-area-inset-top, 0px) + 8px);
+    --game-ios-content-top: calc(var(--game-ios-header-top) + 72px);
+    --game-ios-nav-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    --game-ios-nav-h: 60px;
+    --game-ios-content-bottom: calc(var(--game-ios-nav-h) + var(--game-ios-nav-bottom) + 22px);
+  }
+
+  #gamesScreen,
+  #gamesStatsScreen,
+  #continentModeSelect,
+  #countryShapeModeSelect {
+    padding-top: calc(var(--game-ios-content-top) + 10px) !important;
+    padding-inline: var(--game-ios-x) !important;
+    padding-bottom: var(--game-ios-content-bottom) !important;
+  }
+
+  #continentModeSelect .games-top,
+  #countryShapeModeSelect .games-top,
+  #gamesScreen .games-top {
+    min-height: 44px !important;
+    margin-bottom: var(--game-ios-gap) !important;
+  }
+
+  #continentModeSelect .games-top {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+  }
+
+  #modeSelectBack,
+  #countryShapeModeBack,
+  #backGames,
+  .games-top .circle-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    border-radius: 16px !important;
+  }
+
+  #modeSelectTitle,
+  #countryShapeModeTitle,
+  #gamesScreen .games-title-pill {
+    min-height: 36px !important;
+    max-width: min(100%, 260px) !important;
+    justify-self: center !important;
+    padding-inline: 14px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mode-select-hero,
+  .shape-mode-hero,
+  .game-hero-card {
+    padding: 16px !important;
+    margin-bottom: var(--game-ios-gap) !important;
+    border-radius: var(--game-ios-card) !important;
+  }
+
+  .mode-select-hero span,
+  .shape-mode-hero span,
+  .mode-card span,
+  .shape-mode-card span {
+    font-size: 11px !important;
+    letter-spacing: .09em !important;
+  }
+
+  .mode-select-hero h1,
+  .shape-mode-hero h1,
+  .game-hero-card h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+    line-height: .96 !important;
+    margin: 8px 0 6px !important;
+  }
+
+  .mode-select-hero p,
+  .shape-mode-hero p,
+  .game-hero-card p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .mode-card-grid,
+  .shape-mode-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--game-ios-gap) !important;
+  }
+
+  .mode-card,
+  .shape-mode-card {
+    min-height: 0 !important;
+    padding: 17px 16px !important;
+    gap: 8px !important;
+    border-radius: var(--game-ios-card) !important;
+  }
+
+  .mode-card h2,
+  .shape-mode-card h2 {
+    font-size: clamp(24px, 7vw, 32px) !important;
+    line-height: 1.03 !important;
+  }
+
+  .mode-card p,
+  .shape-mode-card p {
+    max-width: 30ch !important;
+    font-size: 14px !important;
+    line-height: 1.34 !important;
+  }
+
+  .mode-card b,
+  .shape-mode-card b {
+    min-height: 34px !important;
+    padding: 7px 13px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+  }
+
+  .shape-mode-card i {
+    display: none !important;
+  }
+
+  #gamesScreen .game-card {
+    min-height: 76px !important;
+    margin-bottom: var(--game-ios-gap) !important;
+    grid-template-columns: 42px minmax(0, 1fr) 18px !important;
+    gap: 10px !important;
+    padding: 11px !important;
+    border-radius: 20px !important;
+  }
+
+  #gamesScreen .game-icon {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 14px !important;
+  }
+
+  #gamesScreen .game-card h2 {
+    font-size: clamp(17px, 5vw, 21px) !important;
+    line-height: 1.03 !important;
+  }
+
+  #gamesScreen .game-card p {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+
+  .games-nav {
+    width: min(286px, calc(100vw - 56px)) !important;
+    height: var(--game-ios-nav-h) !important;
+    min-height: var(--game-ios-nav-h) !important;
+    bottom: var(--game-ios-nav-bottom) !important;
+    padding: 6px !important;
+    border-radius: 24px !important;
+    z-index: 28000 !important;
+  }
+
+  .games-nav-item {
+    height: 48px !important;
+    min-height: 48px !important;
+    border-radius: 19px !important;
+  }
+
+  .games-nav-item .nav-img-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  #countryShapeGame.active {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+    padding-inline: 10px !important;
+    padding-bottom: 8px !important;
+    grid-template-rows: 44px minmax(0, 24vh) auto minmax(0, 1fr) 52px !important;
+    gap: 8px !important;
+  }
+
+  #countryShapeGame .shape-stage-card,
+  #countryShapeGame .shape-question-card,
+  #countryShapeGame .shape-options-list {
+    border-radius: 18px !important;
+  }
+
+  #countryShapeGame .shape-stage-card {
+    padding: 9px !important;
+  }
+
+  #countryShapeGame .shape-question-card {
+    padding: 10px 12px !important;
+  }
+
+  #countryShapeGame .shape-question-card h1 {
+    font-size: 20px !important;
+  }
+
+  #countryShapeGame .shape-options-list {
+    padding: 8px !important;
+    gap: 7px !important;
+  }
+
+  #countryShapeGame .shape-option {
+    min-height: 40px !important;
+    padding: 7px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  #countryShapeGame .shape-confirm-btn {
+    min-height: 52px !important;
+    border-radius: 18px !important;
+  }
+
+  #gamesStatsScreen .premium-continent-card {
+    min-height: 160px !important;
+    padding: 13px !important;
+    border-radius: 20px !important;
+  }
+
+  #gamesStatsScreen .globe-shell,
+  #gamesStatsScreen #gamesGlobe {
+    height: 228px !important;
+    min-height: 228px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --game-ios-x: 12px;
+  }
+
+  .mode-card,
+  .shape-mode-card {
+    padding: 15px 14px !important;
+  }
+
+  .mode-card h2,
+  .shape-mode-card h2 {
+    font-size: 23px !important;
+  }
+
+  #countryShapeGame.active {
+    grid-template-rows: 42px minmax(0, 21vh) auto minmax(0, 1fr) 50px !important;
+  }
+}

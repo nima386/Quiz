@@ -3549,3 +3549,371 @@ body.quizlearn-dark .shape-live-pill {
     border-radius: 17px !important;
   }
 }
+
+/* === iPhone premium raster v40 === */
+@media (max-width: 520px) {
+  :root {
+    --ios-x: 16px;
+    --ios-gap: 12px;
+    --ios-card: 22px;
+    --ios-pill: 18px;
+    --ios-header-top: calc(env(safe-area-inset-top, 0px) + 8px);
+    --ios-header-h: 48px;
+    --ios-header-bottom: calc(var(--ios-header-top) + var(--ios-header-h));
+    --ios-content-top: calc(var(--ios-header-bottom) + 24px);
+    --ios-nav-h: 60px;
+    --ios-nav-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    --ios-content-bottom: calc(var(--ios-nav-h) + var(--ios-nav-bottom) + 22px);
+    --app-nav-height: var(--ios-nav-h);
+    --nav-h: var(--ios-nav-h);
+    --px: var(--ios-x);
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app-header {
+    top: var(--ios-header-top) !important;
+    width: calc(100vw - (var(--ios-x) * 2)) !important;
+    height: var(--ios-header-h) !important;
+    grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+    gap: 10px !important;
+    z-index: 30000 !important;
+    isolation: isolate !important;
+  }
+
+  .app-header::before {
+    content: "" !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    left: calc(var(--ios-x) * -1) !important;
+    right: calc(var(--ios-x) * -1) !important;
+    top: calc((var(--ios-header-top) + 12px) * -1) !important;
+    height: calc(var(--ios-header-h) + var(--ios-header-top) + 28px) !important;
+    pointer-events: none !important;
+    background:
+      linear-gradient(180deg, rgba(7, 9, 22, .96) 0%, rgba(8, 10, 24, .88) 66%, rgba(8, 10, 24, 0) 100%) !important;
+    backdrop-filter: blur(16px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
+  }
+
+  body.quizlearn-light .app-header::before {
+    background:
+      linear-gradient(180deg, rgba(244, 243, 255, .96) 0%, rgba(244, 243, 255, .86) 66%, rgba(244, 243, 255, 0) 100%) !important;
+  }
+
+  .app-header-icon,
+  .app-header-search,
+  .app-header-profile {
+    height: var(--ios-header-h) !important;
+    min-height: var(--ios-header-h) !important;
+    border-radius: var(--ios-pill) !important;
+  }
+
+  .app-header-search {
+    grid-template-columns: 18px auto !important;
+    gap: 8px !important;
+    justify-content: center !important;
+  }
+
+  .app-header-search span {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .app-header-menu span {
+    width: 18px !important;
+    height: 2px !important;
+  }
+
+  .app-header-menu span + span {
+    margin-top: 6px !important;
+  }
+
+  #appHeaderProfile.app-header-dice-profile {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  #appHeaderProfile.app-header-dice-profile::after {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  body:not(.app-header-hidden) .screen,
+  body:not(.app-header-hidden) .scroll-screen,
+  #homeScreen,
+  #home,
+  #profile,
+  #gamesScreen,
+  #gamesStatsScreen,
+  #arenaScreen,
+  #continentModeSelect,
+  #countryShapeModeSelect {
+    padding-top: var(--ios-content-top) !important;
+    padding-inline: var(--ios-x) !important;
+    padding-bottom: var(--ios-content-bottom) !important;
+  }
+
+  body.app-header-hidden .screen,
+  body.app-header-hidden .scroll-screen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 14px) !important;
+  }
+
+  .landing-text-nav {
+    position: sticky !important;
+    top: calc(var(--ios-header-bottom) + 8px) !important;
+    z-index: 25000 !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    margin: 0 0 var(--ios-gap) !important;
+    padding: 5px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    border-radius: 21px !important;
+  }
+
+  .landing-text-nav button {
+    min-height: 38px !important;
+    padding: 0 3px !important;
+    border-radius: 16px !important;
+    font-size: clamp(10px, 2.8vw, 12px) !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .bottom-nav,
+  .games-nav {
+    width: min(306px, calc(100vw - 48px)) !important;
+    height: var(--ios-nav-h) !important;
+    min-height: var(--ios-nav-h) !important;
+    bottom: var(--ios-nav-bottom) !important;
+    padding: 6px !important;
+    border-radius: 24px !important;
+    z-index: 28000 !important;
+  }
+
+  .bottom-nav button,
+  .games-nav button,
+  .bottom-nav .nav-item,
+  .games-nav-item {
+    height: 48px !important;
+    min-height: 48px !important;
+    border-radius: 19px !important;
+  }
+
+  .bottom-nav .nav-bubble,
+  .games-nav .nav-bubble {
+    height: 48px !important;
+    border-radius: 19px !important;
+  }
+
+  .nav-img-icon,
+  .bottom-nav img,
+  .games-nav img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  #home .upper-page-hero,
+  .daily-hero-card,
+  .arena-home-card,
+  .daily-history-card,
+  .profile-widget,
+  .progress-widget,
+  .settings-card,
+  .sync-info-card,
+  .glass-card,
+  .category-card {
+    border-radius: var(--ios-card) !important;
+  }
+
+  .daily-hero-card,
+  .arena-home-card,
+  .daily-history-card,
+  .progress-widget,
+  .settings-card,
+  .sync-info-card {
+    padding: 16px !important;
+    margin-bottom: var(--ios-gap) !important;
+  }
+
+  .daily-hero-card {
+    min-height: 0 !important;
+    gap: 14px !important;
+  }
+
+  .daily-hero-copy h1,
+  .arena-home-card h2,
+  .home-section-head h2,
+  .progress-widget h2,
+  .settings-card h2 {
+    font-size: clamp(23px, 6.2vw, 30px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .daily-hero-copy p,
+  .arena-home-card p,
+  .progress-widget p,
+  .daily-history-card p {
+    font-size: 14px !important;
+    line-height: 1.38 !important;
+  }
+
+  .daily-stats,
+  .arena-home-stats,
+  .progress-mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .daily-stats > div,
+  .arena-home-stats > div,
+  .progress-mini-grid > div {
+    min-height: 68px !important;
+    padding: 10px !important;
+    border-radius: 17px !important;
+  }
+
+  .daily-stats b,
+  .arena-home-stats b,
+  .progress-mini-grid b {
+    font-size: clamp(22px, 6vw, 28px) !important;
+  }
+
+  .main-btn,
+  .primary-btn,
+  .glass-action.primary,
+  .arena-home-card .main-btn {
+    min-height: 52px !important;
+    border-radius: 20px !important;
+    font-size: 17px !important;
+  }
+
+  #profile.scroll-screen {
+    display: block !important;
+    min-height: 100dvh !important;
+  }
+
+  .profile-hero {
+    margin-top: 6px !important;
+    padding: 0 !important;
+    gap: 12px !important;
+  }
+
+  #profileAvatar,
+  .profile-avatar {
+    width: 104px !important;
+    height: 104px !important;
+  }
+
+  #profileUsername,
+  .profile-hero h1 {
+    font-size: clamp(36px, 10vw, 48px) !important;
+    line-height: 1 !important;
+  }
+
+  .profile-status-pill,
+  .profile-title-pill {
+    min-height: 38px !important;
+    padding-inline: 16px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+  }
+
+  #upperDrawer.upper-drawer {
+    width: min(334px, calc(100vw - 18px)) !important;
+    height: calc(100dvh - env(safe-area-inset-top, 0px) - 14px) !important;
+    top: calc(env(safe-area-inset-top, 0px) + 7px) !important;
+    left: 7px !important;
+    padding: 14px 10px 12px !important;
+    border-radius: 0 24px 24px 0 !important;
+  }
+
+  .upper-drawer-head {
+    grid-template-columns: minmax(0, 1fr) 42px !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .upper-drawer-head h2 {
+    font-size: 24px !important;
+  }
+
+  #closeUpperDrawer {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 15px !important;
+  }
+
+  #upperList .upper-row,
+  .upper-row,
+  .drawer-game-entry {
+    min-height: 70px !important;
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    gap: 9px !important;
+    padding: 9px !important;
+    border-radius: 19px !important;
+  }
+
+  .upper-icon,
+  .drawer-game-icon {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    border-radius: 15px !important;
+  }
+
+  .upper-title,
+  .drawer-game-entry strong {
+    font-size: 15px !important;
+  }
+
+  .upper-sub,
+  .drawer-game-entry span {
+    font-size: 10.5px !important;
+  }
+
+  .upper-progress-line,
+  .upper-mini-meta {
+    display: none !important;
+  }
+
+  .drawer-divider {
+    margin: 10px 0 !important;
+  }
+
+  #addUpperBtn {
+    min-height: 48px !important;
+    margin-top: 10px !important;
+    border-radius: 18px !important;
+    font-size: 17px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --ios-x: 12px;
+    --ios-gap: 10px;
+  }
+
+  .app-header {
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    gap: 8px !important;
+  }
+
+  .app-header-icon,
+  .app-header-profile {
+    width: 44px !important;
+  }
+
+  .app-header-search span {
+    font-size: 14px !important;
+  }
+}
