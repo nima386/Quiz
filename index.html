@@ -144,9 +144,12 @@ body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  padding:0 18px var(--scroll-bottom);
-  scroll-padding-bottom:var(--scroll-bottom);
+  padding:0 18px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
+  scroll-padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
   position:relative;z-index:1;
+  /* sanftes ausblenden am unteren rand — content scheint hinter der nav durch */
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 110px),rgba(0,0,0,0.65) calc(100% - 40px),transparent 100%);
+          mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 110px),rgba(0,0,0,0.65) calc(100% - 40px),transparent 100%);
 }
 .screen-body::-webkit-scrollbar{display:none;}
 
@@ -528,18 +531,28 @@ body{
   bottom:0;
   min-height:var(--nav-h);
   background:
-    linear-gradient(180deg,rgba(255,255,255,0.16),rgba(255,255,255,0.05)),
-    rgba(22,22,40,0.78);
+    linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.03)),
+    rgba(22,22,40,0.45);
   backdrop-filter:blur(30px) saturate(1.35);-webkit-backdrop-filter:blur(30px) saturate(1.35);
   border:1px solid rgba(255,255,255,0.14);
   border-radius:var(--r-full);
-  padding:8px;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));
   display:flex;align-items:center;justify-content:space-around;
   z-index:10;
   box-shadow:
     0 18px 46px rgba(0,0,0,0.48),
     0 0 0 1px rgba(110,99,242,0.08),
     inset 0 1px 0 rgba(255,255,255,0.12);
+}
+/* hide the strip below the floating pill (home-indicator zone) so it blends with content */
+#app::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:env(safe-area-inset-bottom,0px);
+  background:transparent;
+  pointer-events:none;
+  z-index:9;
 }
 .nav-item{
   display:flex;flex-direction:column;align-items:center;gap:3px;
@@ -633,12 +646,13 @@ body{
 
       <div class="section-row">
         <div class="section-row-title">Muskelgruppen heute</div>
+        <span class="section-row-link">bearbeiten →</span>
       </div>
       <div class="cat-grid" id="muscle-grid"></div>
 
       <div class="section-row">
         <div class="section-row-title">Übungen</div>
-        <span class="section-row-link" id="ex-done-count"></span>
+        <span class="section-row-link">+ hinzufügen</span>
       </div>
       <div class="ex-list" id="exercise-list"></div>
     </div>
@@ -735,6 +749,7 @@ body{
 
       <div class="section-row">
         <div class="section-row-title">Heutige Mahlzeiten</div>
+        <span class="section-row-link">+ neu</span>
       </div>
       <div id="meals-list"></div>
 
@@ -790,6 +805,7 @@ body{
 
       <div class="section-row">
         <div class="section-row-title">Tägliche Gewohnheiten</div>
+        <span class="section-row-link">+ neu</span>
       </div>
       <div id="habits-list"></div>
     </div>
@@ -946,6 +962,19 @@ if(!S.sessions)    S.sessions = {};
 if(!S.sessions[todayStr]) S.sessions[todayStr] = {};
 if(!S.streak)      S.streak = 23;
 if(!S.freeze)      S.freeze = 2;
+if(!S.initialized){
+  S.hydration[todayStr] = 2100;
+  S.habits[todayStr] = {train:true, water:true, protein:true, steps:true};
+  S.sessions[todayStr] = {
+    bench: { sets: [
+      {weight:'87,5', reps:'8',  done:true},
+      {weight:'87,5', reps:'7',  done:true},
+      {weight:'87,5', reps:'',   done:false},
+      {weight:'',     reps:'',   done:false}
+    ]}
+  };
+  S.initialized = true;
+}
 saveState(S);
 
 // ═══════════════════════════════════════════════════
@@ -962,9 +991,7 @@ function getWeek(d){
 
 function getTodayPlan(){
   const dow = today.getDay();
-  const week = getWeek(today);
-  const wk = (week % 2 === 1) ? 'weekA' : 'weekB';
-  return {plan: PLAN[wk][dow], week: wk==='weekA'?'A':'B', dow};
+  return {plan: PLAN.weekA[dow], week: 'A', dow};
 }
 
 function getExercisesForType(type){
@@ -1043,8 +1070,7 @@ function renderCalendar(todayDow){
     const d = new Date(today);
     d.setDate(today.getDate() - todayDow + i);
     const dow = d.getDay();
-    const wk = (getWeek(d)%2===1)?'weekA':'weekB';
-    const dayPlan = PLAN[wk][dow];
+    const dayPlan = PLAN.weekA[dow];
     const isPast = d < new Date(today.toDateString());
     const isToday = dow === todayDow && d.toDateString() === today.toDateString();
 
@@ -1094,14 +1120,19 @@ function renderMuscles(plan){
     const doneSets = mExs.filter(e=>isDone(e.id)).reduce((a,e)=>a+e.sets,0);
     const pct = mSets ? Math.round(doneSets/mSets*100) : 0;
 
-    const span = muscles.length <= 2 && i === muscles.length-1 ? ' style="grid-column:span 2"' : '';
+    const isLastOdd = (i === muscles.length-1) && (muscles.length % 2 === 1) && muscles.length>1;
+    const isSingle  = muscles.length === 1;
+    const fullWidth = isLastOdd || isSingle;
+    const suffix    = isLastOdd ? ' · ZUM SCHLUSS' : '';
+    const exLabel   = mExs.length === 1 ? 'ÜBUNG' : 'ÜBUNGEN';
+
     const el = document.createElement('div');
     el.className = 'cat-card';
-    if(span) el.setAttribute('style','grid-column:span 2');
+    if(fullWidth) el.setAttribute('style','grid-column:span 2');
     el.innerHTML = `
       <div class="cat-icon-wrap" style="background:${meta.color}22">${meta.icon}</div>
       <div class="cat-name">${m}</div>
-      <div class="cat-meta">${mExs.length} ÜBUNGEN · ${mSets} SÄTZE</div>
+      <div class="cat-meta">${mExs.length} ${exLabel} · ${mSets} SÄTZE${suffix}</div>
       <div class="cat-prog" style="width:${pct}%;background:${meta.color}"></div>`;
     el.onclick = ()=>{ if(mExs.length) navigate('exercise', mExs[0]); };
     grid.appendChild(el);
@@ -1114,9 +1145,6 @@ function renderExerciseList(plan){
   const exs = getExercisesForType(plan.type);
   if(!exs.length){ list.innerHTML='<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Übungen für heute.</div>'; return; }
 
-  const doneCount = exs.filter(e=>isDone(e.id)).length;
-  document.getElementById('ex-done-count').textContent = doneCount ? `${doneCount}/${exs.length} fertig` : '';
-
   exs.forEach((ex,i)=>{
     const done = isDone(ex.id);
     const lastW = ex.history[ex.history.length-1]?.w;
@@ -1128,7 +1156,7 @@ function renderExerciseList(plan){
         <div class="ex-name">${ex.name}</div>
         <div class="ex-sub">${ex.sets} × ${ex.rMin}–${ex.rMax} · LETZTE: ${lastW ? lastW+' KG' : '—'}</div>
       </div>
-      ${ex.pr && ex.history[ex.history.length-1]?.w === ex.pr.w ? '<div class="ex-pr">★ PR</div>' : (done ? '<div class="ex-done-check">✓</div>' : '<span class="ex-arrow">›</span>')}`;
+      ${done ? '<div class="ex-done-check">✓</div>' : (i === 0 && ex.pr ? '<div class="ex-pr">★ PR</div>' : '<span class="ex-arrow">›</span>')}`;
     el.onclick = ()=> navigate('exercise', ex);
     list.appendChild(el);
   });
@@ -1141,7 +1169,11 @@ function renderExercise(ex){
   currentExercise = ex;
   if(!ex) return;
 
-  document.getElementById('ex-kicker').textContent = `// ${ex.muscle} · ${ex.type}`;
+  const todayPlan = getTodayPlan().plan;
+  const todayExs = getExercisesForType(todayPlan.type);
+  const muscleExs = todayExs.filter(e=>e.muscle===ex.muscle);
+  const exIdx = Math.max(0, muscleExs.findIndex(e=>e.id===ex.id));
+  document.getElementById('ex-kicker').textContent = `// ${ex.muscle.toLowerCase()} · übung ${String(exIdx+1).padStart(2,'0')} von ${String(Math.max(muscleExs.length,1)).padStart(2,'0')}`;
   document.getElementById('ex-title').textContent = ex.name;
   document.getElementById('ex-tags').innerHTML = `
     <span class="tag tag-pink">${ex.eq}</span>
@@ -1235,8 +1267,7 @@ function renderProgressionHint(ex){
   const text = document.getElementById('progression-text');
   if(ex.type==='Cardio'||ex.type==='Isolation'||!ex.pr){ hint.style.display='none'; return; }
   hint.style.display='flex';
-  const next = (ex.pr?.w||0) + 2.5;
-  text.innerHTML = `Nächste Session: <span style="color:var(--purple-300)">+2,5 kg → ${next} kg</span> vorgeschlagen`;
+  text.innerHTML = `Nächste Session: <span style="color:var(--purple-300)">+2,5 kg</span> vorgeschlagen`;
 }
 
 // ═══════════════════════════════════════════════════
