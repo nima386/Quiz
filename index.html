@@ -147,9 +147,9 @@ body{
   padding:0 18px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
   scroll-padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
   position:relative;z-index:1;
-  /* sanftes ausblenden am unteren rand — content scheint hinter der nav durch */
-  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 110px),rgba(0,0,0,0.65) calc(100% - 40px),transparent 100%);
-          mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 110px),rgba(0,0,0,0.65) calc(100% - 40px),transparent 100%);
+  /* dezenter fade ganz unten — keine wichtigen inhalte werden geschluckt */
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 32px),transparent 100%);
+          mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 32px),transparent 100%);
 }
 .screen-body::-webkit-scrollbar{display:none;}
 
@@ -605,40 +605,41 @@ body{
 /* ── PROTEIN TRACKER (NEW) ── */
 .protein-tracker{
   background:var(--bg-card);border:1px solid var(--border-default);
-  border-radius:var(--r-lg);padding:16px;margin-bottom:14px;
+  border-radius:var(--r-lg);padding:14px 16px 16px;margin-bottom:14px;
   position:relative;overflow:hidden;
 }
-.protein-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.protein-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
 .protein-status{
-  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;
   letter-spacing:.12em;text-transform:uppercase;font-weight:700;
-  padding:4px 10px;border-radius:var(--r-full);
+  padding:4px 10px;border-radius:var(--r-full);white-space:nowrap;
 }
 .protein-val{
-  font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;
-  letter-spacing:-0.02em;line-height:1;margin-top:4px;
+  font-family:'JetBrains Mono',monospace;font-size:1.85rem;font-weight:700;
+  letter-spacing:-0.02em;line-height:1;margin-top:2px;
 }
-.protein-val .g{font-size:.95rem;color:var(--text-muted);font-weight:600;margin-left:2px;}
+.protein-val .g{font-size:.9rem;color:var(--text-muted);font-weight:600;margin-left:2px;}
 .protein-target{
-  font-family:'JetBrains Mono',monospace;font-size:.62rem;
-  color:var(--text-muted);letter-spacing:.06em;margin-top:4px;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--text-muted);letter-spacing:.06em;margin-top:3px;
 }
+.protein-bar-wrap{position:relative;margin-top:14px;padding-bottom:14px;}
 .protein-bar-track{
   position:relative;height:8px;background:rgba(255,255,255,0.05);
-  border-radius:4px;margin-top:14px;overflow:hidden;
+  border-radius:4px;overflow:visible;
 }
 .protein-bar-fill{
   height:8px;border-radius:4px;
   transition:width .4s var(--ease),background .25s var(--ease);
 }
 .protein-bar-marker{
-  position:absolute;top:-3px;width:2px;height:14px;
-  background:rgba(255,255,255,0.32);border-radius:1px;pointer-events:none;
+  position:absolute;top:-2px;width:2px;height:12px;
+  background:rgba(255,255,255,0.28);border-radius:1px;pointer-events:none;
 }
 .protein-marker-lbl{
-  position:absolute;top:18px;font-family:'JetBrains Mono',monospace;
-  font-size:.5rem;color:var(--text-muted);letter-spacing:.05em;
-  transform:translateX(-50%);
+  position:absolute;top:14px;font-family:'JetBrains Mono',monospace;
+  font-size:.5rem;color:var(--text-muted);letter-spacing:.04em;
+  transform:translateX(-50%);white-space:nowrap;
 }
 
 /* protein status colors */
@@ -651,43 +652,46 @@ body{
 /* ── STEPS CARD (NEW) ── */
 .steps-card{
   background:var(--bg-card);border:1px solid var(--border-default);
-  border-radius:var(--r-lg);padding:16px;margin-bottom:14px;
+  border-radius:var(--r-lg);padding:14px 16px 16px;margin-bottom:14px;
   position:relative;overflow:hidden;
 }
 .steps-card::before{
-  content:'';position:absolute;top:-30%;right:-15%;
-  width:160px;height:160px;
+  content:'';position:absolute;top:-40%;right:-20%;
+  width:200px;height:200px;
   background:radial-gradient(circle,rgba(110,99,242,0.18),transparent 70%);
-  filter:blur(35px);pointer-events:none;
+  filter:blur(40px);pointer-events:none;
 }
-.steps-head{display:flex;justify-content:space-between;align-items:center;}
-.steps-row{display:flex;align-items:center;gap:14px;margin-top:8px;position:relative;}
-.steps-arc-wrap{width:130px;height:78px;position:relative;flex-shrink:0;}
-.steps-arc-wrap svg{display:block;}
-.steps-arc-center{
-  position:absolute;left:50%;top:60%;transform:translate(-50%,-50%);
+.steps-head{position:relative;}
+.steps-arc-center-wrap{
+  position:relative;width:100%;
+  display:flex;justify-content:center;
+  margin:4px 0 2px;
+}
+.steps-arc-center-wrap svg{display:block;width:100%;max-width:240px;height:auto;}
+.steps-arc-text{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
   text-align:center;
 }
 .steps-val{
-  font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;
+  font-family:'JetBrains Mono',monospace;font-size:1.85rem;font-weight:700;
   letter-spacing:-0.02em;line-height:1;
 }
 .steps-goal{
   font-family:'JetBrains Mono',monospace;font-size:.6rem;
-  color:var(--text-muted);letter-spacing:.06em;margin-top:4px;
+  color:var(--text-muted);letter-spacing:.08em;margin-top:4px;
 }
 .steps-foot{
-  display:flex;justify-content:space-between;align-items:center;margin-top:12px;
-  position:relative;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:6px;position:relative;
 }
 .steps-km{
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  font-family:'JetBrains Mono',monospace;font-size:.66rem;
   color:var(--text-secondary);letter-spacing:.08em;
 }
 .steps-add{
   background:rgba(110,99,242,0.18);
   border:1px solid rgba(110,99,242,0.32);color:var(--purple-300);
-  padding:6px 14px;border-radius:var(--r-full);
+  padding:7px 16px;border-radius:var(--r-full);
   font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;
   letter-spacing:.08em;cursor:pointer;touch-action:manipulation;
 }
@@ -1007,10 +1011,14 @@ input[type=range]::-moz-range-thumb{
         </div>
         <div class="protein-val" id="protein-val">142<span class="g">g</span></div>
         <div class="protein-target" id="protein-target">Bedarf: 126–140g</div>
-        <div class="protein-bar-track">
-          <div class="protein-bar-fill" id="protein-bar-fill" style="width:0%;background:var(--green)"></div>
-          <div class="protein-bar-marker" id="protein-bar-min" style="left:0%"></div>
-          <div class="protein-bar-marker" id="protein-bar-max" style="left:0%"></div>
+        <div class="protein-bar-wrap">
+          <div class="protein-bar-track">
+            <div class="protein-bar-fill" id="protein-bar-fill" style="width:0%;background:var(--green)"></div>
+            <div class="protein-bar-marker" id="protein-bar-min" style="left:0%"></div>
+            <div class="protein-bar-marker" id="protein-bar-max" style="left:0%"></div>
+            <div class="protein-marker-lbl" id="protein-bar-min-lbl" style="left:0%">MIN</div>
+            <div class="protein-marker-lbl" id="protein-bar-max-lbl" style="left:0%">MAX</div>
+          </div>
         </div>
       </div>
 
@@ -1084,23 +1092,20 @@ input[type=range]::-moz-range-thumb{
         <div class="steps-head">
           <div class="kicker" style="margin-bottom:0">// SCHRITTE HEUTE</div>
         </div>
-        <div class="steps-row">
-          <div class="steps-arc-wrap">
-            <svg width="130" height="78" viewBox="0 0 130 78">
-              <path d="M 14 64 A 51 51 0 0 1 116 64" stroke="rgba(255,255,255,0.06)" stroke-width="9" fill="none" stroke-linecap="round"/>
-              <path id="steps-fill" d="M 14 64 A 51 51 0 0 1 116 64" stroke="url(#stepsGrad)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="160" stroke-dashoffset="160"/>
-              <defs>
-                <linearGradient id="stepsGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#6e63f2"/><stop offset="100%" stop-color="#26d47c"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="steps-arc-center">
-              <div class="steps-val" id="steps-val">0</div>
-              <div class="steps-goal" id="steps-goal">/ 10.000</div>
-            </div>
+        <div class="steps-arc-center-wrap">
+          <svg width="240" height="130" viewBox="0 0 240 130">
+            <path d="M 22 110 A 96 96 0 0 1 218 110" stroke="rgba(255,255,255,0.06)" stroke-width="11" fill="none" stroke-linecap="round"/>
+            <path id="steps-fill" d="M 22 110 A 96 96 0 0 1 218 110" stroke="url(#stepsGrad)" stroke-width="11" fill="none" stroke-linecap="round" stroke-dasharray="302" stroke-dashoffset="302"/>
+            <defs>
+              <linearGradient id="stepsGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#6e63f2"/><stop offset="100%" stop-color="#26d47c"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="steps-arc-text">
+            <div class="steps-val" id="steps-val">0</div>
+            <div class="steps-goal" id="steps-goal">/ 10.000</div>
           </div>
-          <div style="flex:1"></div>
         </div>
         <div class="steps-foot">
           <div class="steps-km" id="steps-km">≈ 0,0 km</div>
@@ -1935,8 +1940,14 @@ function renderProtein(){
   fillEl.style.width = pct + '%';
   fillEl.style.background = STATUS_COLOR[stat];
 
-  document.getElementById('protein-bar-min').style.left = ((target.min/visMax)*100)+'%';
-  document.getElementById('protein-bar-max').style.left = ((target.max/visMax)*100)+'%';
+  const minPct = (target.min/visMax)*100;
+  const maxPct = (target.max/visMax)*100;
+  document.getElementById('protein-bar-min').style.left = minPct+'%';
+  document.getElementById('protein-bar-max').style.left = maxPct+'%';
+  document.getElementById('protein-bar-min-lbl').style.left = minPct+'%';
+  document.getElementById('protein-bar-min-lbl').textContent = target.min+'g';
+  document.getElementById('protein-bar-max-lbl').style.left = maxPct+'%';
+  document.getElementById('protein-bar-max-lbl').textContent = target.max+'g';
 }
 
 // ═══════════════════════════════════════════════════
@@ -1952,7 +1963,7 @@ function renderSteps(){
   document.getElementById('steps-km').textContent = `≈ ${(cur*0.000762).toFixed(1).replace('.',',')} km`;
 
   const fill = document.getElementById('steps-fill');
-  const arcLen = 160;
+  const arcLen = 302;
   fill.style.strokeDashoffset = arcLen - pct*arcLen;
 
   // farbverlauf nach prozent
