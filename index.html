@@ -506,7 +506,7 @@ body{
 .habit-card{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-md);padding:11px 13px;
-  display:flex;align-items:center;gap:11px;margin-bottom:7px;
+  display:flex;align-items:center;gap:11px;
   transition:all .2s var(--ease);cursor:pointer;touch-action:manipulation;
 }
 .habit-check{
@@ -560,16 +560,17 @@ body{
   transition:all .2s var(--ease);flex:1;touch-action:manipulation;
   min-width:0;position:relative;z-index:1;
 }
-.nav-icon{font-size:1.18rem;line-height:1;filter:grayscale(1);opacity:.46;transition:all .2s;}
+.nav-icon{font-size:1.2rem;line-height:1;opacity:.55;transition:all .2s var(--ease);}
 .nav-label{
   font-family:'JetBrains Mono',monospace;font-size:.52rem;
   letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;font-weight:600;
+  transition:color .2s var(--ease);
 }
 .nav-item.active{
-  background:linear-gradient(135deg,rgba(110,99,242,0.28),rgba(110,99,242,0.12));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08),0 10px 22px rgba(0,0,0,0.18);
+  background:linear-gradient(135deg,rgba(110,99,242,0.32),rgba(110,99,242,0.14));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.10),0 10px 22px rgba(0,0,0,0.20);
 }
-.nav-item.active .nav-icon{filter:none;opacity:1;transform:translateY(-1px);}
+.nav-item.active .nav-icon{opacity:1;transform:translateY(-1px);}
 .nav-item.active .nav-label{color:var(--purple-300);}
 
 @media(max-width:360px){
@@ -846,6 +847,16 @@ input[type=range]::-moz-range-thumb{
   font-size:1.3rem;color:var(--purple-300);font-weight:700;
 }
 
+/* Empty-State Hint (when no meals/habits/exercises) */
+.empty-hint{
+  background:rgba(110,99,242,0.05);
+  border:1px dashed rgba(110,99,242,0.22);
+  border-radius:var(--r-md);
+  padding:18px 16px;text-align:center;
+  color:var(--text-secondary);font-size:.85rem;line-height:1.5;
+}
+.empty-hint strong{color:var(--purple-300);font-weight:700;}
+
 /* Color picker */
 .color-picker{display:flex;gap:8px;flex-wrap:wrap;}
 .color-pick{
@@ -924,17 +935,17 @@ input[type=range]::-moz-range-thumb{
   letter-spacing:.1em;cursor:pointer;touch-action:manipulation;
 }
 
-/* Card-action button (small ⋮ button on cards) */
+/* Card-action button (small ⋮ button — inline) */
 .card-action{
-  position:absolute;top:10px;right:10px;
-  width:30px;height:30px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   background:rgba(255,255,255,0.06);
   border:1px solid var(--border-default);
-  color:var(--text-secondary);font-size:.95rem;
+  color:var(--text-secondary);font-size:1.05rem;line-height:1;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;touch-action:manipulation;z-index:2;
+  cursor:pointer;touch-action:manipulation;flex-shrink:0;
+  margin-right:6px;
 }
-.card-action:active{background:rgba(255,255,255,0.12);}
+.card-action:active{background:rgba(255,255,255,0.14);}
 .del-btn{
   width:100%;background:rgba(240,96,96,0.12);
   border:1px solid rgba(240,96,96,0.30);color:var(--red, #f06060);
@@ -1168,14 +1179,14 @@ input[type=range]::-moz-range-thumb{
       </div>
       <div id="meals-list"></div>
 
-      <div class="hydration-card" style="position:relative;">
-        <button class="card-action" id="hydration-menu" aria-label="Wert setzen">⋮</button>
+      <div class="hydration-card">
         <div style="font-size:1.6rem;">💧</div>
-        <div style="flex:1;">
+        <div style="flex:1;min-width:0;">
           <div class="hydration-num" id="hydration-val">0,0<span style="font-size:.75rem;color:var(--text-muted)">L / 3L</span></div>
           <div class="hydration-lbl">// trinken heute</div>
           <div class="water-bar-wrap"><div class="water-bar" id="water-bar" style="width:0%"></div></div>
         </div>
+        <button class="card-action" id="hydration-menu" aria-label="Wert setzen">⋮</button>
         <button class="hydration-btn" id="hydration-btn">+ 250ml</button>
       </div>
     </div>
@@ -1209,8 +1220,7 @@ input[type=range]::-moz-range-thumb{
       </div>
 
       <!-- 🆕 STEPS CARD -->
-      <div class="steps-card" style="position:relative;">
-        <button class="card-action" id="steps-menu" aria-label="Wert setzen">⋮</button>
+      <div class="steps-card">
         <div class="steps-head">
           <div class="kicker" style="margin-bottom:0">// SCHRITTE HEUTE</div>
         </div>
@@ -1231,7 +1241,10 @@ input[type=range]::-moz-range-thumb{
         </div>
         <div class="steps-foot">
           <div class="steps-km" id="steps-km">≈ 0,0 km</div>
-          <button class="steps-add" id="steps-add">+ 500</button>
+          <div style="display:flex;align-items:center;">
+            <button class="card-action" id="steps-menu" aria-label="Wert setzen">⋮</button>
+            <button class="steps-add" id="steps-add">+ 500</button>
+          </div>
         </div>
       </div>
 
@@ -1837,77 +1850,52 @@ function loadState(){
 function saveState(s){ localStorage.setItem('forge_state', JSON.stringify(s)); }
 
 let S = loadState();
-if(!S.hydration)   S.hydration = {};
-if(!S.hydration[todayStr]) S.hydration[todayStr] = 0;
-if(!S.habits)      S.habits = {};
-if(!S.habits[todayStr]) S.habits[todayStr] = {};
-if(!S.sessions)    S.sessions = {};
-if(!S.sessions[todayStr]) S.sessions[todayStr] = {};
-if(!S.streak)      S.streak = 23;
-if(!S.freeze)      S.freeze = 2;
-if(!S.profile){
-  S.profile = {
-    name: 'Champion',
-    weightKg: 78,
-    stepGoal: 10000,
-    kcalGoal: 2500,
-    waterGoal: 3000,
-    proteinMin: 1.8,
-    proteinMax: 2.0
+
+// One-time Migration: alte Demo-Daten wegfegen damit alles auf Null startet
+if(S.schema !== 'fresh-v1'){
+  S = {
+    schema: 'fresh-v1',
+    profile: S.profile || {},
+    hydration: {}, steps: {}, habits: {}, sessions: {},
+    readiness: {}, meals: {}, prs: {},
+    userHabits: [], muscles: {}, exercises: {},
+    acceptedProgressions: {},
+    streak: 0, freeze: 2,
   };
 }
-if(!S.steps)       S.steps = {};
-if(S.steps[todayStr]==null) S.steps[todayStr] = 0;
-if(!S.readiness)   S.readiness = {};
+
+// Profil-Defaults (Konfig, keine Tracker-Daten)
+S.profile = Object.assign({
+  name:'',
+  weightKg: 75,
+  stepGoal: 10000,
+  kcalGoal: 2500,
+  waterGoal: 3000,
+  proteinMin: 1.8,
+  proteinMax: 2.0
+}, S.profile || {});
+
+// Container-Defaults
+if(!S.hydration)            S.hydration = {};
+if(!S.steps)                S.steps = {};
+if(!S.habits)               S.habits = {};
+if(!S.sessions)             S.sessions = {};
+if(!S.readiness)            S.readiness = {};
+if(!S.meals)                S.meals = {};
+if(!S.userHabits)           S.userHabits = [];
+if(!S.muscles)              S.muscles = {};
+if(!S.exercises)            S.exercises = {};
 if(!S.acceptedProgressions) S.acceptedProgressions = {};
-if(!S.meals)       S.meals = {};
-if(!S.meals[todayStr]){
-  S.meals[todayStr] = DEFAULT_MEALS.map((m,i)=>({
-    id: 'mseed-'+i, icon:m.icon, bg:m.bg, name:m.name, time:m.time,
-    items:m.items, kcal:m.kcal,
-    protein: Math.round(m.kcal*0.22/4),
-    carbs:   Math.round(m.kcal*0.50/4),
-    fat:     Math.round(m.kcal*0.28/9),
-    planned: !!m.planned
-  }));
-}
-if(!S.userHabits){
-  S.userHabits = DEFAULT_HABITS.map(h=>({...h, icon: h.id==='train'?'🏋️':h.id==='water'?'💧':h.id==='protein'?'🥩':h.id==='steps'?'🚶':h.id==='stretch'?'🧘':h.id==='sleep'?'😴':h.id==='read'?'📚':'✨'}));
-}
-// Editierbarer Trainingsplan: Muskelgruppen + Übungen pro Tagestyp
-if(!S.muscles){
-  S.muscles = {};
-  ['push','pull','legs','upper','lower','cardio'].forEach(type=>{
-    const todayKey = Object.values(PLAN.weekA).find(p=>p.type===type);
-    if(todayKey?.muscles){
-      S.muscles[type] = todayKey.muscles.map(name=>({
-        id: 'mg-'+type+'-'+name.toLowerCase(),
-        name, icon: MUSCLE_META[name]?.icon || '💪',
-        color: MUSCLE_META[name]?.color || 'var(--purple-500)'
-      }));
-    }
-  });
-}
-if(!S.exercises){
-  S.exercises = {};
-  Object.entries(EXERCISES).forEach(([type, list])=>{
-    S.exercises[type] = list.map(e=>({...e}));
-  });
-}
-if(!S.initialized){
-  S.hydration[todayStr] = 2100;
-  S.habits[todayStr] = {train:true, water:true, protein:true, steps:true};
-  S.sessions[todayStr] = {
-    bench: { sets: [
-      {weight:'87,5', reps:'8',  done:true},
-      {weight:'87,5', reps:'7',  done:true},
-      {weight:'87,5', reps:'',   done:false},
-      {weight:'',     reps:'',   done:false}
-    ]}
-  };
-  S.steps[todayStr] = 7842;
-  S.initialized = true;
-}
+if(S.streak == null)        S.streak = 0;
+if(S.freeze == null)        S.freeze = 2;
+
+// Heute-Defaults: nichts vorausgefüllt
+if(S.hydration[todayStr] == null) S.hydration[todayStr] = 0;
+if(S.steps[todayStr]     == null) S.steps[todayStr]     = 0;
+if(!S.habits[todayStr])           S.habits[todayStr]    = {};
+if(!S.sessions[todayStr])         S.sessions[todayStr]  = {};
+if(!S.meals[todayStr])            S.meals[todayStr]     = [];
+
 saveState(S);
 
 // ═══════════════════════════════════════════════════
@@ -1923,7 +1911,7 @@ function getTodayPlan(){
 }
 
 function getExercisesForType(type){
-  return (S.exercises && S.exercises[type]) || EXERCISES[type] || [];
+  return (S.exercises && S.exercises[type]) || [];
 }
 function getMusclesForType(type){
   return (S.muscles && S.muscles[type]) || [];
@@ -2020,21 +2008,29 @@ function renderCalendar(todayDow){
 }
 
 function renderTodayCard(plan, week){
+  const exs = getExercisesForType(plan.type);
+  const muscles = getMusclesForType(plan.type);
+
   document.getElementById('today-day-label').textContent = plan.label;
   document.getElementById('week-label').textContent = `Woche ${week}`;
-  const exs = getExercisesForType(plan.type);
-  const sets = exs.reduce((a,e)=>a+e.sets,0);
-  document.getElementById('stat-exercises').textContent = exs.length || '—';
+  document.getElementById('stat-exercises').textContent = exs.length || '0';
   document.getElementById('stat-duration').textContent = plan.duration ? `~${plan.duration}'` : '—';
 
-  const readiness = (S.readiness && S.readiness[todayStr] != null) ? S.readiness[todayStr] : 9.2;
   const readEl = document.getElementById('stat-readiness');
-  readEl.textContent = (typeof readiness === 'number') ? readiness.toFixed(1) : readiness;
-  readEl.style.color = readiness >= 7 ? 'var(--green)' : readiness >= 5 ? 'var(--amber)' : 'var(--red, #f06060)';
+  if(S.readiness[todayStr] != null){
+    const r = S.readiness[todayStr];
+    readEl.textContent = r.toFixed(1);
+    readEl.style.color = r >= 7 ? 'var(--green)' : r >= 5 ? 'var(--amber)' : 'var(--red, #f06060)';
+  } else {
+    readEl.textContent = '—';
+    readEl.style.color = 'var(--text-muted)';
+  }
 
   const cta = document.getElementById('start-workout-btn');
-  if(plan.type==='rest') cta.textContent = '😴 Ruhetag — erhol dich!';
-  else cta.textContent = '▶ Training starten';
+  if(plan.type==='rest')        cta.textContent = '😴 Ruhetag — erhol dich!';
+  else if(!muscles.length)      cta.textContent = '＋ Muskelgruppen anlegen';
+  else if(!exs.length)          cta.textContent = '＋ Übungen hinzufügen';
+  else                          cta.textContent = '▶ Training starten';
 }
 
 function renderMuscles(plan){
@@ -2102,6 +2098,11 @@ function renderExerciseList(plan){
     list.innerHTML = plan.type==='rest'
       ? '<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Übungen für heute.</div>'
       : '';
+  }
+
+  if(!exs.length && plan.type !== 'rest'){
+    list.innerHTML = '<div class="empty-hint">Noch keine Übungen — tippe auf <strong>+ Hinzufügen</strong> oder lege erst eine Muskelgruppe an</div>';
+    return;
   }
 
   exs.forEach((ex,i)=>{
@@ -2303,6 +2304,9 @@ function renderNutrition(){
     </div>`).join('');
 
   const mealsList = document.getElementById('meals-list');
+  if(!meals.length){
+    mealsList.innerHTML = '<div class="empty-hint">Noch keine Mahlzeiten — tippe auf <strong>+ Neu</strong></div>';
+  } else
   mealsList.innerHTML = meals.map(m=>`
     <div class="meal-card" data-meal-id="${m.id}" style="${m.planned?'opacity:.5;border-style:dashed;':''}">
       <div class="meal-icon" style="background:${m.bg||'rgba(110,99,242,0.15)'}">${m.icon||'🍽️'}</div>
@@ -2353,6 +2357,9 @@ function renderHabits(){
 
   const list = document.getElementById('habits-list');
   list.innerHTML = '';
+  if(!S.userHabits.length){
+    list.innerHTML = '<div class="empty-hint">Noch keine Gewohnheiten — tippe auf <strong>+ Neu</strong> um deine erste anzulegen</div>';
+  }
   S.userHabits.forEach(h=>{
     const isDone = !!S.habits[todayStr][h.id];
     const streak = isDone ? (h.streak||0)+1 : (h.streak||0);
@@ -2666,10 +2673,14 @@ function updateReadiness(){
   document.getElementById(id).addEventListener('input',updateReadiness);
 });
 
-// Training-Start öffnet Readiness statt direkt zu navigieren
+// Training-Start: je nach Setup-Stand → Muskel/Übung anlegen ODER Readiness öffnen
 document.getElementById('start-workout-btn').onclick = ()=>{
   const {plan} = getTodayPlan();
   if(plan.type==='rest') return;
+  const muscles = getMusclesForType(plan.type);
+  const exs = getExercisesForType(plan.type);
+  if(!muscles.length){ openMuscleEdit(null, plan.type); return; }
+  if(!exs.length){     openExerciseEdit(null, plan.type); return; }
   updateReadiness();
   showOverlay('readiness-overlay');
 };
