@@ -808,6 +808,44 @@ input[type=range]::-moz-range-thumb{
 }
 .rt-skip{background:transparent;color:var(--text-muted);padding:6px 8px;}
 
+/* ── EDITABLE LIST ITEMS ── */
+.meal-card,.habit-card{cursor:pointer;}
+.meal-card:active,.habit-card:active{transform:scale(0.985);}
+.del-btn{
+  width:100%;background:rgba(240,96,96,0.12);
+  border:1px solid rgba(240,96,96,0.30);color:var(--red, #f06060);
+  padding:11px;border-radius:var(--r-md);
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:.12em;cursor:pointer;touch-action:manipulation;margin-top:6px;
+}
+.icon-picker{display:flex;flex-wrap:wrap;gap:6px;}
+.icon-pick{
+  width:38px;height:38px;border-radius:var(--r-sm);
+  background:var(--bg-card);border:1px solid var(--border-default);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  cursor:pointer;touch-action:manipulation;
+}
+.icon-pick.sel{
+  background:rgba(110,99,242,0.18);
+  border-color:var(--purple-400);
+  box-shadow:var(--shadow-glow);
+}
+
+/* ── KONFETTI ── */
+.konfetti-stage{
+  position:absolute;inset:0;pointer-events:none;
+  z-index:60;overflow:hidden;
+}
+.konfetti{
+  position:absolute;width:8px;height:14px;
+  border-radius:2px;top:-20px;
+  animation:kfall 1.6s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes kfall{
+  0%   { transform:translateY(0) rotate(0deg);   opacity:1; }
+  100% { transform:translateY(110vh) rotate(720deg); opacity:.2; }
+}
+
 /* progression actions */
 .prog-actions{display:flex;gap:8px;margin-top:8px;}
 .prog-btn{
@@ -1094,6 +1132,97 @@ input[type=range]::-moz-range-thumb{
     </nav>
   </div>
 
+  <!-- KONFETTI STAGE -->
+  <div id="konfetti-stage" class="konfetti-stage" aria-hidden="true"></div>
+
+  <!-- ═══════ OVERLAY: MEAL ═══════ -->
+  <div id="meal-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;" id="meal-mode">// neue mahlzeit</div>
+          <div class="overlay-title" id="meal-title">Mahlzeit hinzufügen</div>
+        </div>
+        <button class="overlay-close" data-close="meal-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label>Icon</label>
+        <div class="icon-picker" id="meal-icons">
+          <span class="icon-pick" data-icon="🌅">🌅</span>
+          <span class="icon-pick" data-icon="☀️">☀️</span>
+          <span class="icon-pick" data-icon="🥤">🥤</span>
+          <span class="icon-pick" data-icon="🌙">🌙</span>
+          <span class="icon-pick" data-icon="🍎">🍎</span>
+          <span class="icon-pick" data-icon="🥗">🥗</span>
+          <span class="icon-pick" data-icon="🍗">🍗</span>
+          <span class="icon-pick" data-icon="🥚">🥚</span>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Name</label>
+        <input id="meal-name" type="text" placeholder="z.B. Frühstück">
+      </div>
+      <div class="set-group">
+        <label>Zeit</label>
+        <input id="meal-time" type="time">
+      </div>
+      <div class="set-group">
+        <label>Beschreibung (optional)</label>
+        <input id="meal-items" type="text" placeholder="z.B. OATS, BANANE, WHEY">
+      </div>
+      <div class="set-group">
+        <label>Kalorien (kcal)</label>
+        <input id="meal-kcal" type="number" inputmode="numeric">
+      </div>
+      <div class="set-group">
+        <label>Makros (Protein / Carbs / Fett, g)</label>
+        <div class="set-row-2" style="grid-template-columns:1fr 1fr 1fr">
+          <input id="meal-protein" type="number" step="0.1" inputmode="decimal" placeholder="P">
+          <input id="meal-carbs"   type="number" step="0.1" inputmode="decimal" placeholder="C">
+          <input id="meal-fat"     type="number" step="0.1" inputmode="decimal" placeholder="F">
+        </div>
+      </div>
+      <button class="cta-btn" id="meal-save">Speichern</button>
+      <button class="del-btn" id="meal-delete" style="display:none;">🗑 Mahlzeit löschen</button>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERLAY: HABIT ═══════ -->
+  <div id="habit-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;" id="habit-mode">// neuer habit</div>
+          <div class="overlay-title" id="habit-title">Gewohnheit hinzufügen</div>
+        </div>
+        <button class="overlay-close" data-close="habit-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label>Icon</label>
+        <div class="icon-picker" id="habit-icons">
+          <span class="icon-pick" data-icon="🏋️">🏋️</span>
+          <span class="icon-pick" data-icon="💧">💧</span>
+          <span class="icon-pick" data-icon="🥩">🥩</span>
+          <span class="icon-pick" data-icon="🚶">🚶</span>
+          <span class="icon-pick" data-icon="🧘">🧘</span>
+          <span class="icon-pick" data-icon="😴">😴</span>
+          <span class="icon-pick" data-icon="📚">📚</span>
+          <span class="icon-pick" data-icon="🧠">🧠</span>
+          <span class="icon-pick" data-icon="🍎">🍎</span>
+          <span class="icon-pick" data-icon="✨">✨</span>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Name</label>
+        <input id="habit-name" type="text" placeholder="z.B. 10.000 Schritte">
+      </div>
+      <button class="cta-btn" id="habit-save">Speichern</button>
+      <button class="del-btn" id="habit-delete" style="display:none;">🗑 Gewohnheit löschen</button>
+    </div>
+  </div>
+
   <!-- ═══════ OVERLAY: SETTINGS ═══════ -->
   <div id="settings-overlay" class="overlay">
     <div class="overlay-card">
@@ -1318,6 +1447,20 @@ if(!S.steps)       S.steps = {};
 if(S.steps[todayStr]==null) S.steps[todayStr] = 0;
 if(!S.readiness)   S.readiness = {};
 if(!S.acceptedProgressions) S.acceptedProgressions = {};
+if(!S.meals)       S.meals = {};
+if(!S.meals[todayStr]){
+  S.meals[todayStr] = DEFAULT_MEALS.map((m,i)=>({
+    id: 'mseed-'+i, icon:m.icon, bg:m.bg, name:m.name, time:m.time,
+    items:m.items, kcal:m.kcal,
+    protein: Math.round(m.kcal*0.22/4),
+    carbs:   Math.round(m.kcal*0.50/4),
+    fat:     Math.round(m.kcal*0.28/9),
+    planned: !!m.planned
+  }));
+}
+if(!S.userHabits){
+  S.userHabits = DEFAULT_HABITS.map(h=>({...h, icon: h.id==='train'?'🏋️':h.id==='water'?'💧':h.id==='protein'?'🥩':h.id==='steps'?'🚶':h.id==='stretch'?'🧘':h.id==='sleep'?'😴':h.id==='read'?'📚':'✨'}));
+}
 if(!S.initialized){
   S.hydration[todayStr] = 2100;
   S.habits[todayStr] = {train:true, water:true, protein:true, steps:true};
@@ -1634,7 +1777,7 @@ function renderNutrition(){
   const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('nutr-kicker').textContent = `// ${dateStr}`;
 
-  const meals = DEFAULT_MEALS;
+  const meals = S.meals[todayStr] || [];
   const totalKcal = meals.filter(m=>!m.planned).reduce((a,m)=>a+m.kcal,0);
   const goalKcal = 2500;
   const pct = Math.min(totalKcal/goalKcal, 1);
@@ -1663,14 +1806,17 @@ function renderNutrition(){
 
   const mealsList = document.getElementById('meals-list');
   mealsList.innerHTML = meals.map(m=>`
-    <div class="meal-card" style="${m.planned?'opacity:.5;border-style:dashed;':''}">
-      <div class="meal-icon" style="background:${m.bg}">${m.icon}</div>
-      <div style="flex:1">
+    <div class="meal-card" data-meal-id="${m.id}" style="${m.planned?'opacity:.5;border-style:dashed;':''}">
+      <div class="meal-icon" style="background:${m.bg||'rgba(110,99,242,0.15)'}">${m.icon||'🍽️'}</div>
+      <div style="flex:1;min-width:0">
         <div class="meal-name">${m.name}</div>
-        <div class="meal-meta">${m.time}${m.items?' · '+m.items:''}</div>
+        <div class="meal-meta">${m.time||''}${m.items?' · '+m.items:''}</div>
       </div>
-      <div class="meal-cal" style="${m.planned?'color:var(--text-muted)':''}">${m.kcal}</div>
+      <div class="meal-cal" style="${m.planned?'color:var(--text-muted)':''}">${m.kcal||0}</div>
     </div>`).join('');
+  mealsList.querySelectorAll('.meal-card').forEach(card=>{
+    card.onclick = ()=>openMealEdit(card.dataset.mealId);
+  });
 
   renderHydration();
   document.getElementById('hydration-btn').onclick = ()=>{
@@ -1697,8 +1843,8 @@ function renderHabits(){
   document.getElementById('streak-num').textContent = S.streak;
   document.getElementById('freeze-val').textContent = `${S.freeze} ❄️`;
 
-  const done = DEFAULT_HABITS.filter(h=>S.habits[todayStr][h.id]).length;
-  const total = DEFAULT_HABITS.length;
+  const done = S.userHabits.filter(h=>S.habits[todayStr][h.id]).length;
+  const total = S.userHabits.length;
   const pct = total ? Math.round(done/total*100) : 0;
   document.getElementById('habits-done-label').textContent = `${done} von ${total} erledigt`;
   document.getElementById('habits-pct').textContent = `${pct}%`;
@@ -1706,15 +1852,15 @@ function renderHabits(){
 
   const list = document.getElementById('habits-list');
   list.innerHTML = '';
-  DEFAULT_HABITS.forEach(h=>{
+  S.userHabits.forEach(h=>{
     const isDone = !!S.habits[todayStr][h.id];
-    const streak = isDone ? h.streak+1 : h.streak;
+    const streak = isDone ? (h.streak||0)+1 : (h.streak||0);
     const el = document.createElement('div');
     el.className = 'habit-card';
     el.innerHTML = `
       <div class="habit-check ${isDone?'done':''}">${isDone?'✓':''}</div>
       <div style="flex:1">
-        <div class="habit-name ${isDone?'done':''}">${h.name}</div>
+        <div class="habit-name ${isDone?'done':''}">${h.icon||'✨'} ${h.name}</div>
         <div class="habit-streak">${streak>0?'🔥 '+streak+' TAGE':'streak: 0'}</div>
       </div>`;
     el.onclick = ()=>{
@@ -1722,6 +1868,12 @@ function renderHabits(){
       saveState(S);
       renderHabits();
     };
+    // long-press → edit
+    let pressT;
+    el.addEventListener('touchstart',()=>{ pressT = setTimeout(()=>openHabitEdit(h.id), 600); }, {passive:true});
+    el.addEventListener('touchend',()=>clearTimeout(pressT));
+    el.addEventListener('touchmove',()=>clearTimeout(pressT));
+    el.addEventListener('contextmenu',e=>{ e.preventDefault(); openHabitEdit(h.id); });
     list.appendChild(el);
   });
 }
@@ -2013,6 +2165,194 @@ renderTodayCard = function(plan, week){
     el.textContent = r.toFixed(1);
     el.style.color = r >= 7 ? 'var(--green)' : r >= 5 ? 'var(--amber)' : 'var(--red, #f06060)';
   }
+};
+
+// ═══════════════════════════════════════════════════
+// MAHLZEITEN CRUD
+// ═══════════════════════════════════════════════════
+let _editingMealId = null;
+const MEAL_BG = {
+  '🌅':'rgba(255,202,40,0.15)','☀️':'rgba(110,99,242,0.15)','🥤':'rgba(38,198,218,0.15)',
+  '🌙':'rgba(240,98,146,0.15)','🍎':'rgba(240,96,96,0.15)', '🥗':'rgba(38,212,124,0.15)',
+  '🍗':'rgba(255,138,61,0.15)','🥚':'rgba(255,202,40,0.15)'
+};
+
+function selectIcon(pickerId, icon){
+  document.querySelectorAll(`#${pickerId} .icon-pick`).forEach(p=>{
+    p.classList.toggle('sel', p.dataset.icon === icon);
+  });
+}
+
+function openMealEdit(mealId){
+  _editingMealId = mealId || null;
+  const meals = S.meals[todayStr] || [];
+  const m = mealId ? meals.find(x=>x.id===mealId) : null;
+
+  document.getElementById('meal-mode').textContent  = m ? '// mahlzeit bearbeiten' : '// neue mahlzeit';
+  document.getElementById('meal-title').textContent = m ? 'Mahlzeit bearbeiten' : 'Mahlzeit hinzufügen';
+  document.getElementById('meal-delete').style.display = m ? 'block' : 'none';
+
+  document.getElementById('meal-name').value    = m?.name    || '';
+  document.getElementById('meal-time').value    = (m?.time||'').match(/^\d{2}:\d{2}/)?.[0] || '';
+  document.getElementById('meal-items').value   = m?.items   || '';
+  document.getElementById('meal-kcal').value    = m?.kcal    ?? '';
+  document.getElementById('meal-protein').value = m?.protein ?? '';
+  document.getElementById('meal-carbs').value   = m?.carbs   ?? '';
+  document.getElementById('meal-fat').value     = m?.fat     ?? '';
+  selectIcon('meal-icons', m?.icon || '🍎');
+
+  showOverlay('meal-overlay');
+}
+
+document.querySelectorAll('#meal-icons .icon-pick').forEach(p=>{
+  p.addEventListener('click',()=>selectIcon('meal-icons', p.dataset.icon));
+});
+
+document.getElementById('meal-save').addEventListener('click',()=>{
+  const icon = document.querySelector('#meal-icons .icon-pick.sel')?.dataset.icon || '🍎';
+  const data = {
+    icon,
+    bg: MEAL_BG[icon] || 'rgba(110,99,242,0.15)',
+    name:    document.getElementById('meal-name').value.trim() || 'Mahlzeit',
+    time:    document.getElementById('meal-time').value || '',
+    items:   document.getElementById('meal-items').value.trim().toUpperCase(),
+    kcal:    parseInt(document.getElementById('meal-kcal').value)    || 0,
+    protein: parseFloat(document.getElementById('meal-protein').value) || 0,
+    carbs:   parseFloat(document.getElementById('meal-carbs').value)   || 0,
+    fat:     parseFloat(document.getElementById('meal-fat').value)     || 0,
+    planned: false
+  };
+  if(!S.meals[todayStr]) S.meals[todayStr] = [];
+  if(_editingMealId){
+    const i = S.meals[todayStr].findIndex(x=>x.id===_editingMealId);
+    if(i>=0) S.meals[todayStr][i] = {...S.meals[todayStr][i], ...data};
+  } else {
+    S.meals[todayStr].push({id:'m-'+Date.now(), ...data});
+  }
+  saveState(S);
+  hideOverlay('meal-overlay');
+  if(currentScreen==='nutrition') renderNutrition();
+});
+
+document.getElementById('meal-delete').addEventListener('click',()=>{
+  if(!_editingMealId) return;
+  S.meals[todayStr] = (S.meals[todayStr]||[]).filter(x=>x.id!==_editingMealId);
+  saveState(S);
+  hideOverlay('meal-overlay');
+  if(currentScreen==='nutrition') renderNutrition();
+});
+
+// + neu Link in Nutrition
+document.querySelectorAll('#screen-nutrition .section-row-link').forEach(a=>{
+  a.addEventListener('click',()=>openMealEdit(null));
+});
+
+// ═══════════════════════════════════════════════════
+// HABITS CRUD
+// ═══════════════════════════════════════════════════
+let _editingHabitId = null;
+
+function openHabitEdit(habitId){
+  _editingHabitId = habitId || null;
+  const h = habitId ? S.userHabits.find(x=>x.id===habitId) : null;
+  document.getElementById('habit-mode').textContent  = h ? '// habit bearbeiten' : '// neuer habit';
+  document.getElementById('habit-title').textContent = h ? 'Gewohnheit bearbeiten' : 'Gewohnheit hinzufügen';
+  document.getElementById('habit-delete').style.display = h ? 'block' : 'none';
+  document.getElementById('habit-name').value = h?.name || '';
+  selectIcon('habit-icons', h?.icon || '✨');
+  showOverlay('habit-overlay');
+}
+
+document.querySelectorAll('#habit-icons .icon-pick').forEach(p=>{
+  p.addEventListener('click',()=>selectIcon('habit-icons', p.dataset.icon));
+});
+
+document.getElementById('habit-save').addEventListener('click',()=>{
+  const icon = document.querySelector('#habit-icons .icon-pick.sel')?.dataset.icon || '✨';
+  const name = document.getElementById('habit-name').value.trim() || 'Neue Gewohnheit';
+  if(_editingHabitId){
+    const i = S.userHabits.findIndex(x=>x.id===_editingHabitId);
+    if(i>=0) S.userHabits[i] = {...S.userHabits[i], icon, name};
+  } else {
+    S.userHabits.push({id:'h-'+Date.now(), icon, name, streak:0});
+  }
+  saveState(S);
+  hideOverlay('habit-overlay');
+  if(currentScreen==='habits') renderHabits();
+});
+
+document.getElementById('habit-delete').addEventListener('click',()=>{
+  if(!_editingHabitId) return;
+  S.userHabits = S.userHabits.filter(x=>x.id!==_editingHabitId);
+  if(S.habits[todayStr]) delete S.habits[todayStr][_editingHabitId];
+  saveState(S);
+  hideOverlay('habit-overlay');
+  if(currentScreen==='habits') renderHabits();
+});
+
+document.querySelectorAll('#screen-habits .section-row-link').forEach(a=>{
+  a.addEventListener('click',()=>openHabitEdit(null));
+});
+
+// ═══════════════════════════════════════════════════
+// PR DETECTION + KONFETTI
+// ═══════════════════════════════════════════════════
+function epley(w, r){ return w * (1 + r/30); }
+
+const KFETTI_COLORS = ['#6e63f2','#f06292','#26d47c','#ffca28','#26c6da','#a29bfe','#ff8a3d'];
+function fireKonfetti(){
+  const stage = document.getElementById('konfetti-stage');
+  for(let i=0;i<60;i++){
+    const k = document.createElement('div');
+    k.className = 'konfetti';
+    k.style.left = Math.random()*100 + '%';
+    k.style.background = KFETTI_COLORS[i % KFETTI_COLORS.length];
+    k.style.animationDelay = (Math.random()*0.4) + 's';
+    k.style.animationDuration = (1.2 + Math.random()*0.9) + 's';
+    k.style.transform = `rotate(${Math.random()*360}deg)`;
+    stage.appendChild(k);
+    setTimeout(()=>k.remove(), 2400);
+  }
+  if(navigator.vibrate) navigator.vibrate([60,40,80,40,120]);
+}
+
+function checkPR(ex, weight, reps){
+  if(!weight || !reps) return false;
+  const cur = epley(weight, reps);
+  const prW = ex.pr?.w || 0, prR = ex.pr?.r || 0;
+  const prE = epley(prW, prR);
+  if(cur > prE){
+    // update PR (in-memory copy on currentExercise so detail re-renders)
+    ex.pr = { w: weight, r: reps, date: new Date().toLocaleDateString('de',{day:'2-digit',month:'long'}) };
+    return true;
+  }
+  return false;
+}
+
+// hook check into setRow
+const _origRenderSetRows2 = renderSetRows;
+renderSetRows = function(ex){
+  _origRenderSetRows2(ex);
+  document.querySelectorAll('#set-rows .set-check').forEach((btn, i)=>{
+    btn.addEventListener('click',()=>{
+      if(!btn.classList.contains('done')) return;
+      const sess = S.sessions[todayStr][ex.id];
+      if(!sess) return;
+      const set = sess.sets[i];
+      const w = parseFloat(String(set.weight).replace(',','.'));
+      const r = parseInt(set.reps);
+      if(checkPR(ex, w, r)){
+        // persist new PR (in user's accepted progressions / state)
+        if(!S.prs) S.prs = {};
+        S.prs[ex.id] = ex.pr;
+        saveState(S);
+        fireKonfetti();
+        // update PR card live
+        document.getElementById('pr-text').textContent  = `${ex.pr.date} · ${ex.pr.r} Wdh.`;
+        document.getElementById('pr-value').innerHTML   = `${ex.pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>`;
+      }
+    });
+  });
 };
 
 renderTraining();
