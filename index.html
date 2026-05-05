@@ -751,6 +751,27 @@ body{
 }
 .set-group input:focus{border-color:var(--purple-400);}
 .set-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.auth-secondary{
+  width:100%;background:var(--bg-card);color:var(--text-primary);
+  border:1px solid var(--border-default);padding:13px;border-radius:var(--r-full);
+  font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:700;
+  cursor:pointer;touch-action:manipulation;
+}
+.auth-status{
+  min-height:20px;margin-top:10px;
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;line-height:1.45;
+  color:var(--text-secondary);letter-spacing:.04em;
+}
+.auth-status.error{color:#ff8a8a;}
+.auth-status.success{color:var(--green);}
+.auth-user-card{
+  display:none;background:rgba(110,99,242,0.10);
+  border:1px solid var(--border-glow);border-radius:var(--r-md);
+  padding:12px;margin-bottom:14px;
+}
+.auth-user-card.show{display:block;}
+.auth-user-email{font-weight:700;font-size:.92rem;margin-top:2px;word-break:break-word;}
 
 /* ── READINESS SLIDERS ── */
 .slider-group{margin-bottom:18px;}
@@ -1264,6 +1285,40 @@ input[type=range]::-moz-range-thumb{
   </div>
 
   <!-- ═══════ OVERLAY: READINESS ═══════ -->
+  <!-- AUTH -->
+  <div id="auth-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;">// account</div>
+          <div class="overlay-title">FORGE Login</div>
+        </div>
+        <button class="overlay-close" data-close="auth-overlay">âœ•</button>
+      </div>
+      <div class="auth-user-card" id="auth-user-card">
+        <div class="kicker" style="margin-bottom:2px;">// angemeldet</div>
+        <div class="auth-user-email" id="auth-user-email"></div>
+      </div>
+      <div id="auth-form">
+        <div class="set-group">
+          <label>E-Mail</label>
+          <input type="email" id="auth-email" placeholder="du@example.com" autocomplete="email">
+        </div>
+        <div class="set-group">
+          <label>Passwort</label>
+          <input type="password" id="auth-password" placeholder="mind. 6 Zeichen" autocomplete="current-password">
+        </div>
+        <div class="auth-actions">
+          <button class="auth-secondary" id="auth-signup">Registrieren</button>
+          <button class="cta-btn" id="auth-login">Einloggen</button>
+        </div>
+      </div>
+      <button class="auth-secondary" id="auth-logout" style="display:none;margin-top:4px;">Logout</button>
+      <div class="auth-status" id="auth-status"></div>
+    </div>
+  </div>
+
   <div id="readiness-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
@@ -1293,7 +1348,80 @@ input[type=range]::-moz-range-thumb{
 
 </div><!-- #app -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// Supabase browser config. This publishable key is safe for the PWA client.
+const SUPABASE_CONFIG = {
+  url: 'https://llpiuyksrpdogirblifr.supabase.co',
+  publishableKey: 'sb_publishable_rLqfnxo6j7_bm4-wrCSevA_IqfEEUOc'
+};
+
+function createForgeSupabaseClient(){
+  if(!window.supabase?.createClient){
+    console.warn('Supabase client not loaded yet.');
+    return null;
+  }
+  return window.supabase.createClient(
+    SUPABASE_CONFIG.url,
+    SUPABASE_CONFIG.publishableKey,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+}
+
+const forgeSupabase = createForgeSupabaseClient();
+window.FORGE_SUPABASE = {
+  config: SUPABASE_CONFIG,
+  client: forgeSupabase,
+  async testConnection(){
+    if(!forgeSupabase) return {ok:false, message:'Supabase client nicht geladen'};
+    const {data, error} = await forgeSupabase.auth.getSession();
+    if(error) return {ok:false, message:error.message};
+    return {ok:true, hasSession:!!data?.session};
+  }
+};
+
+window.FORGE_SUPABASE.testConnection().then(result=>{
+  console.info('FORGE Supabase connection', result);
+}).catch(error=>{
+  console.warn('FORGE Supabase connection failed', error);
+});
+
+let authSession = null;
+
+async function refreshAuthSession(){
+  if(!forgeSupabase) return null;
+  const {data, error} = await forgeSupabase.auth.getSession();
+  if(error){
+    console.warn('Could not read Supabase session', error);
+    return null;
+  }
+  authSession = data?.session || null;
+  updateAuthUI();
+  return authSession;
+}
+
+async function ensureRemoteProfile(session){
+  if(!forgeSupabase || !session?.user) return;
+  const p = S.profile || {};
+  const {error} = await forgeSupabase.from('profiles').upsert({
+    id: session.user.id,
+    display_name: p.name || 'Champion',
+    weight_kg: p.weightKg || null,
+    step_goal: p.stepGoal || 10000,
+    kcal_goal: p.kcalGoal || 2500,
+    water_goal: p.waterGoal || 3000,
+    protein_min: p.proteinMin || 1.8,
+    protein_max: p.proteinMax || 2.0,
+    updated_at: new Date().toISOString()
+  });
+  if(error) console.warn('Profile sync failed', error);
+}
 // ═══════════════════════════════════════════════════
 // DATA DEFAULTS
 // ═══════════════════════════════════════════════════
@@ -2018,6 +2146,34 @@ document.getElementById('steps-add').addEventListener('click',()=>{
 // ═══════════════════════════════════════════════════
 function showOverlay(id){ document.getElementById(id).classList.add('show'); }
 function hideOverlay(id){ document.getElementById(id).classList.remove('show'); }
+function setAuthStatus(message='', type=''){
+  const el = document.getElementById('auth-status');
+  if(!el) return;
+  el.textContent = message;
+  el.className = 'auth-status' + (type ? ' ' + type : '');
+}
+function updateAuthUI(){
+  const email = authSession?.user?.email || authSession?.user?.phone || '';
+  const signedIn = !!authSession?.user;
+  const form = document.getElementById('auth-form');
+  const logout = document.getElementById('auth-logout');
+  const card = document.getElementById('auth-user-card');
+  const emailEl = document.getElementById('auth-user-email');
+  if(form) form.style.display = signedIn ? 'none' : 'block';
+  if(logout) logout.style.display = signedIn ? 'block' : 'none';
+  if(card) card.classList.toggle('show', signedIn);
+  if(emailEl) emailEl.textContent = email;
+}
+function openSettings(){
+  const p = S.profile;
+  document.getElementById('set-weight').value   = p.weightKg;
+  document.getElementById('set-stepgoal').value = p.stepGoal;
+  document.getElementById('set-kcal').value     = p.kcalGoal;
+  document.getElementById('set-water').value    = p.waterGoal;
+  document.getElementById('set-pmin').value     = p.proteinMin;
+  document.getElementById('set-pmax').value     = p.proteinMax;
+  showOverlay('settings-overlay');
+}
 
 document.querySelectorAll('[data-close]').forEach(b=>{
   b.addEventListener('click',()=>hideOverlay(b.dataset.close));
@@ -2029,16 +2185,67 @@ document.querySelectorAll('.overlay').forEach(ov=>{
 // avatar tap → settings
 document.querySelectorAll('.avatar').forEach(av=>{
   av.addEventListener('click',()=>{
-    const p = S.profile;
-    document.getElementById('set-weight').value   = p.weightKg;
-    document.getElementById('set-stepgoal').value = p.stepGoal;
-    document.getElementById('set-kcal').value     = p.kcalGoal;
-    document.getElementById('set-water').value    = p.waterGoal;
-    document.getElementById('set-pmin').value     = p.proteinMin;
-    document.getElementById('set-pmax').value     = p.proteinMax;
-    showOverlay('settings-overlay');
+    if(authSession?.user) openSettings();
+    else {
+      updateAuthUI();
+      setAuthStatus('Melde dich an, damit deine Trainingsdaten spaeter in deinem Account gespeichert werden.');
+      showOverlay('auth-overlay');
+    }
   });
 });
+
+document.getElementById('auth-signup').addEventListener('click',async()=>{
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if(!email || password.length < 6) return setAuthStatus('Bitte E-Mail und Passwort mit mindestens 6 Zeichen eingeben.', 'error');
+  setAuthStatus('Account wird erstellt...');
+  const {data, error} = await forgeSupabase.auth.signUp({email, password});
+  if(error) return setAuthStatus(error.message, 'error');
+  authSession = data.session || null;
+  updateAuthUI();
+  if(authSession) {
+    await ensureRemoteProfile(authSession);
+    setAuthStatus('Account erstellt und angemeldet.', 'success');
+    hideOverlay('auth-overlay');
+    openSettings();
+  } else {
+    setAuthStatus('Account erstellt. Bitte bestaetige deine E-Mail und logge dich danach ein.', 'success');
+  }
+});
+
+document.getElementById('auth-login').addEventListener('click',async()=>{
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
+  setAuthStatus('Login laeuft...');
+  const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
+  if(error) return setAuthStatus(error.message, 'error');
+  authSession = data.session || null;
+  updateAuthUI();
+  await ensureRemoteProfile(authSession);
+  setAuthStatus('Eingeloggt.', 'success');
+  hideOverlay('auth-overlay');
+  openSettings();
+});
+
+document.getElementById('auth-logout').addEventListener('click',async()=>{
+  if(!forgeSupabase) return;
+  await forgeSupabase.auth.signOut();
+  authSession = null;
+  updateAuthUI();
+  setAuthStatus('Ausgeloggt.', 'success');
+});
+
+if(forgeSupabase){
+  forgeSupabase.auth.onAuthStateChange(async(_event, session)=>{
+    authSession = session;
+    updateAuthUI();
+    if(session?.user) await ensureRemoteProfile(session);
+  });
+  refreshAuthSession();
+}
 
 document.getElementById('settings-save').addEventListener('click',()=>{
   S.profile.weightKg   = parseFloat(document.getElementById('set-weight').value)   || S.profile.weightKg;
@@ -2048,6 +2255,7 @@ document.getElementById('settings-save').addEventListener('click',()=>{
   S.profile.proteinMin = parseFloat(document.getElementById('set-pmin').value)      || S.profile.proteinMin;
   S.profile.proteinMax = parseFloat(document.getElementById('set-pmax').value)      || S.profile.proteinMax;
   saveState(S);
+  ensureRemoteProfile(authSession);
   hideOverlay('settings-overlay');
   if(currentScreen==='nutrition') renderNutrition();
   if(currentScreen==='habits')    renderHabits();
