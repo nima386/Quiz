@@ -1094,6 +1094,30 @@ body.auth-locked .forge-auth-page{display:block;}
 .auth-status.auth-gate-status{margin-top:12px;}
 .auth-gate-panel{display:none;flex:1;flex-direction:column;}
 .auth-gate-panel.active{display:flex;}
+.welcome-title{
+  font-size:1.65rem;font-weight:900;line-height:1.05;text-align:center;
+  letter-spacing:-0.04em;margin:1.6rem 0 1rem;
+  color:var(--purple-300);
+}
+.welcome-copy{
+  text-align:center;color:var(--text-secondary);font-size:.92rem;line-height:1.6;
+  margin-bottom:1.8rem;
+}
+.welcome-features{display:grid;gap:10px;margin-bottom:2rem;}
+.feat-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg-card);border:1px solid var(--border-default);
+  border-radius:var(--r-md);padding:12px 14px;
+}
+.feat-icon{
+  width:34px;height:34px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.feat-text{font-size:.86rem;font-weight:700;}
+.feat-mono{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.12em;
+  color:var(--text-muted);text-transform:uppercase;margin-top:2px;
+}
 .profile-card{
   background:linear-gradient(135deg,rgba(110,99,242,0.20),rgba(240,98,146,0.12)),var(--bg-card);
   border:1px solid var(--border-glow);border-radius:var(--r-lg);padding:22px;margin:1rem 0 1.2rem;
@@ -1134,7 +1158,28 @@ body.auth-locked .forge-auth-page{display:block;}
       <div class="logo-tagline">train smart · log fast</div>
     </div>
 
-    <div id="auth-login-panel" class="auth-gate-panel active">
+    <div id="auth-welcome-panel" class="auth-gate-panel active">
+      <div class="welcome-title">Dein Plan.<br>Deine Daten.<br>Dein Weg.</div>
+      <div class="welcome-copy">Komplett anpassbar. Trainingsplan, Ernährung & Gewohnheiten — alles in einer App.</div>
+      <div class="welcome-features">
+        <div class="feat-row">
+          <div class="feat-icon icon-purple">🏋️</div>
+          <div><div class="feat-text">Modulare Trainingspläne</div><div class="feat-mono">Push · Pull · Beine · Custom</div></div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon icon-purple">📊</div>
+          <div><div class="feat-text">Auto-Tracking & PRs</div><div class="feat-mono">Verlauf · Progression · Streaks</div></div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon icon-purple">🥗</div>
+          <div><div class="feat-text">Protein- & Schritt-Ziele</div><div class="feat-mono">Health · Makros · Habits</div></div>
+        </div>
+      </div>
+      <button class="btn-primary" data-auth-mode="signup" style="margin-bottom:10px;">Account erstellen →</button>
+      <button class="btn-social" data-auth-mode="login" style="padding:14px;">Bereits Account? Anmelden</button>
+    </div>
+
+    <div id="auth-login-panel" class="auth-gate-panel">
       <div class="auth-header">
         <div class="auth-kicker">// willkommen zurück</div>
         <div class="auth-title">Hey, Champion 👊</div>
@@ -1998,16 +2043,20 @@ function normalizeState(){
 
 async function loadRemoteAppState(session){
   if(!forgeSupabase || !session?.user) return;
-  const {data, error} = await forgeSupabase
-    .from('user_app_state')
-    .select('state')
-    .eq('user_id', session.user.id)
-    .maybeSingle();
-  if(error){
+  try{
+    const {data, error} = await forgeSupabase
+      .from('user_app_state')
+      .select('state')
+      .eq('user_id', session.user.id)
+      .maybeSingle();
+    if(error){
+      console.warn('App state load failed', error);
+      return;
+    }
+    if(data?.state && typeof data.state === 'object') S = data.state;
+  } catch(error) {
     console.warn('App state load failed', error);
-    return;
   }
-  if(data?.state && typeof data.state === 'object') S = data.state;
   normalizeState();
 }
 
@@ -2859,7 +2908,7 @@ function setAuthStatus(message='', type=''){
   }
 }
 function setGateMode(mode){
-  ['login','signup','profile'].forEach(name=>{
+  ['welcome','login','signup','profile'].forEach(name=>{
     document.getElementById(`auth-${name}-panel`)?.classList.toggle('active', name === mode);
   });
 }
@@ -2896,7 +2945,7 @@ function updateAuthUI(){
     document.getElementById('gate-profile-avatar').textContent = displayName.split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
     setGateMode('profile');
   } else {
-    setGateMode('login');
+    setGateMode('welcome');
   }
 }
 function openSettings(){
@@ -2944,15 +2993,20 @@ document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
   const password = document.getElementById('gate-login-password').value;
   if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
   setAuthStatus('Login laeuft...');
-  const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
-  if(error) return setAuthStatus(error.message, 'error');
-  authSession = data.session || null;
-  if(authSession) {
-    await loadRemoteAppState(authSession);
-    await ensureRemoteProfile(authSession);
+  try{
+    const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
+    if(error) return setAuthStatus(error.message, 'error');
+    authSession = data.session || null;
+    if(!authSession) return setAuthStatus('Login erfolgreich, aber keine Session erhalten.', 'error');
     updateAuthUI();
     renderAll();
+    setAuthStatus('Eingeloggt.', 'success');
+    await loadRemoteAppState(authSession);
+    await ensureRemoteProfile(authSession);
+    renderAll();
     setAuthStatus('');
+  } catch(error){
+    setAuthStatus(error.message || 'Login fehlgeschlagen.', 'error');
   }
 });
 
@@ -2975,7 +3029,7 @@ document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
     setAuthStatus('');
   } else {
     setAuthStatus('Account erstellt. Bitte bestaetige deine E-Mail und logge dich danach ein.', 'success');
-    setGateMode('login');
+    setGateMode('welcome');
   }
 });
 
