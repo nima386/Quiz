@@ -40,12 +40,12 @@
   --r-xs:  6px; --r-sm: 10px; --r-md: 16px;
   --r-lg:  22px; --r-xl: 30px; --r-full: 9999px;
   --ease: cubic-bezier(0.25,0.46,0.45,0.94);
-  --nav-h: 76px;
+  --nav-h: 58px;
   --nav-gap: 0px;
   --nav-side: 16px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
-  --scroll-bottom: calc(var(--nav-h) + 18px);
+  --scroll-bottom: calc(var(--nav-h) + 16px);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -144,8 +144,8 @@ body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  padding:0 18px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
-  scroll-padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px);
+  padding:0 18px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px);
+  scroll-padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px);
   position:relative;z-index:1;
   /* dezenter fade ganz unten — keine wichtigen inhalte werden geschluckt */
   -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 32px),transparent 100%);
@@ -529,6 +529,7 @@ body{
   left:calc(var(--nav-side) + env(safe-area-inset-left,0px));
   right:calc(var(--nav-side) + env(safe-area-inset-right,0px));
   bottom:0;
+  height:var(--nav-h);
   min-height:var(--nav-h);
   background:
     linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.03)),
@@ -536,11 +537,11 @@ body{
   backdrop-filter:blur(30px) saturate(1.35);-webkit-backdrop-filter:blur(30px) saturate(1.35);
   border:1px solid rgba(255,255,255,0.14);
   border-radius:var(--r-full);
-  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));
+  padding:5px 6px calc(5px + env(safe-area-inset-bottom,0px));
   display:flex;align-items:center;justify-content:space-around;
   z-index:10;
   box-shadow:
-    0 18px 46px rgba(0,0,0,0.48),
+    0 14px 34px rgba(0,0,0,0.44),
     0 0 0 1px rgba(110,99,242,0.08),
     inset 0 1px 0 rgba(255,255,255,0.12);
 }
@@ -556,13 +557,13 @@ body{
 }
 .nav-item{
   display:flex;flex-direction:column;align-items:center;gap:3px;
-  cursor:pointer;padding:9px 10px;border-radius:var(--r-full);
+  cursor:pointer;padding:5px 9px;border-radius:var(--r-full);
   transition:all .2s var(--ease);flex:1;touch-action:manipulation;
   min-width:0;position:relative;z-index:1;
 }
-.nav-icon{font-size:1.2rem;line-height:1;opacity:.55;transition:all .2s var(--ease);}
+.nav-icon{font-size:1rem;line-height:1;opacity:.55;transition:all .2s var(--ease);}
 .nav-label{
-  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  font-family:'JetBrains Mono',monospace;font-size:.46rem;
   letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;font-weight:600;
   transition:color .2s var(--ease);
 }
@@ -575,8 +576,8 @@ body{
 
 @media(max-width:360px){
   :root{--nav-side:12px;}
-  .nav-label{font-size:.48rem;}
-  .nav-item{padding-inline:7px;}
+  .nav-label{font-size:.42rem;}
+  .nav-item{padding-inline:6px;}
 }
 
 /* ── DESKTOP CENTER ── */
@@ -990,9 +991,254 @@ input[type=range]::-moz-range-thumb{
 }
 .prog-yes{background:linear-gradient(135deg,var(--purple-500),#8a52f0);color:#fff;}
 .prog-no{background:rgba(255,255,255,0.06);border:1px solid var(--border-default);color:var(--text-secondary);}
+
+body.auth-locked #app{display:none;}
+.forge-auth-page{
+  position:fixed;inset:0;z-index:1000;
+  display:none;overflow-y:auto;
+  background:var(--bg-base);color:var(--text-primary);
+  -webkit-overflow-scrolling:touch;
+}
+body.auth-locked .forge-auth-page{display:block;}
+.forge-auth-page::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(420px 320px at 50% -8%,rgba(110,99,242,0.30),transparent 62%),
+    radial-gradient(340px 260px at 92% 100%,rgba(240,98,146,0.18),transparent 60%);
+}
+.forge-auth-inner{
+  min-height:100dvh;position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 28px) 26px calc(env(safe-area-inset-bottom,0px) + 28px);
+}
+.logo-block{display:flex;flex-direction:column;align-items:center;margin:1.8rem 0 1.6rem;}
+.logo-mark{
+  width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--purple-500),#8a52f0);
+  box-shadow:var(--shadow-glow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;margin-bottom:14px;position:relative;
+}
+.logo-mark::after{content:'';position:absolute;inset:-4px;border-radius:22px;border:1px solid var(--border-glow);}
+.logo-name{
+  font-size:1.7rem;font-weight:900;letter-spacing:-0.03em;line-height:1;
+  background:linear-gradient(135deg,#f0eeff 0%,#a29bfe 60%,#f06292 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-tagline{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.25em;
+  color:var(--text-muted);text-transform:uppercase;margin-top:6px;
+}
+.auth-header{margin-bottom:1.4rem;}
+.auth-kicker{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;
+  color:var(--purple-300);text-transform:uppercase;margin-bottom:6px;
+}
+.auth-title{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:4px;}
+.auth-sub{color:var(--text-secondary);font-size:.85rem;line-height:1.45;}
+.segmented{
+  display:grid;grid-template-columns:1fr 1fr;background:var(--bg-card);
+  border:1px solid var(--border-default);border-radius:var(--r-full);
+  padding:4px;margin-bottom:1.4rem;
+}
+.seg-btn{
+  background:transparent;border:none;padding:9px 0;border-radius:var(--r-full);
+  font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:600;
+  color:var(--text-secondary);cursor:pointer;letter-spacing:.04em;
+}
+.seg-btn.active{background:linear-gradient(135deg,var(--purple-500),#8a52f0);color:#fff;box-shadow:var(--shadow-glow);}
+.field-group{display:flex;flex-direction:column;gap:14px;margin-bottom:1.2rem;}
+.field-label{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.15em;
+  color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px;display:block;font-weight:600;
+}
+.field-wrap{position:relative;}
+.field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1rem;pointer-events:none;}
+.field{
+  width:100%;background:var(--bg-card);border:1px solid var(--border-default);
+  border-radius:var(--r-md);padding:13px 14px 13px 42px;
+  font-family:'Outfit',sans-serif;font-size:16px;color:var(--text-primary);outline:none;
+}
+.field:focus{border-color:var(--border-focus);background:var(--bg-card-hover);box-shadow:0 0 0 4px rgba(110,99,242,0.10);}
+.forgot-row{display:flex;justify-content:flex-end;margin-top:-6px;margin-bottom:1.2rem;}
+.forgot-link{
+  background:transparent;border:none;font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.12em;
+  color:var(--purple-300);text-transform:uppercase;font-weight:600;
+}
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,var(--purple-500),#8a52f0);
+  color:#fff;border:none;padding:15px;border-radius:var(--r-full);
+  font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;
+  box-shadow:var(--shadow-glow);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.divider{display:flex;align-items:center;gap:12px;margin:1.4rem 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-default);}
+.divider span{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.25em;color:var(--text-muted);text-transform:uppercase;}
+.social-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.4rem;}
+.btn-social{
+  background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--r-md);
+  padding:12px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;
+  color:var(--text-primary);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.auth-footer{margin-top:auto;padding-bottom:1rem;text-align:center;font-size:.82rem;color:var(--text-secondary);}
+.auth-footer button{background:transparent;border:none;color:var(--purple-300);font-weight:600;margin-left:4px;}
+.pw-strength{display:flex;gap:4px;margin-top:8px;}
+.pw-bar{flex:1;height:3px;border-radius:2px;background:var(--bg-elevated);}
+.pw-bar.weak{background:var(--red);}
+.pw-bar.med{background:var(--amber);}
+.pw-bar.strong{background:var(--green);}
+.pw-strength-label{
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.15em;
+  color:var(--text-muted);text-transform:uppercase;margin-top:6px;font-weight:600;
+}
+.auth-status.auth-gate-status{margin-top:12px;}
+.auth-gate-panel{display:none;flex:1;flex-direction:column;}
+.auth-gate-panel.active{display:flex;}
+.profile-card{
+  background:linear-gradient(135deg,rgba(110,99,242,0.20),rgba(240,98,146,0.12)),var(--bg-card);
+  border:1px solid var(--border-glow);border-radius:var(--r-lg);padding:22px;margin:1rem 0 1.2rem;
+  text-align:center;position:relative;overflow:hidden;
+}
+.profile-avatar{
+  width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,var(--purple-500),var(--pink));
+  margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;font-weight:800;color:#fff;box-shadow:var(--shadow-glow);
+}
+.profile-name{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;}
+.profile-email{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-secondary);letter-spacing:.05em;margin-top:4px;word-break:break-word;}
+.settings-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.4rem;}
+.setting-row{
+  background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--r-md);
+  padding:13px 14px;display:flex;align-items:center;gap:12px;
+}
+.setting-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.icon-purple{background:rgba(110,99,242,0.18);color:var(--purple-300);}
+.icon-red{background:rgba(240,96,96,0.15);color:var(--red);}
+.setting-text{flex:1;min-width:0;}
+.setting-name{font-size:.88rem;font-weight:600;}
+.setting-sub{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--text-muted);letter-spacing:.08em;margin-top:2px;text-transform:uppercase;}
+.btn-logout{
+  width:100%;background:rgba(240,96,96,0.10);border:1px solid rgba(240,96,96,0.25);
+  color:var(--red);padding:14px;border-radius:var(--r-full);
+  font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;
+}
+.version-mono{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:1rem 0;}
 </style>
 </head>
-<body>
+<body class="auth-locked">
+<section id="auth-gate" class="forge-auth-page" aria-label="FORGE Login">
+  <div class="forge-auth-inner">
+    <div class="logo-block">
+      <div class="logo-mark">⚡</div>
+      <div class="logo-name">FORGE</div>
+      <div class="logo-tagline">train smart · log fast</div>
+    </div>
+
+    <div id="auth-login-panel" class="auth-gate-panel active">
+      <div class="auth-header">
+        <div class="auth-kicker">// willkommen zurück</div>
+        <div class="auth-title">Hey, Champion 👊</div>
+        <div class="auth-sub">Melde dich an und mach da weiter, wo du aufgehört hast.</div>
+      </div>
+      <div class="segmented">
+        <button class="seg-btn active" data-auth-mode="login">Anmelden</button>
+        <button class="seg-btn" data-auth-mode="signup">Registrieren</button>
+      </div>
+      <div class="field-group">
+        <div>
+          <label class="field-label">E-Mail</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉</span>
+            <input type="email" class="field" id="gate-login-email" placeholder="du@beispiel.com" autocomplete="email">
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Passwort</label>
+          <div class="field-wrap">
+            <span class="field-icon">🔒</span>
+            <input type="password" class="field" id="gate-login-password" placeholder="Dein Passwort" autocomplete="current-password">
+          </div>
+        </div>
+      </div>
+      <div class="forgot-row"><button class="forgot-link" id="gate-reset-password">// passwort vergessen?</button></div>
+      <button class="btn-primary" id="gate-login-btn">Anmelden →</button>
+      <div class="divider"><span>// oder schnell mit</span></div>
+      <div class="social-row">
+        <button class="btn-social" id="gate-apple-login">Apple</button>
+        <button class="btn-social" id="gate-google-login">G Google</button>
+      </div>
+      <div class="auth-footer">Noch kein Account? <button data-auth-mode="signup">Jetzt registrieren</button></div>
+    </div>
+
+    <div id="auth-signup-panel" class="auth-gate-panel">
+      <div class="auth-header">
+        <div class="auth-kicker">// neu hier</div>
+        <div class="auth-title">Account erstellen</div>
+        <div class="auth-sub">Starte deinen Trainings-Track in unter einer Minute.</div>
+      </div>
+      <div class="segmented">
+        <button class="seg-btn" data-auth-mode="login">Anmelden</button>
+        <button class="seg-btn active" data-auth-mode="signup">Registrieren</button>
+      </div>
+      <div class="field-group">
+        <div>
+          <label class="field-label">Name</label>
+          <div class="field-wrap">
+            <span class="field-icon">👤</span>
+            <input type="text" class="field" id="gate-signup-name" placeholder="Wie sollen wir dich nennen?" autocomplete="name">
+          </div>
+        </div>
+        <div>
+          <label class="field-label">E-Mail</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉</span>
+            <input type="email" class="field" id="gate-signup-email" placeholder="du@beispiel.com" autocomplete="email">
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Passwort</label>
+          <div class="field-wrap">
+            <span class="field-icon">🔒</span>
+            <input type="password" class="field" id="gate-signup-password" placeholder="Mind. 8 Zeichen" autocomplete="new-password">
+          </div>
+          <div class="pw-strength" id="gate-pw-bars">
+            <div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div>
+          </div>
+          <div class="pw-strength-label" id="gate-pw-label">// passwort eingeben</div>
+        </div>
+      </div>
+      <button class="btn-primary" id="gate-signup-btn">Konto erstellen ⚡</button>
+      <div class="divider"><span>// oder</span></div>
+      <div class="social-row">
+        <button class="btn-social" id="gate-apple-signup">Apple</button>
+        <button class="btn-social" id="gate-google-signup">G Google</button>
+      </div>
+      <div class="auth-footer">Schon dabei? <button data-auth-mode="login">Jetzt einloggen</button></div>
+    </div>
+
+    <div id="auth-profile-panel" class="auth-gate-panel">
+      <div class="auth-header" style="margin-top:.6rem;">
+        <div class="auth-kicker">// mein konto</div>
+        <div class="auth-title">Profil & Settings</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-avatar" id="gate-profile-avatar">JM</div>
+        <div class="profile-name" id="gate-profile-name">Champion</div>
+        <div class="profile-email" id="gate-profile-email"></div>
+      </div>
+      <div class="settings-list">
+        <div class="setting-row"><div class="setting-icon icon-purple">👤</div><div class="setting-text"><div class="setting-name">Persönliche Daten</div><div class="setting-sub">Profil · Ziele · Account</div></div></div>
+        <div class="setting-row"><div class="setting-icon icon-purple">💾</div><div class="setting-text"><div class="setting-name">Daten & Backup</div><div class="setting-sub">Supabase · geschützt · synchron</div></div></div>
+        <div class="setting-row"><div class="setting-icon icon-red">⏻</div><div class="setting-text"><div class="setting-name">Abmelden</div><div class="setting-sub">Zur Login-Seite zurück</div></div></div>
+      </div>
+      <button class="btn-logout" id="gate-logout-btn">⏻ Abmelden</button>
+      <button class="btn-primary" id="gate-open-app-btn" style="margin-top:10px;">Zur App →</button>
+      <div class="version-mono">// forge · account required</div>
+    </div>
+
+    <div class="auth-status auth-gate-status" id="gate-auth-status"></div>
+  </div>
+</section>
 <div id="app">
 
   <!-- ═══════ SCREEN: TRAINING ═══════ -->
@@ -1639,7 +1885,12 @@ async function refreshAuthSession(){
     return null;
   }
   authSession = data?.session || null;
+  if(authSession?.user) {
+    await loadRemoteAppState(authSession);
+    await ensureRemoteProfile(authSession);
+  }
   updateAuthUI();
+  if(authSession?.user) renderAll();
   return authSession;
 }
 
@@ -1714,6 +1965,60 @@ async function syncWorkoutExercise(ex, dateStr=todayStr){
     .upsert(rows, {onConflict:'workout_day_id,exercise_id,set_index'});
 
   if(setsError) console.warn('Workout set sync failed', setsError);
+}
+
+function normalizeState(){
+  S.profile = Object.assign({
+    name:'',
+    weightKg: 75,
+    stepGoal: 10000,
+    kcalGoal: 2500,
+    waterGoal: 3000,
+    proteinMin: 1.8,
+    proteinMax: 2.0
+  }, S.profile || {});
+  if(!S.hydration) S.hydration = {};
+  if(!S.steps) S.steps = {};
+  if(!S.habits) S.habits = {};
+  if(!S.sessions) S.sessions = {};
+  if(!S.readiness) S.readiness = {};
+  if(!S.meals) S.meals = {};
+  if(!S.userHabits) S.userHabits = [];
+  if(!S.muscles) S.muscles = {};
+  if(!S.exercises) S.exercises = {};
+  if(!S.acceptedProgressions) S.acceptedProgressions = {};
+  if(S.streak == null) S.streak = 0;
+  if(S.freeze == null) S.freeze = 2;
+  if(S.hydration[todayStr] == null) S.hydration[todayStr] = 0;
+  if(S.steps[todayStr] == null) S.steps[todayStr] = 0;
+  if(!S.habits[todayStr]) S.habits[todayStr] = {};
+  if(!S.sessions[todayStr]) S.sessions[todayStr] = {};
+  if(!S.meals[todayStr]) S.meals[todayStr] = [];
+}
+
+async function loadRemoteAppState(session){
+  if(!forgeSupabase || !session?.user) return;
+  const {data, error} = await forgeSupabase
+    .from('user_app_state')
+    .select('state')
+    .eq('user_id', session.user.id)
+    .maybeSingle();
+  if(error){
+    console.warn('App state load failed', error);
+    return;
+  }
+  if(data?.state && typeof data.state === 'object') S = data.state;
+  normalizeState();
+}
+
+async function syncAppState(state=S){
+  if(!forgeSupabase || !authSession?.user) return;
+  const {error} = await forgeSupabase.from('user_app_state').upsert({
+    user_id: authSession.user.id,
+    state,
+    updated_at: new Date().toISOString()
+  });
+  if(error) console.warn('App state sync failed. Run supabase-app-state.sql if this table is missing.', error);
 }
 // ═══════════════════════════════════════════════════
 // DATA DEFAULTS
@@ -1844,10 +2149,14 @@ const today = new Date();
 const todayStr = today.toISOString().slice(0,10);
 
 function loadState(){
-  try{ return JSON.parse(localStorage.getItem('forge_state')||'{}'); }
-  catch(e){ return {}; }
+  return {};
 }
-function saveState(s){ localStorage.setItem('forge_state', JSON.stringify(s)); }
+let _stateSyncTimer = null;
+function saveState(s){
+  if(!authSession?.user || !forgeSupabase) return;
+  clearTimeout(_stateSyncTimer);
+  _stateSyncTimer = setTimeout(()=>syncAppState(s), 350);
+}
 
 let S = loadState();
 
@@ -1952,6 +2261,13 @@ function navigate(screen, data){
   if(screen === 'exercise')  renderExercise(data);
   if(screen === 'nutrition') renderNutrition();
   if(screen === 'habits')    renderHabits();
+}
+
+function renderAll(){
+  if(currentScreen === 'training') renderTraining();
+  if(currentScreen === 'exercise') renderExercise(currentExercise);
+  if(currentScreen === 'nutrition') renderNutrition();
+  if(currentScreen === 'habits') renderHabits();
 }
 
 // Global nav listeners
@@ -2536,6 +2852,30 @@ function setAuthStatus(message='', type=''){
   if(!el) return;
   el.textContent = message;
   el.className = 'auth-status' + (type ? ' ' + type : '');
+  const gate = document.getElementById('gate-auth-status');
+  if(gate){
+    gate.textContent = message;
+    gate.className = 'auth-status auth-gate-status' + (type ? ' ' + type : '');
+  }
+}
+function setGateMode(mode){
+  ['login','signup','profile'].forEach(name=>{
+    document.getElementById(`auth-${name}-panel`)?.classList.toggle('active', name === mode);
+  });
+}
+function updatePasswordStrength(){
+  const value = document.getElementById('gate-signup-password')?.value || '';
+  const bars = [...document.querySelectorAll('#gate-pw-bars .pw-bar')];
+  let score = 0;
+  if(value.length >= 8) score++;
+  if(/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+  if(/\d/.test(value)) score++;
+  if(/[^A-Za-z0-9]/.test(value)) score++;
+  bars.forEach((bar,i)=>{
+    bar.className = 'pw-bar' + (i < score ? (score < 2 ? ' weak' : score < 4 ? ' med' : ' strong') : '');
+  });
+  const label = document.getElementById('gate-pw-label');
+  if(label) label.textContent = score >= 4 ? `// stark · ${value.length} zeichen` : score >= 2 ? `// ok · ${value.length} zeichen` : '// zu schwach';
 }
 function updateAuthUI(){
   const email = authSession?.user?.email || authSession?.user?.phone || '';
@@ -2548,6 +2888,16 @@ function updateAuthUI(){
   if(logout) logout.style.display = signedIn ? 'block' : 'none';
   if(card) card.classList.toggle('show', signedIn);
   if(emailEl) emailEl.textContent = email;
+  document.body.classList.toggle('auth-locked', !signedIn);
+  if(signedIn){
+    const displayName = S.profile?.name || 'Champion';
+    document.getElementById('gate-profile-name').textContent = displayName;
+    document.getElementById('gate-profile-email').textContent = email;
+    document.getElementById('gate-profile-avatar').textContent = displayName.split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
+    setGateMode('profile');
+  } else {
+    setGateMode('login');
+  }
 }
 function openSettings(){
   const p = S.profile;
@@ -2570,13 +2920,84 @@ document.querySelectorAll('.overlay').forEach(ov=>{
 // avatar tap → settings
 document.querySelectorAll('.avatar').forEach(av=>{
   av.addEventListener('click',()=>{
-    if(authSession?.user) openSettings();
+    if(authSession?.user) {
+      updateAuthUI();
+      setGateMode('profile');
+      document.body.classList.add('auth-locked');
+    }
     else {
       updateAuthUI();
       setAuthStatus('Melde dich an, damit deine Trainingsdaten spaeter in deinem Account gespeichert werden.');
       showOverlay('auth-overlay');
     }
   });
+});
+
+document.querySelectorAll('[data-auth-mode]').forEach(btn=>{
+  btn.addEventListener('click',()=>setGateMode(btn.dataset.authMode));
+});
+document.getElementById('gate-signup-password')?.addEventListener('input',updatePasswordStrength);
+
+document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  const email = document.getElementById('gate-login-email').value.trim();
+  const password = document.getElementById('gate-login-password').value;
+  if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
+  setAuthStatus('Login laeuft...');
+  const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
+  if(error) return setAuthStatus(error.message, 'error');
+  authSession = data.session || null;
+  if(authSession) {
+    await loadRemoteAppState(authSession);
+    await ensureRemoteProfile(authSession);
+    updateAuthUI();
+    renderAll();
+    setAuthStatus('');
+  }
+});
+
+document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  const name = document.getElementById('gate-signup-name').value.trim();
+  const email = document.getElementById('gate-signup-email').value.trim();
+  const password = document.getElementById('gate-signup-password').value;
+  if(!email || password.length < 8) return setAuthStatus('Bitte E-Mail und Passwort mit mindestens 8 Zeichen eingeben.', 'error');
+  if(name) S.profile.name = name;
+  setAuthStatus('Account wird erstellt...');
+  const {data, error} = await forgeSupabase.auth.signUp({email, password, options:{data:{display_name:name || 'Champion'}}});
+  if(error) return setAuthStatus(error.message, 'error');
+  authSession = data.session || null;
+  if(authSession) {
+    await ensureRemoteProfile(authSession);
+    await syncAppState(S);
+    updateAuthUI();
+    renderAll();
+    setAuthStatus('');
+  } else {
+    setAuthStatus('Account erstellt. Bitte bestaetige deine E-Mail und logge dich danach ein.', 'success');
+    setGateMode('login');
+  }
+});
+
+document.getElementById('gate-logout-btn')?.addEventListener('click',async()=>{
+  if(!forgeSupabase) return;
+  await syncAppState(S);
+  await forgeSupabase.auth.signOut();
+  authSession = null;
+  S = loadState();
+  normalizeState();
+  updateAuthUI();
+  setAuthStatus('Ausgeloggt.', 'success');
+});
+document.getElementById('gate-open-app-btn')?.addEventListener('click',()=>{
+  document.body.classList.remove('auth-locked');
+});
+
+['gate-apple-login','gate-apple-signup'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('click',()=>setAuthStatus('Apple Login ist vorbereitet, muss in Supabase/Apple Developer noch aktiviert werden.', 'error'));
+});
+['gate-google-login','gate-google-signup'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('click',()=>setAuthStatus('Google Login ist vorbereitet, Provider ist noch nicht aktiviert.', 'error'));
 });
 
 document.getElementById('auth-signup').addEventListener('click',async()=>{
@@ -2617,8 +3038,11 @@ document.getElementById('auth-login').addEventListener('click',async()=>{
 
 document.getElementById('auth-logout').addEventListener('click',async()=>{
   if(!forgeSupabase) return;
+  await syncAppState(S);
   await forgeSupabase.auth.signOut();
   authSession = null;
+  S = loadState();
+  normalizeState();
   updateAuthUI();
   setAuthStatus('Ausgeloggt.', 'success');
 });
@@ -2626,8 +3050,12 @@ document.getElementById('auth-logout').addEventListener('click',async()=>{
 if(forgeSupabase){
   forgeSupabase.auth.onAuthStateChange(async(_event, session)=>{
     authSession = session;
+    if(session?.user) {
+      await loadRemoteAppState(session);
+      await ensureRemoteProfile(session);
+    }
     updateAuthUI();
-    if(session?.user) await ensureRemoteProfile(session);
+    if(session?.user) renderAll();
   });
   refreshAuthSession();
 }
