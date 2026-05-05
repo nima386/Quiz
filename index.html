@@ -836,6 +836,105 @@ input[type=range]::-moz-range-thumb{
 /* ── EDITABLE LIST ITEMS ── */
 .meal-card,.habit-card{cursor:pointer;}
 .meal-card:active,.habit-card:active{transform:scale(0.985);}
+
+/* + Add Muscle/Exercise Card */
+.cat-add{
+  background:rgba(110,99,242,0.06);
+  border:1px dashed rgba(110,99,242,0.28);
+}
+.cat-add .cat-icon-wrap{
+  font-size:1.3rem;color:var(--purple-300);font-weight:700;
+}
+
+/* Color picker */
+.color-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.color-pick{
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid transparent;cursor:pointer;
+  transition:all .2s var(--ease);touch-action:manipulation;
+}
+.color-pick.sel{
+  border-color:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,0.15),var(--shadow-glow);
+  transform:scale(1.08);
+}
+
+/* Pill picker for equipment/type */
+.pill-picker{display:flex;gap:6px;flex-wrap:wrap;}
+.pill-pick{
+  padding:7px 13px;border-radius:var(--r-full);
+  background:var(--bg-card);border:1px solid var(--border-default);
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+  color:var(--text-secondary);cursor:pointer;
+  touch-action:manipulation;transition:all .2s var(--ease);
+}
+.pill-pick.sel{
+  background:rgba(110,99,242,0.18);
+  border-color:var(--purple-400);
+  color:var(--purple-300);
+  box-shadow:var(--shadow-glow);
+}
+
+/* Select-input native styled */
+.select-input{
+  width:100%;background:var(--bg-card);
+  border:1px solid var(--border-default);border-radius:var(--r-md);
+  padding:11px 13px;font-family:'Outfit',sans-serif;
+  font-size:16px;font-weight:600;color:var(--text-primary);outline:none;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239190b8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;
+}
+.select-input:focus{border-color:var(--purple-400);}
+
+/* Amount quick-buttons */
+.amount-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
+.amount-quick button{
+  background:var(--bg-card);border:1px solid var(--border-default);
+  color:var(--text-primary);padding:9px 4px;border-radius:var(--r-md);
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;
+  letter-spacing:.06em;cursor:pointer;touch-action:manipulation;
+}
+.amount-quick button:active{background:var(--bg-card-hover);}
+
+/* Swipeable habit cards */
+.habit-card{
+  position:relative;
+  transition:transform .25s var(--ease);
+  background-clip:padding-box;
+  z-index:1;
+  touch-action:pan-y;
+}
+.habit-card.swiped{transform:translateX(-86px);}
+.habit-row{position:relative;margin-bottom:7px;overflow:hidden;border-radius:var(--r-md);}
+.habit-del-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(240,96,96,0.14),rgba(240,96,96,0.32));
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:0 22px;border-radius:var(--r-md);
+  z-index:0;
+}
+.habit-del-bg button{
+  background:rgba(240,96,96,0.85);
+  color:#fff;border:none;
+  width:60px;height:38px;border-radius:var(--r-sm);
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:.1em;cursor:pointer;touch-action:manipulation;
+}
+
+/* Card-action button (small ⋮ button on cards) */
+.card-action{
+  position:absolute;top:10px;right:10px;
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border-default);
+  color:var(--text-secondary);font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;touch-action:manipulation;z-index:2;
+}
+.card-action:active{background:rgba(255,255,255,0.12);}
 .del-btn{
   width:100%;background:rgba(240,96,96,0.12);
   border:1px solid rgba(240,96,96,0.30);color:var(--red, #f06060);
@@ -1069,7 +1168,8 @@ input[type=range]::-moz-range-thumb{
       </div>
       <div id="meals-list"></div>
 
-      <div class="hydration-card">
+      <div class="hydration-card" style="position:relative;">
+        <button class="card-action" id="hydration-menu" aria-label="Wert setzen">⋮</button>
         <div style="font-size:1.6rem;">💧</div>
         <div style="flex:1;">
           <div class="hydration-num" id="hydration-val">0,0<span style="font-size:.75rem;color:var(--text-muted)">L / 3L</span></div>
@@ -1109,7 +1209,8 @@ input[type=range]::-moz-range-thumb{
       </div>
 
       <!-- 🆕 STEPS CARD -->
-      <div class="steps-card">
+      <div class="steps-card" style="position:relative;">
+        <button class="card-action" id="steps-menu" aria-label="Wert setzen">⋮</button>
         <div class="steps-head">
           <div class="kicker" style="margin-bottom:0">// SCHRITTE HEUTE</div>
         </div>
@@ -1211,6 +1312,129 @@ input[type=range]::-moz-range-thumb{
       </div>
       <button class="cta-btn" id="meal-save">Speichern</button>
       <button class="del-btn" id="meal-delete" style="display:none;">🗑 Mahlzeit löschen</button>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERLAY: MUSCLE GROUP ═══════ -->
+  <div id="muscle-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;" id="mg-mode">// neue muskelgruppe</div>
+          <div class="overlay-title" id="mg-title">Muskelgruppe hinzufügen</div>
+        </div>
+        <button class="overlay-close" data-close="muscle-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label>Icon</label>
+        <div class="icon-picker" id="mg-icons">
+          <span class="icon-pick" data-icon="💪">💪</span>
+          <span class="icon-pick" data-icon="🏋️">🏋️</span>
+          <span class="icon-pick" data-icon="🦾">🦾</span>
+          <span class="icon-pick" data-icon="🔱">🔱</span>
+          <span class="icon-pick" data-icon="🦵">🦵</span>
+          <span class="icon-pick" data-icon="🦶">🦶</span>
+          <span class="icon-pick" data-icon="🍑">🍑</span>
+          <span class="icon-pick" data-icon="🏃">🏃</span>
+          <span class="icon-pick" data-icon="🧗">🧗</span>
+          <span class="icon-pick" data-icon="🤸">🤸</span>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Name</label>
+        <input id="mg-name" type="text" placeholder="z.B. Brust">
+      </div>
+      <div class="set-group">
+        <label>Akzentfarbe</label>
+        <div class="color-picker" id="mg-colors">
+          <span class="color-pick" data-color="var(--purple-500)" style="background:#6e63f2"></span>
+          <span class="color-pick" data-color="var(--pink)"       style="background:#f06292"></span>
+          <span class="color-pick" data-color="var(--teal)"       style="background:#26c6da"></span>
+          <span class="color-pick" data-color="var(--amber)"      style="background:#ffca28"></span>
+          <span class="color-pick" data-color="var(--green)"      style="background:#26d47c"></span>
+          <span class="color-pick" data-color="var(--orange)"     style="background:#ff8a3d"></span>
+        </div>
+      </div>
+      <button class="cta-btn" id="mg-save">Speichern</button>
+      <button class="del-btn" id="mg-delete" style="display:none;">🗑 Muskelgruppe löschen</button>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERLAY: EXERCISE ═══════ -->
+  <div id="exercise-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;" id="ex-edit-mode">// neue übung</div>
+          <div class="overlay-title" id="ex-edit-title">Übung hinzufügen</div>
+        </div>
+        <button class="overlay-close" data-close="exercise-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label>Name</label>
+        <input id="ex-edit-name" type="text" placeholder="z.B. Bankdrücken">
+      </div>
+      <div class="set-group">
+        <label>Muskelgruppe</label>
+        <select id="ex-edit-muscle" class="select-input"></select>
+      </div>
+      <div class="set-group">
+        <label>Equipment</label>
+        <div class="pill-picker" id="ex-edit-eq">
+          <span class="pill-pick" data-val="Langhantel">Langhantel</span>
+          <span class="pill-pick" data-val="Kurzhantel">Kurzhantel</span>
+          <span class="pill-pick" data-val="Maschine">Maschine</span>
+          <span class="pill-pick" data-val="Kabel">Kabelzug</span>
+          <span class="pill-pick" data-val="Körpergewicht">Körpergewicht</span>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Typ</label>
+        <div class="pill-picker" id="ex-edit-type">
+          <span class="pill-pick" data-val="Compound">Compound</span>
+          <span class="pill-pick" data-val="Isolation">Isolation</span>
+          <span class="pill-pick" data-val="Cardio">Cardio</span>
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Sätze · Wdh. Min · Wdh. Max</label>
+        <div class="set-row-2" style="grid-template-columns:1fr 1fr 1fr">
+          <input id="ex-edit-sets" type="number" min="1" max="10" placeholder="Sätze">
+          <input id="ex-edit-rmin" type="number" min="1" placeholder="Min">
+          <input id="ex-edit-rmax" type="number" min="1" placeholder="Max">
+        </div>
+      </div>
+      <div class="set-group">
+        <label>Pause (Sek.)</label>
+        <input id="ex-edit-rest" type="number" min="0" max="600" placeholder="90">
+      </div>
+      <button class="cta-btn" id="ex-edit-save">Speichern</button>
+      <button class="del-btn" id="ex-edit-delete" style="display:none;">🗑 Übung löschen</button>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERLAY: AMOUNT (Wasser/Schritte) ═══════ -->
+  <div id="amount-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;" id="am-kicker">// wert setzen</div>
+          <div class="overlay-title" id="am-title">Wert setzen</div>
+        </div>
+        <button class="overlay-close" data-close="amount-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label id="am-label">Aktueller Wert</label>
+        <input id="am-input" type="number" inputmode="numeric">
+      </div>
+      <div class="amount-quick" id="am-quick"></div>
+      <div class="set-row-2" style="margin-top:14px;">
+        <button class="del-btn" id="am-reset" style="margin-top:0;">↺ Zurücksetzen</button>
+        <button class="cta-btn"  id="am-save"  style="margin-top:0;">Speichern</button>
+      </div>
     </div>
   </div>
 
@@ -1422,6 +1646,62 @@ async function ensureRemoteProfile(session){
   });
   if(error) console.warn('Profile sync failed', error);
 }
+
+function parseNumberInput(value){
+  if(value === '' || value == null) return null;
+  const n = parseFloat(String(value).replace(',','.'));
+  return Number.isFinite(n) ? n : null;
+}
+
+function parseIntegerInput(value){
+  if(value === '' || value == null) return null;
+  const n = parseInt(value, 10);
+  return Number.isFinite(n) ? n : null;
+}
+
+async function syncWorkoutExercise(ex, dateStr=todayStr){
+  if(!forgeSupabase || !authSession?.user || !ex) return;
+  const sess = S.sessions?.[dateStr]?.[ex.id];
+  if(!sess?.sets) return;
+
+  const {plan} = getTodayPlan();
+  const userId = authSession.user.id;
+  const {data: day, error: dayError} = await forgeSupabase
+    .from('workout_days')
+    .upsert({
+      user_id: userId,
+      workout_date: dateStr,
+      plan_type: plan?.type || null,
+      plan_label: plan?.label || null,
+      readiness: parseNumberInput(S.readiness?.[dateStr]),
+      updated_at: new Date().toISOString()
+    }, {onConflict:'user_id,workout_date'})
+    .select('id')
+    .single();
+
+  if(dayError){
+    console.warn('Workout day sync failed', dayError);
+    return;
+  }
+
+  const rows = sess.sets.map((set, index)=>({
+    workout_day_id: day.id,
+    user_id: userId,
+    exercise_id: ex.id,
+    exercise_name: ex.name,
+    set_index: index + 1,
+    weight: parseNumberInput(set.weight),
+    reps: parseIntegerInput(set.reps),
+    done: !!set.done,
+    updated_at: new Date().toISOString()
+  }));
+
+  const {error: setsError} = await forgeSupabase
+    .from('workout_sets')
+    .upsert(rows, {onConflict:'workout_day_id,exercise_id,set_index'});
+
+  if(setsError) console.warn('Workout set sync failed', setsError);
+}
 // ═══════════════════════════════════════════════════
 // DATA DEFAULTS
 // ═══════════════════════════════════════════════════
@@ -1594,6 +1874,26 @@ if(!S.meals[todayStr]){
 if(!S.userHabits){
   S.userHabits = DEFAULT_HABITS.map(h=>({...h, icon: h.id==='train'?'🏋️':h.id==='water'?'💧':h.id==='protein'?'🥩':h.id==='steps'?'🚶':h.id==='stretch'?'🧘':h.id==='sleep'?'😴':h.id==='read'?'📚':'✨'}));
 }
+// Editierbarer Trainingsplan: Muskelgruppen + Übungen pro Tagestyp
+if(!S.muscles){
+  S.muscles = {};
+  ['push','pull','legs','upper','lower','cardio'].forEach(type=>{
+    const todayKey = Object.values(PLAN.weekA).find(p=>p.type===type);
+    if(todayKey?.muscles){
+      S.muscles[type] = todayKey.muscles.map(name=>({
+        id: 'mg-'+type+'-'+name.toLowerCase(),
+        name, icon: MUSCLE_META[name]?.icon || '💪',
+        color: MUSCLE_META[name]?.color || 'var(--purple-500)'
+      }));
+    }
+  });
+}
+if(!S.exercises){
+  S.exercises = {};
+  Object.entries(EXERCISES).forEach(([type, list])=>{
+    S.exercises[type] = list.map(e=>({...e}));
+  });
+}
 if(!S.initialized){
   S.hydration[todayStr] = 2100;
   S.habits[todayStr] = {train:true, water:true, protein:true, steps:true};
@@ -1623,7 +1923,10 @@ function getTodayPlan(){
 }
 
 function getExercisesForType(type){
-  return EXERCISES[type] || [];
+  return (S.exercises && S.exercises[type]) || EXERCISES[type] || [];
+}
+function getMusclesForType(type){
+  return (S.muscles && S.muscles[type]) || [];
 }
 
 function isDone(exerciseId){
@@ -1737,12 +2040,20 @@ function renderTodayCard(plan, week){
 function renderMuscles(plan){
   const grid = document.getElementById('muscle-grid');
   grid.innerHTML = '';
-  const muscles = plan.muscles || [];
-  if(!muscles.length){ grid.innerHTML='<div style="color:var(--text-muted);font-size:.82rem;padding:8px 2px;">Ruhetag — kein Training heute.</div>'; return; }
+  const muscles = getMusclesForType(plan.type);
+  if(!muscles.length){
+    grid.innerHTML = plan.type==='rest'
+      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:8px 2px;">Ruhetag — kein Training heute.</div>'
+      : '<div class="cat-card cat-add" data-action="add-muscle"><div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">＋</div><div class="cat-name" style="color:var(--purple-300)">Muskelgruppe hinzufügen</div><div class="cat-meta">TIPPEN ZUM ANLEGEN</div></div>';
+    grid.querySelectorAll('[data-action="add-muscle"]').forEach(el=>el.addEventListener('click',()=>openMuscleEdit(null,plan.type)));
+    return;
+  }
   const exs = getExercisesForType(plan.type);
 
-  muscles.forEach((m,i)=>{
-    const meta = MUSCLE_META[m] || {icon:'💪',color:'var(--purple-500)',sets:8};
+  muscles.forEach((mObj,i)=>{
+    const m = mObj.name;
+    const icon = mObj.icon || MUSCLE_META[m]?.icon || '💪';
+    const color = mObj.color || MUSCLE_META[m]?.color || 'var(--purple-500)';
     const mExs = exs.filter(e=>e.muscle===m);
     const mSets = mExs.reduce((a,e)=>a+e.sets,0);
     const doneSets = mExs.filter(e=>isDone(e.id)).reduce((a,e)=>a+e.sets,0);
@@ -1758,20 +2069,40 @@ function renderMuscles(plan){
     el.className = 'cat-card';
     if(fullWidth) el.setAttribute('style','grid-column:span 2');
     el.innerHTML = `
-      <div class="cat-icon-wrap" style="background:${meta.color}22">${meta.icon}</div>
+      <div class="cat-icon-wrap" style="background:${color}22">${icon}</div>
       <div class="cat-name">${m}</div>
       <div class="cat-meta">${mExs.length} ${exLabel} · ${mSets} SÄTZE${suffix}</div>
-      <div class="cat-prog" style="width:${pct}%;background:${meta.color}"></div>`;
+      <div class="cat-prog" style="width:${pct}%;background:${color}"></div>`;
     el.onclick = ()=>{ if(mExs.length) navigate('exercise', mExs[0]); };
+    let pT;
+    el.addEventListener('touchstart',()=>{ pT = setTimeout(()=>openMuscleEdit(mObj.id, plan.type), 550); }, {passive:true});
+    el.addEventListener('touchend',()=>clearTimeout(pT));
+    el.addEventListener('touchmove',()=>clearTimeout(pT));
+    el.addEventListener('contextmenu',e=>{ e.preventDefault(); openMuscleEdit(mObj.id, plan.type); });
     grid.appendChild(el);
   });
+
+  // + Add-Card am Ende
+  const addEl = document.createElement('div');
+  addEl.className = 'cat-card cat-add';
+  if(muscles.length % 2 === 0) addEl.setAttribute('style','grid-column:span 2');
+  addEl.innerHTML = `
+    <div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">＋</div>
+    <div class="cat-name" style="color:var(--purple-300)">Hinzufügen</div>
+    <div class="cat-meta">NEUE MUSKELGRUPPE</div>`;
+  addEl.addEventListener('click',()=>openMuscleEdit(null, plan.type));
+  grid.appendChild(addEl);
 }
 
 function renderExerciseList(plan){
   const list = document.getElementById('exercise-list');
   list.innerHTML = '';
   const exs = getExercisesForType(plan.type);
-  if(!exs.length){ list.innerHTML='<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Übungen für heute.</div>'; return; }
+  if(!exs.length){
+    list.innerHTML = plan.type==='rest'
+      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Übungen für heute.</div>'
+      : '';
+  }
 
   exs.forEach((ex,i)=>{
     const done = isDone(ex.id);
@@ -1786,6 +2117,11 @@ function renderExerciseList(plan){
       </div>
       ${done ? '<div class="ex-done-check">✓</div>' : (i === 0 && ex.pr ? '<div class="ex-pr">★ PR</div>' : '<span class="ex-arrow">›</span>')}`;
     el.onclick = ()=> navigate('exercise', ex);
+    let pT;
+    el.addEventListener('touchstart',()=>{ pT = setTimeout(()=>openExerciseEdit(ex.id, plan.type), 550); }, {passive:true});
+    el.addEventListener('touchend',()=>clearTimeout(pT));
+    el.addEventListener('touchmove',()=>clearTimeout(pT));
+    el.addEventListener('contextmenu',e=>{ e.preventDefault(); openExerciseEdit(ex.id, plan.type); });
     list.appendChild(el);
   });
 }
@@ -1810,7 +2146,7 @@ function renderExercise(ex){
 
   const pr = ex.pr;
   document.getElementById('pr-text').textContent = pr ? `${pr.date} · ${pr.r} Wdh.` : '—';
-  document.getElementById('pr-value').textContent = pr ? `${pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>` : '—';
+  document.getElementById('pr-value').innerHTML = pr ? `${pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>` : '—';
   document.getElementById('pr-card').style.display = (ex.type==='Cardio')?'none':'flex';
 
   renderHistoryChart(ex);
@@ -1877,6 +2213,7 @@ function renderSetRows(ex){
       const f = e.target.dataset.field;
       S.sessions[todayStr][ex.id].sets[i][f] = e.target.value;
       saveState(S);
+      syncWorkoutExercise(ex);
     });
   });
 
@@ -1908,6 +2245,7 @@ function renderSetRows(ex){
         }
       }
       saveState(S);
+      syncWorkoutExercise(ex);
     });
   });
 }
@@ -2018,26 +2356,66 @@ function renderHabits(){
   S.userHabits.forEach(h=>{
     const isDone = !!S.habits[todayStr][h.id];
     const streak = isDone ? (h.streak||0)+1 : (h.streak||0);
-    const el = document.createElement('div');
-    el.className = 'habit-card';
-    el.innerHTML = `
-      <div class="habit-check ${isDone?'done':''}">${isDone?'✓':''}</div>
-      <div style="flex:1">
-        <div class="habit-name ${isDone?'done':''}">${h.icon||'✨'} ${h.name}</div>
-        <div class="habit-streak">${streak>0?'🔥 '+streak+' TAGE':'streak: 0'}</div>
-      </div>`;
-    el.onclick = ()=>{
+
+    // Swipe-Wrapper mit Lösch-Hintergrund
+    const row = document.createElement('div');
+    row.className = 'habit-row';
+    row.innerHTML = `
+      <div class="habit-del-bg"><button data-del="${h.id}">LÖSCHEN</button></div>
+      <div class="habit-card">
+        <div class="habit-check ${isDone?'done':''}">${isDone?'✓':''}</div>
+        <div style="flex:1">
+          <div class="habit-name ${isDone?'done':''}">${h.icon||'✨'} ${h.name}</div>
+          <div class="habit-streak">${streak>0?'🔥 '+streak+' TAGE':'streak: 0'}</div>
+        </div>`;
+    const card = row.querySelector('.habit-card');
+
+    // Tap toggle (nur wenn nicht geswiped)
+    card.addEventListener('click',e=>{
+      if(card.classList.contains('swiped')){ card.classList.remove('swiped'); return; }
       S.habits[todayStr][h.id] = !S.habits[todayStr][h.id];
       saveState(S);
       renderHabits();
-    };
-    // long-press → edit
+    });
+
+    // Swipe-Logik
+    let sx=0, sy=0, dx=0, dragging=false;
+    card.addEventListener('touchstart',e=>{
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; dx=0; dragging=true;
+      card.style.transition='none';
+    },{passive:true});
+    card.addEventListener('touchmove',e=>{
+      if(!dragging) return;
+      dx = e.touches[0].clientX - sx;
+      const dy = Math.abs(e.touches[0].clientY - sy);
+      if(dy > Math.abs(dx)){ dragging=false; card.style.transform=''; return; }
+      if(dx < 0) card.style.transform = `translateX(${Math.max(dx,-100)}px)`;
+      else if(card.classList.contains('swiped')) card.style.transform = `translateX(${Math.min(-86+dx,0)}px)`;
+    },{passive:true});
+    card.addEventListener('touchend',()=>{
+      dragging=false;
+      card.style.transition='transform .25s var(--ease)';
+      if(dx < -50){ card.classList.add('swiped'); card.style.transform=''; }
+      else { card.classList.remove('swiped'); card.style.transform=''; }
+    });
+
+    // Long-press → edit (nur ohne Swipe)
     let pressT;
-    el.addEventListener('touchstart',()=>{ pressT = setTimeout(()=>openHabitEdit(h.id), 600); }, {passive:true});
-    el.addEventListener('touchend',()=>clearTimeout(pressT));
-    el.addEventListener('touchmove',()=>clearTimeout(pressT));
-    el.addEventListener('contextmenu',e=>{ e.preventDefault(); openHabitEdit(h.id); });
-    list.appendChild(el);
+    card.addEventListener('touchstart',()=>{ pressT = setTimeout(()=>{ if(Math.abs(dx)<8) openHabitEdit(h.id); }, 600); }, {passive:true});
+    card.addEventListener('touchend',()=>clearTimeout(pressT));
+    card.addEventListener('touchmove',()=>clearTimeout(pressT));
+    card.addEventListener('contextmenu',e=>{ e.preventDefault(); openHabitEdit(h.id); });
+
+    // Delete-Button im Hintergrund
+    row.querySelector('[data-del]').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      S.userHabits = S.userHabits.filter(x=>x.id!==h.id);
+      if(S.habits[todayStr]) delete S.habits[todayStr][h.id];
+      saveState(S);
+      renderHabits();
+    });
+
+    list.appendChild(row);
   });
   renderSteps();
 }
@@ -2306,7 +2684,10 @@ document.getElementById('readiness-confirm').addEventListener('click',()=>{
   hideOverlay('readiness-overlay');
   const {plan} = getTodayPlan();
   const exs = getExercisesForType(plan.type);
-  if(exs.length) navigate('exercise', exs[0]);
+  if(exs.length) {
+    syncWorkoutExercise(exs[0]);
+    navigate('exercise', exs[0]);
+  }
   // re-render today card with new readiness
   if(currentScreen==='training') renderTraining();
 });
@@ -2532,6 +2913,225 @@ function checkPR(ex, weight, reps){
   }
   return false;
 }
+
+// ═══════════════════════════════════════════════════
+// MUSKELGRUPPEN CRUD
+// ═══════════════════════════════════════════════════
+let _editingMuscleId = null;
+let _editingMuscleType = null;
+
+function selectColor(picker, color){
+  document.querySelectorAll(`#${picker} .color-pick`).forEach(p=>{
+    p.classList.toggle('sel', p.dataset.color === color);
+  });
+}
+
+function openMuscleEdit(muscleId, type){
+  _editingMuscleId = muscleId || null;
+  _editingMuscleType = type;
+  const list = S.muscles[type] || [];
+  const m = muscleId ? list.find(x=>x.id===muscleId) : null;
+
+  document.getElementById('mg-mode').textContent  = m ? '// muskelgruppe bearbeiten' : '// neue muskelgruppe';
+  document.getElementById('mg-title').textContent = m ? 'Muskelgruppe bearbeiten' : 'Muskelgruppe hinzufügen';
+  document.getElementById('mg-delete').style.display = m ? 'block' : 'none';
+  document.getElementById('mg-name').value = m?.name || '';
+  selectIcon('mg-icons',  m?.icon  || '💪');
+  selectColor('mg-colors', m?.color || 'var(--purple-500)');
+  showOverlay('muscle-overlay');
+}
+
+document.querySelectorAll('#mg-icons .icon-pick').forEach(p=>{
+  p.addEventListener('click',()=>selectIcon('mg-icons', p.dataset.icon));
+});
+document.querySelectorAll('#mg-colors .color-pick').forEach(p=>{
+  p.addEventListener('click',()=>selectColor('mg-colors', p.dataset.color));
+});
+
+document.getElementById('mg-save').addEventListener('click',()=>{
+  const type = _editingMuscleType;
+  if(!type) return;
+  const icon  = document.querySelector('#mg-icons .icon-pick.sel')?.dataset.icon  || '💪';
+  const color = document.querySelector('#mg-colors .color-pick.sel')?.dataset.color || 'var(--purple-500)';
+  const name  = document.getElementById('mg-name').value.trim() || 'Muskelgruppe';
+  if(!S.muscles[type]) S.muscles[type] = [];
+  if(_editingMuscleId){
+    const i = S.muscles[type].findIndex(x=>x.id===_editingMuscleId);
+    if(i>=0) S.muscles[type][i] = {...S.muscles[type][i], name, icon, color};
+  } else {
+    S.muscles[type].push({id:'mg-'+Date.now(), name, icon, color});
+  }
+  saveState(S);
+  hideOverlay('muscle-overlay');
+  if(currentScreen==='training') renderTraining();
+});
+
+document.getElementById('mg-delete').addEventListener('click',()=>{
+  const type = _editingMuscleType;
+  if(!type || !_editingMuscleId) return;
+  const removed = S.muscles[type].find(x=>x.id===_editingMuscleId);
+  S.muscles[type] = S.muscles[type].filter(x=>x.id!==_editingMuscleId);
+  // Übungen dieser Muskelgruppe ebenfalls entfernen
+  if(removed && S.exercises[type]){
+    S.exercises[type] = S.exercises[type].filter(e=>e.muscle!==removed.name);
+  }
+  saveState(S);
+  hideOverlay('muscle-overlay');
+  if(currentScreen==='training') renderTraining();
+});
+
+// "BEARBEITEN →" Link in Muskel-Section
+document.querySelector('#screen-training .section-row .section-row-link').addEventListener('click',()=>{
+  const type = getTodayPlan().plan.type;
+  if(type === 'rest') return;
+  openMuscleEdit(null, type);
+});
+
+// ═══════════════════════════════════════════════════
+// ÜBUNGEN CRUD
+// ═══════════════════════════════════════════════════
+let _editingExId = null;
+let _editingExType = null;
+
+function selectPill(pickerId, val){
+  document.querySelectorAll(`#${pickerId} .pill-pick`).forEach(p=>{
+    p.classList.toggle('sel', p.dataset.val === val);
+  });
+}
+
+function openExerciseEdit(exId, type){
+  _editingExId = exId || null;
+  _editingExType = type;
+  const list = S.exercises[type] || [];
+  const ex = exId ? list.find(x=>x.id===exId) : null;
+
+  document.getElementById('ex-edit-mode').textContent  = ex ? '// übung bearbeiten' : '// neue übung';
+  document.getElementById('ex-edit-title').textContent = ex ? 'Übung bearbeiten' : 'Übung hinzufügen';
+  document.getElementById('ex-edit-delete').style.display = ex ? 'block' : 'none';
+
+  document.getElementById('ex-edit-name').value = ex?.name || '';
+  document.getElementById('ex-edit-sets').value = ex?.sets ?? 4;
+  document.getElementById('ex-edit-rmin').value = ex?.rMin ?? 8;
+  document.getElementById('ex-edit-rmax').value = ex?.rMax ?? 10;
+  document.getElementById('ex-edit-rest').value = ex?.rest ?? 90;
+
+  // Muskel-Dropdown füllen
+  const sel = document.getElementById('ex-edit-muscle');
+  const muscles = S.muscles[type] || [];
+  sel.innerHTML = muscles.map(m=>`<option value="${m.name}">${m.icon||''} ${m.name}</option>`).join('') ||
+    '<option value="">— Erst Muskelgruppe anlegen —</option>';
+  sel.value = ex?.muscle || muscles[0]?.name || '';
+
+  selectPill('ex-edit-eq',   ex?.eq   || 'Langhantel');
+  selectPill('ex-edit-type', ex?.type || 'Compound');
+  showOverlay('exercise-overlay');
+}
+
+['ex-edit-eq','ex-edit-type'].forEach(id=>{
+  document.querySelectorAll(`#${id} .pill-pick`).forEach(p=>{
+    p.addEventListener('click',()=>selectPill(id, p.dataset.val));
+  });
+});
+
+document.getElementById('ex-edit-save').addEventListener('click',()=>{
+  const type = _editingExType;
+  if(!type) return;
+  const data = {
+    name:    document.getElementById('ex-edit-name').value.trim() || 'Neue Übung',
+    muscle:  document.getElementById('ex-edit-muscle').value || (S.muscles[type]?.[0]?.name || ''),
+    eq:      document.querySelector('#ex-edit-eq .pill-pick.sel')?.dataset.val   || 'Langhantel',
+    type:    document.querySelector('#ex-edit-type .pill-pick.sel')?.dataset.val || 'Compound',
+    sets:    parseInt(document.getElementById('ex-edit-sets').value) || 3,
+    rMin:    parseInt(document.getElementById('ex-edit-rmin').value) || 8,
+    rMax:    parseInt(document.getElementById('ex-edit-rmax').value) || 10,
+    rest:    parseInt(document.getElementById('ex-edit-rest').value) || 90,
+  };
+  if(!S.exercises[type]) S.exercises[type] = [];
+  if(_editingExId){
+    const i = S.exercises[type].findIndex(x=>x.id===_editingExId);
+    if(i>=0) S.exercises[type][i] = {...S.exercises[type][i], ...data};
+  } else {
+    S.exercises[type].push({
+      id:'ex-'+Date.now(), ...data,
+      history:[], pr:null
+    });
+  }
+  saveState(S);
+  hideOverlay('exercise-overlay');
+  if(currentScreen==='training') renderTraining();
+});
+
+document.getElementById('ex-edit-delete').addEventListener('click',()=>{
+  const type = _editingExType;
+  if(!type || !_editingExId) return;
+  S.exercises[type] = S.exercises[type].filter(x=>x.id!==_editingExId);
+  saveState(S);
+  hideOverlay('exercise-overlay');
+  if(currentScreen==='training') renderTraining();
+});
+
+// "+ HINZUFÜGEN" Link in Übungen-Section (zweiter section-row-link)
+document.querySelectorAll('#screen-training .section-row-link')[1]?.addEventListener('click',()=>{
+  const type = getTodayPlan().plan.type;
+  if(type === 'rest') return;
+  if(!S.muscles[type] || !S.muscles[type].length){
+    openMuscleEdit(null, type);
+    return;
+  }
+  openExerciseEdit(null, type);
+});
+
+// ═══════════════════════════════════════════════════
+// AMOUNT OVERLAY (Hydration / Steps Set & Reset)
+// ═══════════════════════════════════════════════════
+let _amountTarget = null; // 'water' | 'steps'
+
+function openAmount(target){
+  _amountTarget = target;
+  const cur = target==='water' ? (S.hydration[todayStr]||0) : (S.steps[todayStr]||0);
+  const goal = target==='water' ? S.profile.waterGoal : S.profile.stepGoal;
+  const unit = target==='water' ? 'ml' : 'Schritte';
+
+  document.getElementById('am-kicker').textContent = target==='water' ? '// wasser setzen' : '// schritte setzen';
+  document.getElementById('am-title').textContent  = target==='water' ? 'Wasserstand setzen' : 'Schritte setzen';
+  document.getElementById('am-label').textContent  = `Aktuell · ${cur} ${unit} (Ziel ${goal})`;
+  document.getElementById('am-input').value = cur;
+
+  const quick = document.getElementById('am-quick');
+  const opts = target==='water'
+    ? [{lbl:'+250',v:250},{lbl:'+500',v:500},{lbl:'+1000',v:1000},{lbl:'-250',v:-250}]
+    : [{lbl:'+500',v:500},{lbl:'+1000',v:1000},{lbl:'+2500',v:2500},{lbl:'-500',v:-500}];
+  quick.innerHTML = opts.map(o=>`<button data-add="${o.v}">${o.lbl}</button>`).join('');
+  quick.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const inp = document.getElementById('am-input');
+      const val = Math.max(0, (parseInt(inp.value)||0) + parseInt(b.dataset.add));
+      inp.value = val;
+    });
+  });
+  showOverlay('amount-overlay');
+}
+
+document.getElementById('am-save').addEventListener('click',()=>{
+  const v = Math.max(0, parseInt(document.getElementById('am-input').value)||0);
+  if(_amountTarget==='water'){ S.hydration[todayStr] = v; }
+  else if(_amountTarget==='steps'){ S.steps[todayStr] = v; }
+  saveState(S);
+  hideOverlay('amount-overlay');
+  if(_amountTarget==='water' && currentScreen==='nutrition') renderHydration();
+  if(_amountTarget==='steps' && currentScreen==='habits')    renderSteps();
+});
+document.getElementById('am-reset').addEventListener('click',()=>{
+  if(_amountTarget==='water') S.hydration[todayStr] = 0;
+  if(_amountTarget==='steps') S.steps[todayStr]     = 0;
+  saveState(S);
+  hideOverlay('amount-overlay');
+  if(_amountTarget==='water' && currentScreen==='nutrition') renderHydration();
+  if(_amountTarget==='steps' && currentScreen==='habits')    renderSteps();
+});
+
+document.getElementById('hydration-menu').addEventListener('click',e=>{ e.stopPropagation(); openAmount('water'); });
+document.getElementById('steps-menu')   .addEventListener('click',e=>{ e.stopPropagation(); openAmount('steps'); });
 
 renderTraining();
 </script>
