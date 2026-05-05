@@ -601,6 +601,222 @@ body{
   color:var(--purple-400);text-transform:uppercase;
   margin-bottom:8px;
 }
+
+/* ── PROTEIN TRACKER (NEW) ── */
+.protein-tracker{
+  background:var(--bg-card);border:1px solid var(--border-default);
+  border-radius:var(--r-lg);padding:16px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.protein-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.protein-status{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  padding:4px 10px;border-radius:var(--r-full);
+}
+.protein-val{
+  font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;
+  letter-spacing:-0.02em;line-height:1;margin-top:4px;
+}
+.protein-val .g{font-size:.95rem;color:var(--text-muted);font-weight:600;margin-left:2px;}
+.protein-target{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  color:var(--text-muted);letter-spacing:.06em;margin-top:4px;
+}
+.protein-bar-track{
+  position:relative;height:8px;background:rgba(255,255,255,0.05);
+  border-radius:4px;margin-top:14px;overflow:hidden;
+}
+.protein-bar-fill{
+  height:8px;border-radius:4px;
+  transition:width .4s var(--ease),background .25s var(--ease);
+}
+.protein-bar-marker{
+  position:absolute;top:-3px;width:2px;height:14px;
+  background:rgba(255,255,255,0.32);border-radius:1px;pointer-events:none;
+}
+.protein-marker-lbl{
+  position:absolute;top:18px;font-family:'JetBrains Mono',monospace;
+  font-size:.5rem;color:var(--text-muted);letter-spacing:.05em;
+  transform:translateX(-50%);
+}
+
+/* protein status colors */
+.p-red    {background:rgba(240,96,96,0.15);  color:var(--red, #f06060);}
+.p-orange {background:rgba(255,138,61,0.15); color:var(--orange);}
+.p-amber  {background:rgba(255,202,40,0.15); color:var(--amber);}
+.p-green  {background:rgba(38,212,124,0.15); color:var(--green);}
+.p-teal   {background:rgba(38,198,218,0.15); color:var(--teal);}
+
+/* ── STEPS CARD (NEW) ── */
+.steps-card{
+  background:var(--bg-card);border:1px solid var(--border-default);
+  border-radius:var(--r-lg);padding:16px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.steps-card::before{
+  content:'';position:absolute;top:-30%;right:-15%;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(110,99,242,0.18),transparent 70%);
+  filter:blur(35px);pointer-events:none;
+}
+.steps-head{display:flex;justify-content:space-between;align-items:center;}
+.steps-row{display:flex;align-items:center;gap:14px;margin-top:8px;position:relative;}
+.steps-arc-wrap{width:130px;height:78px;position:relative;flex-shrink:0;}
+.steps-arc-wrap svg{display:block;}
+.steps-arc-center{
+  position:absolute;left:50%;top:60%;transform:translate(-50%,-50%);
+  text-align:center;
+}
+.steps-val{
+  font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;
+  letter-spacing:-0.02em;line-height:1;
+}
+.steps-goal{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--text-muted);letter-spacing:.06em;margin-top:4px;
+}
+.steps-foot{
+  display:flex;justify-content:space-between;align-items:center;margin-top:12px;
+  position:relative;
+}
+.steps-km{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  color:var(--text-secondary);letter-spacing:.08em;
+}
+.steps-add{
+  background:rgba(110,99,242,0.18);
+  border:1px solid rgba(110,99,242,0.32);color:var(--purple-300);
+  padding:6px 14px;border-radius:var(--r-full);
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;
+  letter-spacing:.08em;cursor:pointer;touch-action:manipulation;
+}
+
+/* ── OVERLAY / MODAL ── */
+.overlay{
+  position:absolute;inset:0;z-index:50;
+  background:rgba(8,8,15,0.65);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s var(--ease);
+}
+.overlay.show{opacity:1;pointer-events:auto;}
+.overlay-card{
+  width:100%;max-width:430px;
+  background:var(--bg-surface);
+  border-top:1px solid var(--border-default);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:20px 20px calc(28px + env(safe-area-inset-bottom,0px));
+  max-height:85vh;overflow-y:auto;
+  transform:translateY(100%);
+  transition:transform .3s var(--ease);
+  -webkit-overflow-scrolling:touch;
+}
+.overlay.show .overlay-card{transform:translateY(0);}
+.overlay-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:16px;
+}
+.overlay-title{font-size:1.2rem;font-weight:800;letter-spacing:-0.02em;}
+.overlay-close{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--bg-card);border:1px solid var(--border-default);
+  color:var(--text-secondary);font-size:.85rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;
+}
+.overlay-grab{
+  width:36px;height:4px;background:var(--border-default);
+  border-radius:2px;margin:-4px auto 12px;
+}
+
+.set-group{margin-bottom:14px;}
+.set-group label{
+  display:block;font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;letter-spacing:.12em;
+  color:var(--text-muted);text-transform:uppercase;
+  margin-bottom:6px;
+}
+.set-group input{
+  width:100%;background:var(--bg-card);
+  border:1px solid var(--border-default);border-radius:var(--r-md);
+  padding:11px 13px;font-family:'JetBrains Mono',monospace;
+  font-size:16px;font-weight:600;color:var(--text-primary);outline:none;
+  -webkit-appearance:none;
+}
+.set-group input:focus{border-color:var(--purple-400);}
+.set-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* ── READINESS SLIDERS ── */
+.slider-group{margin-bottom:18px;}
+.slider-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:8px;font-size:.85rem;font-weight:600;
+}
+.slider-val{
+  font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;
+  color:var(--purple-300);
+}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:6px;
+  background:rgba(255,255,255,0.08);border-radius:3px;outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple-500),#8a52f0);
+  cursor:pointer;box-shadow:var(--shadow-glow);
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--purple-500),#8a52f0);
+  cursor:pointer;box-shadow:var(--shadow-glow);
+}
+.readiness-result{
+  background:rgba(110,99,242,0.10);
+  border:1px solid var(--border-glow);
+  border-radius:var(--r-md);padding:12px;
+  text-align:center;font-size:.92rem;font-weight:700;
+  margin:10px 0 14px;
+}
+
+/* ── REST TIMER BANNER ── */
+.rest-timer{
+  background:linear-gradient(135deg,rgba(38,198,218,0.18),rgba(110,99,242,0.10));
+  border:1px solid rgba(38,198,218,0.35);
+  border-radius:var(--r-md);padding:12px;
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  transition:opacity .25s var(--ease),transform .25s var(--ease);
+}
+.rest-timer.hidden{display:none;}
+.rt-icon{font-size:1.4rem;flex-shrink:0;}
+.rt-info{flex:1;min-width:0;}
+.rt-label{
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;
+  letter-spacing:.15em;color:var(--teal);text-transform:uppercase;
+}
+.rt-time{
+  font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;
+  letter-spacing:-0.01em;line-height:1;margin-top:2px;
+}
+.rt-btn,.rt-skip{
+  background:rgba(255,255,255,0.06);border:1px solid var(--border-default);
+  color:var(--text-primary);
+  padding:6px 10px;border-radius:var(--r-sm);
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;
+  cursor:pointer;touch-action:manipulation;flex-shrink:0;
+}
+.rt-skip{background:transparent;color:var(--text-muted);padding:6px 8px;}
+
+/* progression actions */
+.prog-actions{display:flex;gap:8px;margin-top:8px;}
+.prog-btn{
+  flex:1;padding:8px 10px;border-radius:var(--r-full);
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;
+  letter-spacing:.08em;cursor:pointer;border:none;touch-action:manipulation;
+}
+.prog-yes{background:linear-gradient(135deg,var(--purple-500),#8a52f0);color:#fff;}
+.prog-no{background:rgba(255,255,255,0.06);border:1px solid var(--border-default);color:var(--text-secondary);}
 </style>
 </head>
 <body>
@@ -670,6 +886,18 @@ body{
       <div class="avatar">JM</div>
     </div>
     <div class="screen-body">
+      <!-- REST TIMER (NEW) -->
+      <div id="rest-timer" class="rest-timer hidden">
+        <div class="rt-icon">⏱️</div>
+        <div class="rt-info">
+          <div class="rt-label">// PAUSE</div>
+          <div class="rt-time" id="rt-time">2:00</div>
+        </div>
+        <button class="rt-btn" id="rt-minus">−30</button>
+        <button class="rt-btn" id="rt-plus">+30</button>
+        <button class="rt-skip" id="rt-skip">SKIP</button>
+      </div>
+
       <div class="ex-hero">
         <div class="ex-hero-kicker" id="ex-kicker"></div>
         <div class="ex-hero-title" id="ex-title"></div>
@@ -702,11 +930,17 @@ body{
         </div>
         <div id="set-rows"></div>
       </div>
-      <div class="hint-banner" id="progression-hint" style="background:linear-gradient(135deg,rgba(110,99,242,0.18),rgba(38,198,218,0.10));border:1px solid var(--border-glow);">
-        <div class="hint-icon">⚡</div>
-        <div>
-          <div class="hint-lbl" style="color:var(--purple-300);">// auto-progression</div>
-          <div class="hint-text" id="progression-text"></div>
+      <div class="hint-banner" id="progression-hint" style="background:linear-gradient(135deg,rgba(110,99,242,0.18),rgba(38,198,218,0.10));border:1px solid var(--border-glow);flex-direction:column;align-items:stretch;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="hint-icon">⚡</div>
+          <div style="flex:1;">
+            <div class="hint-lbl" style="color:var(--purple-300);">// auto-progression</div>
+            <div class="hint-text" id="progression-text"></div>
+          </div>
+        </div>
+        <div class="prog-actions">
+          <button class="prog-btn prog-no"  id="prog-no">ABLEHNEN</button>
+          <button class="prog-btn prog-yes" id="prog-yes">ANNEHMEN +2,5 KG</button>
         </div>
       </div>
     </div>
@@ -727,6 +961,21 @@ body{
       <div class="avatar">JM</div>
     </div>
     <div class="screen-body">
+      <!-- 🆕 PROTEIN TRACKER -->
+      <div class="protein-tracker">
+        <div class="protein-head">
+          <div class="kicker" style="margin-bottom:0;color:var(--purple-400)">// PROTEIN-ZIEL</div>
+          <span class="protein-status p-green" id="protein-status">IM ZIEL ✓</span>
+        </div>
+        <div class="protein-val" id="protein-val">142<span class="g">g</span></div>
+        <div class="protein-target" id="protein-target">Bedarf: 126–140g</div>
+        <div class="protein-bar-track">
+          <div class="protein-bar-fill" id="protein-bar-fill" style="width:0%;background:var(--green)"></div>
+          <div class="protein-bar-marker" id="protein-bar-min" style="left:0%"></div>
+          <div class="protein-bar-marker" id="protein-bar-max" style="left:0%"></div>
+        </div>
+      </div>
+
       <div class="macro-ring-card">
         <div class="ring">
           <svg width="110" height="110" viewBox="0 0 110 110">
@@ -792,6 +1041,35 @@ body{
         </div>
       </div>
 
+      <!-- 🆕 STEPS CARD -->
+      <div class="steps-card">
+        <div class="steps-head">
+          <div class="kicker" style="margin-bottom:0">// SCHRITTE HEUTE</div>
+        </div>
+        <div class="steps-row">
+          <div class="steps-arc-wrap">
+            <svg width="130" height="78" viewBox="0 0 130 78">
+              <path d="M 14 64 A 51 51 0 0 1 116 64" stroke="rgba(255,255,255,0.06)" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path id="steps-fill" d="M 14 64 A 51 51 0 0 1 116 64" stroke="url(#stepsGrad)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="160" stroke-dashoffset="160"/>
+              <defs>
+                <linearGradient id="stepsGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#6e63f2"/><stop offset="100%" stop-color="#26d47c"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="steps-arc-center">
+              <div class="steps-val" id="steps-val">0</div>
+              <div class="steps-goal" id="steps-goal">/ 10.000</div>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+        </div>
+        <div class="steps-foot">
+          <div class="steps-km" id="steps-km">≈ 0,0 km</div>
+          <button class="steps-add" id="steps-add">+ 500</button>
+        </div>
+      </div>
+
       <div class="progress-card">
         <div class="progress-meta">
           <div>
@@ -814,6 +1092,69 @@ body{
       <div class="nav-item" data-screen="nutrition"><div class="nav-icon">🥗</div><div class="nav-label">Ernährung</div></div>
       <div class="nav-item active" data-screen="habits"><div class="nav-icon">✨</div><div class="nav-label">Habits</div></div>
     </nav>
+  </div>
+
+  <!-- ═══════ OVERLAY: SETTINGS ═══════ -->
+  <div id="settings-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div class="overlay-title">Einstellungen</div>
+        <button class="overlay-close" data-close="settings-overlay">✕</button>
+      </div>
+      <div class="set-group">
+        <label>Gewicht (kg)</label>
+        <input id="set-weight" type="number" step="0.1" inputmode="decimal">
+      </div>
+      <div class="set-group">
+        <label>Schrittziel</label>
+        <input id="set-stepgoal" type="number" inputmode="numeric">
+      </div>
+      <div class="set-group">
+        <label>Kalorienziel (kcal)</label>
+        <input id="set-kcal" type="number" inputmode="numeric">
+      </div>
+      <div class="set-group">
+        <label>Wasserziel (ml)</label>
+        <input id="set-water" type="number" inputmode="numeric">
+      </div>
+      <div class="set-group">
+        <label>Protein-Multiplikator (Min / Max)</label>
+        <div class="set-row-2">
+          <input id="set-pmin" type="number" step="0.1" inputmode="decimal">
+          <input id="set-pmax" type="number" step="0.1" inputmode="decimal">
+        </div>
+      </div>
+      <button class="cta-btn" id="settings-save">Speichern</button>
+    </div>
+  </div>
+
+  <!-- ═══════ OVERLAY: READINESS ═══════ -->
+  <div id="readiness-overlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-grab"></div>
+      <div class="overlay-head">
+        <div>
+          <div class="kicker" style="margin-bottom:2px;">// readiness-check</div>
+          <div class="overlay-title">Wie fühlst du dich?</div>
+        </div>
+        <button class="overlay-close" data-close="readiness-overlay">✕</button>
+      </div>
+      <div class="slider-group">
+        <div class="slider-head"><span>😴 Schlaf</span><span class="slider-val" id="rd-sleep-val">7</span></div>
+        <input type="range" min="1" max="10" value="7" id="rd-sleep">
+      </div>
+      <div class="slider-group">
+        <div class="slider-head"><span>🔥 Motivation</span><span class="slider-val" id="rd-motiv-val">8</span></div>
+        <input type="range" min="1" max="10" value="8" id="rd-motiv">
+      </div>
+      <div class="slider-group">
+        <div class="slider-head"><span>💢 Muskelkater (10 = stark)</span><span class="slider-val" id="rd-sore-val">3</span></div>
+        <input type="range" min="1" max="10" value="3" id="rd-sore">
+      </div>
+      <div class="readiness-result" id="rd-result">Score: 8.0 — Volle Power 🔥</div>
+      <button class="cta-btn" id="readiness-confirm">Training starten</button>
+    </div>
   </div>
 
 </div><!-- #app -->
@@ -962,6 +1303,21 @@ if(!S.sessions)    S.sessions = {};
 if(!S.sessions[todayStr]) S.sessions[todayStr] = {};
 if(!S.streak)      S.streak = 23;
 if(!S.freeze)      S.freeze = 2;
+if(!S.profile){
+  S.profile = {
+    name: 'Champion',
+    weightKg: 78,
+    stepGoal: 10000,
+    kcalGoal: 2500,
+    waterGoal: 3000,
+    proteinMin: 1.8,
+    proteinMax: 2.0
+  };
+}
+if(!S.steps)       S.steps = {};
+if(S.steps[todayStr]==null) S.steps[todayStr] = 0;
+if(!S.readiness)   S.readiness = {};
+if(!S.acceptedProgressions) S.acceptedProgressions = {};
 if(!S.initialized){
   S.hydration[todayStr] = 2100;
   S.habits[todayStr] = {train:true, water:true, protein:true, steps:true};
@@ -973,6 +1329,7 @@ if(!S.initialized){
       {weight:'',     reps:'',   done:false}
     ]}
   };
+  S.steps[todayStr] = 7842;
   S.initialized = true;
 }
 saveState(S);
@@ -1375,6 +1732,288 @@ function renderHabits(){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
+
+// ═══════════════════════════════════════════════════
+// 🆕 PROTEIN TRACKER
+// ═══════════════════════════════════════════════════
+function calcProteinTarget(weightKg, mn, mx){
+  return { min: Math.round(weightKg*mn), max: Math.round(weightKg*mx) };
+}
+function evaluateProtein(g, t){
+  if(g >= t.min && g <= t.max) return 'green';
+  if(g > t.max) return 'teal';
+  const ratio = g/t.min;
+  if(ratio >= 0.8) return 'amber';
+  if(ratio >= 0.6) return 'orange';
+  return 'red';
+}
+const STATUS_LABELS = {
+  red:'ZU WENIG', orange:'KNAPP DRUNTER', amber:'FAST GESCHAFFT',
+  green:'IM ZIEL ✓', teal:'ÜBER ZIEL'
+};
+const STATUS_COLOR = {
+  red:'var(--red, #f06060)', orange:'var(--orange)', amber:'var(--amber)',
+  green:'var(--green)', teal:'var(--teal)'
+};
+
+function getProteinG(){
+  // mock: aus DEFAULT_MEALS Protein-Anteil ableiten (ca 20% kcal)
+  // bzw aus state, falls erweitert
+  const meals = (S.meals && S.meals[todayStr]) || DEFAULT_MEALS.filter(m=>!m.planned);
+  const total = meals.reduce((a,m)=>a+(m.protein || Math.round(m.kcal*0.2/4)),0);
+  return total;
+}
+
+function renderProtein(){
+  const p = S.profile;
+  const target = calcProteinTarget(p.weightKg, p.proteinMin, p.proteinMax);
+  const g = getProteinG();
+  const stat = evaluateProtein(g, target);
+
+  document.getElementById('protein-val').innerHTML = `${g}<span class="g">g</span>`;
+  document.getElementById('protein-target').textContent = `Bedarf: ${target.min}–${target.max}g (${p.weightKg} kg × ${p.proteinMin.toFixed(1)}–${p.proteinMax.toFixed(1)})`;
+
+  const lbl = document.getElementById('protein-status');
+  lbl.textContent = STATUS_LABELS[stat];
+  lbl.className = 'protein-status p-' + stat;
+
+  const fillEl = document.getElementById('protein-bar-fill');
+  const visMax = Math.max(target.max * 1.2, g);
+  const pct = Math.min((g / visMax) * 100, 100);
+  fillEl.style.width = pct + '%';
+  fillEl.style.background = STATUS_COLOR[stat];
+
+  document.getElementById('protein-bar-min').style.left = ((target.min/visMax)*100)+'%';
+  document.getElementById('protein-bar-max').style.left = ((target.max/visMax)*100)+'%';
+}
+
+// ═══════════════════════════════════════════════════
+// 🆕 STEPS
+// ═══════════════════════════════════════════════════
+function renderSteps(){
+  const goal = S.profile.stepGoal || 10000;
+  const cur = S.steps[todayStr] || 0;
+  const pct = Math.min(cur/goal, 1);
+
+  document.getElementById('steps-val').textContent = cur.toLocaleString('de');
+  document.getElementById('steps-goal').textContent = `/ ${goal.toLocaleString('de')}`;
+  document.getElementById('steps-km').textContent = `≈ ${(cur*0.000762).toFixed(1).replace('.',',')} km`;
+
+  const fill = document.getElementById('steps-fill');
+  const arcLen = 160;
+  fill.style.strokeDashoffset = arcLen - pct*arcLen;
+
+  // farbverlauf nach prozent
+  const ratio = cur/goal;
+  let color = '#6e63f2';
+  if(ratio >= 1) color = '#26d47c';
+  else if(ratio < 0.25) color = '#f06060';
+  else if(ratio < 0.5) color = '#ff8a3d';
+  else if(ratio < 0.75) color = '#ffca28';
+  fill.setAttribute('stroke', color);
+}
+
+// hooks in renderNutrition / renderHabits
+const _origRenderNutrition = renderNutrition;
+renderNutrition = function(){ _origRenderNutrition(); renderProtein(); };
+const _origRenderHabits = renderHabits;
+renderHabits = function(){ _origRenderHabits(); renderSteps(); };
+
+document.getElementById('steps-add').addEventListener('click',()=>{
+  S.steps[todayStr] = (S.steps[todayStr] || 0) + 500;
+  saveState(S);
+  renderSteps();
+});
+
+// ═══════════════════════════════════════════════════
+// SETTINGS OVERLAY
+// ═══════════════════════════════════════════════════
+function showOverlay(id){ document.getElementById(id).classList.add('show'); }
+function hideOverlay(id){ document.getElementById(id).classList.remove('show'); }
+
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>hideOverlay(b.dataset.close));
+});
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click',e=>{ if(e.target===ov) hideOverlay(ov.id); });
+});
+
+// avatar tap → settings
+document.querySelectorAll('.avatar').forEach(av=>{
+  av.addEventListener('click',()=>{
+    const p = S.profile;
+    document.getElementById('set-weight').value   = p.weightKg;
+    document.getElementById('set-stepgoal').value = p.stepGoal;
+    document.getElementById('set-kcal').value     = p.kcalGoal;
+    document.getElementById('set-water').value    = p.waterGoal;
+    document.getElementById('set-pmin').value     = p.proteinMin;
+    document.getElementById('set-pmax').value     = p.proteinMax;
+    showOverlay('settings-overlay');
+  });
+});
+
+document.getElementById('settings-save').addEventListener('click',()=>{
+  S.profile.weightKg   = parseFloat(document.getElementById('set-weight').value)   || S.profile.weightKg;
+  S.profile.stepGoal   = parseInt(document.getElementById('set-stepgoal').value)    || S.profile.stepGoal;
+  S.profile.kcalGoal   = parseInt(document.getElementById('set-kcal').value)        || S.profile.kcalGoal;
+  S.profile.waterGoal  = parseInt(document.getElementById('set-water').value)       || S.profile.waterGoal;
+  S.profile.proteinMin = parseFloat(document.getElementById('set-pmin').value)      || S.profile.proteinMin;
+  S.profile.proteinMax = parseFloat(document.getElementById('set-pmax').value)      || S.profile.proteinMax;
+  saveState(S);
+  hideOverlay('settings-overlay');
+  if(currentScreen==='nutrition') renderNutrition();
+  if(currentScreen==='habits')    renderHabits();
+});
+
+// ═══════════════════════════════════════════════════
+// READINESS OVERLAY
+// ═══════════════════════════════════════════════════
+function calcReadiness(s,m,k){
+  // Schlaf+Motivation hoch=gut, Muskelkater hoch=schlecht (invertiert)
+  return ((s + m + (11-k)) / 3);
+}
+function readinessLabel(score){
+  if(score >= 8) return 'Volle Power 🔥';
+  if(score >= 6.5) return 'Gut bereit ✓';
+  if(score >= 5) return 'Solide — leg los';
+  return 'Heute leichter? -20% empfohlen';
+}
+function updateReadiness(){
+  const s = +document.getElementById('rd-sleep').value;
+  const m = +document.getElementById('rd-motiv').value;
+  const k = +document.getElementById('rd-sore').value;
+  document.getElementById('rd-sleep-val').textContent = s;
+  document.getElementById('rd-motiv-val').textContent = m;
+  document.getElementById('rd-sore-val').textContent  = k;
+  const score = calcReadiness(s,m,k);
+  document.getElementById('rd-result').textContent = `Score: ${score.toFixed(1)} — ${readinessLabel(score)}`;
+}
+['rd-sleep','rd-motiv','rd-sore'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updateReadiness);
+});
+
+// hijack training start
+const startBtn = document.getElementById('start-workout-btn');
+const oldStartHandler = startBtn.onclick;
+startBtn.onclick = ()=>{
+  const {plan} = getTodayPlan();
+  if(plan.type==='rest') return;
+  updateReadiness();
+  showOverlay('readiness-overlay');
+};
+
+document.getElementById('readiness-confirm').addEventListener('click',()=>{
+  const s = +document.getElementById('rd-sleep').value;
+  const m = +document.getElementById('rd-motiv').value;
+  const k = +document.getElementById('rd-sore').value;
+  const score = +calcReadiness(s,m,k).toFixed(1);
+  S.readiness[todayStr] = score;
+  saveState(S);
+  hideOverlay('readiness-overlay');
+  const {plan} = getTodayPlan();
+  const exs = getExercisesForType(plan.type);
+  if(exs.length) navigate('exercise', exs[0]);
+  // re-render today card with new readiness
+  if(currentScreen==='training') renderTraining();
+});
+
+// ═══════════════════════════════════════════════════
+// REST TIMER
+// ═══════════════════════════════════════════════════
+let _restInt = null;
+let _restRemain = 0;
+
+function smartRest(rMin, rMax){
+  const avg = (rMin+rMax)/2;
+  if(avg <= 5) return 180;
+  if(avg <= 8) return 120;
+  if(avg <= 12) return 90;
+  return 60;
+}
+
+function fmtTime(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function startRest(seconds){
+  clearInterval(_restInt);
+  _restRemain = seconds;
+  const banner = document.getElementById('rest-timer');
+  banner.classList.remove('hidden');
+  document.getElementById('rt-time').textContent = fmtTime(_restRemain);
+  _restInt = setInterval(()=>{
+    _restRemain--;
+    if(_restRemain <= 0){
+      clearInterval(_restInt);
+      document.getElementById('rt-time').textContent = '0:00 ✓';
+      if(navigator.vibrate) navigator.vibrate([120,80,120]);
+      setTimeout(()=>banner.classList.add('hidden'), 1800);
+      return;
+    }
+    document.getElementById('rt-time').textContent = fmtTime(_restRemain);
+  },1000);
+}
+function stopRest(){
+  clearInterval(_restInt);
+  document.getElementById('rest-timer').classList.add('hidden');
+}
+document.getElementById('rt-plus').addEventListener('click',()=>{ _restRemain += 30; document.getElementById('rt-time').textContent = fmtTime(_restRemain); });
+document.getElementById('rt-minus').addEventListener('click',()=>{ _restRemain = Math.max(5, _restRemain - 30); document.getElementById('rt-time').textContent = fmtTime(_restRemain); });
+document.getElementById('rt-skip').addEventListener('click',stopRest);
+
+// hook in setRows to start timer on check
+const _origRenderSetRows = renderSetRows;
+renderSetRows = function(ex){
+  _origRenderSetRows(ex);
+  const container = document.getElementById('set-rows');
+  container.querySelectorAll('.set-check').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const newlyDone = btn.classList.contains('done');
+      if(newlyDone){
+        const dur = smartRest(ex.rMin, ex.rMax) || ex.rest || 90;
+        startRest(dur);
+        if(navigator.vibrate) navigator.vibrate(40);
+      }
+    });
+  });
+};
+
+// stop timer when leaving exercise screen
+const _origNavigate = navigate;
+navigate = function(screen, data){
+  if(currentScreen==='exercise' && screen!=='exercise') stopRest();
+  _origNavigate(screen, data);
+};
+
+// ═══════════════════════════════════════════════════
+// AUTO-PROGRESSION ACCEPT/DECLINE
+// ═══════════════════════════════════════════════════
+document.getElementById('prog-yes').addEventListener('click',()=>{
+  if(!currentExercise) return;
+  S.acceptedProgressions[currentExercise.id] = (currentExercise.pr?.w||0) + 2.5;
+  saveState(S);
+  document.getElementById('progression-hint').style.display='none';
+  if(navigator.vibrate) navigator.vibrate([60,40,60]);
+});
+document.getElementById('prog-no').addEventListener('click',()=>{
+  document.getElementById('progression-hint').style.display='none';
+});
+
+// ═══════════════════════════════════════════════════
+// BIND READINESS TO TODAY-CARD
+// ═══════════════════════════════════════════════════
+const _origRenderTodayCard = renderTodayCard;
+renderTodayCard = function(plan, week){
+  _origRenderTodayCard(plan, week);
+  const r = S.readiness[todayStr];
+  if(r != null){
+    const el = document.getElementById('stat-readiness');
+    el.textContent = r.toFixed(1);
+    el.style.color = r >= 7 ? 'var(--green)' : r >= 5 ? 'var(--amber)' : 'var(--red, #f06060)';
+  }
+};
 
 renderTraining();
 </script>
