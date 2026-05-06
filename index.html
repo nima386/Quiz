@@ -69,7 +69,7 @@ body{
   position:fixed;inset:0;padding:0;
 }
 
-/* â”€â”€ APP SHELL â”€â”€ */
+/* ── APP SHELL ── */
 #app{
   display:flex;flex-direction:column;
   height:100vh;height:-webkit-fill-available;height:100dvh;
@@ -85,7 +85,7 @@ body{
     radial-gradient(600px 400px at 110% 10%,rgba(240,98,146,0.10),transparent 60%);
 }
 
-/* â”€â”€ SCREENS â”€â”€ */
+/* ── SCREENS ── */
 .screen{
   position:absolute;inset:0;
   display:flex;flex-direction:column;
@@ -105,7 +105,7 @@ body{
   transform:translateX(-30%);opacity:0;pointer-events:none;
 }
 
-/* â”€â”€ HEADER â”€â”€ */
+/* ── HEADER ── */
 .app-header{
   padding:calc(var(--safe-top) + 18px) 20px 22px;
   display:flex;justify-content:space-between;align-items:center;
@@ -147,7 +147,7 @@ body{
   touch-action:manipulation;
 }
 
-/* â”€â”€ SCREEN BODY â”€â”€ */
+/* ── SCREEN BODY ── */
 .screen-body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
@@ -158,7 +158,7 @@ body{
 }
 .screen-body::-webkit-scrollbar{display:none;}
 
-/* â”€â”€ CALENDAR â”€â”€ */
+/* ── CALENDAR ── */
 .calendar-strip{
   display:flex;gap:7px;padding:14px 2px 18px;
   overflow-x:auto;scrollbar-width:none;
@@ -178,7 +178,7 @@ body{
   transform:translateY(-2px);
 }
 .cal-day.done::after{
-  content:'âœ“';position:absolute;top:4px;right:5px;
+  content:'✓';position:absolute;top:4px;right:5px;
   font-size:.52rem;color:var(--green);
 }
 .cal-day-name{
@@ -193,7 +193,7 @@ body{
 .cal-day.rest .cal-dot{background:var(--text-muted);}
 .cal-day.done .cal-dot{background:var(--green);}
 
-/* â”€â”€ TODAY CARD â”€â”€ */
+/* ── TODAY CARD ── */
 .today-card{
   background:linear-gradient(135deg,rgba(110,99,242,0.20),rgba(240,98,146,0.12)),var(--bg-card);
   border:1px solid var(--border-glow);border-radius:var(--r-lg);
@@ -240,7 +240,7 @@ body{
   position:relative;
 }
 
-/* â”€â”€ SECTION ROWS â”€â”€ */
+/* ── SECTION ROWS ── */
 .section-row{
   display:flex;justify-content:space-between;align-items:center;
   margin:16px 0 10px;
@@ -252,7 +252,7 @@ body{
   cursor:pointer;touch-action:manipulation;
 }
 
-/* â”€â”€ MUSCLE CATS â”€â”€ */
+/* ── MUSCLE CATS ── */
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
 .cat-card{
   background:var(--bg-card);border:1px solid var(--border-default);
@@ -272,7 +272,7 @@ body{
 }
 .cat-prog{position:absolute;bottom:0;left:0;height:2px;border-radius:2px;transition:width .4s var(--ease);}
 
-/* â”€â”€ EXERCISE LIST â”€â”€ */
+/* ── EXERCISE LIST ── */
 .ex-list{display:flex;flex-direction:column;gap:7px;}
 .ex-card{
   background:var(--bg-card);border:1px solid var(--border-default);
@@ -302,7 +302,7 @@ body{
   font-size:.7rem;color:#fff;flex-shrink:0;
 }
 
-/* â”€â”€ EXERCISE DETAIL â”€â”€ */
+/* ── EXERCISE DETAIL ── */
 .ex-hero{
   margin:12px 0 14px;padding:16px;
   background:var(--bg-card);border:1px solid var(--border-default);
@@ -330,7 +330,7 @@ body{
 .tag-pink{background:rgba(240,98,146,0.18);color:var(--pink);border:1px solid rgba(240,98,146,0.3);}
 .tag-amber{background:rgba(255,202,40,0.15);color:var(--amber);border:1px solid rgba(255,202,40,0.3);}
 
-/* â”€â”€ PR CARD â”€â”€ */
+/* ── PR CARD ── */
 .pr-card{
   background:linear-gradient(135deg,rgba(38,212,124,0.10),rgba(38,198,218,0.05));
   border:1px solid rgba(38,212,124,0.25);border-radius:var(--r-md);
@@ -346,7 +346,7 @@ body{
 .pr-text{font-size:.8rem;font-weight:600;}
 .pr-value{font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:700;color:var(--green);}
 
-/* â”€â”€ HISTORY CHART â”€â”€ */
+/* ── HISTORY CHART ── */
 .history-card{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-lg);padding:15px;margin-bottom:12px;
@@ -372,7 +372,7 @@ body{
   white-space:nowrap;
 }
 
-/* â”€â”€ SET TRACKER â”€â”€ */
+/* ── SET TRACKER ── */
 .set-tracker{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-lg);padding:15px;margin-bottom:12px;
@@ -416,7 +416,7 @@ body{
 }
 .set-check.done{background:var(--green);border-color:var(--green);color:#fff;}
 
-/* â”€â”€ HINT BANNER â”€â”€ */
+/* ── HINT BANNER ── */
 .hint-banner{
   border-radius:var(--r-lg);padding:14px;margin-bottom:12px;
   display:flex;align-items:center;gap:12px;
@@ -428,7 +428,7 @@ body{
 }
 .hint-text{font-size:.8rem;font-weight:600;margin-top:2px;}
 
-/* â”€â”€ NUTRITION â”€â”€ */
+/* ── NUTRITION ── */
 .macro-ring-card{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-lg);padding:18px;margin-bottom:14px;
@@ -484,7 +484,7 @@ body{
 .water-bar-wrap{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:8px;}
 .water-bar{height:4px;background:var(--teal);border-radius:2px;transition:width .4s var(--ease);}
 
-/* â”€â”€ HABITS â”€â”€ */
+/* ── HABITS ── */
 .streak-banner{
   background:linear-gradient(135deg,rgba(255,138,61,0.18),rgba(240,98,146,0.10));
   border:1px solid rgba(255,138,61,0.30);
@@ -529,7 +529,7 @@ body{
 .habit-name.done{text-decoration:line-through;opacity:0.5;}
 .habit-streak{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--amber);letter-spacing:.05em;}
 
-/* â”€â”€ BOTTOM NAV â”€â”€ */
+/* ── BOTTOM NAV ── */
 .bottom-nav{
   position:fixed;
   left:50%;
@@ -616,7 +616,7 @@ body{
   .nav-label{font-size:.48rem;}
 }
 
-/* â”€â”€ DESKTOP CENTER â”€â”€ */
+/* ── DESKTOP CENTER ── */
 @media(min-width:430px){
   body{background:#08080f;display:flex;justify-content:center;}
   #app{
@@ -630,7 +630,7 @@ body{
   #app{height:100dvh;min-height:100dvh;}
 }
 
-/* â”€â”€ UTILS â”€â”€ */
+/* ── UTILS ── */
 .spacer{height:10px;}
 .kicker{
   font-family:'JetBrains Mono',monospace;
@@ -639,7 +639,7 @@ body{
   margin-bottom:8px;
 }
 
-/* â”€â”€ PROTEIN TRACKER (NEW) â”€â”€ */
+/* ── PROTEIN TRACKER (NEW) ── */
 .protein-tracker{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-lg);padding:14px 16px 16px;margin-bottom:14px;
@@ -686,7 +686,7 @@ body{
 .p-green  {background:rgba(38,212,124,0.15); color:var(--green);}
 .p-teal   {background:rgba(38,198,218,0.15); color:var(--teal);}
 
-/* â”€â”€ STEPS CARD (NEW) â”€â”€ */
+/* ── STEPS CARD (NEW) ── */
 .steps-card{
   background:var(--bg-card);border:1px solid var(--border-default);
   border-radius:var(--r-lg);padding:14px 16px 16px;margin-bottom:14px;
@@ -733,7 +733,7 @@ body{
   letter-spacing:.08em;cursor:pointer;touch-action:manipulation;
 }
 
-/* â”€â”€ OVERLAY / MODAL â”€â”€ */
+/* ── OVERLAY / MODAL ── */
 .overlay{
   position:absolute;inset:0;z-index:50;
   background:rgba(8,8,15,0.65);
@@ -802,7 +802,7 @@ body{
 }
 .auth-status.error{color:#ff8a8a;}
 .auth-status.success{color:var(--green);}
-/* â”€â”€ READINESS SLIDERS â”€â”€ */
+/* ── READINESS SLIDERS ── */
 .slider-group{margin-bottom:18px;}
 .slider-head{
   display:flex;justify-content:space-between;align-items:center;
@@ -834,7 +834,7 @@ input[type=range]::-moz-range-thumb{
   margin:10px 0 14px;
 }
 
-/* â”€â”€ REST TIMER BANNER â”€â”€ */
+/* ── REST TIMER BANNER ── */
 .rest-timer{
   background:linear-gradient(135deg,rgba(38,198,218,0.18),rgba(110,99,242,0.10));
   border:1px solid rgba(38,198,218,0.35);
@@ -862,7 +862,7 @@ input[type=range]::-moz-range-thumb{
 }
 .rt-skip{background:transparent;color:var(--text-muted);padding:6px 8px;}
 
-/* â”€â”€ EDITABLE LIST ITEMS â”€â”€ */
+/* ── EDITABLE LIST ITEMS ── */
 .meal-card,.habit-card{cursor:pointer;}
 .meal-card:active,.habit-card:active{transform:scale(0.985);}
 
@@ -963,7 +963,7 @@ input[type=range]::-moz-range-thumb{
   letter-spacing:.1em;cursor:pointer;touch-action:manipulation;
 }
 
-/* Card-action button (small â‹® button â€” inline) */
+/* Card-action button (small ⋮ button — inline) */
 .card-action{
   width:32px;height:32px;border-radius:50%;
   background:rgba(255,255,255,0.06);
@@ -994,7 +994,7 @@ input[type=range]::-moz-range-thumb{
   box-shadow:var(--shadow-glow);
 }
 
-/* â”€â”€ KONFETTI â”€â”€ */
+/* ── KONFETTI ── */
 .konfetti-stage{
   position:absolute;inset:0;pointer-events:none;
   z-index:60;overflow:hidden;
@@ -1194,7 +1194,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
   margin-top:10px;
 }
 
-/* Settings â†’ Profil-Karte oben */
+/* Settings → Profil-Karte oben */
 .btn-primary,.btn-social,.cta-btn,.settings-action-btn,.btn-logout,.auth-secondary{
   position:relative;overflow:visible;
   transform:translateZ(0);
@@ -1375,7 +1375,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
 .settings-sync.error  .settings-sync-dot{background:var(--red);box-shadow:0 0 8px var(--red);animation:none;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
-/* SekundÃ¤rer Action-Button (Sync-Now etc) */
+/* Sekundärer Action-Button (Sync-Now etc) */
 .settings-action-btn{
   width:100%;background:rgba(110,99,242,0.10);
   border:1px solid rgba(110,99,242,0.25);color:var(--purple-300);
@@ -1402,35 +1402,35 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         </svg>
       </div>
       <div class="logo-name">FORGE</div>
-      <div class="logo-tagline">train smart Â· log fast</div>
+      <div class="logo-tagline">train smart · log fast</div>
     </div>
 
     <div id="auth-welcome-panel" class="auth-gate-panel active">
       <div class="welcome-title">Dein Plan.<br>Deine Daten.<br>Dein Weg.</div>
-      <div class="welcome-copy">Komplett anpassbar. Trainingsplan, ErnÃ¤hrung & Gewohnheiten â€” alles in einer App.</div>
+      <div class="welcome-copy">Komplett anpassbar. Trainingsplan, Ernährung & Gewohnheiten — alles in einer App.</div>
       <div class="welcome-features">
         <div class="feat-row">
-          <div class="feat-icon icon-purple">ðŸ‹ï¸</div>
-          <div><div class="feat-text">Modulare TrainingsplÃ¤ne</div><div class="feat-mono">Push Â· Pull Â· Beine Â· Custom</div></div>
+          <div class="feat-icon icon-purple">🏋️</div>
+          <div><div class="feat-text">Modulare Trainingspläne</div><div class="feat-mono">Push · Pull · Beine · Custom</div></div>
         </div>
         <div class="feat-row">
-          <div class="feat-icon icon-purple">ðŸ“Š</div>
-          <div><div class="feat-text">Auto-Tracking & PRs</div><div class="feat-mono">Verlauf Â· Progression Â· Streaks</div></div>
+          <div class="feat-icon icon-purple">📊</div>
+          <div><div class="feat-text">Auto-Tracking & PRs</div><div class="feat-mono">Verlauf · Progression · Streaks</div></div>
         </div>
         <div class="feat-row">
-          <div class="feat-icon icon-purple">ðŸ¥—</div>
-          <div><div class="feat-text">Protein- & Schritt-Ziele</div><div class="feat-mono">Health Â· Makros Â· Habits</div></div>
+          <div class="feat-icon icon-purple">🥗</div>
+          <div><div class="feat-text">Protein- & Schritt-Ziele</div><div class="feat-mono">Health · Makros · Habits</div></div>
         </div>
       </div>
-      <button class="btn-primary" data-auth-mode="signup" style="margin-bottom:10px;">Account erstellen â†’</button>
+      <button class="btn-primary" data-auth-mode="signup" style="margin-bottom:10px;">Account erstellen →</button>
       <button class="btn-social" data-auth-mode="login" style="padding:14px;">Bereits Account? Anmelden</button>
     </div>
 
     <div id="auth-login-panel" class="auth-gate-panel">
       <div class="auth-header">
-        <div class="auth-kicker">// willkommen zurÃ¼ck</div>
-        <div class="auth-title">Hey, Champion ðŸ‘Š</div>
-        <div class="auth-sub">Melde dich an und mach da weiter, wo du aufgehÃ¶rt hast.</div>
+        <div class="auth-kicker">// willkommen zurück</div>
+        <div class="auth-title">Hey, Champion 👊</div>
+        <div class="auth-sub">Melde dich an und mach da weiter, wo du aufgehört hast.</div>
       </div>
       <div class="segmented">
         <button class="seg-btn active" data-auth-mode="login">Anmelden</button>
@@ -1440,20 +1440,20 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <div>
           <label class="field-label">E-Mail</label>
           <div class="field-wrap">
-            <span class="field-icon">âœ‰</span>
+            <span class="field-icon">✉</span>
             <input type="email" class="field" id="gate-login-email" placeholder="du@beispiel.com" autocomplete="email">
           </div>
         </div>
         <div>
           <label class="field-label">Passwort</label>
           <div class="field-wrap">
-            <span class="field-icon">ðŸ”’</span>
+            <span class="field-icon">🔒</span>
             <input type="password" class="field" id="gate-login-password" placeholder="Dein Passwort" autocomplete="current-password">
           </div>
         </div>
       </div>
       <div class="forgot-row"><button class="forgot-link" id="gate-reset-password">// passwort vergessen?</button></div>
-      <button class="btn-primary" id="gate-login-btn">Anmelden â†’</button>
+      <button class="btn-primary" id="gate-login-btn">Anmelden →</button>
       <div class="divider"><span>// oder schnell mit</span></div>
       <div class="social-row">
         <button class="btn-social" id="gate-apple-login">Apple</button>
@@ -1476,21 +1476,21 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <div>
           <label class="field-label">Name</label>
           <div class="field-wrap">
-            <span class="field-icon">ðŸ‘¤</span>
+            <span class="field-icon">👤</span>
             <input type="text" class="field" id="gate-signup-name" placeholder="Wie sollen wir dich nennen?" autocomplete="name">
           </div>
         </div>
         <div>
           <label class="field-label">E-Mail</label>
           <div class="field-wrap">
-            <span class="field-icon">âœ‰</span>
+            <span class="field-icon">✉</span>
             <input type="email" class="field" id="gate-signup-email" placeholder="du@beispiel.com" autocomplete="email">
           </div>
         </div>
         <div>
           <label class="field-label">Passwort</label>
           <div class="field-wrap">
-            <span class="field-icon">ðŸ”’</span>
+            <span class="field-icon">🔒</span>
             <input type="password" class="field" id="gate-signup-password" placeholder="Mind. 8 Zeichen" autocomplete="new-password">
           </div>
           <div class="pw-strength" id="gate-pw-bars">
@@ -1499,7 +1499,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
           <div class="pw-strength-label" id="gate-pw-label">// passwort eingeben</div>
         </div>
       </div>
-      <button class="btn-primary" id="gate-signup-btn">Konto erstellen âš¡</button>
+      <button class="btn-primary" id="gate-signup-btn">Konto erstellen ⚡</button>
       <div class="divider"><span>// oder</span></div>
       <div class="social-row">
         <button class="btn-social" id="gate-apple-signup">Apple</button>
@@ -1519,13 +1519,13 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <div class="profile-email" id="gate-profile-email"></div>
       </div>
       <div class="settings-list">
-        <div class="setting-row"><div class="setting-icon icon-purple">ðŸ‘¤</div><div class="setting-text"><div class="setting-name">PersÃ¶nliche Daten</div><div class="setting-sub">Profil Â· Ziele Â· Account</div></div></div>
-        <div class="setting-row"><div class="setting-icon icon-purple">ðŸ’¾</div><div class="setting-text"><div class="setting-name">Daten & Backup</div><div class="setting-sub">Supabase Â· geschÃ¼tzt Â· synchron</div></div></div>
-        <div class="setting-row"><div class="setting-icon icon-red">â»</div><div class="setting-text"><div class="setting-name">Abmelden</div><div class="setting-sub">Zur Login-Seite zurÃ¼ck</div></div></div>
+        <div class="setting-row"><div class="setting-icon icon-purple">👤</div><div class="setting-text"><div class="setting-name">Persönliche Daten</div><div class="setting-sub">Profil · Ziele · Account</div></div></div>
+        <div class="setting-row"><div class="setting-icon icon-purple">💾</div><div class="setting-text"><div class="setting-name">Daten & Backup</div><div class="setting-sub">Supabase · geschützt · synchron</div></div></div>
+        <div class="setting-row"><div class="setting-icon icon-red">⏻</div><div class="setting-text"><div class="setting-name">Abmelden</div><div class="setting-sub">Zur Login-Seite zurück</div></div></div>
       </div>
-      <button class="btn-logout" id="gate-logout-btn">â» Abmelden</button>
-      <button class="btn-primary" id="gate-open-app-btn" style="margin-top:10px;">Zur App â†’</button>
-      <div class="version-mono">// forge Â· account required</div>
+      <button class="btn-logout" id="gate-logout-btn">⏻ Abmelden</button>
+      <button class="btn-primary" id="gate-open-app-btn" style="margin-top:10px;">Zur App →</button>
+      <div class="version-mono">// forge · account required</div>
     </div>
 
     <div class="auth-status auth-gate-status" id="gate-auth-status"></div>
@@ -1533,12 +1533,12 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
 </section>
 <div id="app">
 
-  <!-- â•â•â•â•â•â•â• SCREEN: TRAINING â•â•â•â•â•â•â• -->
+  <!-- ═══════ SCREEN: TRAINING ═══════ -->
   <div id="screen-training" class="screen active">
     <div class="app-header">
       <div class="header-left">
         <div class="header-kicker" id="train-kicker"></div>
-        <div class="header-title" id="train-title">Hey Champion ðŸ‘Š</div>
+        <div class="header-title" id="train-title">Hey Champion 👊</div>
       </div>
       <div class="avatar">JM</div>
     </div>
@@ -1557,7 +1557,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <div class="today-stats">
           <div class="stat-block">
             <div class="stat-val" id="stat-exercises">5</div>
-            <div class="stat-lbl">Ãœbungen</div>
+            <div class="stat-lbl">Übungen</div>
           </div>
           <div class="stat-block">
             <div class="stat-val" id="stat-duration">~52'</div>
@@ -1568,43 +1568,43 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
             <div class="stat-lbl">Readiness</div>
           </div>
         </div>
-        <button class="cta-btn" id="start-workout-btn">â–¶ Training starten</button>
+        <button class="cta-btn" id="start-workout-btn">▶ Training starten</button>
       </div>
 
       <div class="section-row">
         <div class="section-row-title">Muskelgruppen heute</div>
-        <span class="section-row-link">bearbeiten â†’</span>
+        <span class="section-row-link">bearbeiten →</span>
       </div>
       <div class="cat-grid" id="muscle-grid"></div>
 
       <div class="section-row">
-        <div class="section-row-title">Ãœbungen</div>
-        <span class="section-row-link">+ hinzufÃ¼gen</span>
+        <div class="section-row-title">Übungen</div>
+        <span class="section-row-link">+ hinzufügen</span>
       </div>
       <div class="ex-list" id="exercise-list"></div>
     </div>
     <nav class="bottom-nav" id="nav-training">
-      <div class="nav-item active" data-screen="training"><div class="nav-icon">ðŸ‹ï¸</div><div class="nav-label">Training</div></div>
-      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">ðŸ¥—</div><div class="nav-label">ErnÃ¤hrung</div></div>
-      <div class="nav-item" data-screen="habits"><div class="nav-icon">âœ¨</div><div class="nav-label">Habits</div></div>
+      <div class="nav-item active" data-screen="training"><div class="nav-icon">🏋️</div><div class="nav-label">Training</div></div>
+      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">🥗</div><div class="nav-label">Ernährung</div></div>
+      <div class="nav-item" data-screen="habits"><div class="nav-icon">✨</div><div class="nav-label">Habits</div></div>
     </nav>
   </div>
 
-  <!-- â•â•â•â•â•â•â• SCREEN: EXERCISE DETAIL â•â•â•â•â•â•â• -->
+  <!-- ═══════ SCREEN: EXERCISE DETAIL ═══════ -->
   <div id="screen-exercise" class="screen">
     <div class="app-header">
-      <button class="back-btn" id="back-btn">â† zurÃ¼ck</button>
+      <button class="back-btn" id="back-btn">← zurück</button>
       <div class="avatar">JM</div>
     </div>
     <div class="screen-body">
       <!-- REST TIMER (NEW) -->
       <div id="rest-timer" class="rest-timer hidden">
-        <div class="rt-icon">â±ï¸</div>
+        <div class="rt-icon">⏱️</div>
         <div class="rt-info">
           <div class="rt-label">// PAUSE</div>
           <div class="rt-time" id="rt-time">2:00</div>
         </div>
-        <button class="rt-btn" id="rt-minus">âˆ’30</button>
+        <button class="rt-btn" id="rt-minus">−30</button>
         <button class="rt-btn" id="rt-plus">+30</button>
         <button class="rt-skip" id="rt-skip">SKIP</button>
       </div>
@@ -1616,21 +1616,21 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       </div>
       <div class="pr-card" id="pr-card">
         <div style="display:flex;align-items:center;">
-          <div class="pr-icon-wrap">ðŸ†</div>
+          <div class="pr-icon-wrap">🏆</div>
           <div><div class="pr-label">Personal Record</div><div class="pr-text" id="pr-text"></div></div>
         </div>
         <div class="pr-value" id="pr-value"></div>
       </div>
       <div class="history-card">
         <div class="card-head">
-          <div class="card-title">Verlauf Â· Top-Set</div>
+          <div class="card-title">Verlauf · Top-Set</div>
           <div class="card-sub" id="chart-sub">letzte sessions</div>
         </div>
         <div class="chart" id="history-chart"></div>
       </div>
       <div class="set-tracker">
         <div class="card-head" style="margin-bottom:10px;">
-          <div class="card-title">Heutige SÃ¤tze</div>
+          <div class="card-title">Heutige Sätze</div>
           <div class="card-sub" id="last-session-hint"></div>
         </div>
         <div class="set-header">
@@ -1643,7 +1643,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       </div>
       <div class="hint-banner" id="progression-hint" style="background:linear-gradient(135deg,rgba(110,99,242,0.18),rgba(38,198,218,0.10));border:1px solid var(--border-glow);flex-direction:column;align-items:stretch;">
         <div style="display:flex;align-items:center;gap:12px;">
-          <div class="hint-icon">âš¡</div>
+          <div class="hint-icon">⚡</div>
           <div style="flex:1;">
             <div class="hint-lbl" style="color:var(--purple-300);">// auto-progression</div>
             <div class="hint-text" id="progression-text"></div>
@@ -1656,30 +1656,30 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       </div>
     </div>
     <nav class="bottom-nav">
-      <div class="nav-item active"><div class="nav-icon">ðŸ‹ï¸</div><div class="nav-label">Training</div></div>
-      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">ðŸ¥—</div><div class="nav-label">ErnÃ¤hrung</div></div>
-      <div class="nav-item" data-screen="habits"><div class="nav-icon">âœ¨</div><div class="nav-label">Habits</div></div>
+      <div class="nav-item active"><div class="nav-icon">🏋️</div><div class="nav-label">Training</div></div>
+      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">🥗</div><div class="nav-label">Ernährung</div></div>
+      <div class="nav-item" data-screen="habits"><div class="nav-icon">✨</div><div class="nav-label">Habits</div></div>
     </nav>
   </div>
 
-  <!-- â•â•â•â•â•â•â• SCREEN: NUTRITION â•â•â•â•â•â•â• -->
+  <!-- ═══════ SCREEN: NUTRITION ═══════ -->
   <div id="screen-nutrition" class="screen">
     <div class="app-header">
       <div class="header-left">
         <div class="header-kicker" id="nutr-kicker"></div>
-        <div class="header-title">ErnÃ¤hrung ðŸ¥—</div>
+        <div class="header-title">Ernährung 🥗</div>
       </div>
       <div class="avatar">JM</div>
     </div>
     <div class="screen-body">
-      <!-- ðŸ†• PROTEIN TRACKER -->
+      <!-- 🆕 PROTEIN TRACKER -->
       <div class="protein-tracker">
         <div class="protein-head">
           <div class="kicker" style="margin-bottom:0;color:var(--purple-400)">// PROTEIN-ZIEL</div>
-          <span class="protein-status p-green" id="protein-status">IM ZIEL âœ“</span>
+          <span class="protein-status p-green" id="protein-status">IM ZIEL ✓</span>
         </div>
         <div class="protein-val" id="protein-val">142<span class="g">g</span></div>
-        <div class="protein-target" id="protein-target">Bedarf: 126â€“140g</div>
+        <div class="protein-target" id="protein-target">Bedarf: 126–140g</div>
         <div class="protein-bar-wrap">
           <div class="protein-bar-track">
             <div class="protein-bar-fill" id="protein-bar-fill" style="width:0%;background:var(--green)"></div>
@@ -1718,46 +1718,46 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       <div id="meals-list"></div>
 
       <div class="hydration-card">
-        <div style="font-size:1.6rem;">ðŸ’§</div>
+        <div style="font-size:1.6rem;">💧</div>
         <div style="flex:1;min-width:0;">
           <div class="hydration-num" id="hydration-val">0,0<span style="font-size:.75rem;color:var(--text-muted)">L / 3L</span></div>
           <div class="hydration-lbl">// trinken heute</div>
           <div class="water-bar-wrap"><div class="water-bar" id="water-bar" style="width:0%"></div></div>
         </div>
-        <button class="card-action" id="hydration-menu" aria-label="Wert setzen">â‹®</button>
+        <button class="card-action" id="hydration-menu" aria-label="Wert setzen">⋮</button>
         <button class="hydration-btn" id="hydration-btn">+ 250ml</button>
       </div>
     </div>
     <nav class="bottom-nav">
-      <div class="nav-item" data-screen="training"><div class="nav-icon">ðŸ‹ï¸</div><div class="nav-label">Training</div></div>
-      <div class="nav-item active" data-screen="nutrition"><div class="nav-icon">ðŸ¥—</div><div class="nav-label">ErnÃ¤hrung</div></div>
-      <div class="nav-item" data-screen="habits"><div class="nav-icon">âœ¨</div><div class="nav-label">Habits</div></div>
+      <div class="nav-item" data-screen="training"><div class="nav-icon">🏋️</div><div class="nav-label">Training</div></div>
+      <div class="nav-item active" data-screen="nutrition"><div class="nav-icon">🥗</div><div class="nav-label">Ernährung</div></div>
+      <div class="nav-item" data-screen="habits"><div class="nav-icon">✨</div><div class="nav-label">Habits</div></div>
     </nav>
   </div>
 
-  <!-- â•â•â•â•â•â•â• SCREEN: HABITS â•â•â•â•â•â•â• -->
+  <!-- ═══════ SCREEN: HABITS ═══════ -->
   <div id="screen-habits" class="screen">
     <div class="app-header">
       <div class="header-left">
         <div class="header-kicker" id="habit-kicker"></div>
-        <div class="header-title">Habits âœ¨</div>
+        <div class="header-title">Habits ✨</div>
       </div>
       <div class="avatar">JM</div>
     </div>
     <div class="screen-body">
       <div class="streak-banner">
-        <div class="streak-flame">ðŸ”¥</div>
+        <div class="streak-flame">🔥</div>
         <div>
           <div class="streak-num" id="streak-num">0</div>
           <div class="streak-lbl">// tage in serie</div>
         </div>
         <div class="freeze-box">
           <div class="freeze-lbl">FREEZE</div>
-          <div class="freeze-val" id="freeze-val">2 â„ï¸</div>
+          <div class="freeze-val" id="freeze-val">2 ❄️</div>
         </div>
       </div>
 
-      <!-- ðŸ†• STEPS CARD -->
+      <!-- 🆕 STEPS CARD -->
       <div class="steps-card">
         <div class="steps-head">
           <div class="kicker" style="margin-bottom:0">// SCHRITTE HEUTE</div>
@@ -1778,9 +1778,9 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
           </div>
         </div>
         <div class="steps-foot">
-          <div class="steps-km" id="steps-km">â‰ˆ 0,0 km</div>
+          <div class="steps-km" id="steps-km">≈ 0,0 km</div>
           <div style="display:flex;align-items:center;">
-            <button class="card-action" id="steps-menu" aria-label="Wert setzen">â‹®</button>
+            <button class="card-action" id="steps-menu" aria-label="Wert setzen">⋮</button>
             <button class="steps-add" id="steps-add">+ 500</button>
           </div>
         </div>
@@ -1798,48 +1798,48 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       </div>
 
       <div class="section-row">
-        <div class="section-row-title">TÃ¤gliche Gewohnheiten</div>
+        <div class="section-row-title">Tägliche Gewohnheiten</div>
         <span class="section-row-link">+ neu</span>
       </div>
       <div id="habits-list"></div>
     </div>
     <nav class="bottom-nav">
-      <div class="nav-item" data-screen="training"><div class="nav-icon">ðŸ‹ï¸</div><div class="nav-label">Training</div></div>
-      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">ðŸ¥—</div><div class="nav-label">ErnÃ¤hrung</div></div>
-      <div class="nav-item active" data-screen="habits"><div class="nav-icon">âœ¨</div><div class="nav-label">Habits</div></div>
+      <div class="nav-item" data-screen="training"><div class="nav-icon">🏋️</div><div class="nav-label">Training</div></div>
+      <div class="nav-item" data-screen="nutrition"><div class="nav-icon">🥗</div><div class="nav-label">Ernährung</div></div>
+      <div class="nav-item active" data-screen="habits"><div class="nav-icon">✨</div><div class="nav-label">Habits</div></div>
     </nav>
   </div>
 
   <!-- KONFETTI STAGE -->
   <div id="konfetti-stage" class="konfetti-stage" aria-hidden="true"></div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: MEAL â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: MEAL ═══════ -->
   <div id="meal-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div>
           <div class="kicker" style="margin-bottom:2px;" id="meal-mode">// neue mahlzeit</div>
-          <div class="overlay-title" id="meal-title">Mahlzeit hinzufÃ¼gen</div>
+          <div class="overlay-title" id="meal-title">Mahlzeit hinzufügen</div>
         </div>
-        <button class="overlay-close" data-close="meal-overlay">âœ•</button>
+        <button class="overlay-close" data-close="meal-overlay">✕</button>
       </div>
       <div class="set-group">
         <label>Icon</label>
         <div class="icon-picker" id="meal-icons">
-          <span class="icon-pick" data-icon="ðŸŒ…">ðŸŒ…</span>
-          <span class="icon-pick" data-icon="â˜€ï¸">â˜€ï¸</span>
-          <span class="icon-pick" data-icon="ðŸ¥¤">ðŸ¥¤</span>
-          <span class="icon-pick" data-icon="ðŸŒ™">ðŸŒ™</span>
-          <span class="icon-pick" data-icon="ðŸŽ">ðŸŽ</span>
-          <span class="icon-pick" data-icon="ðŸ¥—">ðŸ¥—</span>
-          <span class="icon-pick" data-icon="ðŸ—">ðŸ—</span>
-          <span class="icon-pick" data-icon="ðŸ¥š">ðŸ¥š</span>
+          <span class="icon-pick" data-icon="🌅">🌅</span>
+          <span class="icon-pick" data-icon="☀️">☀️</span>
+          <span class="icon-pick" data-icon="🥤">🥤</span>
+          <span class="icon-pick" data-icon="🌙">🌙</span>
+          <span class="icon-pick" data-icon="🍎">🍎</span>
+          <span class="icon-pick" data-icon="🥗">🥗</span>
+          <span class="icon-pick" data-icon="🍗">🍗</span>
+          <span class="icon-pick" data-icon="🥚">🥚</span>
         </div>
       </div>
       <div class="set-group">
         <label>Name</label>
-        <input id="meal-name" type="text" placeholder="z.B. FrÃ¼hstÃ¼ck">
+        <input id="meal-name" type="text" placeholder="z.B. Frühstück">
       </div>
       <div class="set-group">
         <label>Zeit</label>
@@ -1862,34 +1862,34 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         </div>
       </div>
       <button class="cta-btn" id="meal-save">Speichern</button>
-      <button class="del-btn" id="meal-delete" style="display:none;">ðŸ—‘ Mahlzeit lÃ¶schen</button>
+      <button class="del-btn" id="meal-delete" style="display:none;">🗑 Mahlzeit löschen</button>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: MUSCLE GROUP â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: MUSCLE GROUP ═══════ -->
   <div id="muscle-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div>
           <div class="kicker" style="margin-bottom:2px;" id="mg-mode">// neue muskelgruppe</div>
-          <div class="overlay-title" id="mg-title">Muskelgruppe hinzufÃ¼gen</div>
+          <div class="overlay-title" id="mg-title">Muskelgruppe hinzufügen</div>
         </div>
-        <button class="overlay-close" data-close="muscle-overlay">âœ•</button>
+        <button class="overlay-close" data-close="muscle-overlay">✕</button>
       </div>
       <div class="set-group">
         <label>Icon</label>
         <div class="icon-picker" id="mg-icons">
-          <span class="icon-pick" data-icon="ðŸ’ª">ðŸ’ª</span>
-          <span class="icon-pick" data-icon="ðŸ‹ï¸">ðŸ‹ï¸</span>
-          <span class="icon-pick" data-icon="ðŸ¦¾">ðŸ¦¾</span>
-          <span class="icon-pick" data-icon="ðŸ”±">ðŸ”±</span>
-          <span class="icon-pick" data-icon="ðŸ¦µ">ðŸ¦µ</span>
-          <span class="icon-pick" data-icon="ðŸ¦¶">ðŸ¦¶</span>
-          <span class="icon-pick" data-icon="ðŸ‘">ðŸ‘</span>
-          <span class="icon-pick" data-icon="ðŸƒ">ðŸƒ</span>
-          <span class="icon-pick" data-icon="ðŸ§—">ðŸ§—</span>
-          <span class="icon-pick" data-icon="ðŸ¤¸">ðŸ¤¸</span>
+          <span class="icon-pick" data-icon="💪">💪</span>
+          <span class="icon-pick" data-icon="🏋️">🏋️</span>
+          <span class="icon-pick" data-icon="🦾">🦾</span>
+          <span class="icon-pick" data-icon="🔱">🔱</span>
+          <span class="icon-pick" data-icon="🦵">🦵</span>
+          <span class="icon-pick" data-icon="🦶">🦶</span>
+          <span class="icon-pick" data-icon="🍑">🍑</span>
+          <span class="icon-pick" data-icon="🏃">🏃</span>
+          <span class="icon-pick" data-icon="🧗">🧗</span>
+          <span class="icon-pick" data-icon="🤸">🤸</span>
         </div>
       </div>
       <div class="set-group">
@@ -1908,24 +1908,24 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         </div>
       </div>
       <button class="cta-btn" id="mg-save">Speichern</button>
-      <button class="del-btn" id="mg-delete" style="display:none;">ðŸ—‘ Muskelgruppe lÃ¶schen</button>
+      <button class="del-btn" id="mg-delete" style="display:none;">🗑 Muskelgruppe löschen</button>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: EXERCISE â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: EXERCISE ═══════ -->
   <div id="exercise-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div>
-          <div class="kicker" style="margin-bottom:2px;" id="ex-edit-mode">// neue Ã¼bung</div>
-          <div class="overlay-title" id="ex-edit-title">Ãœbung hinzufÃ¼gen</div>
+          <div class="kicker" style="margin-bottom:2px;" id="ex-edit-mode">// neue übung</div>
+          <div class="overlay-title" id="ex-edit-title">Übung hinzufügen</div>
         </div>
-        <button class="overlay-close" data-close="exercise-overlay">âœ•</button>
+        <button class="overlay-close" data-close="exercise-overlay">✕</button>
       </div>
       <div class="set-group">
         <label>Name</label>
-        <input id="ex-edit-name" type="text" placeholder="z.B. BankdrÃ¼cken">
+        <input id="ex-edit-name" type="text" placeholder="z.B. Bankdrücken">
       </div>
       <div class="set-group">
         <label>Muskelgruppe</label>
@@ -1938,7 +1938,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
           <span class="pill-pick" data-val="Kurzhantel">Kurzhantel</span>
           <span class="pill-pick" data-val="Maschine">Maschine</span>
           <span class="pill-pick" data-val="Kabel">Kabelzug</span>
-          <span class="pill-pick" data-val="KÃ¶rpergewicht">KÃ¶rpergewicht</span>
+          <span class="pill-pick" data-val="Körpergewicht">Körpergewicht</span>
         </div>
       </div>
       <div class="set-group">
@@ -1950,9 +1950,9 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         </div>
       </div>
       <div class="set-group">
-        <label>SÃ¤tze Â· Wdh. Min Â· Wdh. Max</label>
+        <label>Sätze · Wdh. Min · Wdh. Max</label>
         <div class="set-row-2" style="grid-template-columns:1fr 1fr 1fr">
-          <input id="ex-edit-sets" type="number" min="1" max="10" placeholder="SÃ¤tze">
+          <input id="ex-edit-sets" type="number" min="1" max="10" placeholder="Sätze">
           <input id="ex-edit-rmin" type="number" min="1" placeholder="Min">
           <input id="ex-edit-rmax" type="number" min="1" placeholder="Max">
         </div>
@@ -1962,11 +1962,11 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <input id="ex-edit-rest" type="number" min="0" max="600" placeholder="90">
       </div>
       <button class="cta-btn" id="ex-edit-save">Speichern</button>
-      <button class="del-btn" id="ex-edit-delete" style="display:none;">ðŸ—‘ Ãœbung lÃ¶schen</button>
+      <button class="del-btn" id="ex-edit-delete" style="display:none;">🗑 Übung löschen</button>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: AMOUNT (Wasser/Schritte) â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: AMOUNT (Wasser/Schritte) ═══════ -->
   <div id="amount-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
@@ -1975,7 +1975,7 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
           <div class="kicker" style="margin-bottom:2px;" id="am-kicker">// wert setzen</div>
           <div class="overlay-title" id="am-title">Wert setzen</div>
         </div>
-        <button class="overlay-close" data-close="amount-overlay">âœ•</button>
+        <button class="overlay-close" data-close="amount-overlay">✕</button>
       </div>
       <div class="set-group">
         <label id="am-label">Aktueller Wert</label>
@@ -1983,36 +1983,36 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
       </div>
       <div class="amount-quick" id="am-quick"></div>
       <div class="set-row-2" style="margin-top:14px;">
-        <button class="del-btn" id="am-reset" style="margin-top:0;">â†º ZurÃ¼cksetzen</button>
+        <button class="del-btn" id="am-reset" style="margin-top:0;">↺ Zurücksetzen</button>
         <button class="cta-btn"  id="am-save"  style="margin-top:0;">Speichern</button>
       </div>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: HABIT â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: HABIT ═══════ -->
   <div id="habit-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div>
           <div class="kicker" style="margin-bottom:2px;" id="habit-mode">// neuer habit</div>
-          <div class="overlay-title" id="habit-title">Gewohnheit hinzufÃ¼gen</div>
+          <div class="overlay-title" id="habit-title">Gewohnheit hinzufügen</div>
         </div>
-        <button class="overlay-close" data-close="habit-overlay">âœ•</button>
+        <button class="overlay-close" data-close="habit-overlay">✕</button>
       </div>
       <div class="set-group">
         <label>Icon</label>
         <div class="icon-picker" id="habit-icons">
-          <span class="icon-pick" data-icon="ðŸ‹ï¸">ðŸ‹ï¸</span>
-          <span class="icon-pick" data-icon="ðŸ’§">ðŸ’§</span>
-          <span class="icon-pick" data-icon="ðŸ¥©">ðŸ¥©</span>
-          <span class="icon-pick" data-icon="ðŸš¶">ðŸš¶</span>
-          <span class="icon-pick" data-icon="ðŸ§˜">ðŸ§˜</span>
-          <span class="icon-pick" data-icon="ðŸ˜´">ðŸ˜´</span>
-          <span class="icon-pick" data-icon="ðŸ“š">ðŸ“š</span>
-          <span class="icon-pick" data-icon="ðŸ§ ">ðŸ§ </span>
-          <span class="icon-pick" data-icon="ðŸŽ">ðŸŽ</span>
-          <span class="icon-pick" data-icon="âœ¨">âœ¨</span>
+          <span class="icon-pick" data-icon="🏋️">🏋️</span>
+          <span class="icon-pick" data-icon="💧">💧</span>
+          <span class="icon-pick" data-icon="🥩">🥩</span>
+          <span class="icon-pick" data-icon="🚶">🚶</span>
+          <span class="icon-pick" data-icon="🧘">🧘</span>
+          <span class="icon-pick" data-icon="😴">😴</span>
+          <span class="icon-pick" data-icon="📚">📚</span>
+          <span class="icon-pick" data-icon="🧠">🧠</span>
+          <span class="icon-pick" data-icon="🍎">🍎</span>
+          <span class="icon-pick" data-icon="✨">✨</span>
         </div>
       </div>
       <div class="set-group">
@@ -2020,17 +2020,17 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
         <input id="habit-name" type="text" placeholder="z.B. 10.000 Schritte">
       </div>
       <button class="cta-btn" id="habit-save">Speichern</button>
-      <button class="del-btn" id="habit-delete" style="display:none;">ðŸ—‘ Gewohnheit lÃ¶schen</button>
+      <button class="del-btn" id="habit-delete" style="display:none;">🗑 Gewohnheit löschen</button>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: SETTINGS â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: SETTINGS ═══════ -->
   <div id="settings-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div class="overlay-title">Einstellungen</div>
-        <button class="overlay-close" data-close="settings-overlay">âœ•</button>
+        <button class="overlay-close" data-close="settings-overlay">✕</button>
       </div>
 
       <!-- Profil-Karte (nur sichtbar wenn eingeloggt) -->
@@ -2079,40 +2079,40 @@ body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier
 
       <!-- Account-Aktionen (nur sichtbar wenn eingeloggt) -->
       <div id="settings-account-actions" style="display:none;">
-        <button class="settings-action-btn" id="settings-sync-now">â˜ Jetzt synchronisieren</button>
-        <button class="btn-logout" id="settings-logout">â» Abmelden</button>
+        <button class="settings-action-btn" id="settings-sync-now">☁ Jetzt synchronisieren</button>
+        <button class="btn-logout" id="settings-logout">⏻ Abmelden</button>
       </div>
       <!-- Account-Login (nur sichtbar wenn NICHT eingeloggt) -->
       <div id="settings-account-login" style="display:none;">
-        <button class="cta-btn" id="settings-go-login" style="margin-top:10px;">ðŸ”’ Anmelden / Account erstellen</button>
+        <button class="cta-btn" id="settings-go-login" style="margin-top:10px;">🔒 Anmelden / Account erstellen</button>
       </div>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â• OVERLAY: READINESS â•â•â•â•â•â•â• -->
+  <!-- ═══════ OVERLAY: READINESS ═══════ -->
   <div id="readiness-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
       <div class="overlay-head">
         <div>
           <div class="kicker" style="margin-bottom:2px;">// readiness-check</div>
-          <div class="overlay-title">Wie fÃ¼hlst du dich?</div>
+          <div class="overlay-title">Wie fühlst du dich?</div>
         </div>
-        <button class="overlay-close" data-close="readiness-overlay">âœ•</button>
+        <button class="overlay-close" data-close="readiness-overlay">✕</button>
       </div>
       <div class="slider-group">
-        <div class="slider-head"><span>ðŸ˜´ Schlaf</span><span class="slider-val" id="rd-sleep-val">7</span></div>
+        <div class="slider-head"><span>😴 Schlaf</span><span class="slider-val" id="rd-sleep-val">7</span></div>
         <input type="range" min="1" max="10" value="7" id="rd-sleep">
       </div>
       <div class="slider-group">
-        <div class="slider-head"><span>ðŸ”¥ Motivation</span><span class="slider-val" id="rd-motiv-val">8</span></div>
+        <div class="slider-head"><span>🔥 Motivation</span><span class="slider-val" id="rd-motiv-val">8</span></div>
         <input type="range" min="1" max="10" value="8" id="rd-motiv">
       </div>
       <div class="slider-group">
-        <div class="slider-head"><span>ðŸ’¢ Muskelkater (10 = stark)</span><span class="slider-val" id="rd-sore-val">3</span></div>
+        <div class="slider-head"><span>💢 Muskelkater (10 = stark)</span><span class="slider-val" id="rd-sore-val">3</span></div>
         <input type="range" min="1" max="10" value="3" id="rd-sore">
       </div>
-      <div class="readiness-result" id="rd-result">Score: 8.0 â€” Volle Power ðŸ”¥</div>
+      <div class="readiness-result" id="rd-result">Score: 8.0 — Volle Power 🔥</div>
       <button class="cta-btn" id="readiness-confirm">Training starten</button>
     </div>
   </div>
@@ -2346,24 +2346,24 @@ async function syncAppState(state=S){
   });
   if(error) console.warn('App state sync failed. Run supabase-app-state.sql if this table is missing.', error);
 }
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // DATA DEFAULTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 const PLAN = {
   weekMode: 'AB',
   weekA: {
     0:{type:'rest',  label:'Ruhetag',  duration:0},
     1:{type:'push',  label:'Push Day', duration:52, muscles:['Brust','Schultern','Trizeps']},
-    2:{type:'pull',  label:'Pull Day', duration:55, muscles:['RÃ¼cken','Bizeps']},
+    2:{type:'pull',  label:'Pull Day', duration:55, muscles:['Rücken','Bizeps']},
     3:{type:'legs',  label:'Bein Day', duration:60, muscles:['Quadrizeps','Hamstrings','Waden']},
     4:{type:'rest',  label:'Ruhetag',  duration:0},
-    5:{type:'upper', label:'OberkÃ¶rper',duration:58,muscles:['Brust','RÃ¼cken','Schultern']},
-    6:{type:'lower', label:'UnterkÃ¶rper',duration:55,muscles:['Quadrizeps','Glutes','Waden']},
+    5:{type:'upper', label:'Oberkörper',duration:58,muscles:['Brust','Rücken','Schultern']},
+    6:{type:'lower', label:'Unterkörper',duration:55,muscles:['Quadrizeps','Glutes','Waden']},
   },
   weekB: {
     0:{type:'rest',  label:'Ruhetag',  duration:0},
     1:{type:'push',  label:'Push Day', duration:52, muscles:['Brust','Schultern','Trizeps']},
-    2:{type:'pull',  label:'Pull Day', duration:55, muscles:['RÃ¼cken','Bizeps']},
+    2:{type:'pull',  label:'Pull Day', duration:55, muscles:['Rücken','Bizeps']},
     3:{type:'cardio',label:'Cardio',   duration:40, muscles:['Ausdauer']},
     4:{type:'rest',  label:'Ruhetag',  duration:0},
     5:{type:'legs',  label:'Bein Day', duration:60, muscles:['Quadrizeps','Hamstrings','Waden']},
@@ -2372,41 +2372,41 @@ const PLAN = {
 };
 
 const MUSCLE_META = {
-  'Brust':       {icon:'ðŸ’ª', color:'var(--pink)',    sets:12},
-  'Schultern':   {icon:'ðŸ‹ï¸', color:'var(--purple-500)', sets:8},
-  'Trizeps':     {icon:'ðŸ¦¾', color:'var(--teal)',    sets:9},
-  'RÃ¼cken':      {icon:'ðŸ”±', color:'var(--purple-400)',  sets:12},
-  'Bizeps':      {icon:'ðŸ’ª', color:'var(--pink)',    sets:8},
-  'Quadrizeps':  {icon:'ðŸ¦µ', color:'var(--amber)',   sets:12},
-  'Hamstrings':  {icon:'ðŸ¦µ', color:'var(--orange)',  sets:10},
-  'Waden':       {icon:'ðŸ¦¶', color:'var(--teal)',    sets:6},
-  'Glutes':      {icon:'ðŸ‘', color:'var(--pink)',    sets:10},
-  'Ausdauer':    {icon:'ðŸƒ', color:'var(--green)',   sets:0},
+  'Brust':       {icon:'💪', color:'var(--pink)',    sets:12},
+  'Schultern':   {icon:'🏋️', color:'var(--purple-500)', sets:8},
+  'Trizeps':     {icon:'🦾', color:'var(--teal)',    sets:9},
+  'Rücken':      {icon:'🔱', color:'var(--purple-400)',  sets:12},
+  'Bizeps':      {icon:'💪', color:'var(--pink)',    sets:8},
+  'Quadrizeps':  {icon:'🦵', color:'var(--amber)',   sets:12},
+  'Hamstrings':  {icon:'🦵', color:'var(--orange)',  sets:10},
+  'Waden':       {icon:'🦶', color:'var(--teal)',    sets:6},
+  'Glutes':      {icon:'🍑', color:'var(--pink)',    sets:10},
+  'Ausdauer':    {icon:'🏃', color:'var(--green)',   sets:0},
 };
 
 const EXERCISES = {
   push: [
-    {id:'bench',    name:'BankdrÃ¼cken (Langhantel)',       muscle:'Brust',    eq:'Langhantel',  type:'Compound', sets:4,rMin:6, rMax:8,  rest:180,
+    {id:'bench',    name:'Bankdrücken (Langhantel)',       muscle:'Brust',    eq:'Langhantel',  type:'Compound', sets:4,rMin:6, rMax:8,  rest:180,
      history:[{d:'25.03',w:80},{d:'29.03',w:82.5},{d:'02.04',w:85},{d:'08.04',w:87.5},{d:'12.04',w:90},{d:'28.04',w:87.5}],
      pr:{w:90,r:6,date:'12. April'}},
-    {id:'incline',  name:'SchrÃ¤gbankdrÃ¼cken (KH)',         muscle:'Brust',    eq:'Kurzhantel',  type:'Compound', sets:4,rMin:8, rMax:10, rest:120,
+    {id:'incline',  name:'Schrägbankdrücken (KH)',         muscle:'Brust',    eq:'Kurzhantel',  type:'Compound', sets:4,rMin:8, rMax:10, rest:120,
      history:[{d:'25.03',w:28},{d:'29.03',w:30},{d:'02.04',w:30},{d:'08.04',w:32},{d:'12.04',w:32},{d:'28.04',w:32}],
      pr:{w:32,r:10,date:'28. April'}},
     {id:'butterfly',name:'Butterfly',                      muscle:'Brust',    eq:'Maschine',    type:'Isolation',sets:3,rMin:10,rMax:12, rest:90,
      history:[{d:'25.03',w:40},{d:'29.03',w:42.5},{d:'02.04',w:45},{d:'08.04',w:45},{d:'12.04',w:47.5},{d:'28.04',w:45}],
      pr:{w:47.5,r:12,date:'12. April'}},
-    {id:'ohp',      name:'SchulterdrÃ¼cken (LH)',           muscle:'Schultern', eq:'Langhantel', type:'Compound', sets:3,rMin:6, rMax:8,  rest:150,
+    {id:'ohp',      name:'Schulterdrücken (LH)',           muscle:'Schultern', eq:'Langhantel', type:'Compound', sets:3,rMin:6, rMax:8,  rest:150,
      history:[{d:'25.03',w:50},{d:'29.03',w:52.5},{d:'02.04',w:55},{d:'08.04',w:55},{d:'12.04',w:57.5},{d:'28.04',w:57.5}],
      pr:{w:57.5,r:7,date:'28. April'}},
-    {id:'tricep',   name:'Trizeps-DrÃ¼cken (Kabel)',        muscle:'Trizeps',  eq:'Kabel',       type:'Isolation',sets:3,rMin:12,rMax:15, rest:60,
+    {id:'tricep',   name:'Trizeps-Drücken (Kabel)',        muscle:'Trizeps',  eq:'Kabel',       type:'Isolation',sets:3,rMin:12,rMax:15, rest:60,
      history:[{d:'25.03',w:15},{d:'29.03',w:15},{d:'02.04',w:17.5},{d:'08.04',w:17.5},{d:'12.04',w:20},{d:'28.04',w:20}],
      pr:{w:20,r:15,date:'28. April'}},
   ],
   pull: [
-    {id:'pullup',   name:'KlimmzÃ¼ge',                      muscle:'RÃ¼cken',   eq:'KÃ¶rpergewicht',type:'Compound',sets:4,rMin:6, rMax:10, rest:180,
+    {id:'pullup',   name:'Klimmzüge',                      muscle:'Rücken',   eq:'Körpergewicht',type:'Compound',sets:4,rMin:6, rMax:10, rest:180,
      history:[{d:'26.03',w:0},{d:'30.03',w:5},{d:'03.04',w:5},{d:'09.04',w:7.5},{d:'13.04',w:10},{d:'29.04',w:10}],
      pr:{w:10,r:8,date:'29. April'}},
-    {id:'row',      name:'Rudern (LH)',                    muscle:'RÃ¼cken',   eq:'Langhantel',  type:'Compound', sets:4,rMin:8, rMax:10, rest:150,
+    {id:'row',      name:'Rudern (LH)',                    muscle:'Rücken',   eq:'Langhantel',  type:'Compound', sets:4,rMin:8, rMax:10, rest:150,
      history:[{d:'26.03',w:60},{d:'30.03',w:62.5},{d:'03.04',w:65},{d:'09.04',w:67.5},{d:'13.04',w:70},{d:'29.04',w:70}],
      pr:{w:70,r:9,date:'29. April'}},
     {id:'curl',     name:'Bizeps Curl (KH)',               muscle:'Bizeps',   eq:'Kurzhantel',  type:'Isolation',sets:3,rMin:10,rMax:12, rest:90,
@@ -2425,13 +2425,13 @@ const EXERCISES = {
      pr:{w:110,r:18,date:'30. April'}},
   ],
   upper:[
-    {id:'bench',    name:'BankdrÃ¼cken (Langhantel)',       muscle:'Brust',    eq:'Langhantel',  type:'Compound', sets:3,rMin:6,rMax:8,   rest:180,
+    {id:'bench',    name:'Bankdrücken (Langhantel)',       muscle:'Brust',    eq:'Langhantel',  type:'Compound', sets:3,rMin:6,rMax:8,   rest:180,
      history:[{d:'25.03',w:80},{d:'29.03',w:82.5},{d:'02.04',w:85},{d:'08.04',w:87.5},{d:'12.04',w:90},{d:'28.04',w:87.5}],
      pr:{w:90,r:6,date:'12. April'}},
-    {id:'row',      name:'Rudern (LH)',                   muscle:'RÃ¼cken',   eq:'Langhantel',  type:'Compound', sets:3,rMin:8,rMax:10,  rest:150,
+    {id:'row',      name:'Rudern (LH)',                   muscle:'Rücken',   eq:'Langhantel',  type:'Compound', sets:3,rMin:8,rMax:10,  rest:150,
      history:[{d:'26.03',w:60},{d:'30.03',w:62.5},{d:'03.04',w:65},{d:'09.04',w:67.5},{d:'13.04',w:70},{d:'29.04',w:70}],
      pr:{w:70,r:9,date:'29. April'}},
-    {id:'ohp',      name:'SchulterdrÃ¼cken (LH)',          muscle:'Schultern',eq:'Langhantel',  type:'Compound', sets:3,rMin:6,rMax:8,   rest:150,
+    {id:'ohp',      name:'Schulterdrücken (LH)',          muscle:'Schultern',eq:'Langhantel',  type:'Compound', sets:3,rMin:6,rMax:8,   rest:150,
      history:[{d:'25.03',w:50},{d:'29.03',w:52.5},{d:'02.04',w:55},{d:'08.04',w:55},{d:'12.04',w:57.5},{d:'28.04',w:57.5}],
      pr:{w:57.5,r:7,date:'28. April'}},
   ],
@@ -2444,7 +2444,7 @@ const EXERCISES = {
      pr:{w:70,r:10,date:'30. April'}},
   ],
   cardio:[
-    {id:'run',      name:'Laufband',                      muscle:'Ausdauer', eq:'GerÃ¤t',       type:'Cardio',   sets:1,rMin:20,rMax:40, rest:0,
+    {id:'run',      name:'Laufband',                      muscle:'Ausdauer', eq:'Gerät',       type:'Cardio',   sets:1,rMin:20,rMax:40, rest:0,
      history:[{d:'20.04',w:0},{d:'27.04',w:0}],
      pr:{w:0,r:40,date:'27. April'}},
   ],
@@ -2462,15 +2462,15 @@ const DEFAULT_HABITS = [
 ];
 
 const DEFAULT_MEALS = [
-  {icon:'ðŸŒ…',bg:'rgba(255,202,40,0.15)',  name:'FrÃ¼hstÃ¼ck',   time:'07:42',items:'OATS, BANANE, WHEY',    kcal:486},
-  {icon:'â˜€ï¸',bg:'rgba(110,99,242,0.15)', name:'Mittag',      time:'12:15',items:'HÃ„HNCHEN, REIS, BROKKOLI',kcal:712},
-  {icon:'ðŸ¥¤',bg:'rgba(38,198,218,0.15)', name:'Pre-Workout', time:'17:30',items:'BANANE, KAFFEE',          kcal:125},
-  {icon:'ðŸŒ™',bg:'rgba(240,98,146,0.10)', name:'Abendessen',  time:'geplant Â· 19:30',items:'',              kcal:524,planned:true},
+  {icon:'🌅',bg:'rgba(255,202,40,0.15)',  name:'Frühstück',   time:'07:42',items:'OATS, BANANE, WHEY',    kcal:486},
+  {icon:'☀️',bg:'rgba(110,99,242,0.15)', name:'Mittag',      time:'12:15',items:'HÄHNCHEN, REIS, BROKKOLI',kcal:712},
+  {icon:'🥤',bg:'rgba(38,198,218,0.15)', name:'Pre-Workout', time:'17:30',items:'BANANE, KAFFEE',          kcal:125},
+  {icon:'🌙',bg:'rgba(240,98,146,0.10)', name:'Abendessen',  time:'geplant · 19:30',items:'',              kcal:524,planned:true},
 ];
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // STATE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 const today = new Date();
 const todayStr = today.toISOString().slice(0,10);
 
@@ -2495,7 +2495,7 @@ function setSyncStatus(state, label){
 // saveState: lokal sofort + Cloud debounced (nur wenn eingeloggt)
 let _stateSyncTimer = null;
 function saveState(s){
-  // 1) Lokal sofort speichern (offline-fÃ¤hig + Guest-Modus)
+  // 1) Lokal sofort speichern (offline-fähig + Guest-Modus)
   try{ localStorage.setItem('forge_state', JSON.stringify(s)); }catch(_){}
   // 2) Cloud debounced (800ms) wenn eingeloggt
   if(authSession?.user && forgeSupabase){
@@ -2504,9 +2504,9 @@ function saveState(s){
     _stateSyncTimer = setTimeout(async()=>{
       try{
         await syncAppState(s);
-        setSyncStatus('ok','// synchronisiert âœ“');
+        setSyncStatus('ok','// synchronisiert ✓');
       }catch(e){
-        setSyncStatus('error','// offline Â· spÃ¤ter erneut');
+        setSyncStatus('error','// offline · später erneut');
       }
     }, 800);
   }
@@ -2552,7 +2552,7 @@ if(!S.acceptedProgressions) S.acceptedProgressions = {};
 if(S.streak == null)        S.streak = 0;
 if(S.freeze == null)        S.freeze = 2;
 
-// Heute-Defaults: nichts vorausgefÃ¼llt
+// Heute-Defaults: nichts vorausgefüllt
 if(S.hydration[todayStr] == null) S.hydration[todayStr] = 0;
 if(S.steps[todayStr]     == null) S.steps[todayStr]     = 0;
 if(!S.habits[todayStr])           S.habits[todayStr]    = {};
@@ -2561,12 +2561,12 @@ if(!S.meals[todayStr])            S.meals[todayStr]     = [];
 
 saveState(S);
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // HELPERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 const DE_DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
 const DE_DAYS_FULL = ['sonntag','montag','dienstag','mittwoch','donnerstag','freitag','samstag'];
-const DE_MONTHS = ['Jan','Feb','MÃ¤r','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const DE_MONTHS = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 
 function getTodayPlan(){
   const dow = today.getDay();
@@ -2586,9 +2586,9 @@ function isDone(exerciseId){
   return sess.sets && sess.sets.every(set => set.done);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // NAVIGATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let currentScreen = 'training';
 let prevScreen = 'training';
 let currentExercise = null;
@@ -2636,14 +2636,14 @@ document.getElementById('back-btn').addEventListener('click',()=>{
   navigate(prevScreen);
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // RENDER: TRAINING
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function renderTraining(){
   const {plan, week, dow} = getTodayPlan();
-  const dateStr = `${DE_DAYS_FULL[today.getDay()]} Â· ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('train-kicker').textContent = `// ${dateStr}`;
-  document.getElementById('train-title').textContent = 'Hey Champion ðŸ‘Š';
+  document.getElementById('train-title').textContent = 'Hey Champion 👊';
 
   renderCalendar(dow);
   renderTodayCard(plan, week);
@@ -2684,7 +2684,7 @@ function renderTodayCard(plan, week){
   document.getElementById('today-day-label').textContent = plan.label;
   document.getElementById('week-label').textContent = `Woche ${week}`;
   document.getElementById('stat-exercises').textContent = exs.length || '0';
-  document.getElementById('stat-duration').textContent = plan.duration ? `~${plan.duration}'` : 'â€”';
+  document.getElementById('stat-duration').textContent = plan.duration ? `~${plan.duration}'` : '—';
 
   const readEl = document.getElementById('stat-readiness');
   if(S.readiness[todayStr] != null){
@@ -2692,15 +2692,15 @@ function renderTodayCard(plan, week){
     readEl.textContent = r.toFixed(1);
     readEl.style.color = r >= 7 ? 'var(--green)' : r >= 5 ? 'var(--amber)' : 'var(--red, #f06060)';
   } else {
-    readEl.textContent = 'â€”';
+    readEl.textContent = '—';
     readEl.style.color = 'var(--text-muted)';
   }
 
   const cta = document.getElementById('start-workout-btn');
-  if(plan.type==='rest')        cta.textContent = 'ðŸ˜´ Ruhetag â€” erhol dich!';
-  else if(!muscles.length)      cta.textContent = 'ï¼‹ Muskelgruppen anlegen';
-  else if(!exs.length)          cta.textContent = 'ï¼‹ Ãœbungen hinzufÃ¼gen';
-  else                          cta.textContent = 'â–¶ Training starten';
+  if(plan.type==='rest')        cta.textContent = '😴 Ruhetag — erhol dich!';
+  else if(!muscles.length)      cta.textContent = '＋ Muskelgruppen anlegen';
+  else if(!exs.length)          cta.textContent = '＋ Übungen hinzufügen';
+  else                          cta.textContent = '▶ Training starten';
 }
 
 function renderMuscles(plan){
@@ -2709,8 +2709,8 @@ function renderMuscles(plan){
   const muscles = getMusclesForType(plan.type);
   if(!muscles.length){
     grid.innerHTML = plan.type==='rest'
-      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:8px 2px;">Ruhetag â€” kein Training heute.</div>'
-      : '<div class="cat-card cat-add" data-action="add-muscle"><div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">ï¼‹</div><div class="cat-name" style="color:var(--purple-300)">Muskelgruppe hinzufÃ¼gen</div><div class="cat-meta">TIPPEN ZUM ANLEGEN</div></div>';
+      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:8px 2px;">Ruhetag — kein Training heute.</div>'
+      : '<div class="cat-card cat-add" data-action="add-muscle"><div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">＋</div><div class="cat-name" style="color:var(--purple-300)">Muskelgruppe hinzufügen</div><div class="cat-meta">TIPPEN ZUM ANLEGEN</div></div>';
     grid.querySelectorAll('[data-action="add-muscle"]').forEach(el=>el.addEventListener('click',()=>openMuscleEdit(null,plan.type)));
     return;
   }
@@ -2718,7 +2718,7 @@ function renderMuscles(plan){
 
   muscles.forEach((mObj,i)=>{
     const m = mObj.name;
-    const icon = mObj.icon || MUSCLE_META[m]?.icon || 'ðŸ’ª';
+    const icon = mObj.icon || MUSCLE_META[m]?.icon || '💪';
     const color = mObj.color || MUSCLE_META[m]?.color || 'var(--purple-500)';
     const mExs = exs.filter(e=>e.muscle===m);
     const mSets = mExs.reduce((a,e)=>a+e.sets,0);
@@ -2728,8 +2728,8 @@ function renderMuscles(plan){
     const isLastOdd = (i === muscles.length-1) && (muscles.length % 2 === 1) && muscles.length>1;
     const isSingle  = muscles.length === 1;
     const fullWidth = isLastOdd || isSingle;
-    const suffix    = isLastOdd ? ' Â· ZUM SCHLUSS' : '';
-    const exLabel   = mExs.length === 1 ? 'ÃœBUNG' : 'ÃœBUNGEN';
+    const suffix    = isLastOdd ? ' · ZUM SCHLUSS' : '';
+    const exLabel   = mExs.length === 1 ? 'ÜBUNG' : 'ÜBUNGEN';
 
     const el = document.createElement('div');
     el.className = 'cat-card';
@@ -2737,7 +2737,7 @@ function renderMuscles(plan){
     el.innerHTML = `
       <div class="cat-icon-wrap" style="background:${color}22">${icon}</div>
       <div class="cat-name">${m}</div>
-      <div class="cat-meta">${mExs.length} ${exLabel} Â· ${mSets} SÃ„TZE${suffix}</div>
+      <div class="cat-meta">${mExs.length} ${exLabel} · ${mSets} SÄTZE${suffix}</div>
       <div class="cat-prog" style="width:${pct}%;background:${color}"></div>`;
     el.onclick = ()=>{ if(mExs.length) navigate('exercise', mExs[0]); };
     let pT;
@@ -2753,8 +2753,8 @@ function renderMuscles(plan){
   addEl.className = 'cat-card cat-add';
   if(muscles.length % 2 === 0) addEl.setAttribute('style','grid-column:span 2');
   addEl.innerHTML = `
-    <div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">ï¼‹</div>
-    <div class="cat-name" style="color:var(--purple-300)">HinzufÃ¼gen</div>
+    <div class="cat-icon-wrap" style="background:rgba(110,99,242,0.15)">＋</div>
+    <div class="cat-name" style="color:var(--purple-300)">Hinzufügen</div>
     <div class="cat-meta">NEUE MUSKELGRUPPE</div>`;
   addEl.addEventListener('click',()=>openMuscleEdit(null, plan.type));
   grid.appendChild(addEl);
@@ -2766,12 +2766,12 @@ function renderExerciseList(plan){
   const exs = getExercisesForType(plan.type);
   if(!exs.length){
     list.innerHTML = plan.type==='rest'
-      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Ãœbungen fÃ¼r heute.</div>'
+      ? '<div style="color:var(--text-muted);font-size:.82rem;padding:4px 2px;">Keine Übungen für heute.</div>'
       : '';
   }
 
   if(!exs.length && plan.type !== 'rest'){
-    list.innerHTML = '<div class="empty-hint">Noch keine Ãœbungen â€” tippe auf <strong>+ HinzufÃ¼gen</strong> oder lege erst eine Muskelgruppe an</div>';
+    list.innerHTML = '<div class="empty-hint">Noch keine Übungen — tippe auf <strong>+ Hinzufügen</strong> oder lege erst eine Muskelgruppe an</div>';
     return;
   }
 
@@ -2784,9 +2784,9 @@ function renderExerciseList(plan){
       <div class="ex-num">${String(i+1).padStart(2,'0')}</div>
       <div class="ex-info">
         <div class="ex-name">${ex.name}</div>
-        <div class="ex-sub">${ex.sets} Ã— ${ex.rMin}â€“${ex.rMax} Â· LETZTE: ${lastW ? lastW+' KG' : 'â€”'}</div>
+        <div class="ex-sub">${ex.sets} × ${ex.rMin}–${ex.rMax} · LETZTE: ${lastW ? lastW+' KG' : '—'}</div>
       </div>
-      ${done ? '<div class="ex-done-check">âœ“</div>' : (i === 0 && ex.pr ? '<div class="ex-pr">â˜… PR</div>' : '<span class="ex-arrow">â€º</span>')}`;
+      ${done ? '<div class="ex-done-check">✓</div>' : (i === 0 && ex.pr ? '<div class="ex-pr">★ PR</div>' : '<span class="ex-arrow">›</span>')}`;
     el.onclick = ()=> navigate('exercise', ex);
     let pT;
     el.addEventListener('touchstart',()=>{ pT = setTimeout(()=>openExerciseEdit(ex.id, plan.type), 550); }, {passive:true});
@@ -2797,9 +2797,9 @@ function renderExerciseList(plan){
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // RENDER: EXERCISE DETAIL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function renderExercise(ex){
   currentExercise = ex;
   if(!ex) return;
@@ -2808,16 +2808,16 @@ function renderExercise(ex){
   const todayExs = getExercisesForType(todayPlan.type);
   const muscleExs = todayExs.filter(e=>e.muscle===ex.muscle);
   const exIdx = Math.max(0, muscleExs.findIndex(e=>e.id===ex.id));
-  document.getElementById('ex-kicker').textContent = `// ${ex.muscle.toLowerCase()} Â· Ã¼bung ${String(exIdx+1).padStart(2,'0')} von ${String(Math.max(muscleExs.length,1)).padStart(2,'0')}`;
+  document.getElementById('ex-kicker').textContent = `// ${ex.muscle.toLowerCase()} · übung ${String(exIdx+1).padStart(2,'0')} von ${String(Math.max(muscleExs.length,1)).padStart(2,'0')}`;
   document.getElementById('ex-title').textContent = ex.name;
   document.getElementById('ex-tags').innerHTML = `
     <span class="tag tag-pink">${ex.eq}</span>
     <span class="tag tag-purple">${ex.type}</span>
-    <span class="tag tag-amber">${ex.sets} Ã— ${ex.rMin}â€“${ex.rMax}</span>`;
+    <span class="tag tag-amber">${ex.sets} × ${ex.rMin}–${ex.rMax}</span>`;
 
   const pr = ex.pr;
-  document.getElementById('pr-text').textContent = pr ? `${pr.date} Â· ${pr.r} Wdh.` : 'â€”';
-  document.getElementById('pr-value').innerHTML = pr ? `${pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>` : 'â€”';
+  document.getElementById('pr-text').textContent = pr ? `${pr.date} · ${pr.r} Wdh.` : '—';
+  document.getElementById('pr-value').innerHTML = pr ? `${pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>` : '—';
   document.getElementById('pr-card').style.display = (ex.type==='Cardio')?'none':'flex';
 
   renderHistoryChart(ex);
@@ -2871,13 +2871,13 @@ function renderSetRows(ex){
     row.className = 'set-row';
     row.innerHTML = `
       <div class="set-num">${i+1}</div>
-      <input class="set-input" type="number" inputmode="decimal" placeholder="â€“" value="${set.weight}" data-set="${i}" data-field="weight">
-      <input class="set-input" type="number" inputmode="numeric" placeholder="â€“" value="${set.reps}" data-set="${i}" data-field="reps">
-      <div class="set-check ${set.done?'done':''}" data-set="${i}">${set.done?'âœ“':''}</div>`;
+      <input class="set-input" type="number" inputmode="decimal" placeholder="–" value="${set.weight}" data-set="${i}" data-field="weight">
+      <input class="set-input" type="number" inputmode="numeric" placeholder="–" value="${set.reps}" data-set="${i}" data-field="reps">
+      <div class="set-check ${set.done?'done':''}" data-set="${i}">${set.done?'✓':''}</div>`;
     container.appendChild(row);
   });
 
-  // EIN Listener fÃ¼r Inputs
+  // EIN Listener für Inputs
   container.querySelectorAll('.set-input').forEach(inp=>{
     inp.addEventListener('change', e=>{
       const i = +e.target.dataset.set;
@@ -2888,7 +2888,7 @@ function renderSetRows(ex){
     });
   });
 
-  // EIN Listener fÃ¼r Set-Checks (toggle + save + rest-timer + PR + konfetti)
+  // EIN Listener für Set-Checks (toggle + save + rest-timer + PR + konfetti)
   container.querySelectorAll('.set-check').forEach(btn=>{
     btn.addEventListener('click', e=>{
       const i       = +e.currentTarget.dataset.set;
@@ -2897,7 +2897,7 @@ function renderSetRows(ex){
       setData.done  = !wasDone;
 
       e.currentTarget.classList.toggle('done', setData.done);
-      e.currentTarget.textContent = setData.done ? 'âœ“' : '';
+      e.currentTarget.textContent = setData.done ? '✓' : '';
 
       if(setData.done && !wasDone){
         // Rest-Timer starten
@@ -2911,7 +2911,7 @@ function renderSetRows(ex){
           if(!S.prs) S.prs = {};
           S.prs[ex.id] = ex.pr;
           fireKonfetti();
-          document.getElementById('pr-text').textContent  = `${ex.pr.date} Â· ${ex.pr.r} Wdh.`;
+          document.getElementById('pr-text').textContent  = `${ex.pr.date} · ${ex.pr.r} Wdh.`;
           document.getElementById('pr-value').innerHTML   = `${ex.pr.w}<span style="font-size:.65rem;color:var(--text-muted)">kg</span>`;
         }
       }
@@ -2926,14 +2926,14 @@ function renderProgressionHint(ex){
   const text = document.getElementById('progression-text');
   if(ex.type==='Cardio'||ex.type==='Isolation'||!ex.pr){ hint.style.display='none'; return; }
   hint.style.display='flex';
-  text.innerHTML = `NÃ¤chste Session: <span style="color:var(--purple-300)">+2,5 kg</span> vorgeschlagen`;
+  text.innerHTML = `Nächste Session: <span style="color:var(--purple-300)">+2,5 kg</span> vorgeschlagen`;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // RENDER: NUTRITION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function renderNutrition(){
-  const dateStr = `${DE_DAYS_FULL[today.getDay()]} Â· ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('nutr-kicker').textContent = `// ${dateStr}`;
 
   const meals = S.meals[todayStr] || [];
@@ -2952,7 +2952,7 @@ function renderNutrition(){
   document.getElementById('kcal-goal').textContent = `/ ${goalKcal.toLocaleString('de')} KCAL`;
   document.getElementById('kcal-ring').style.strokeDashoffset = offset;
 
-  // Makro-Goals: aus Profile/Standard ableiten (Protein â†’ von Tracker, Carbs/Fat klassisch)
+  // Makro-Goals: aus Profile/Standard ableiten (Protein → von Tracker, Carbs/Fat klassisch)
   const proteinGoalMid = Math.round(S.profile.weightKg * ((S.profile.proteinMin+S.profile.proteinMax)/2));
   const carbGoal = Math.round((goalKcal*0.50)/4);
   const fatGoal  = Math.round((goalKcal*0.28)/9);
@@ -2975,14 +2975,14 @@ function renderNutrition(){
 
   const mealsList = document.getElementById('meals-list');
   if(!meals.length){
-    mealsList.innerHTML = '<div class="empty-hint">Noch keine Mahlzeiten â€” tippe auf <strong>+ Neu</strong></div>';
+    mealsList.innerHTML = '<div class="empty-hint">Noch keine Mahlzeiten — tippe auf <strong>+ Neu</strong></div>';
   } else
   mealsList.innerHTML = meals.map(m=>`
     <div class="meal-card" data-meal-id="${m.id}" style="${m.planned?'opacity:.5;border-style:dashed;':''}">
-      <div class="meal-icon" style="background:${m.bg||'rgba(110,99,242,0.15)'}">${m.icon||'ðŸ½ï¸'}</div>
+      <div class="meal-icon" style="background:${m.bg||'rgba(110,99,242,0.15)'}">${m.icon||'🍽️'}</div>
       <div style="flex:1;min-width:0">
         <div class="meal-name">${m.name}</div>
-        <div class="meal-meta">${m.time||''}${m.items?' Â· '+m.items:''}</div>
+        <div class="meal-meta">${m.time||''}${m.items?' · '+m.items:''}</div>
       </div>
       <div class="meal-cal" style="${m.planned?'color:var(--text-muted)':''}">${m.kcal||0}</div>
     </div>`).join('');
@@ -3009,14 +3009,14 @@ document.getElementById('hydration-btn').addEventListener('click',()=>{
   renderHydration();
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // RENDER: HABITS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function renderHabits(){
-  const dateStr = `${DE_DAYS_FULL[today.getDay()]} Â· ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
+  const dateStr = `${DE_DAYS_FULL[today.getDay()]} · ${today.getDate().toString().padStart(2,'0')} ${DE_MONTHS[today.getMonth()].toLowerCase()}`;
   document.getElementById('habit-kicker').textContent = `// ${dateStr}`;
   document.getElementById('streak-num').textContent = S.streak;
-  document.getElementById('freeze-val').textContent = `${S.freeze} â„ï¸`;
+  document.getElementById('freeze-val').textContent = `${S.freeze} ❄️`;
 
   const done = S.userHabits.filter(h=>S.habits[todayStr][h.id]).length;
   const total = S.userHabits.length;
@@ -3028,22 +3028,22 @@ function renderHabits(){
   const list = document.getElementById('habits-list');
   list.innerHTML = '';
   if(!S.userHabits.length){
-    list.innerHTML = '<div class="empty-hint">Noch keine Gewohnheiten â€” tippe auf <strong>+ Neu</strong> um deine erste anzulegen</div>';
+    list.innerHTML = '<div class="empty-hint">Noch keine Gewohnheiten — tippe auf <strong>+ Neu</strong> um deine erste anzulegen</div>';
   }
   S.userHabits.forEach(h=>{
     const isDone = !!S.habits[todayStr][h.id];
     const streak = isDone ? (h.streak||0)+1 : (h.streak||0);
 
-    // Swipe-Wrapper mit LÃ¶sch-Hintergrund
+    // Swipe-Wrapper mit Lösch-Hintergrund
     const row = document.createElement('div');
     row.className = 'habit-row';
     row.innerHTML = `
-      <div class="habit-del-bg"><button data-del="${h.id}">LÃ–SCHEN</button></div>
+      <div class="habit-del-bg"><button data-del="${h.id}">LÖSCHEN</button></div>
       <div class="habit-card">
-        <div class="habit-check ${isDone?'done':''}">${isDone?'âœ“':''}</div>
+        <div class="habit-check ${isDone?'done':''}">${isDone?'✓':''}</div>
         <div style="flex:1">
-          <div class="habit-name ${isDone?'done':''}">${h.icon||'âœ¨'} ${h.name}</div>
-          <div class="habit-streak">${streak>0?'ðŸ”¥ '+streak+' TAGE':'streak: 0'}</div>
+          <div class="habit-name ${isDone?'done':''}">${h.icon||'✨'} ${h.name}</div>
+          <div class="habit-streak">${streak>0?'🔥 '+streak+' TAGE':'streak: 0'}</div>
         </div>`;
     const card = row.querySelector('.habit-card');
 
@@ -3076,7 +3076,7 @@ function renderHabits(){
       else { card.classList.remove('swiped'); card.style.transform=''; }
     });
 
-    // Long-press â†’ edit (nur ohne Swipe)
+    // Long-press → edit (nur ohne Swipe)
     let pressT;
     card.addEventListener('touchstart',()=>{ pressT = setTimeout(()=>{ if(Math.abs(dx)<8) openHabitEdit(h.id); }, 600); }, {passive:true});
     card.addEventListener('touchend',()=>clearTimeout(pressT));
@@ -3097,16 +3097,16 @@ function renderHabits(){
   renderSteps();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // INIT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// ðŸ†• PROTEIN TRACKER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
+// 🆕 PROTEIN TRACKER
+// ═══════════════════════════════════════════════════
 function calcProteinTarget(weightKg, mn, mx){
   return { min: Math.round(weightKg*mn), max: Math.round(weightKg*mx) };
 }
@@ -3120,7 +3120,7 @@ function evaluateProtein(g, t){
 }
 const STATUS_LABELS = {
   red:'ZU WENIG', orange:'KNAPP DRUNTER', amber:'FAST GESCHAFFT',
-  green:'IM ZIEL âœ“', teal:'ÃœBER ZIEL'
+  green:'IM ZIEL ✓', teal:'ÜBER ZIEL'
 };
 const STATUS_COLOR = {
   red:'var(--red, #f06060)', orange:'var(--orange)', amber:'var(--amber)',
@@ -3142,7 +3142,7 @@ function renderProtein(){
   const stat = evaluateProtein(g, target);
 
   document.getElementById('protein-val').innerHTML = `${g}<span class="g">g</span>`;
-  document.getElementById('protein-target').textContent = `Bedarf: ${target.min}â€“${target.max}g (${p.weightKg} kg Ã— ${p.proteinMin.toFixed(1)}â€“${p.proteinMax.toFixed(1)})`;
+  document.getElementById('protein-target').textContent = `Bedarf: ${target.min}–${target.max}g (${p.weightKg} kg × ${p.proteinMin.toFixed(1)}–${p.proteinMax.toFixed(1)})`;
 
   const lbl = document.getElementById('protein-status');
   lbl.textContent = STATUS_LABELS[stat];
@@ -3164,9 +3164,9 @@ function renderProtein(){
   document.getElementById('protein-bar-max-lbl').textContent = target.max+'g';
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// ðŸ†• STEPS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
+// 🆕 STEPS
+// ═══════════════════════════════════════════════════
 function renderSteps(){
   const goal = S.profile.stepGoal || 10000;
   const cur = S.steps[todayStr] || 0;
@@ -3174,7 +3174,7 @@ function renderSteps(){
 
   document.getElementById('steps-val').textContent = cur.toLocaleString('de');
   document.getElementById('steps-goal').textContent = `/ ${goal.toLocaleString('de')}`;
-  document.getElementById('steps-km').textContent = `â‰ˆ ${(cur*0.000762).toFixed(1).replace('.',',')} km`;
+  document.getElementById('steps-km').textContent = `≈ ${(cur*0.000762).toFixed(1).replace('.',',')} km`;
 
   const fill = document.getElementById('steps-fill');
   const arcLen = 302;
@@ -3196,9 +3196,9 @@ document.getElementById('steps-add').addEventListener('click',()=>{
   renderSteps();
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // SETTINGS OVERLAY
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function showOverlay(id){ document.getElementById(id).classList.add('show'); }
 function hideOverlay(id){ document.getElementById(id).classList.remove('show'); }
 function setAuthStatus(message='', type=''){
@@ -3225,7 +3225,7 @@ function updatePasswordStrength(){
     bar.className = 'pw-bar' + (i < score ? (score < 2 ? ' weak' : score < 4 ? ' med' : ' strong') : '');
   });
   const label = document.getElementById('gate-pw-label');
-  if(label) label.textContent = score >= 4 ? `// stark Â· ${value.length} zeichen` : score >= 2 ? `// ok Â· ${value.length} zeichen` : '// zu schwach';
+  if(label) label.textContent = score >= 4 ? `// stark · ${value.length} zeichen` : score >= 2 ? `// ok · ${value.length} zeichen` : '// zu schwach';
 }
 function getInitials(name){
   return (name||'').split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
@@ -3290,10 +3290,10 @@ function updateAuthUI(){
     // App-Avatare & Header aktualisieren
     document.querySelectorAll('.avatar').forEach(av=>{ av.textContent = initials; });
     document.querySelectorAll('.header-title').forEach(t=>{
-      if(t.textContent.startsWith('Hey')) t.textContent = `Hey ${displayName.split(' ')[0]} ðŸ‘Š`;
+      if(t.textContent.startsWith('Hey')) t.textContent = `Hey ${displayName.split(' ')[0]} 👊`;
     });
 
-    // Profile-Panel im Gate (fÃ¼r spÃ¤teren Bedarf)
+    // Profile-Panel im Gate (für späteren Bedarf)
     document.getElementById('gate-profile-name').textContent  = displayName;
     document.getElementById('gate-profile-email').textContent = email;
     document.getElementById('gate-profile-avatar').textContent = initials;
@@ -3335,12 +3335,12 @@ document.querySelectorAll('.overlay').forEach(ov=>{
   ov.addEventListener('click',e=>{ if(e.target===ov) hideOverlay(ov.id); });
 });
 
-// Avatar-Tap â†’ Settings (Bottom-Sheet, kein Vollbild-Auth-Gate mehr)
+// Avatar-Tap → Settings (Bottom-Sheet, kein Vollbild-Auth-Gate mehr)
 document.querySelectorAll('.avatar').forEach(av=>{
   av.addEventListener('click',()=>openSettings());
 });
 
-// Settings: "Anmelden" Button fÃ¼r ausgeloggte User
+// Settings: "Anmelden" Button für ausgeloggte User
 document.getElementById('settings-go-login')?.addEventListener('click',()=>{
   hideOverlay('settings-overlay');
   document.body.classList.add('auth-locked');
@@ -3354,7 +3354,7 @@ document.getElementById('settings-sync-now')?.addEventListener('click',async()=>
   try{
     await syncAppState(S);
     await ensureRemoteProfile(authSession);
-    setSyncStatus('ok','// synchronisiert âœ“');
+    setSyncStatus('ok','// synchronisiert ✓');
   }catch(e){
     setSyncStatus('error','// fehler beim sync');
   }
@@ -3371,7 +3371,7 @@ document.querySelectorAll('[data-auth-mode]').forEach(btn=>{
 });
 document.getElementById('gate-signup-password')?.addEventListener('input',updatePasswordStrength);
 
-// â”€â”€ HELPER: Logout â”€â”€ lokalen State komplett wegwerfen + Cloud-Sync vorher
+// ── HELPER: Logout ── lokalen State komplett wegwerfen + Cloud-Sync vorher
 async function performLogout(btn){
   setButtonLoading(btn, true);
   setSyncStatus('syncing','// finaler sync...');
@@ -3381,7 +3381,7 @@ async function performLogout(btn){
   }
   authSession = null;
   clearCachedAuthUser();
-  // Lokalen State komplett wegwerfen damit nÃ¤chster User nicht die Daten sieht
+  // Lokalen State komplett wegwerfen damit nächster User nicht die Daten sieht
   localStorage.removeItem('forge_state');
   S = {};
   normalizeState();
@@ -3391,14 +3391,14 @@ async function performLogout(btn){
   await setButtonSuccess(btn, 420);
 }
 
-// â”€â”€ LOGIN â”€â”€
+// ── LOGIN ──
 document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
   const btn = document.getElementById('gate-login-btn');
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const email = document.getElementById('gate-login-email').value.trim();
   const password = document.getElementById('gate-login-password').value;
   if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
-  setAuthStatus('Login lÃ¤uft...');
+  setAuthStatus('Login läuft...');
   try{
     setButtonLoading(btn, true);
     const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
@@ -3419,7 +3419,7 @@ document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
   }
 });
 
-// â”€â”€ SIGNUP â”€â”€
+// ── SIGNUP ──
 document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
   const btn = document.getElementById('gate-signup-btn');
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
@@ -3444,18 +3444,18 @@ document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
     await setButtonSuccess(btn, 420);
   } else {
     setButtonLoading(btn, false);
-    setAuthStatus('Account erstellt. Bitte bestÃ¤tige deine E-Mail und logge dich danach ein.', 'success');
+    setAuthStatus('Account erstellt. Bitte bestätige deine E-Mail und logge dich danach ein.', 'success');
     setGateMode('login');
   }
 });
 
-// â”€â”€ LOGOUT (Gate-Profile-Button) â”€â”€
+// ── LOGOUT (Gate-Profile-Button) ──
 document.getElementById('gate-logout-btn')?.addEventListener('click',()=>performLogout(document.getElementById('gate-logout-btn')));
 document.getElementById('gate-open-app-btn')?.addEventListener('click',()=>{
   document.body.classList.remove('auth-locked');
 });
 
-// â”€â”€ PASSWORT VERGESSEN â”€â”€
+// ── PASSWORT VERGESSEN ──
 document.getElementById('gate-reset-password')?.addEventListener('click',async()=>{
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const email = document.getElementById('gate-login-email').value.trim();
@@ -3465,10 +3465,10 @@ document.getElementById('gate-reset-password')?.addEventListener('click',async()
     redirectTo: window.location.origin + window.location.pathname
   });
   if(error) return setAuthStatus(error.message, 'error');
-  setAuthStatus(`Link zum ZurÃ¼cksetzen wurde an ${email} gesendet âœ“`, 'success');
+  setAuthStatus(`Link zum Zurücksetzen wurde an ${email} gesendet ✓`, 'success');
 });
 
-// â”€â”€ OAUTH (Apple / Google) â”€â”€
+// ── OAUTH (Apple / Google) ──
 async function oauthLogin(provider){
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   setAuthStatus(`Weiterleitung zu ${provider}...`);
@@ -3521,17 +3521,17 @@ document.getElementById('settings-save').addEventListener('click',()=>{
   renderAll();
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // READINESS OVERLAY
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function calcReadiness(s,m,k){
   // Schlaf+Motivation hoch=gut, Muskelkater hoch=schlecht (invertiert)
   return ((s + m + (11-k)) / 3);
 }
 function readinessLabel(score){
-  if(score >= 8) return 'Volle Power ðŸ”¥';
-  if(score >= 6.5) return 'Gut bereit âœ“';
-  if(score >= 5) return 'Solide â€” leg los';
+  if(score >= 8) return 'Volle Power 🔥';
+  if(score >= 6.5) return 'Gut bereit ✓';
+  if(score >= 5) return 'Solide — leg los';
   return 'Heute leichter? -20% empfohlen';
 }
 function updateReadiness(){
@@ -3542,13 +3542,13 @@ function updateReadiness(){
   document.getElementById('rd-motiv-val').textContent = m;
   document.getElementById('rd-sore-val').textContent  = k;
   const score = calcReadiness(s,m,k);
-  document.getElementById('rd-result').textContent = `Score: ${score.toFixed(1)} â€” ${readinessLabel(score)}`;
+  document.getElementById('rd-result').textContent = `Score: ${score.toFixed(1)} — ${readinessLabel(score)}`;
 }
 ['rd-sleep','rd-motiv','rd-sore'].forEach(id=>{
   document.getElementById(id).addEventListener('input',updateReadiness);
 });
 
-// Training-Start: je nach Setup-Stand â†’ Muskel/Ãœbung anlegen ODER Readiness Ã¶ffnen
+// Training-Start: je nach Setup-Stand → Muskel/Übung anlegen ODER Readiness öffnen
 document.getElementById('start-workout-btn').onclick = ()=>{
   const {plan} = getTodayPlan();
   if(plan.type==='rest') return;
@@ -3578,9 +3578,9 @@ document.getElementById('readiness-confirm').addEventListener('click',()=>{
   if(currentScreen==='training') renderTraining();
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // REST TIMER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let _restInt = null;
 let _restRemain = 0;
 
@@ -3608,7 +3608,7 @@ function startRest(seconds){
     _restRemain--;
     if(_restRemain <= 0){
       clearInterval(_restInt);
-      document.getElementById('rt-time').textContent = '0:00 âœ“';
+      document.getElementById('rt-time').textContent = '0:00 ✓';
       if(navigator.vibrate) navigator.vibrate([120,80,120]);
       setTimeout(()=>banner.classList.add('hidden'), 1800);
       return;
@@ -3624,9 +3624,9 @@ document.getElementById('rt-plus').addEventListener('click',()=>{ _restRemain +=
 document.getElementById('rt-minus').addEventListener('click',()=>{ _restRemain = Math.max(5, _restRemain - 30); document.getElementById('rt-time').textContent = fmtTime(_restRemain); });
 document.getElementById('rt-skip').addEventListener('click',stopRest);
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // AUTO-PROGRESSION ACCEPT/DECLINE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 document.getElementById('prog-yes').addEventListener('click',()=>{
   if(!currentExercise) return;
   S.acceptedProgressions[currentExercise.id] = (currentExercise.pr?.w||0) + 2.5;
@@ -3638,14 +3638,14 @@ document.getElementById('prog-no').addEventListener('click',()=>{
   document.getElementById('progression-hint').style.display='none';
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // MAHLZEITEN CRUD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let _editingMealId = null;
 const MEAL_BG = {
-  'ðŸŒ…':'rgba(255,202,40,0.15)','â˜€ï¸':'rgba(110,99,242,0.15)','ðŸ¥¤':'rgba(38,198,218,0.15)',
-  'ðŸŒ™':'rgba(240,98,146,0.15)','ðŸŽ':'rgba(240,96,96,0.15)', 'ðŸ¥—':'rgba(38,212,124,0.15)',
-  'ðŸ—':'rgba(255,138,61,0.15)','ðŸ¥š':'rgba(255,202,40,0.15)'
+  '🌅':'rgba(255,202,40,0.15)','☀️':'rgba(110,99,242,0.15)','🥤':'rgba(38,198,218,0.15)',
+  '🌙':'rgba(240,98,146,0.15)','🍎':'rgba(240,96,96,0.15)', '🥗':'rgba(38,212,124,0.15)',
+  '🍗':'rgba(255,138,61,0.15)','🥚':'rgba(255,202,40,0.15)'
 };
 
 function selectIcon(pickerId, icon){
@@ -3660,7 +3660,7 @@ function openMealEdit(mealId){
   const m = mealId ? meals.find(x=>x.id===mealId) : null;
 
   document.getElementById('meal-mode').textContent  = m ? '// mahlzeit bearbeiten' : '// neue mahlzeit';
-  document.getElementById('meal-title').textContent = m ? 'Mahlzeit bearbeiten' : 'Mahlzeit hinzufÃ¼gen';
+  document.getElementById('meal-title').textContent = m ? 'Mahlzeit bearbeiten' : 'Mahlzeit hinzufügen';
   document.getElementById('meal-delete').style.display = m ? 'block' : 'none';
 
   document.getElementById('meal-name').value    = m?.name    || '';
@@ -3670,7 +3670,7 @@ function openMealEdit(mealId){
   document.getElementById('meal-protein').value = m?.protein ?? '';
   document.getElementById('meal-carbs').value   = m?.carbs   ?? '';
   document.getElementById('meal-fat').value     = m?.fat     ?? '';
-  selectIcon('meal-icons', m?.icon || 'ðŸŽ');
+  selectIcon('meal-icons', m?.icon || '🍎');
 
   showOverlay('meal-overlay');
 }
@@ -3680,7 +3680,7 @@ document.querySelectorAll('#meal-icons .icon-pick').forEach(p=>{
 });
 
 document.getElementById('meal-save').addEventListener('click',()=>{
-  const icon = document.querySelector('#meal-icons .icon-pick.sel')?.dataset.icon || 'ðŸŽ';
+  const icon = document.querySelector('#meal-icons .icon-pick.sel')?.dataset.icon || '🍎';
   const data = {
     icon,
     bg: MEAL_BG[icon] || 'rgba(110,99,242,0.15)',
@@ -3718,19 +3718,19 @@ document.querySelectorAll('#screen-nutrition .section-row-link').forEach(a=>{
   a.addEventListener('click',()=>openMealEdit(null));
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // HABITS CRUD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let _editingHabitId = null;
 
 function openHabitEdit(habitId){
   _editingHabitId = habitId || null;
   const h = habitId ? S.userHabits.find(x=>x.id===habitId) : null;
   document.getElementById('habit-mode').textContent  = h ? '// habit bearbeiten' : '// neuer habit';
-  document.getElementById('habit-title').textContent = h ? 'Gewohnheit bearbeiten' : 'Gewohnheit hinzufÃ¼gen';
+  document.getElementById('habit-title').textContent = h ? 'Gewohnheit bearbeiten' : 'Gewohnheit hinzufügen';
   document.getElementById('habit-delete').style.display = h ? 'block' : 'none';
   document.getElementById('habit-name').value = h?.name || '';
-  selectIcon('habit-icons', h?.icon || 'âœ¨');
+  selectIcon('habit-icons', h?.icon || '✨');
   showOverlay('habit-overlay');
 }
 
@@ -3739,7 +3739,7 @@ document.querySelectorAll('#habit-icons .icon-pick').forEach(p=>{
 });
 
 document.getElementById('habit-save').addEventListener('click',()=>{
-  const icon = document.querySelector('#habit-icons .icon-pick.sel')?.dataset.icon || 'âœ¨';
+  const icon = document.querySelector('#habit-icons .icon-pick.sel')?.dataset.icon || '✨';
   const name = document.getElementById('habit-name').value.trim() || 'Neue Gewohnheit';
   if(_editingHabitId){
     const i = S.userHabits.findIndex(x=>x.id===_editingHabitId);
@@ -3765,9 +3765,9 @@ document.querySelectorAll('#screen-habits .section-row-link').forEach(a=>{
   a.addEventListener('click',()=>openHabitEdit(null));
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // PR DETECTION + KONFETTI
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 function epley(w, r){ return w * (1 + r/30); }
 
 const KFETTI_COLORS = ['#6e63f2','#f06292','#26d47c','#ffca28','#26c6da','#a29bfe','#ff8a3d'];
@@ -3800,9 +3800,9 @@ function checkPR(ex, weight, reps){
   return false;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // MUSKELGRUPPEN CRUD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let _editingMuscleId = null;
 let _editingMuscleType = null;
 
@@ -3819,10 +3819,10 @@ function openMuscleEdit(muscleId, type){
   const m = muscleId ? list.find(x=>x.id===muscleId) : null;
 
   document.getElementById('mg-mode').textContent  = m ? '// muskelgruppe bearbeiten' : '// neue muskelgruppe';
-  document.getElementById('mg-title').textContent = m ? 'Muskelgruppe bearbeiten' : 'Muskelgruppe hinzufÃ¼gen';
+  document.getElementById('mg-title').textContent = m ? 'Muskelgruppe bearbeiten' : 'Muskelgruppe hinzufügen';
   document.getElementById('mg-delete').style.display = m ? 'block' : 'none';
   document.getElementById('mg-name').value = m?.name || '';
-  selectIcon('mg-icons',  m?.icon  || 'ðŸ’ª');
+  selectIcon('mg-icons',  m?.icon  || '💪');
   selectColor('mg-colors', m?.color || 'var(--purple-500)');
   showOverlay('muscle-overlay');
 }
@@ -3837,7 +3837,7 @@ document.querySelectorAll('#mg-colors .color-pick').forEach(p=>{
 document.getElementById('mg-save').addEventListener('click',()=>{
   const type = _editingMuscleType;
   if(!type) return;
-  const icon  = document.querySelector('#mg-icons .icon-pick.sel')?.dataset.icon  || 'ðŸ’ª';
+  const icon  = document.querySelector('#mg-icons .icon-pick.sel')?.dataset.icon  || '💪';
   const color = document.querySelector('#mg-colors .color-pick.sel')?.dataset.color || 'var(--purple-500)';
   const name  = document.getElementById('mg-name').value.trim() || 'Muskelgruppe';
   if(!S.muscles[type]) S.muscles[type] = [];
@@ -3857,7 +3857,7 @@ document.getElementById('mg-delete').addEventListener('click',()=>{
   if(!type || !_editingMuscleId) return;
   const removed = S.muscles[type].find(x=>x.id===_editingMuscleId);
   S.muscles[type] = S.muscles[type].filter(x=>x.id!==_editingMuscleId);
-  // Ãœbungen dieser Muskelgruppe ebenfalls entfernen
+  // Übungen dieser Muskelgruppe ebenfalls entfernen
   if(removed && S.exercises[type]){
     S.exercises[type] = S.exercises[type].filter(e=>e.muscle!==removed.name);
   }
@@ -3866,16 +3866,16 @@ document.getElementById('mg-delete').addEventListener('click',()=>{
   if(currentScreen==='training') renderTraining();
 });
 
-// "BEARBEITEN â†’" Link in Muskel-Section
+// "BEARBEITEN →" Link in Muskel-Section
 document.querySelector('#screen-training .section-row .section-row-link').addEventListener('click',()=>{
   const type = getTodayPlan().plan.type;
   if(type === 'rest') return;
   openMuscleEdit(null, type);
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// ÃœBUNGEN CRUD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
+// ÜBUNGEN CRUD
+// ═══════════════════════════════════════════════════
 let _editingExId = null;
 let _editingExType = null;
 
@@ -3891,8 +3891,8 @@ function openExerciseEdit(exId, type){
   const list = S.exercises[type] || [];
   const ex = exId ? list.find(x=>x.id===exId) : null;
 
-  document.getElementById('ex-edit-mode').textContent  = ex ? '// Ã¼bung bearbeiten' : '// neue Ã¼bung';
-  document.getElementById('ex-edit-title').textContent = ex ? 'Ãœbung bearbeiten' : 'Ãœbung hinzufÃ¼gen';
+  document.getElementById('ex-edit-mode').textContent  = ex ? '// übung bearbeiten' : '// neue übung';
+  document.getElementById('ex-edit-title').textContent = ex ? 'Übung bearbeiten' : 'Übung hinzufügen';
   document.getElementById('ex-edit-delete').style.display = ex ? 'block' : 'none';
 
   document.getElementById('ex-edit-name').value = ex?.name || '';
@@ -3901,11 +3901,11 @@ function openExerciseEdit(exId, type){
   document.getElementById('ex-edit-rmax').value = ex?.rMax ?? 10;
   document.getElementById('ex-edit-rest').value = ex?.rest ?? 90;
 
-  // Muskel-Dropdown fÃ¼llen
+  // Muskel-Dropdown füllen
   const sel = document.getElementById('ex-edit-muscle');
   const muscles = S.muscles[type] || [];
   sel.innerHTML = muscles.map(m=>`<option value="${m.name}">${m.icon||''} ${m.name}</option>`).join('') ||
-    '<option value="">â€” Erst Muskelgruppe anlegen â€”</option>';
+    '<option value="">— Erst Muskelgruppe anlegen —</option>';
   sel.value = ex?.muscle || muscles[0]?.name || '';
 
   selectPill('ex-edit-eq',   ex?.eq   || 'Langhantel');
@@ -3923,7 +3923,7 @@ document.getElementById('ex-edit-save').addEventListener('click',()=>{
   const type = _editingExType;
   if(!type) return;
   const data = {
-    name:    document.getElementById('ex-edit-name').value.trim() || 'Neue Ãœbung',
+    name:    document.getElementById('ex-edit-name').value.trim() || 'Neue Übung',
     muscle:  document.getElementById('ex-edit-muscle').value || (S.muscles[type]?.[0]?.name || ''),
     eq:      document.querySelector('#ex-edit-eq .pill-pick.sel')?.dataset.val   || 'Langhantel',
     type:    document.querySelector('#ex-edit-type .pill-pick.sel')?.dataset.val || 'Compound',
@@ -3956,7 +3956,7 @@ document.getElementById('ex-edit-delete').addEventListener('click',()=>{
   if(currentScreen==='training') renderTraining();
 });
 
-// "+ HINZUFÃœGEN" Link in Ãœbungen-Section (zweiter section-row-link)
+// "+ HINZUFÜGEN" Link in Übungen-Section (zweiter section-row-link)
 document.querySelectorAll('#screen-training .section-row-link')[1]?.addEventListener('click',()=>{
   const type = getTodayPlan().plan.type;
   if(type === 'rest') return;
@@ -3967,9 +3967,9 @@ document.querySelectorAll('#screen-training .section-row-link')[1]?.addEventList
   openExerciseEdit(null, type);
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 // AMOUNT OVERLAY (Hydration / Steps Set & Reset)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════
 let _amountTarget = null; // 'water' | 'steps'
 
 function openAmount(target){
@@ -3980,7 +3980,7 @@ function openAmount(target){
 
   document.getElementById('am-kicker').textContent = target==='water' ? '// wasser setzen' : '// schritte setzen';
   document.getElementById('am-title').textContent  = target==='water' ? 'Wasserstand setzen' : 'Schritte setzen';
-  document.getElementById('am-label').textContent  = `Aktuell Â· ${cur} ${unit} (Ziel ${goal})`;
+  document.getElementById('am-label').textContent  = `Aktuell · ${cur} ${unit} (Ziel ${goal})`;
   document.getElementById('am-input').value = cur;
 
   const quick = document.getElementById('am-quick');
