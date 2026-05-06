@@ -40,12 +40,14 @@
   --r-xs:  6px; --r-sm: 10px; --r-md: 16px;
   --r-lg:  22px; --r-xl: 30px; --r-full: 9999px;
   --ease: cubic-bezier(0.25,0.46,0.45,0.94);
-  --nav-h: 58px;
-  --nav-gap: 0px;
-  --nav-side: 16px;
+  --nav-h: 64px;
+  --nav-side: 0px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
-  --scroll-bottom: calc(var(--nav-h) + 16px);
+  --nav-bottom-gap: 0px;
+  --nav-safe-pad: max(10px, var(--safe-bottom));
+  --nav-total-h: calc(var(--nav-h) + var(--nav-safe-pad));
+  --scroll-bottom: calc(var(--nav-total-h) + 18px);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -145,12 +147,9 @@ body{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
-  padding:0 18px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px);
-  scroll-padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 12px);
+  padding:0 18px var(--scroll-bottom);
+  scroll-padding-bottom:var(--scroll-bottom);
   position:relative;z-index:1;
-  /* dezenter fade ganz unten — keine wichtigen inhalte werden geschluckt */
-  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 32px),transparent 100%);
-          mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 32px),transparent 100%);
 }
 .screen-body::-webkit-scrollbar{display:none;}
 
@@ -531,36 +530,30 @@ body{
   left:calc(var(--nav-side) + env(safe-area-inset-left,0px));
   right:calc(var(--nav-side) + env(safe-area-inset-right,0px));
   bottom:0;
-  min-height:var(--nav-h);
+  min-height:var(--nav-total-h);
   background:
-    linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.03)),
-    rgba(22,22,40,0.45);
+    linear-gradient(180deg,rgba(255,255,255,0.11),rgba(255,255,255,0.04) 42%,rgba(255,255,255,0.02)),
+    rgba(15,15,26,0.88);
   backdrop-filter:blur(30px) saturate(1.35);-webkit-backdrop-filter:blur(30px) saturate(1.35);
-  border:1px solid rgba(255,255,255,0.14);
-  border-radius:var(--r-full);
-  padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));
+  border:0;
+  border-top:1px solid rgba(255,255,255,0.12);
+  border-radius:0;
+  padding:8px max(8px, env(safe-area-inset-right,0px)) var(--nav-safe-pad) max(8px, env(safe-area-inset-left,0px));
   display:flex;align-items:center;justify-content:space-around;
   z-index:10;
   box-shadow:
-    0 14px 34px rgba(0,0,0,0.44),
+    0 -18px 38px rgba(0,0,0,0.36),
     0 0 0 1px rgba(110,99,242,0.08),
     inset 0 1px 0 rgba(255,255,255,0.12);
 }
-/* hide the strip below the floating pill (home-indicator zone) so it blends with content */
 #app::after{
-  content:'';
-  position:absolute;
-  left:0;right:0;bottom:0;
-  height:env(safe-area-inset-bottom,0px);
-  background:transparent;
-  pointer-events:none;
-  z-index:9;
+  content:none;
 }
 .nav-item{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  cursor:pointer;padding:8px 10px;border-radius:var(--r-full);
+  cursor:pointer;padding:8px 8px;border-radius:var(--r-md);
   transition:all .2s var(--ease);flex:1;touch-action:manipulation;
-  min-width:0;position:relative;z-index:1;
+  min-width:0;min-height:48px;position:relative;z-index:1;
 }
 .nav-icon{font-size:1.2rem;line-height:1;opacity:.55;transition:all .2s var(--ease);}
 .nav-label{
@@ -576,9 +569,8 @@ body{
 .nav-item.active .nav-label{color:var(--purple-300);}
 
 @media(max-width:360px){
-  :root{--nav-side:12px;}
   .nav-label{font-size:.5rem;}
-  .nav-item{padding-inline:7px;}
+  .nav-item{padding-inline:6px;}
 }
 
 /* ── DESKTOP CENTER ── */
@@ -591,7 +583,6 @@ body{
 }
 
 @media(display-mode:standalone){
-  :root{--nav-gap:0px;}
   body{position:fixed;inset:0;overflow:hidden;}
   #app{height:100dvh;min-height:100dvh;}
 }
@@ -1011,8 +1002,27 @@ body.auth-locked .forge-auth-page{display:block;}
   box-shadow:var(--shadow-glow);
   display:flex;align-items:center;justify-content:center;
   font-size:1.8rem;margin-bottom:14px;position:relative;
+  overflow:visible;
 }
 .logo-mark::after{content:'';position:absolute;inset:-4px;border-radius:22px;border:1px solid var(--border-glow);}
+.logo-dumbbell-svg{width:42px;height:42px;position:relative;z-index:2;filter:drop-shadow(0 0 5px rgba(255,255,255,.52));}
+.dumbbell-part{fill:#fff;opacity:0;transform-box:fill-box;transform-origin:center;}
+body.auth-locked .dumbbell-part.left{animation:dumbbell-build .52s cubic-bezier(.22,1,.36,1) forwards .16s;}
+body.auth-locked .dumbbell-part.bar{animation:dumbbell-build .52s cubic-bezier(.22,1,.36,1) forwards .34s;}
+body.auth-locked .dumbbell-part.right{animation:dumbbell-build .52s cubic-bezier(.22,1,.36,1) forwards .52s;}
+.logo-mark .logo-ring{
+  position:absolute;inset:-5px;border-radius:23px;padding:2px;
+  background:conic-gradient(from 0deg,transparent 0deg,var(--purple-300) 44deg,var(--pink) 96deg,transparent 154deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:.82;animation:logo-ring-spin 3.4s linear infinite;
+}
+@keyframes dumbbell-build{
+  0%{opacity:0;transform:scale(.42) translateY(5px);}
+  72%{opacity:1;transform:scale(1.08) translateY(0);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+@keyframes logo-ring-spin{to{transform:rotate(360deg);}}
 .logo-name{
   font-size:1.7rem;font-weight:900;letter-spacing:-0.03em;line-height:1;
   background:linear-gradient(135deg,#f0eeff 0%,#a29bfe 60%,#f06292 100%);
@@ -1142,6 +1152,70 @@ body.auth-locked .forge-auth-page{display:block;}
 }
 
 /* Settings → Profil-Karte oben */
+.btn-primary,.btn-social,.cta-btn,.settings-action-btn,.btn-logout,.auth-secondary{
+  position:relative;overflow:visible;
+  transform:translateZ(0);
+  transition:
+    transform .42s cubic-bezier(.16,1,.3,1),
+    box-shadow .42s cubic-bezier(.16,1,.3,1),
+    border-color .42s cubic-bezier(.16,1,.3,1),
+    background .42s cubic-bezier(.16,1,.3,1),
+    color .3s ease;
+  will-change:transform;
+}
+.btn-primary:active,.btn-social:active,.cta-btn:active,.settings-action-btn:active,.btn-logout:active,.auth-secondary:active{
+  transform:translateY(1px) scale(.985);
+}
+.premium-btn-text{position:relative;z-index:3;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:opacity .24s ease,transform .34s cubic-bezier(.16,1,.3,1);}
+.premium-shimmer-outline{
+  position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);
+  pointer-events:none;opacity:0;z-index:4;overflow:visible;
+  transition:opacity .22s ease;
+}
+.premium-runner{
+  fill:none;stroke:rgba(255,255,255,.95);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:112 980;stroke-dashoffset:0;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.86)) drop-shadow(0 0 18px var(--purple-400));
+}
+.premium-runner.echo{
+  stroke-width:1.6;stroke-dasharray:76 980;opacity:.46;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.58));
+}
+.premium-btn.is-loading .premium-shimmer-outline{opacity:1;}
+.premium-btn.is-loading .premium-runner{animation:premium-shimmer-trace 1.75s cubic-bezier(.65,0,.35,1) infinite;}
+.premium-btn.is-loading .premium-runner.echo{animation-delay:.16s;}
+.premium-btn.is-loading .premium-btn-text{opacity:.18;transform:scale(.985);}
+.premium-btn.is-loading .premium-spinner{opacity:1;transform:scale(1);}
+.premium-spinner{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.82);transition:opacity .22s ease .1s,transform .34s cubic-bezier(.16,1,.3,1) .1s;
+  pointer-events:none;z-index:2;
+}
+.premium-spinner::before{
+  content:'';width:18px;height:18px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.24);border-top-color:#fff;
+  animation:premium-spin .75s linear infinite;
+}
+.premium-btn.is-success .premium-btn-text{opacity:0;}
+.premium-btn.is-success .premium-spinner,.premium-btn.is-success .premium-shimmer-outline{opacity:0;}
+.premium-success{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.46) rotate(-16deg);z-index:5;pointer-events:none;
+  color:#fff;font-weight:900;font-size:1.2rem;
+}
+.premium-btn.is-success .premium-success{
+  opacity:1;transform:scale(1) rotate(0deg);
+  transition:opacity .2s ease,transform .48s cubic-bezier(.34,1.56,.64,1);
+}
+.premium-btn-danger .premium-runner{
+  stroke:rgba(255,255,255,.96);
+  filter:drop-shadow(0 0 7px var(--red)) drop-shadow(0 0 18px rgba(240,96,96,.8));
+}
+.premium-btn-danger .premium-spinner::before{border-color:rgba(240,96,96,.25);border-top-color:var(--red);}
+.premium-btn-danger .premium-success{color:var(--red);}
+@keyframes premium-shimmer-trace{to{stroke-dashoffset:-1092;}}
+@keyframes premium-spin{to{transform:rotate(360deg);}}
+
 .settings-profile{
   display:flex;align-items:center;gap:14px;
   background:linear-gradient(135deg,rgba(110,99,242,0.18),rgba(240,98,146,0.10));
@@ -1193,7 +1267,16 @@ body.auth-locked .forge-auth-page{display:block;}
 <section id="auth-gate" class="forge-auth-page" aria-label="FORGE Login">
   <div class="forge-auth-inner">
     <div class="logo-block">
-      <div class="logo-mark">⚡</div>
+      <div class="logo-mark" aria-label="FORGE Training">
+        <span class="logo-ring" aria-hidden="true"></span>
+        <svg class="logo-dumbbell-svg" viewBox="0 0 60 60" aria-hidden="true">
+          <rect class="dumbbell-part left" x="4" y="18" width="8" height="24" rx="2"></rect>
+          <rect class="dumbbell-part left" x="14" y="14" width="6" height="32" rx="2"></rect>
+          <rect class="dumbbell-part bar" x="20" y="27" width="20" height="6" rx="1"></rect>
+          <rect class="dumbbell-part right" x="40" y="14" width="6" height="32" rx="2"></rect>
+          <rect class="dumbbell-part right" x="48" y="18" width="8" height="24" rx="2"></rect>
+        </svg>
+      </div>
       <div class="logo-name">FORGE</div>
       <div class="logo-tagline">train smart · log fast</div>
     </div>
@@ -1932,7 +2015,8 @@ function createForgeSupabaseClient(){
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true
+        detectSessionInUrl: true,
+        storageKey: 'forge.supabase.auth'
       }
     }
   );
@@ -1957,6 +2041,25 @@ window.FORGE_SUPABASE.testConnection().then(result=>{
 });
 
 let authSession = null;
+let cachedAuthUser = null;
+
+function loadCachedAuthUser(){
+  try{ return JSON.parse(localStorage.getItem('forge_auth_user') || 'null'); }
+  catch(_){ return null; }
+}
+function cacheAuthUser(session){
+  if(!session?.user) return;
+  cachedAuthUser = {
+    id: session.user.id,
+    email: session.user.email || session.user.phone || '',
+    updatedAt: new Date().toISOString()
+  };
+  try{ localStorage.setItem('forge_auth_user', JSON.stringify(cachedAuthUser)); }catch(_){}
+}
+function clearCachedAuthUser(){
+  cachedAuthUser = null;
+  try{ localStorage.removeItem('forge_auth_user'); }catch(_){}
+}
 
 async function refreshAuthSession(){
   if(!forgeSupabase) return null;
@@ -1967,6 +2070,7 @@ async function refreshAuthSession(){
   }
   authSession = data?.session || null;
   if(authSession?.user) {
+    cacheAuthUser(authSession);
     await loadRemoteAppState(authSession);
     await ensureRemoteProfile(authSession);
   }
@@ -2079,6 +2183,7 @@ function normalizeState(){
 
 async function loadRemoteAppState(session){
   if(!forgeSupabase || !session?.user) return;
+  setButtonLoading(btn, true);
   try{
     const {data, error} = await forgeSupabase
       .from('user_app_state')
@@ -2990,9 +3095,50 @@ function getInitials(name){
   return (name||'').split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
 }
 
+function enhancePremiumButton(btn, variant='echo'){
+  if(!btn || btn.dataset.premiumEnhanced === '1') return;
+  btn.dataset.premiumEnhanced = '1';
+  btn.classList.add('premium-btn');
+  if(variant === 'danger') btn.classList.add('premium-btn-danger');
+  const label = btn.innerHTML.trim();
+  btn.innerHTML = `
+    <span class="premium-btn-text">${label}</span>
+    <svg class="premium-shimmer-outline" viewBox="0 0 244 58" preserveAspectRatio="none" aria-hidden="true">
+      <rect class="premium-runner" x="2" y="2" width="240" height="54" rx="29" ry="29"></rect>
+      ${variant === 'echo' ? '<rect class="premium-runner echo" x="2" y="2" width="240" height="54" rx="29" ry="29"></rect>' : ''}
+    </svg>
+    <span class="premium-spinner" aria-hidden="true"></span>
+    <span class="premium-success" aria-hidden="true">✓</span>
+  `;
+}
+
+function setButtonLoading(btn, loading){
+  if(!btn) return;
+  btn.disabled = !!loading;
+  btn.classList.toggle('is-loading', !!loading);
+  if(loading) btn.classList.remove('is-success');
+}
+
+function setButtonSuccess(btn, duration=520){
+  if(!btn) return Promise.resolve();
+  btn.classList.remove('is-loading');
+  btn.classList.add('is-success');
+  return new Promise(resolve=>setTimeout(()=>{
+    btn.classList.remove('is-success');
+    btn.disabled = false;
+    resolve();
+  }, duration));
+}
+
+document.querySelectorAll('#gate-login-btn,#gate-signup-btn,#gate-open-app-btn,.auth-gate-panel .btn-primary').forEach(btn=>enhancePremiumButton(btn,'echo'));
+document.querySelectorAll('#settings-save,#settings-go-login,.cta-btn').forEach(btn=>enhancePremiumButton(btn,'echo'));
+document.querySelectorAll('#settings-logout,#gate-logout-btn').forEach(btn=>enhancePremiumButton(btn,'danger'));
+
 function updateAuthUI(){
-  const email = authSession?.user?.email || authSession?.user?.phone || '';
-  const signedIn = !!authSession?.user;
+  cachedAuthUser = cachedAuthUser || loadCachedAuthUser();
+  const effectiveUser = authSession?.user || cachedAuthUser;
+  const email = effectiveUser?.email || effectiveUser?.phone || '';
+  const signedIn = !!effectiveUser;
   // Auth-Gate nur zeigen wenn nicht eingeloggt
   document.body.classList.toggle('auth-locked', !signedIn);
 
@@ -3075,7 +3221,7 @@ document.getElementById('settings-sync-now')?.addEventListener('click',async()=>
 
 // Settings: Logout-Button
 document.getElementById('settings-logout')?.addEventListener('click',async()=>{
-  await performLogout();
+  await performLogout(document.getElementById('settings-logout'));
   hideOverlay('settings-overlay');
 });
 
@@ -3085,12 +3231,15 @@ document.querySelectorAll('[data-auth-mode]').forEach(btn=>{
 document.getElementById('gate-signup-password')?.addEventListener('input',updatePasswordStrength);
 
 // ── HELPER: Logout ── lokalen State komplett wegwerfen + Cloud-Sync vorher
-async function performLogout(){
-  if(!forgeSupabase) return;
+async function performLogout(btn){
+  setButtonLoading(btn, true);
   setSyncStatus('syncing','// finaler sync...');
   try{ await syncAppState(S); }catch(_){}
-  await forgeSupabase.auth.signOut();
+  if(forgeSupabase) {
+    try{ await forgeSupabase.auth.signOut(); }catch(_){}
+  }
   authSession = null;
+  clearCachedAuthUser();
   // Lokalen State komplett wegwerfen damit nächster User nicht die Daten sieht
   localStorage.removeItem('forge_state');
   S = {};
@@ -3098,33 +3247,40 @@ async function performLogout(){
   updateAuthUI();
   setAuthStatus('Du bist abgemeldet.', 'success');
   renderAll();
+  await setButtonSuccess(btn, 420);
 }
 
 // ── LOGIN ──
 document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
+  const btn = document.getElementById('gate-login-btn');
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const email = document.getElementById('gate-login-email').value.trim();
   const password = document.getElementById('gate-login-password').value;
   if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
   setAuthStatus('Login läuft...');
   try{
+    setButtonLoading(btn, true);
     const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
-    if(error) return setAuthStatus(error.message, 'error');
+    if(error){ setButtonLoading(btn, false); return setAuthStatus(error.message, 'error'); }
     authSession = data.session || null;
-    if(!authSession) return setAuthStatus('Login erfolgreich, aber keine Session erhalten.', 'error');
+    if(!authSession){ setButtonLoading(btn, false); return setAuthStatus('Login erfolgreich, aber keine Session erhalten.', 'error'); }
+    cacheAuthUser(authSession);
     await loadRemoteAppState(authSession);
     await ensureRemoteProfile(authSession);
     updateAuthUI();
     document.body.classList.remove('auth-locked'); // direkt zur App
     setAuthStatus('');
     renderAll();
+    await setButtonSuccess(btn, 420);
   } catch(error){
+    setButtonLoading(btn, false);
     setAuthStatus(error.message || 'Login fehlgeschlagen.', 'error');
   }
 });
 
 // ── SIGNUP ──
 document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
+  const btn = document.getElementById('gate-signup-btn');
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const name = document.getElementById('gate-signup-name').value.trim();
   const email = document.getElementById('gate-signup-email').value.trim();
@@ -3132,24 +3288,28 @@ document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
   if(!email || password.length < 8) return setAuthStatus('Bitte E-Mail und Passwort mit mindestens 8 Zeichen eingeben.', 'error');
   if(name) S.profile.name = name;
   setAuthStatus('Account wird erstellt...');
+  setButtonLoading(btn, true);
   const {data, error} = await forgeSupabase.auth.signUp({email, password, options:{data:{display_name:name || 'Champion'}}});
-  if(error) return setAuthStatus(error.message, 'error');
+  if(error){ setButtonLoading(btn, false); return setAuthStatus(error.message, 'error'); }
   authSession = data.session || null;
   if(authSession){
+    cacheAuthUser(authSession);
     await ensureRemoteProfile(authSession);
     await syncAppState(S);
     updateAuthUI();
     document.body.classList.remove('auth-locked');
     setAuthStatus('');
     renderAll();
+    await setButtonSuccess(btn, 420);
   } else {
+    setButtonLoading(btn, false);
     setAuthStatus('Account erstellt. Bitte bestätige deine E-Mail und logge dich danach ein.', 'success');
     setGateMode('login');
   }
 });
 
 // ── LOGOUT (Gate-Profile-Button) ──
-document.getElementById('gate-logout-btn')?.addEventListener('click',performLogout);
+document.getElementById('gate-logout-btn')?.addEventListener('click',()=>performLogout(document.getElementById('gate-logout-btn')));
 document.getElementById('gate-open-app-btn')?.addEventListener('click',()=>{
   document.body.classList.remove('auth-locked');
 });
@@ -3185,16 +3345,24 @@ async function oauthLogin(provider){
 });
 
 if(forgeSupabase){
+  cachedAuthUser = loadCachedAuthUser();
+  updateAuthUI();
   forgeSupabase.auth.onAuthStateChange(async(_event, session)=>{
     authSession = session;
     if(session?.user) {
+      cacheAuthUser(session);
       await loadRemoteAppState(session);
       await ensureRemoteProfile(session);
+    } else if(_event === 'SIGNED_OUT') {
+      clearCachedAuthUser();
     }
     updateAuthUI();
     if(session?.user) renderAll();
   });
   refreshAuthSession();
+} else {
+  cachedAuthUser = loadCachedAuthUser();
+  updateAuthUI();
 }
 
 document.getElementById('settings-save').addEventListener('click',()=>{
