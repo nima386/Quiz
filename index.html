@@ -2183,7 +2183,6 @@ function normalizeState(){
 
 async function loadRemoteAppState(session){
   if(!forgeSupabase || !session?.user) return;
-  setButtonLoading(btn, true);
   try{
     const {data, error} = await forgeSupabase
       .from('user_app_state')
