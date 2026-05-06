@@ -1,4 +1,4 @@
-const CACHE = 'forge-v25';
+const CACHE = 'forge-v26';
 const ASSETS = [
   './',
   './index.html',
@@ -6,12 +6,15 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
   'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap',
 ];
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then(c => Promise.allSettled(ASSETS.map(asset => c.add(asset))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -33,7 +36,12 @@ self.addEventListener('fetch', e => {
         const clone = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return res;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(() => {
+        if (e.request.mode === 'navigate' || e.request.destination === 'document') {
+          return caches.match('./index.html');
+        }
+        return caches.match(e.request);
+      });
     })
   );
 });

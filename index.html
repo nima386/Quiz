@@ -3136,7 +3136,7 @@ document.querySelectorAll('#settings-logout,#gate-logout-btn').forEach(btn=>enha
 
 function updateAuthUI(){
   cachedAuthUser = cachedAuthUser || loadCachedAuthUser();
-  const effectiveUser = authSession?.user || cachedAuthUser;
+  const effectiveUser = authSession?.user || (!forgeSupabase ? cachedAuthUser : null);
   const email = effectiveUser?.email || effectiveUser?.phone || '';
   const signedIn = !!effectiveUser;
   // Auth-Gate nur zeigen wenn nicht eingeloggt
