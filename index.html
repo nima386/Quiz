@@ -100,7 +100,7 @@ body{
 
 /* ── HEADER ── */
 .app-header{
-  padding:calc(var(--safe-top) + 14px) 20px 14px;
+  padding:calc(var(--safe-top) + 18px) 20px 22px;
   display:flex;justify-content:space-between;align-items:center;
   flex-shrink:0;position:relative;z-index:9;
   isolation:isolate;
@@ -108,20 +108,21 @@ body{
     linear-gradient(180deg,var(--bg-base) 0%,rgba(15,15,26,0.94) 58%,rgba(15,15,26,0.72) 100%);
 }
 .app-header::after{
-  content:'';position:absolute;left:0;right:0;bottom:-34px;height:34px;
+  content:'';position:absolute;left:0;right:0;bottom:-24px;height:24px;
   pointer-events:none;z-index:0;
-  background:linear-gradient(180deg,rgba(15,15,26,0.72),rgba(15,15,26,0));
+  background:linear-gradient(180deg,rgba(15,15,26,0.55),rgba(15,15,26,0));
 }
 .app-header > *{
   position:relative;z-index:1;
 }
-.header-left{}
+.header-left{display:flex;flex-direction:column;gap:6px;min-width:0;}
 .header-kicker{
   font-family:'JetBrains Mono',monospace;
-  font-size:.56rem;letter-spacing:.22em;
-  color:var(--purple-400);text-transform:uppercase;margin-bottom:3px;
+  font-size:.6rem;letter-spacing:.22em;
+  color:var(--purple-400);text-transform:uppercase;
+  margin:0;line-height:1;
 }
-.header-title{font-size:1.35rem;font-weight:800;letter-spacing:-0.02em;}
+.header-title{font-size:1.45rem;font-weight:800;letter-spacing:-0.02em;line-height:1.1;}
 .avatar{
   width:40px;height:40px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,var(--purple-500),var(--pink));
@@ -155,7 +156,7 @@ body{
 
 /* ── CALENDAR ── */
 .calendar-strip{
-  display:flex;gap:7px;padding:4px 2px 14px;
+  display:flex;gap:7px;padding:14px 2px 18px;
   overflow-x:auto;scrollbar-width:none;
 }
 .calendar-strip::-webkit-scrollbar{display:none;}
@@ -767,14 +768,6 @@ body{
 }
 .auth-status.error{color:#ff8a8a;}
 .auth-status.success{color:var(--green);}
-.auth-user-card{
-  display:none;background:rgba(110,99,242,0.10);
-  border:1px solid var(--border-glow);border-radius:var(--r-md);
-  padding:12px;margin-bottom:14px;
-}
-.auth-user-card.show{display:block;}
-.auth-user-email{font-weight:700;font-size:.92rem;margin-top:2px;word-break:break-word;}
-
 /* ── READINESS SLIDERS ── */
 .slider-group{margin-bottom:18px;}
 .slider-head{
@@ -1145,6 +1138,53 @@ body.auth-locked .forge-auth-page{display:block;}
   width:100%;background:rgba(240,96,96,0.10);border:1px solid rgba(240,96,96,0.25);
   color:var(--red);padding:14px;border-radius:var(--r-full);
   font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;
+  margin-top:10px;
+}
+
+/* Settings → Profil-Karte oben */
+.settings-profile{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,rgba(110,99,242,0.18),rgba(240,98,146,0.10));
+  border:1px solid var(--border-glow);
+  border-radius:var(--r-lg);padding:14px;margin-bottom:14px;
+}
+.settings-profile-avatar{
+  width:48px;height:48px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--purple-500),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:1rem;color:#fff;box-shadow:var(--shadow-glow);
+}
+.settings-profile-info{flex:1;min-width:0;}
+.settings-profile-name{font-weight:700;font-size:1rem;letter-spacing:-0.01em;}
+.settings-profile-email{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);letter-spacing:.04em;margin-top:2px;word-break:break-word;}
+
+/* Sync-Status Pill */
+.settings-sync{
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(38,212,124,0.08);
+  border:1px solid rgba(38,212,124,0.18);
+  border-radius:var(--r-full);padding:6px 12px;
+  margin-bottom:14px;
+}
+.settings-sync-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);flex-shrink:0;
+  animation:pulse 1.8s ease-in-out infinite;
+}
+.settings-sync.syncing .settings-sync-dot{background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.settings-sync.error  .settings-sync-dot{background:var(--red);box-shadow:0 0 8px var(--red);animation:none;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* Sekundärer Action-Button (Sync-Now etc) */
+.settings-action-btn{
+  width:100%;background:rgba(110,99,242,0.10);
+  border:1px solid rgba(110,99,242,0.25);color:var(--purple-300);
+  padding:12px;border-radius:var(--r-full);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;margin-top:12px;
 }
 .version-mono{font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:1rem 0;}
 </style>
@@ -1785,6 +1825,26 @@ body.auth-locked .forge-auth-page{display:block;}
         <div class="overlay-title">Einstellungen</div>
         <button class="overlay-close" data-close="settings-overlay">✕</button>
       </div>
+
+      <!-- Profil-Karte (nur sichtbar wenn eingeloggt) -->
+      <div id="settings-profile-card" class="settings-profile" style="display:none;">
+        <div class="settings-profile-avatar" id="settings-profile-avatar">JM</div>
+        <div class="settings-profile-info">
+          <div class="settings-profile-name" id="settings-profile-name">Champion</div>
+          <div class="settings-profile-email" id="settings-profile-email"></div>
+        </div>
+      </div>
+
+      <!-- Sync-Status -->
+      <div id="settings-sync-status" class="settings-sync" style="display:none;">
+        <span class="settings-sync-dot"></span>
+        <span id="settings-sync-text">// synchronisiert</span>
+      </div>
+
+      <div class="set-group">
+        <label>Anzeigename</label>
+        <input id="set-name" type="text" placeholder="Wie sollen wir dich nennen?">
+      </div>
       <div class="set-group">
         <label>Gewicht (kg)</label>
         <input id="set-weight" type="number" step="0.1" inputmode="decimal">
@@ -1809,44 +1869,20 @@ body.auth-locked .forge-auth-page{display:block;}
         </div>
       </div>
       <button class="cta-btn" id="settings-save">Speichern</button>
+
+      <!-- Account-Aktionen (nur sichtbar wenn eingeloggt) -->
+      <div id="settings-account-actions" style="display:none;">
+        <button class="settings-action-btn" id="settings-sync-now">☁ Jetzt synchronisieren</button>
+        <button class="btn-logout" id="settings-logout">⏻ Abmelden</button>
+      </div>
+      <!-- Account-Login (nur sichtbar wenn NICHT eingeloggt) -->
+      <div id="settings-account-login" style="display:none;">
+        <button class="cta-btn" id="settings-go-login" style="margin-top:10px;">🔒 Anmelden / Account erstellen</button>
+      </div>
     </div>
   </div>
 
   <!-- ═══════ OVERLAY: READINESS ═══════ -->
-  <!-- AUTH -->
-  <div id="auth-overlay" class="overlay">
-    <div class="overlay-card">
-      <div class="overlay-grab"></div>
-      <div class="overlay-head">
-        <div>
-          <div class="kicker" style="margin-bottom:2px;">// account</div>
-          <div class="overlay-title">FORGE Login</div>
-        </div>
-        <button class="overlay-close" data-close="auth-overlay">âœ•</button>
-      </div>
-      <div class="auth-user-card" id="auth-user-card">
-        <div class="kicker" style="margin-bottom:2px;">// angemeldet</div>
-        <div class="auth-user-email" id="auth-user-email"></div>
-      </div>
-      <div id="auth-form">
-        <div class="set-group">
-          <label>E-Mail</label>
-          <input type="email" id="auth-email" placeholder="du@example.com" autocomplete="email">
-        </div>
-        <div class="set-group">
-          <label>Passwort</label>
-          <input type="password" id="auth-password" placeholder="mind. 6 Zeichen" autocomplete="current-password">
-        </div>
-        <div class="auth-actions">
-          <button class="auth-secondary" id="auth-signup">Registrieren</button>
-          <button class="cta-btn" id="auth-login">Einloggen</button>
-        </div>
-      </div>
-      <button class="auth-secondary" id="auth-logout" style="display:none;margin-top:4px;">Logout</button>
-      <div class="auth-status" id="auth-status"></div>
-    </div>
-  </div>
-
   <div id="readiness-overlay" class="overlay">
     <div class="overlay-card">
       <div class="overlay-grab"></div>
@@ -2198,13 +2234,41 @@ const today = new Date();
 const todayStr = today.toISOString().slice(0,10);
 
 function loadState(){
-  return {};
+  try{ return JSON.parse(localStorage.getItem('forge_state') || '{}'); }
+  catch(_){ return {}; }
 }
+
+// Sync-Status-Indikator im Settings-Overlay
+function setSyncStatus(state, label){
+  const el = document.getElementById('settings-sync-status');
+  if(!el) return;
+  el.classList.remove('syncing','error');
+  if(state==='syncing') el.classList.add('syncing');
+  if(state==='error')   el.classList.add('error');
+  document.getElementById('settings-sync-text').textContent = label;
+  if(state==='ok'){
+    setTimeout(()=>{ document.getElementById('settings-sync-text').textContent = '// synchronisiert'; }, 2000);
+  }
+}
+
+// saveState: lokal sofort + Cloud debounced (nur wenn eingeloggt)
 let _stateSyncTimer = null;
 function saveState(s){
-  if(!authSession?.user || !forgeSupabase) return;
-  clearTimeout(_stateSyncTimer);
-  _stateSyncTimer = setTimeout(()=>syncAppState(s), 350);
+  // 1) Lokal sofort speichern (offline-fähig + Guest-Modus)
+  try{ localStorage.setItem('forge_state', JSON.stringify(s)); }catch(_){}
+  // 2) Cloud debounced (800ms) wenn eingeloggt
+  if(authSession?.user && forgeSupabase){
+    clearTimeout(_stateSyncTimer);
+    setSyncStatus('syncing','// schreibe...');
+    _stateSyncTimer = setTimeout(async()=>{
+      try{
+        await syncAppState(s);
+        setSyncStatus('ok','// synchronisiert ✓');
+      }catch(e){
+        setSyncStatus('error','// offline · später erneut');
+      }
+    }, 800);
+  }
 }
 
 let S = loadState();
@@ -2897,10 +2961,6 @@ document.getElementById('steps-add').addEventListener('click',()=>{
 function showOverlay(id){ document.getElementById(id).classList.add('show'); }
 function hideOverlay(id){ document.getElementById(id).classList.remove('show'); }
 function setAuthStatus(message='', type=''){
-  const el = document.getElementById('auth-status');
-  if(!el) return;
-  el.textContent = message;
-  el.className = 'auth-status' + (type ? ' ' + type : '');
   const gate = document.getElementById('gate-auth-status');
   if(gate){
     gate.textContent = message;
@@ -2926,36 +2986,58 @@ function updatePasswordStrength(){
   const label = document.getElementById('gate-pw-label');
   if(label) label.textContent = score >= 4 ? `// stark · ${value.length} zeichen` : score >= 2 ? `// ok · ${value.length} zeichen` : '// zu schwach';
 }
+function getInitials(name){
+  return (name||'').split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
+}
+
 function updateAuthUI(){
   const email = authSession?.user?.email || authSession?.user?.phone || '';
   const signedIn = !!authSession?.user;
-  const form = document.getElementById('auth-form');
-  const logout = document.getElementById('auth-logout');
-  const card = document.getElementById('auth-user-card');
-  const emailEl = document.getElementById('auth-user-email');
-  if(form) form.style.display = signedIn ? 'none' : 'block';
-  if(logout) logout.style.display = signedIn ? 'block' : 'none';
-  if(card) card.classList.toggle('show', signedIn);
-  if(emailEl) emailEl.textContent = email;
+  // Auth-Gate nur zeigen wenn nicht eingeloggt
   document.body.classList.toggle('auth-locked', !signedIn);
+
   if(signedIn){
-    const displayName = S.profile?.name || 'Champion';
-    document.getElementById('gate-profile-name').textContent = displayName;
+    const displayName = S.profile?.name || email.split('@')[0] || 'Champion';
+    const initials   = getInitials(displayName);
+
+    // App-Avatare & Header aktualisieren
+    document.querySelectorAll('.avatar').forEach(av=>{ av.textContent = initials; });
+    document.querySelectorAll('.header-title').forEach(t=>{
+      if(t.textContent.startsWith('Hey')) t.textContent = `Hey ${displayName.split(' ')[0]} 👊`;
+    });
+
+    // Profile-Panel im Gate (für späteren Bedarf)
+    document.getElementById('gate-profile-name').textContent  = displayName;
     document.getElementById('gate-profile-email').textContent = email;
-    document.getElementById('gate-profile-avatar').textContent = displayName.split(/\s+/).filter(Boolean).map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'JM';
-    setGateMode('profile');
+    document.getElementById('gate-profile-avatar').textContent = initials;
+
+    // Settings-Profilbereich aktualisieren
+    document.getElementById('settings-profile-card').style.display = 'flex';
+    document.getElementById('settings-profile-avatar').textContent = initials;
+    document.getElementById('settings-profile-name').textContent  = displayName;
+    document.getElementById('settings-profile-email').textContent = email;
+    document.getElementById('settings-sync-status').style.display = 'flex';
+    document.getElementById('settings-account-actions').style.display = 'block';
+    document.getElementById('settings-account-login').style.display   = 'none';
   } else {
+    document.querySelectorAll('.avatar').forEach(av=>{ av.textContent = 'JM'; });
+    document.getElementById('settings-profile-card').style.display = 'none';
+    document.getElementById('settings-sync-status').style.display = 'none';
+    document.getElementById('settings-account-actions').style.display = 'none';
+    document.getElementById('settings-account-login').style.display   = 'block';
     setGateMode('welcome');
   }
 }
 function openSettings(){
   const p = S.profile;
+  document.getElementById('set-name').value     = p.name || '';
   document.getElementById('set-weight').value   = p.weightKg;
   document.getElementById('set-stepgoal').value = p.stepGoal;
   document.getElementById('set-kcal').value     = p.kcalGoal;
   document.getElementById('set-water').value    = p.waterGoal;
   document.getElementById('set-pmin').value     = p.proteinMin;
   document.getElementById('set-pmax').value     = p.proteinMax;
+  updateAuthUI();
   showOverlay('settings-overlay');
 }
 
@@ -2966,20 +3048,35 @@ document.querySelectorAll('.overlay').forEach(ov=>{
   ov.addEventListener('click',e=>{ if(e.target===ov) hideOverlay(ov.id); });
 });
 
-// avatar tap → settings
+// Avatar-Tap → Settings (Bottom-Sheet, kein Vollbild-Auth-Gate mehr)
 document.querySelectorAll('.avatar').forEach(av=>{
-  av.addEventListener('click',()=>{
-    if(authSession?.user) {
-      updateAuthUI();
-      setGateMode('profile');
-      document.body.classList.add('auth-locked');
-    }
-    else {
-      updateAuthUI();
-      setAuthStatus('Melde dich an, damit deine Trainingsdaten spaeter in deinem Account gespeichert werden.');
-      showOverlay('auth-overlay');
-    }
-  });
+  av.addEventListener('click',()=>openSettings());
+});
+
+// Settings: "Anmelden" Button für ausgeloggte User
+document.getElementById('settings-go-login')?.addEventListener('click',()=>{
+  hideOverlay('settings-overlay');
+  document.body.classList.add('auth-locked');
+  setGateMode('login');
+});
+
+// Settings: "Jetzt synchronisieren" Button
+document.getElementById('settings-sync-now')?.addEventListener('click',async()=>{
+  if(!authSession?.user) return;
+  setSyncStatus('syncing','// synchronisiere...');
+  try{
+    await syncAppState(S);
+    await ensureRemoteProfile(authSession);
+    setSyncStatus('ok','// synchronisiert ✓');
+  }catch(e){
+    setSyncStatus('error','// fehler beim sync');
+  }
+});
+
+// Settings: Logout-Button
+document.getElementById('settings-logout')?.addEventListener('click',async()=>{
+  await performLogout();
+  hideOverlay('settings-overlay');
 });
 
 document.querySelectorAll('[data-auth-mode]').forEach(btn=>{
@@ -2987,29 +3084,46 @@ document.querySelectorAll('[data-auth-mode]').forEach(btn=>{
 });
 document.getElementById('gate-signup-password')?.addEventListener('input',updatePasswordStrength);
 
+// ── HELPER: Logout ── lokalen State komplett wegwerfen + Cloud-Sync vorher
+async function performLogout(){
+  if(!forgeSupabase) return;
+  setSyncStatus('syncing','// finaler sync...');
+  try{ await syncAppState(S); }catch(_){}
+  await forgeSupabase.auth.signOut();
+  authSession = null;
+  // Lokalen State komplett wegwerfen damit nächster User nicht die Daten sieht
+  localStorage.removeItem('forge_state');
+  S = {};
+  normalizeState();
+  updateAuthUI();
+  setAuthStatus('Du bist abgemeldet.', 'success');
+  renderAll();
+}
+
+// ── LOGIN ──
 document.getElementById('gate-login-btn')?.addEventListener('click',async()=>{
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const email = document.getElementById('gate-login-email').value.trim();
   const password = document.getElementById('gate-login-password').value;
   if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
-  setAuthStatus('Login laeuft...');
+  setAuthStatus('Login läuft...');
   try{
     const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
     if(error) return setAuthStatus(error.message, 'error');
     authSession = data.session || null;
     if(!authSession) return setAuthStatus('Login erfolgreich, aber keine Session erhalten.', 'error');
-    updateAuthUI();
-    renderAll();
-    setAuthStatus('Eingeloggt.', 'success');
     await loadRemoteAppState(authSession);
     await ensureRemoteProfile(authSession);
-    renderAll();
+    updateAuthUI();
+    document.body.classList.remove('auth-locked'); // direkt zur App
     setAuthStatus('');
+    renderAll();
   } catch(error){
     setAuthStatus(error.message || 'Login fehlgeschlagen.', 'error');
   }
 });
 
+// ── SIGNUP ──
 document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
   if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
   const name = document.getElementById('gate-signup-name').value.trim();
@@ -3021,84 +3135,53 @@ document.getElementById('gate-signup-btn')?.addEventListener('click',async()=>{
   const {data, error} = await forgeSupabase.auth.signUp({email, password, options:{data:{display_name:name || 'Champion'}}});
   if(error) return setAuthStatus(error.message, 'error');
   authSession = data.session || null;
-  if(authSession) {
+  if(authSession){
     await ensureRemoteProfile(authSession);
     await syncAppState(S);
     updateAuthUI();
-    renderAll();
+    document.body.classList.remove('auth-locked');
     setAuthStatus('');
+    renderAll();
   } else {
-    setAuthStatus('Account erstellt. Bitte bestaetige deine E-Mail und logge dich danach ein.', 'success');
-    setGateMode('welcome');
+    setAuthStatus('Account erstellt. Bitte bestätige deine E-Mail und logge dich danach ein.', 'success');
+    setGateMode('login');
   }
 });
 
-document.getElementById('gate-logout-btn')?.addEventListener('click',async()=>{
-  if(!forgeSupabase) return;
-  await syncAppState(S);
-  await forgeSupabase.auth.signOut();
-  authSession = null;
-  S = loadState();
-  normalizeState();
-  updateAuthUI();
-  setAuthStatus('Ausgeloggt.', 'success');
-});
+// ── LOGOUT (Gate-Profile-Button) ──
+document.getElementById('gate-logout-btn')?.addEventListener('click',performLogout);
 document.getElementById('gate-open-app-btn')?.addEventListener('click',()=>{
   document.body.classList.remove('auth-locked');
 });
 
+// ── PASSWORT VERGESSEN ──
+document.getElementById('gate-reset-password')?.addEventListener('click',async()=>{
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  const email = document.getElementById('gate-login-email').value.trim();
+  if(!email) return setAuthStatus('Trage erst deine E-Mail oben ein, dann erneut tippen.', 'error');
+  setAuthStatus('Reset-Link wird verschickt...');
+  const {error} = await forgeSupabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
+  if(error) return setAuthStatus(error.message, 'error');
+  setAuthStatus(`Link zum Zurücksetzen wurde an ${email} gesendet ✓`, 'success');
+});
+
+// ── OAUTH (Apple / Google) ──
+async function oauthLogin(provider){
+  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
+  setAuthStatus(`Weiterleitung zu ${provider}...`);
+  const {error} = await forgeSupabase.auth.signInWithOAuth({
+    provider,
+    options:{ redirectTo: window.location.origin + window.location.pathname }
+  });
+  if(error) setAuthStatus(`${provider} Login fehlgeschlagen: ${error.message}. Provider muss in Supabase aktiviert sein.`, 'error');
+}
 ['gate-apple-login','gate-apple-signup'].forEach(id=>{
-  document.getElementById(id)?.addEventListener('click',()=>setAuthStatus('Apple Login ist vorbereitet, muss in Supabase/Apple Developer noch aktiviert werden.', 'error'));
+  document.getElementById(id)?.addEventListener('click',()=>oauthLogin('apple'));
 });
 ['gate-google-login','gate-google-signup'].forEach(id=>{
-  document.getElementById(id)?.addEventListener('click',()=>setAuthStatus('Google Login ist vorbereitet, Provider ist noch nicht aktiviert.', 'error'));
-});
-
-document.getElementById('auth-signup').addEventListener('click',async()=>{
-  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  if(!email || password.length < 6) return setAuthStatus('Bitte E-Mail und Passwort mit mindestens 6 Zeichen eingeben.', 'error');
-  setAuthStatus('Account wird erstellt...');
-  const {data, error} = await forgeSupabase.auth.signUp({email, password});
-  if(error) return setAuthStatus(error.message, 'error');
-  authSession = data.session || null;
-  updateAuthUI();
-  if(authSession) {
-    await ensureRemoteProfile(authSession);
-    setAuthStatus('Account erstellt und angemeldet.', 'success');
-    hideOverlay('auth-overlay');
-    openSettings();
-  } else {
-    setAuthStatus('Account erstellt. Bitte bestaetige deine E-Mail und logge dich danach ein.', 'success');
-  }
-});
-
-document.getElementById('auth-login').addEventListener('click',async()=>{
-  if(!forgeSupabase) return setAuthStatus('Supabase ist nicht geladen.', 'error');
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  if(!email || !password) return setAuthStatus('Bitte E-Mail und Passwort eingeben.', 'error');
-  setAuthStatus('Login laeuft...');
-  const {data, error} = await forgeSupabase.auth.signInWithPassword({email, password});
-  if(error) return setAuthStatus(error.message, 'error');
-  authSession = data.session || null;
-  updateAuthUI();
-  await ensureRemoteProfile(authSession);
-  setAuthStatus('Eingeloggt.', 'success');
-  hideOverlay('auth-overlay');
-  openSettings();
-});
-
-document.getElementById('auth-logout').addEventListener('click',async()=>{
-  if(!forgeSupabase) return;
-  await syncAppState(S);
-  await forgeSupabase.auth.signOut();
-  authSession = null;
-  S = loadState();
-  normalizeState();
-  updateAuthUI();
-  setAuthStatus('Ausgeloggt.', 'success');
+  document.getElementById(id)?.addEventListener('click',()=>oauthLogin('google'));
 });
 
 if(forgeSupabase){
@@ -3115,6 +3198,7 @@ if(forgeSupabase){
 }
 
 document.getElementById('settings-save').addEventListener('click',()=>{
+  S.profile.name       = document.getElementById('set-name').value.trim() || S.profile.name || '';
   S.profile.weightKg   = parseFloat(document.getElementById('set-weight').value)   || S.profile.weightKg;
   S.profile.stepGoal   = parseInt(document.getElementById('set-stepgoal').value)    || S.profile.stepGoal;
   S.profile.kcalGoal   = parseInt(document.getElementById('set-kcal').value)        || S.profile.kcalGoal;
@@ -3122,10 +3206,10 @@ document.getElementById('settings-save').addEventListener('click',()=>{
   S.profile.proteinMin = parseFloat(document.getElementById('set-pmin').value)      || S.profile.proteinMin;
   S.profile.proteinMax = parseFloat(document.getElementById('set-pmax').value)      || S.profile.proteinMax;
   saveState(S);
-  ensureRemoteProfile(authSession);
+  if(authSession?.user) ensureRemoteProfile(authSession);
+  updateAuthUI();
   hideOverlay('settings-overlay');
-  if(currentScreen==='nutrition') renderNutrition();
-  if(currentScreen==='habits')    renderHabits();
+  renderAll();
 });
 
 // ═══════════════════════════════════════════════════
